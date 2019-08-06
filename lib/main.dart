@@ -14,10 +14,16 @@ import 'package:firebase_core/firebase_core.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging().getToken().then((val)=>(print("FCM Token: ${val.toString()}"))).catchError((error)=>print("FCM Token Error: ${error.toString()}"));
+    FirebaseMessaging()
+        .getToken()
+        .then((val) => (print("FCM Token: ${val.toString()}")))
+        .catchError((error) => print("FCM Token Error: ${error.toString()}"));
+
+    FirebaseMessaging().getToken().then((token) {
+      userInformation.userToken = token;
+    });
 
     return WillPopScope(
         onWillPop: () async => false,

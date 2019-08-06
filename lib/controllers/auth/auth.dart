@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/Auth/nullpage.dart';
+import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/controllers/sign/SignError.dart';
 import 'package:haegisa2/main.dart';
 import 'dart:async';
-import 'package:haegisa2/controllers/sign/SignIn.dart';
-import 'package:haegisa2/controllers/sign/SignSelect.dart';
 import 'package:haegisa2/controllers/member/find_id.dart';
 import 'package:haegisa2/controllers/member/find_pw.dart';
 import 'package:haegisa2/controllers/member/join.dart';
@@ -11,7 +11,6 @@ import 'dart:convert';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/views/sign/authWidget.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 const kAndroidUserAgent =
@@ -112,20 +111,18 @@ class _AuthState extends State<Auth> {
             'http://www.mariners.or.kr/member/mobile_checkplus_success.php') {
           if (state.type == WebViewState.finishLoad) {
             currentURL = ''; //아이폰이 다시 이전 페이지로 돌아오는 경우때문에 url을 초기화 시킴
+            await new Future.delayed(const Duration(
+                seconds: 1)); //아이폰 바로 진행하면 res값이 null넘어와서 딜레이주고 실행
             //flutterWebviewPlugin.evalJavascript("console.log(myFunction());");
             String script = 'statusMsg("' + userInformation.userDeviceOS + '")';
-            //res = '1' already, '0' = new member7
+            //res = '1' already, '0' = new member
             var res = await flutterWebviewPlugin.evalJavascript(script);
             Map valueMap = json.decode(res);
 
             if (valueMap['status'] == 0) {
               flutterWebviewPlugin.close();
-              showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    authAlert();
-                  });
+              Navigator.push(context,
+                  new MaterialPageRoute(builder: (context) => new SignError()));
             } else if (valueMap['status'] == 1) {
               //res가 //0 : 해기사 회원이 아님, 1 : 신규회원, 2 : 이미 존재하는 회원(홈페이지) 4 : 오류
               flutterWebviewPlugin.close();
@@ -137,11 +134,46 @@ class _AuthState extends State<Auth> {
               Navigator.push(context,
                   new MaterialPageRoute(builder: (context) => new Join()));
             } else if (valueMap['status'] == 2) {
-              //회원가입 페이지로
+              flutterWebviewPlugin.close();
+              if (userInformation.userDeviceOS == "i") {
+                userInformation.mode =
+                    Strings.shared.controllers.signIn.already;
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new Nullpage()));
+              } else {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new SplashScreen()));
+              }
             } else if (valueMap['status'] == 3) {
-              //회원가입 페이지로
+              flutterWebviewPlugin.close();
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new SplashScreen()));
             } else if (valueMap['status'] == 4) {
-              //회원가입 페이지로
+              if (userInformation.userDeviceOS == "i") {
+                flutterWebviewPlugin.close();
+                userInformation.mode = "인증 에러";
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new Nullpage()));
+              } else {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new SplashScreen()));
+              }
+            } else {
+              flutterWebviewPlugin.close();
+
+              userInformation.mode = "인증 에러";
+              Navigator.push(context,
+                  new MaterialPageRoute(builder: (context) => new Nullpage()));
             }
           }
         }
@@ -150,22 +182,46 @@ class _AuthState extends State<Auth> {
             'http://www.mariners.or.kr/member/mobile_checkplus_checkid_success.php') {
           if (state.type == WebViewState.finishLoad) {
             currentURL = ''; //아이폰이 다시 이전 페이지로 돌아오는 경우때문에 url을 초기화 시킴
+            await new Future.delayed(const Duration(
+                seconds: 1)); //아이폰 바로 진행하면 res값이 null넘어와서 딜레이주고 실행
             String script = 'statusMsg("' + userInformation.userDeviceOS + '")';
             //res = '1' already, '0' = new member7
             var res = await flutterWebviewPlugin.evalJavascript(script);
             Map valueMap = json.decode(res);
             if (valueMap["status"] == 0) {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new SignIn()));
+              flutterWebviewPlugin.close();
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new SplashScreen()));
             } else if (valueMap["status"] == 1) {
+              flutterWebviewPlugin.close();
               userInformation.userID = valueMap['id'];
               flutterWebviewPlugin.close();
               flutterWebviewPlugin.onDestroy;
               Navigator.push(context,
                   new MaterialPageRoute(builder: (context) => new FindID()));
             } else if (valueMap["status"] == 2) {
+              flutterWebviewPlugin.close();
+              if (userInformation.userDeviceOS == "i") {
+                userInformation.mode =
+                    Strings.shared.controllers.signIn.nomember;
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new Nullpage()));
+              } else {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new SplashScreen()));
+              }
+            } else {
+              flutterWebviewPlugin.close();
+
+              userInformation.mode = "인증 에러";
               Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new SignIn()));
+                  new MaterialPageRoute(builder: (context) => new Nullpage()));
             }
           }
         }
@@ -174,22 +230,49 @@ class _AuthState extends State<Auth> {
             'http://www.mariners.or.kr/member/mobile_checkplus_checkpw_success.php') {
           if (state.type == WebViewState.finishLoad) {
             currentURL = ''; //아이폰이 다시 이전 페이지로 돌아오는 경우때문에 url을 초기화 시킴
+            await new Future.delayed(const Duration(
+                seconds: 1)); //아이폰 바로 진행하면 res값이 null넘어와서 딜레이주고 실행
             String script = 'statusMsg("' + userInformation.userDeviceOS + '")';
             //res = '1' already, '0' = new member7
             var res = await flutterWebviewPlugin.evalJavascript(script);
             Map valueMap = json.decode(res);
             if (valueMap["status"] == 0) {
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new SignIn()));
+              flutterWebviewPlugin.close();
+
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new SplashScreen()));
             } else if (valueMap["status"] == 1) {
+              flutterWebviewPlugin.close();
+
               currentURL = '';
               userInformation.userID = valueMap['id'];
               flutterWebviewPlugin.close();
               Navigator.push(context,
                   new MaterialPageRoute(builder: (context) => new FindPW()));
             } else if (valueMap["status"] == 2) {
+              flutterWebviewPlugin.close();
+
+              if (userInformation.userDeviceOS == "i") {
+                userInformation.mode =
+                    Strings.shared.controllers.signIn.nomember;
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new Nullpage()));
+              } else {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new SplashScreen()));
+              }
+            } else {
+              flutterWebviewPlugin.close();
+
+              userInformation.mode = "인증 에러";
               Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new SignIn()));
+                  new MaterialPageRoute(builder: (context) => new Nullpage()));
             }
           }
         }
@@ -272,97 +355,5 @@ class _AuthState extends State<Auth> {
     flutterWebviewPlugin.dispose();
 
     super.dispose();
-  }
-
-  Widget authAlert() {
-    return AlertDialog(
-      contentPadding: EdgeInsets.all(0.0),
-      content: Container(
-        height: MediaQuery.of(context).size.height / 1.5,
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Image.asset(
-                "Resources/Images/no_member.png",
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(top: 40, bottom: 10),
-              child: Text(
-                Strings.shared.controllers.signSelect.title3,
-                style: TextStyle(
-                    color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.supplementary),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                  Text(
-                    Strings.shared.controllers.signSelect.title3_1
-                        .substring(0, 13),
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    Strings.shared.controllers.signSelect.title3_1
-                        .substring(13, 14),
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.content),
-                    textAlign: TextAlign.center,
-                  ),
-                ])),
-            Expanded(
-              child: Text(
-                Strings.shared.controllers.signSelect.title3_1
-                    .substring(14, 28),
-                style: TextStyle(
-                    color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.content),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            Container(
-                // This align moves the children to the bottom
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    // This container holds all the children that will be aligned
-                    // on the bottom and should not scroll with the above ListView
-                    child: Container(
-                        child: Column(
-                      children: <Widget>[
-                        Image.asset(
-                          'Resources/Icons/Line2.png',
-                        ),
-                        FlatButton(
-                          padding: const EdgeInsets.only(top: 30, bottom: 30),
-                          child: Text(
-                            Strings.shared.controllers.signSelect.confirm,
-                            style: TextStyle(
-                                color: Statics.shared.colors.titleTextColor,
-                                fontSize: Statics.shared.fontSizes.content),
-                            textAlign: TextAlign.center,
-                          ),
-                          onPressed: () {
-                            flutterWebviewPlugin.close();
-                            userInformation.lognCheck = 0;
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => new MyApp()));
-                          },
-                        ),
-                      ],
-                    ))))
-          ],
-        ),
-      ),
-    );
   }
 }

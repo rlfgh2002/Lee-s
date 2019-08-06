@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/auth.dart';
 import 'package:haegisa2/main.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:haegisa2/controllers/member/find_pw.dart';
+import 'package:haegisa2/controllers/sign/SignError.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -27,11 +28,11 @@ class _SignInState extends State<SignIn> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   void refreshUserInfo(onComplete()) async {
-    await SharedPreferences.getInstance().then((val){
-      val.setString("app_user_login_info_userid", idValue).then((val2){
-        if(val2){
-          val.setBool("app_user_login_info_islogin", true).then((val3){
-            if(val3){
+    await SharedPreferences.getInstance().then((val) {
+      val.setString("app_user_login_info_userid", idValue).then((val2) {
+        if (val2) {
+          val.setBool("app_user_login_info_islogin", true).then((val3) {
+            if (val3) {
               onComplete();
             }
           });
@@ -176,11 +177,10 @@ class _SignInState extends State<SignIn> {
             Container(
               child: Row(
                 children: [
-                  HeagisaButton(
+                  HaegisaButton(
                     text: Strings.shared.controllers.signIn.loginBtnTitle,
                     iconURL: "Resources/Icons/Vector 3.2.png",
                     onPressed: () async {
-
                       if (trim(idValue) == "") {
                         _displaySnackBar(
                             context, Strings.shared.controllers.signIn.enterID);
@@ -203,153 +203,28 @@ class _SignInState extends State<SignIn> {
                             Strings.shared.controllers.signIn.wrongPass);
                       } else if (jsonMsg == "no haegisa member") {
                         //해기사 회원이 아닐 시 팝업
-                        return AlertDialog(
-                          contentPadding: EdgeInsets.all(0.0),
-                          content: Container(
-                            height: MediaQuery.of(context).size.height / 1.5,
-                            child: Column(
-                              children: <Widget>[
-                                Container(
-                                  child: Image.asset(
-                                    "Resources/Images/no_member.png",
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 40, bottom: 10),
-                                  child: Text(
-                                    Strings
-                                        .shared.controllers.signSelect.title3,
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: Statics
-                                            .shared.fontSizes.supplementary),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                Container(
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                      Text(
-                                        Strings.shared.controllers.signSelect
-                                            .title3_1
-                                            .substring(0, 13),
-                                        style: TextStyle(
-                                            color: Statics
-                                                .shared.colors.titleTextColor,
-                                            fontSize: Statics
-                                                .shared.fontSizes.subTitle,
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      Text(
-                                        Strings.shared.controllers.signSelect
-                                            .title3_1
-                                            .substring(13, 14),
-                                        style: TextStyle(
-                                            color: Statics
-                                                .shared.colors.titleTextColor,
-                                            fontSize: Statics
-                                                .shared.fontSizes.content),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ])),
-                                Expanded(
-                                  child: Text(
-                                    Strings
-                                        .shared.controllers.signSelect.title3_1
-                                        .substring(14, 28),
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize:
-                                            Statics.shared.fontSizes.content),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                Container(
-                                    // This align moves the children to the bottom
-                                    child: Align(
-                                        alignment:
-                                            FractionalOffset.bottomCenter,
-                                        // This container holds all the children that will be aligned
-                                        // on the bottom and should not scroll with the above ListView
-                                        child: Container(
-                                            child: Column(
-                                          children: <Widget>[
-                                            Image.asset(
-                                              'Resources/Icons/Line2.png',
-                                            ),
-                                            FlatButton(
-                                              padding: const EdgeInsets.only(
-                                                  top: 30, bottom: 30),
-                                              child: Text(
-                                                Strings.shared.controllers
-                                                    .signSelect.confirm,
-                                                style: TextStyle(
-                                                    color: Statics.shared.colors
-                                                        .titleTextColor,
-                                                    fontSize: Statics.shared
-                                                        .fontSizes.content),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              onPressed: () {
-                                                userInformation.lognCheck = 0;
-
-                                                print("LOGGGGG XXX OUT");
-
-                                                this.refreshUserInfo((){
-
-                                                  Navigator.push(
-                                                      context,
-                                                      new MaterialPageRoute(
-                                                          builder: (context) =>
-                                                          new MyApp()));
-
-                                                });
-
-                                              },
-                                            ),
-                                          ],
-                                        ))))
-                              ],
-                            ),
-                          ),
-                        );
+                        await showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) => authAlert());
                       } else if (jsonMsg == "success") {
-
                         await deviceinfo();
 
                         userInformation.mode = "login";
                         userInformation.fullName = resultPost.member_name;
                         userInformation.hp = resultPost.hp;
-                        userInformation.lognCheck = 1;
+                        userInformation.loginCheck = 1;
                         userInformation.userID = idValue;
+                        _firebaseMessaging.getToken().then((token) {
+                          print(token);
+                          userInformation.userToken = token;
+                        });
 
-                        var map = new Map<String, dynamic>();
-                        map["user_id"] = idValue;
-                        map["user_phone"] = userInformation.hp;
-                        map["reg_key"] = userInformation.userToken;
-                        map["os_type"] = userInformation.userDeviceOS;
-                        map["os_version"] = "";
-                        map["app_version"] = userInformation.appVersion;
-                        map["device_id"] = userInformation.userDeviceID;
-                        map["push_status"] = "y";
-                        await createPost(
-                            Strings.shared.controllers.jsonURL.logininfoJson,
-                            body: map);
-
-                        this.refreshUserInfo((){
-
+                        this.refreshUserInfo(() {
                           Navigator.push(
                               context,
                               new MaterialPageRoute(
-                                  builder: (context) =>
-                                  new MyApp()));
-
+                                  builder: (context) => new SplashScreen()));
                         });
                       }
                     },
@@ -370,6 +245,108 @@ class _SignInState extends State<SignIn> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(content: Text(str));
     _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  Widget authAlert() {
+    return AlertDialog(
+      contentPadding: EdgeInsets.all(0.0),
+      content: Container(
+        height: MediaQuery.of(context).size.height / 1.4,
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Image.asset(
+                "Resources/Images/no_member.png",
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 40, bottom: 10),
+              child: Text(
+                Strings.shared.controllers.signSelect.title3,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitleInContent),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        Strings.shared.controllers.signSelect.title3_1
+                            .substring(0, 13),
+                        style: TextStyle(
+                            color: Statics.shared.colors.titleTextColor,
+                            fontSize: Statics.shared.fontSizes.subTitle,
+                            fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        Strings.shared.controllers.signSelect.title3_1
+                            .substring(13, 14),
+                        style: TextStyle(
+                            color: Statics.shared.colors.titleTextColor,
+                            fontSize:
+                                Statics.shared.fontSizes.subTitleInContent),
+                        textAlign: TextAlign.center,
+                      ),
+                    ])),
+            Container(
+              child: Text(
+                Strings.shared.controllers.signSelect.title3_2,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitleInContent),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Expanded(
+              child: Text(
+                "",
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitleInContent),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+                // This align moves the children to the bottom
+                child: Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    // This container holds all the children that will be aligned
+                    // on the bottom and should not scroll with the above ListView
+                    child: Container(
+                        child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          'Resources/Icons/Line2.png',
+                        ),
+                        FlatButton(
+                          padding: const EdgeInsets.only(top: 20, bottom: 20),
+                          child: Text(
+                            Strings.shared.controllers.signSelect.confirm,
+                            style: TextStyle(
+                                color: Statics.shared.colors.titleTextColor,
+                                fontSize: Statics.shared.fontSizes.content),
+                            textAlign: TextAlign.center,
+                          ),
+                          onPressed: () {
+                            userInformation.loginCheck = 0;
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new SplashScreen()));
+                          },
+                        ),
+                      ],
+                    ))))
+          ],
+        ),
+      ),
+    );
   }
 }
 

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 
-class HeagisaButton extends StatefulWidget {
+class HaegisaButton extends StatefulWidget {
   String iconURL;
   String text = "";
   VoidCallback onPressed;
 
-  HeagisaButton({String text, String iconURL, VoidCallback onPressed}) {
+  HaegisaButton({String text, String iconURL, VoidCallback onPressed}) {
     this.text = text;
     this.iconURL = iconURL;
     this.onPressed = onPressed;
   }
 
   @override
-  _HeagisaButtonState createState() {
-    return _HeagisaButtonState();
+  _HaegisaButtonState createState() {
+    return _HaegisaButtonState();
   }
 }
 
-class _HeagisaButtonState extends State<HeagisaButton> {
+class _HaegisaButtonState extends State<HaegisaButton> {
   @override
   Widget build(BuildContext context) {
     return Container(

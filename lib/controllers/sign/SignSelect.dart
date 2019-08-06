@@ -14,6 +14,7 @@ import 'package:haegisa2/views/buttons/Buttons.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'dart:io' show Platform;
 
 String idValue = "";
@@ -26,6 +27,7 @@ class SignSelect extends StatefulWidget {
 }
 
 class _SignInState extends State<SignSelect> {
+  String agree = userInformation.agree;
   @override
   Widget build(BuildContext context) {
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;

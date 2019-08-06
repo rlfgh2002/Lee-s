@@ -18,6 +18,14 @@ class Agree extends StatefulWidget {
 
 class _AgreeInState extends State<Agree> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+
+  bool _termsChecked = true;
+
+  String btnStatus = "";
+  String btnOff = "Resources/Icons/radio_inactive.png";
+  String btnOn = "Resources/Icons/radio_active.png";
+
   @override
   Widget build(BuildContext context) {
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
@@ -60,10 +68,7 @@ class _AgreeInState extends State<Agree> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          "Resources/Icons/radio_inactive.png",
-                          scale: 4.0,
-                        ),
+                        ListView(children: getFormWidget()),
                         Text(
                           " " +
                               Strings.shared.controllers.term
@@ -75,7 +80,13 @@ class _AgreeInState extends State<Agree> {
                           textAlign: TextAlign.left,
                         ),
                       ]),
-                  onPressed: () {},
+                  onPressed: () {
+                    if (btnStatus == btnOff) {
+                      btnStatus = btnOn;
+                    } else {
+                      btnStatus = btnOff;
+                    }
+                  },
                   padding: const EdgeInsets.only(right: 64),
                 ),
                 padding: const EdgeInsets.only(bottom: 20)),
@@ -228,5 +239,30 @@ class _AgreeInState extends State<Agree> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(content: Text(str));
     _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  List<Widget> getFormWidget() {
+    List<Widget> formWidget = new List();
+
+    formWidget.add(CheckboxListTile(
+      value: _termsChecked,
+      onChanged: (value) {
+        setState(() {
+          _termsChecked = value;
+        });
+      },
+      subtitle: !_termsChecked
+          ? Text(
+              'Required',
+              style: TextStyle(color: Colors.red, fontSize: 12.0),
+            )
+          : null,
+      title: new Text(
+        'I agree to the terms and condition',
+      ),
+      controlAffinity: ListTileControlAffinity.leading,
+    ));
+
+    return formWidget;
   }
 }

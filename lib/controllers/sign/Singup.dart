@@ -145,7 +145,7 @@ class _SignInState extends State<SignUp> {
       bottomNavigationBar: Container(
         child: Row(
           children: [
-            HeagisaButton(
+            HaegisaButton(
               text: Strings.shared.controllers.signIn.loginBtnTitle,
               iconURL: "Resources/Icons/Vector 3.2.png",
               onPressed: () async {

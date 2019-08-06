@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/auth.dart';
 import 'package:haegisa2/main.dart';
 import 'dart:async';
@@ -109,11 +110,12 @@ class _AuthWidgetState extends State<AuthWidget> {
                                 ),
                                 onPressed: () {
                                   flutterWebviewPlugin.close();
-                                  userInformation.lognCheck = 0;
+                                  userInformation.loginCheck = 0;
                                   Navigator.push(
                                       context,
                                       new MaterialPageRoute(
-                                          builder: (context) => new MyApp()));
+                                          builder: (context) =>
+                                              new SplashScreen()));
                                 },
                               ),
                             ],

@@ -31,6 +31,7 @@ class _SignInState extends State<SignAuth> {
         backgroundColor: Colors.white,
         centerTitle: false,
         elevation: 0,
+        key: _scaffoldKey,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
       body: Container(
