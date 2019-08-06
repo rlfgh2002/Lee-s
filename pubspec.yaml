@@ -1,0 +1,140 @@
+name: haegisa2
+description: A new Flutter project.
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^0.5.2
+  flutter_webview_plugin: ^0.3.5
+  firebase_messaging: ^5.1.0
+  firebase_core: ^0.4.0+6
+  firebase_auth: ^0.11.1+8
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+  http: 0.12.0+2 #network json parsing
+  json_annotation: ^2.0.0 #json
+  device_info: ^0.4.0+2
+  package_info: ^0.4.0+4
+  sqflite: ^1.1.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  json_serializable: ^2.0.3 #json
+
+# For information on the generic Dart part of this file, see the
+# following page: https://www.dartlang.org/tools/pub/pubspec
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    # Icons
+    - Resources/Icons/left-arrow.png
+    - Resources/Icons/button_check.png
+    - Resources/Icons/radio_active.png
+    - Resources/Icons/radio_inactive.png
+    - Resources/Icons/img_notice.png
+    - Resources/Icons/img_vote.png
+    - Resources/Icons/img_survey.png
+    - Resources/Icons/icon_search.png
+    - Resources/Icons/icon_id.png
+    - Resources/Icons/icon_pass.png
+    - Resources/Icons/icon_caution.png
+    - Resources/Icons/button_check_inactive.png
+    - Resources/Icons/user_img_01.png
+    - Resources/Icons/btn_finduser_ac.png
+    - Resources/Icons/btn_mymenu_ac.png
+    - Resources/Icons/btn_chat_ac.png
+    - Resources/Icons/Vector 3.2.png
+    - Resources/Icons/user_img_03.png
+    - Resources/Icons/user_img_02.png
+    - Resources/Icons/none.png
+    - Resources/Icons/elections.png
+    - Resources/Icons/icon_barcode.png
+    - Resources/Icons/icon_date.png
+    - Resources/Icons/btn_notice_ac.png
+    - Resources/Icons/btn_main_ac.png
+    - Resources/Icons/icon_Permission.png
+    - Resources/Icons/icon_send_active.png
+    - Resources/Icons/profile.png
+    - Resources/Icons/refusal.png
+    - Resources/Icons/block.png
+    - Resources/Icons/x-mark.png
+    - Resources/Icons/btn_more.png
+    - Resources/Icons/icon_intro.png
+    - Resources/Icons/icon_map.png
+    - Resources/Icons/icon_webzine.png
+    - Resources/Icons/icon_survey.png
+    - Resources/Icons/icon_refusal.png
+    - Resources/Icons/icon_send.png
+    - Resources/Icons/btn_next_green.png
+    - Resources/Icons/btn_next_blue.png
+    - Resources/Icons/btn_notice.png
+    - Resources/Icons/btn_main.png
+    - Resources/Icons/btn_finduser.png
+    - Resources/Icons/btn_mymenu.png
+    - Resources/Icons/btn_chat.png
+    - Resources/Icons/Line2.png
+    - Resources/Icons/login_join.png
+    - Resources/Icons/login_sign.png
+    - Resources/Icons/btn_certi.png
+    # Images
+    - Resources/Images/ill_survey.png
+    - Resources/Images/ill_service.png
+    - Resources/Images/ill_vote.png
+    - Resources/Images/no_member.png
+    # Single Chat Page
+    - Resources/Images/leftEdge.png
+    - Resources/Images/rightEdge.png
+    - Resources/Icons/Line.png
+    - Resources/Images/userAvatar.png
+    - Resources/Images/userAlertTop.png
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware.
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
