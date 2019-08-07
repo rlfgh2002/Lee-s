@@ -84,74 +84,53 @@ class ChatState extends State<Chat> {
 
   void sendChat({String message, onSent(), onNotSent()}) async {
 
-    String y = DateTime.now().year.toString();
-    String m = DateTime.now().month.toString();
-    String d = DateTime.now().day.toString();
+    MainTabBar.myChild.getUserId(onGetUserId: (uid){
+      String y = DateTime.now().year.toString();
+      String m = DateTime.now().month.toString();
+      String d = DateTime.now().day.toString();
 
-    String h = DateTime.now().hour.toString();
-    String i = DateTime.now().minute.toString();
-    String s = DateTime.now().second.toString();
+      String h = DateTime.now().hour.toString();
+      String i = DateTime.now().minute.toString();
+      String s = DateTime.now().second.toString();
 
-    String date = "${y.toString()}/${m.toString()}/${d.toString()} ${h.toString()}:${i.toString()}:${s.toString()}";
-    String msg = MiddleWare.shared.txtChat.text;
-    this.widget.db.insertChat(
-        convId: chatCurrentConvId,
-        userId: MiddleWare.shared.user.UID,
-        content: msg,
-        isYours: "TRUE",
-        date: date,
-        onAdded: (){
-          //refreshChats();
-          addMessageToList(date: date,isYours: true,msg: msg,senderName: "");
-        }
-    );
-    setState(() {
-      MiddleWare.shared.txtChat.text = "";
+      String date = "${y.toString()}/${m.toString()}/${d.toString()} ${h.toString()}:${i.toString()}:${s.toString()}";
+      String msg = MiddleWare.shared.txtChat.text;
+      this.widget.db.insertChat(
+          convId: chatCurrentConvId,
+          userId: MiddleWare.shared.user.UID,
+          content: msg,
+          isYours: "TRUE",
+          date: date,
+          onAdded: (){
+            //refreshChats();
+            addMessageToList(date: date,isYours: true,msg: msg,senderName: "");
+          }
+      );
+      setState(() {
+        MiddleWare.shared.txtChat.text = "";
+      });
+
+      http.post(Statics.shared.urls.sendChatServer,
+          body: {
+            'conversationId':chatCurrentConvId,
+            'fromId':uid,
+            'toId':MiddleWare.shared.user.UID,
+            'message':message,
+          }
+      ).then((val){
+      }).catchError((error){
+        print(":::::::::::::::::: on sending chat error : ${error.toString()} ::::::::::::::::::");
+      }).whenComplete((){
+
+        print("::::::::::::::::::::: [ SEND DATA ] :::::::::::::::::::::");
+        print("userId: ${uid}");
+        print("convId: ${chatCurrentConvId}");
+        print("toId: ${MiddleWare.shared.user.UID}");
+        print("message: ${message}");
+        print("::::::::::::::::::::: [ SEND DATA ] :::::::::::::::::::::");
+
+      });
     });
-
-    await http.post(Statics.shared.urls.sendChatServer,
-        body: {
-          'conversationId':chatCurrentConvId,
-          'fromId':MainTabBar.mainTabBar.myUserId,
-          'toId':MiddleWare.shared.user.UID,
-          'message':message,
-        }
-    ).then((val){
-    }).catchError((error){
-      print(":::::::::::::::::: on sending chat error : ${error.toString()} ::::::::::::::::::");
-    }).whenComplete((){
-
-      print("::::::::::::::::::::: [ SEND DATA ] :::::::::::::::::::::");
-      print("userId: ${MainTabBar.mainTabBar.myUserId}");
-      print("convId: ${chatCurrentConvId}");
-      print("toId: ${MiddleWare.shared.user.UID}");
-      print("message: ${message}");
-      print("::::::::::::::::::::: [ SEND DATA ] :::::::::::::::::::::");
-
-    });
-
-//    if (response.statusCode == 200) {
-//      // If server returns an OK response, parse the JSON.
-//      print("JSON OUTPUT:${response.body.toString()}");
-//      var parsedJson = json.decode(response.body.toString());
-//      //ChatObject chat = ChatObject.fromJson(parsedJson);
-//      if(parsedJson['success'] == 1){
-//        onSent();
-////        this.widget.db.insertChat(
-////                    convId: MiddleWare.shared.conversationID,
-////                    userId: MiddleWare.shared.user.UID,
-////                    chatId: chatItem.message_id,
-////                    content: chatItem.notificationContent,
-////                    date: chatItem.notificationRegDate,
-////                );
-//      }else{
-//        onNotSent();
-//      }
-//
-//    } else {
-//      // If that response was not OK, throw an error.
-//      throw Exception('Failed to load post Server Error');
-//    }
   }
 
   _displaySnackBar(BuildContext context, String str) {

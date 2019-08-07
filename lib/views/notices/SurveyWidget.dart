@@ -10,10 +10,15 @@ class SurveyWidget extends StatefulWidget {
   String groupName = "";
   int itemIndex = 1;
   double result = 0;
+  String surveyIdx = "";
+  String qNum = "";
+  VoidCallback onTappedFalse;
+  VoidCallback onTappedTrue;
 
-  VoidCallback onTapped;
-
-  SurveyWidget({bool isChecked = false,double width = 0,String survey = "", String groupName = "", int itemIndex = 1,double result = 0, bool isAfter = false}){
+  SurveyWidget({bool isChecked = false,double width = 0,String survey = "", String groupName = "", int itemIndex = 1,double result = 0, bool isAfter = false, String surveyIdx, String qNum,
+  VoidCallback onTappedTrue,
+  VoidCallback onTappedFalse
+  }){
     this.width = width;
     this.survey = survey;
     this.groupName = groupName;
@@ -21,6 +26,10 @@ class SurveyWidget extends StatefulWidget {
     this.isChecked = isChecked;
     this.result = result;
     this.isAfter = isAfter;
+    this.surveyIdx = surveyIdx;
+    this.qNum = qNum;
+    this.onTappedTrue = onTappedTrue;
+    this.onTappedFalse = onTappedFalse;
   }
 
   @override
@@ -54,6 +63,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
                 setState(() {
                   this.widget.isChecked = true;
                 });
+                this.widget.onTappedTrue();
               },
               padding: const EdgeInsets.all(0),
               child: Container(
@@ -87,6 +97,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
               setState(() {
                 this.widget.isChecked = false;
               });
+              this.widget.onTappedFalse();
             },
             padding: const EdgeInsets.all(0),
             child: Container(
@@ -117,6 +128,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
               setState(() {
                 this.widget.isChecked = true;
               });
+              this.widget.onTappedTrue();
             },
             padding: const EdgeInsets.all(0),
             child: Container(

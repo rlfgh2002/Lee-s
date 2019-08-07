@@ -41,7 +41,7 @@ class NoticesState extends State<Notices> {
     );
   }
 
-  showPopUp({String content,String idx,String votingPeriod,List<String> votes, VoidCallback onPressApply, VoidCallback onPressClose, NoticeType nt = NoticeType.Vote}){
+  showPopUp({String content,String idx,String votingPeriod,List<String> votes, VoidCallback onPressApply, VoidCallback onPressClose, NoticeType nt = NoticeType.Vote, List<Map<String, dynamic>> surveys}){
     double popUpWidth = MiddleWare.shared.screenWidth - 64;
     double height = MediaQuery.of(context).size.height / 1.5;
 
@@ -65,7 +65,7 @@ class NoticesState extends State<Notices> {
             });
       }// Vote
       else{
-        return HaegisaAlertSurveyDialog(votes: votes,
+        return HaegisaAlertSurveyDialog(surveys: surveys,
             votingPeriod: votingPeriod,
             popUpWidth: popUpWidth,
             popUpHeight: height,
@@ -123,34 +123,15 @@ class NoticesState extends State<Notices> {
       for(int i = 0; i < res.length; i++){
         NoticeWidget item = NoticeWidget(title: res[i]['subject'].toString(),shortDescription: res[i]['contents'].toString(),time: res[i]['start_date'].toString(),type: NoticeType.Survey,
           onTapped: (){
-            widget.db.selectSurveyAnswer(idx: res[i]['bd_idx'],onResult: (answers){
-              if(answers.length > 0){
-                List<String> answersData = [];
-
-                if(answers.first['answ1'] != "" && answers.first['answ1'] != null){
-                  answersData.add(answers.first['answ1'].toString());
-                }
-                if(answers.first['answ2'] != "" && answers.first['answ2'] != null){
-                  answersData.add(answers.first['answ2'].toString());
-                }
-                if(answers.first['answ3'] != "" && answers.first['answ3'] != null){
-                  answersData.add(answers.first['answ3'].toString());
-                }
-                if(answers.first['answ4'] != "" && answers.first['answ4'] != null){
-                  answersData.add(answers.first['answ4'].toString());
-                }
-                if(answers.first['answ5'] != "" && answers.first['answ5'] != null){
-                  answersData.add(answers.first['answ5'].toString());
-                }
-                if(answers.first['answ6'] != "" && answers.first['answ6'] != null){
-                  answersData.add(answers.first['answ6'].toString());
-                }
+            widget.db.selectSurveyAnswer(idx: res[i]['bd_idx'],onResult: (surveys){
+              if(surveys.length > 0){
 
                 showPopUp(
                     content: res[i]['contents'].toString(),
                     nt: NoticeType.Survey,
                     votingPeriod: " ~ ${res[i]['end_date'].toString()}",
-                    votes: answersData,
+                    votes: [],
+                    surveys: surveys,
                     idx: res[i]['bd_idx'].toString(),
                     onPressClose: (){
                       Navigator.pop(_scaffold.currentContext);
@@ -223,6 +204,7 @@ class NoticesState extends State<Notices> {
                       content: results[i].content,
                       votingPeriod: " ~ ${results[i].endDate}",
                       votes: answers,
+                      surveys: [],
                       idx: answer['voteIdx'],
                       onPressClose: (){
                         Navigator.pop(_scaffold.currentContext);

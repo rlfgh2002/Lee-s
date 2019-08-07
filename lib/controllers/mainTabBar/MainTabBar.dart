@@ -90,11 +90,31 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                             if(z == 5){
                               ans6 = qItems["${qStr.toString()}_${(z+1).toString()}"];
                             }
+                            if(z == 6){
+                              ans7 = qItems["${qStr.toString()}_${(z+1).toString()}"];
+                            }
+                            if(z == 7){
+                              ans8 = qItems["${qStr.toString()}_${(z+1).toString()}"];
+                            }
                           }// for loop 2
+
+                          print("**************************************************");
+                          print("ANS 1 : ${ans1}");
+                          print("ANS 2 : ${ans2}");
+                          print("ANS 3 : ${ans3}");
+                          print("ANS 4 : ${ans4}");
+                          print("ANS 5 : ${ans5}");
+                          print("ANS 6 : ${ans6}");
+                          print("ANS 7 : ${ans7}");
+                          print("ANS 8 : ${ans8}");
+                          print("q Title : ${dataAnswers['q${(j+1).toString()}'].toString()}");
+                          print("QN : ${(j+1).toString()}");
+                          print("**************************************************");
 
                           widget.db.insertSurveyAnswer(
                               idx: myList[i]['bd_idx'].toString(),
                               qTitle: dataAnswers['q${(j+1).toString()}'].toString(),
+                              qN: (j+1).toString(),
                               answer1: ans1,
                               answer2: ans2,
                               answer3: ans3,
@@ -103,6 +123,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                               answer6: ans6,
                               answer7: ans7,
                               answer8: ans8,
+                              cnt: qCnt.toString(),
                               onAdded: (){
                                 print("ADDDEDDDD TOOO SANS");
                                 if(Notices.staticNoticesPage != null && Notices.staticNoticesPage.myChild != null){

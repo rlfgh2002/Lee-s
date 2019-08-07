@@ -50,6 +50,7 @@ class _StaticDbInformation
 
   static const String tblAnswersSurveyIdx = 'surveyIdx';
   static const String tblAnswersSurveyQN = 'qNumber';
+  static const String tblAnswersSurveyCNT = 'qCnt';
   static const String tblAnswersSurveyTitle = 'title';
   static const String tblAnswersSurveyQ1 = 'q1';
   static const String tblAnswersSurveyQ2 = 'q2';
@@ -129,7 +130,7 @@ class MyDataBase
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
           });
 
-          await db.execute('CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersSurveyIdx} TEXT, ${_StaticDbInformation.tblAnswersSurveyQN} TEXT,${_StaticDbInformation.tblAnswersSurveyQ1} TEXT,${_StaticDbInformation.tblAnswersSurveyQ2} TEXT,${_StaticDbInformation.tblAnswersSurveyQ3} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ4} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ5} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ6} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ7} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ8} TEXT)').then((val){
+          await db.execute('CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersSurveyIdx} TEXT, ${_StaticDbInformation.tblAnswersSurveyQN} TEXT, ${_StaticDbInformation.tblAnswersSurveyTitle} TEXT,${_StaticDbInformation.tblAnswersSurveyCNT} TEXT,${_StaticDbInformation.tblAnswersSurveyQ1} TEXT,${_StaticDbInformation.tblAnswersSurveyQ2} TEXT,${_StaticDbInformation.tblAnswersSurveyQ3} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ4} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ5} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ6} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ7} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ8} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
@@ -365,7 +366,7 @@ class MyDataBase
     });
   }
 
-  void insertSurveyAnswer({String idx, String qTitle = "i", String answer1 = "", String answer2 = "", String answer3 = "", String answer4 = "", String answer5 = "", String answer6 = "",String answer7 = "",String answer8 = "", onAdded(),}) async
+  void insertSurveyAnswer({String idx,String cnt = "0", String qTitle = "",String qN, String answer1 = "", String answer2 = "", String answer3 = "", String answer4 = "", String answer5 = "", String answer6 = "",String answer7 = "",String answer8 = "", onAdded(),}) async
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -373,8 +374,8 @@ class MyDataBase
     await openDatabase(path).then((db){
 
       db.transaction((txn) async {
-        int id1 = await txn.rawInsert(
-            'INSERT INTO ${_StaticDbInformation.tblSurveysAnswers} (${_StaticDbInformation.tblAnswersSurveyIdx},${_StaticDbInformation.tblAnswersSurveyQN},${_StaticDbInformation.tblAnswersSurveyQ1},${_StaticDbInformation.tblAnswersSurveyQ2}, ${_StaticDbInformation.tblAnswersSurveyQ3}, ${_StaticDbInformation.tblAnswersSurveyQ4}, ${_StaticDbInformation.tblAnswersSurveyQ5}, ${_StaticDbInformation.tblAnswersSurveyQ6}, ${_StaticDbInformation.tblAnswersSurveyQ7}, ${_StaticDbInformation.tblAnswersSurveyQ8}) VALUES ("${idx.toString()}","FALSE","${qTitle.toString()}","${answer1.toString()}","${answer2.toString()}","${answer3.toString()}","${answer4.toString()}","${answer5.toString()}","${answer6.toString()}","${answer7.toString()},"${answer8.toString()}"")');
+        String query = 'INSERT INTO ${_StaticDbInformation.tblSurveysAnswers} (${_StaticDbInformation.tblAnswersSurveyIdx},${_StaticDbInformation.tblAnswersSurveyQN},${_StaticDbInformation.tblAnswersSurveyTitle},${_StaticDbInformation.tblAnswersSurveyCNT},${_StaticDbInformation.tblAnswersSurveyQ1},${_StaticDbInformation.tblAnswersSurveyQ2}, ${_StaticDbInformation.tblAnswersSurveyQ3}, ${_StaticDbInformation.tblAnswersSurveyQ4}, ${_StaticDbInformation.tblAnswersSurveyQ5}, ${_StaticDbInformation.tblAnswersSurveyQ6}, ${_StaticDbInformation.tblAnswersSurveyQ7}, ${_StaticDbInformation.tblAnswersSurveyQ8}) VALUES ("${idx.toString()}","${qN.toString()}","${qTitle.toString()}","${cnt.toString()}","${answer1.toString()}","${answer2.toString()}","${answer3.toString()}","${answer4.toString()}","${answer5.toString()}","${answer6.toString()}","${answer7.toString()}","${answer8.toString()}")';
+        int id1 = await txn.rawInsert(query);
         print(":::::::::: DB INSERT(answer survey) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
         onAdded();

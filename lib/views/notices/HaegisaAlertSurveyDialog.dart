@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/notices/SurveyWidget.dart';
+import 'package:http/http.dart' as http;
 
+class HaegisaAlertSurveyCheckedListObj
+{
+  String question = "";
+  String answer = "";
+  String idx = "";
+  String cnt = "0";
+
+  HaegisaAlertSurveyCheckedListObj({
+  String Q,
+  String A,
+  String I,
+  String cnt,
+  }){
+    this.question = Q;
+    this.answer = A;
+    this.idx = I;
+    this.cnt = cnt;
+  }
+}
 class HaegisaAlertSurveyDialog extends StatefulWidget {
 
   final db = MyDataBase();
@@ -21,11 +42,12 @@ class HaegisaAlertSurveyDialog extends StatefulWidget {
   double popUpWidth = 0;
   String content = "";
   String votingPeriod = "";
-  List<String> votes = [];
+  List<Map<String, dynamic>> surveys = [];
+  List<HaegisaAlertSurveyCheckedListObj> surveysChecked = [];
 
-  HaegisaAlertSurveyDialog({String idx,double popUpWidth = 0,double popUpHeight = 0,String content,String votingPeriod,List<String> votes, VoidCallback onPressClose, VoidCallback onPressApply}){
+  HaegisaAlertSurveyDialog({String idx,double popUpWidth = 0,double popUpHeight = 0,String content,String votingPeriod,List<Map<String, dynamic>> surveys, VoidCallback onPressClose, VoidCallback onPressApply}){
     this.content = content;
-    this.votes = votes;
+    this.surveys = surveys;
     this.votingPeriod = votingPeriod;
     this.popUpWidth = popUpWidth;
     this.onPressApply = onPressApply;
@@ -40,6 +62,78 @@ class HaegisaAlertSurveyDialog extends StatefulWidget {
 
 class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
 
+  void submitSurvey({String bdxId}) async{
+
+    String q1 = "";String q2 = "";String q3 = "";
+    String q4 = "";String q5 = "";String q6 = "";
+    String q7 = "";String q8 = "";String q9 = "";
+    String q10 = "";
+
+    String qCnt = "";
+
+    this.widget.surveysChecked.forEach((item){
+      qCnt = item.cnt;
+      String itemX = "q${item.question}_${item.answer}";
+      switch(int.parse(item.question)){
+        case 1:
+          q1 = itemX;
+          break;
+        case 2:
+          q2 = itemX;
+          break;
+        case 3:
+          q3 = itemX;
+          break;
+        case 4:
+          q4 = itemX;
+          break;
+        case 5:
+          q5 = itemX;
+          break;
+        case 6:
+          q6 = itemX;
+          break;
+        case 7:
+          q7 = itemX;
+          break;
+        case 8:
+          q8 = itemX;
+          break;
+        case 9:
+          q9 = itemX;
+          break;
+        case 10:
+          q10 = itemX;
+          break;
+      }
+    });
+
+    MainTabBar.myChild.getUserId(onGetUserId: (uid){
+      http.post(Statics.shared.urls.submitSurvey(),
+          body: {
+            'mode':'submit',
+            'userId':uid,
+            'bd_idx':bdxId,
+            'q_cnt':qCnt,
+            'q1':q1,
+            'q2':q2,
+            'q3':q3,
+            'q4':q4,
+            'q5':q5,
+            'q6':q6,
+            'q7':q7,
+            'q8':q8,
+            'q9':q9,
+            'q10':q10,
+          }
+      ).then((val){
+        print(":::::::::::::::::: Submitting survey was Successful. : ${val.body.toString()} ::::::::::::::::::");
+      }).catchError((error){
+        print(":::::::::::::::::: error on sending Survey to Server : ${error.toString()} ::::::::::::::::::");
+      });
+    });
+  }
+
   Container beforeSurvey(){
     return Container(
       height: 60,
@@ -53,6 +147,8 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
           Container(color: Statics.shared.colors.mainColor, child: FlatButton(child: Text(Strings.shared.dialogs.submitBtnTitle, style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.subTitleInContent, color: Colors.white),),onPressed: (){
             // submit Survey
             // Submit this Survey to Server ...
+            print("Connect To Server ........");
+            this.submitSurvey(bdxId: this.widget.surveysChecked.first.idx);
             setState(() {
               this.widget.bottomButton = afterSurvey();
               this.widget.surveyList = resultList();
@@ -64,6 +160,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       ),
     );
   }
+
   Container afterSurvey() {
     return Container(
       height: 60,
@@ -76,10 +173,37 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
   }
 
   Container surveyList(){
-    List<SurveyWidget> mySurveysList = [];
-    for(int i = 0; i < widget.votes.length; i++){
-      mySurveysList.add(SurveyWidget(width: this.widget.popUpWidth - 64,survey: this.widget.votes[i],groupName: "voteGroup",itemIndex: i,result: 100,isChecked: false,isAfter: false,));
-    }
+    List<Widget> mySurveysList = [];
+    for(int i = 0; i < widget.surveys.length; i++){
+      mySurveysList.add(Padding(child: Text("${this.widget.surveys[i]['title']}"),padding: const EdgeInsets.only(bottom: 8),));
+      for(int j = 0; j < 8; j++){
+        if(this.widget.surveys[i]['q${j+1}'] != ""){
+          mySurveysList.add(SurveyWidget(width: this.widget.popUpWidth - 64,survey: this.widget.surveys[i]['q${j+1}'],groupName: "voteGroup",itemIndex: i,result: 100,isChecked: false,isAfter: false,surveyIdx: this.widget.surveys[i]['surveyIdx'],qNum: this.widget.surveys[i]['qNumber']
+          ,
+            onTappedTrue: (){
+            this.widget.surveysChecked.add(
+                HaegisaAlertSurveyCheckedListObj(
+                    Q: this.widget.surveys[i]['qNumber'],
+                    A: (j+1).toString(),
+                    I: this.widget.surveys[i]['surveyIdx'],
+                    cnt: this.widget.surveys[i]['qNumber'],
+                )
+                );
+            },
+            onTappedFalse: (){
+              int delIndex = 0;
+              this.widget.surveysChecked.forEach((item){
+                if(item.question == this.widget.surveys[i]['qNumber'] && item.answer == (j+1).toString() && item.idx == this.widget.surveys[i]['surveyIdx'])
+                {
+                  this.widget.surveysChecked.removeAt(delIndex);
+                }
+                delIndex++;
+              });
+            },
+          ));
+        }
+      }//loop2
+    }//loop1
     return Container(
       child: ListView(
         children: mySurveysList,
@@ -89,13 +213,18 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
   }
   Container resultList() {
 
-    List<SurveyWidget> mySurveysList = [];
-    for(int i = 0; i < widget.votes.length; i++){
+    List<Widget> mySurveysList = [];
+    for(int i = 0; i < widget.surveys.length; i++){
       double percent = 5;
       if(i == 0){
         percent = 95;
       }
-      mySurveysList.add(SurveyWidget(width: this.widget.popUpWidth - 64,survey: this.widget.votes[i],groupName: "voteGroup",itemIndex: i,result: percent,isChecked: true,isAfter: true));
+      mySurveysList.add(Padding(child: Text("${this.widget.surveys[i]['title']}"),padding: const EdgeInsets.only(bottom: 8),));
+      for(int j = 0; j < 8; j++){
+        if(this.widget.surveys[i]['q${j+1}'] != ""){
+          mySurveysList.add(SurveyWidget(width: this.widget.popUpWidth - 64,survey: this.widget.surveys[i]['q${j+1}'],groupName: "voteGroup",itemIndex: i,result: percent,isChecked: true,isAfter: true));
+        }
+      }//loop2
     }
     return Container(
       child: ListView(

@@ -9,4 +9,7 @@ class URLS
   String searchSurveysAnswers(String uid, String idx){
     return "http://mariners.or.kr/app_middle/survey/survey_json.php?bd_idx=${idx}&mode=view&userId=${uid}";
   }
+  String submitSurvey(){
+    return "http://mariners.or.kr/app_middle/app_middle/survey/survey_json.php";
+  }
 }
