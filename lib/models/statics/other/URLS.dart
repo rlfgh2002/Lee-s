@@ -7,6 +7,6 @@ class URLS
     return "http://mariners.or.kr/app_middle/survey/survey_json.php?userId=${uid.toString()}&mode=search&page_number=1";
   }
   String searchSurveysAnswers(String uid, String idx){
-    return "http://mariners.or.kr/app_middle/vote/vote_json.php?idx=${idx}&mode=view&userId=${uid}";
+    return "http://mariners.or.kr/app_middle/survey/survey_json.php?bd_idx=${idx}&mode=view&userId=${uid}";
   }
 }

@@ -49,16 +49,19 @@ class _StaticDbInformation
   static const String tblAnswersAnswer6 = 'answ6';
 
   static const String tblAnswersSurveyIdx = 'surveyIdx';
-  static const String tblAnswersSurveyDone = 'surveyDone';
-  static const String tblAnswersSurveyStatus = 'status';
-  static const String tblAnswersSurveyAnswer1 = 'answ1';
-  static const String tblAnswersSurveyAnswer2 = 'answ2';
-  static const String tblAnswersSurveyAnswer3 = 'answ3';
-  static const String tblAnswersSurveyAnswer4 = 'answ4';
-  static const String tblAnswersSurveyAnswer5 = 'answ5';
-  static const String tblAnswersSurveyAnswer6 = 'answ6';
+  static const String tblAnswersSurveyQN = 'qNumber';
+  static const String tblAnswersSurveyTitle = 'title';
+  static const String tblAnswersSurveyQ1 = 'q1';
+  static const String tblAnswersSurveyQ2 = 'q2';
+  static const String tblAnswersSurveyQ3 = 'q3';
+  static const String tblAnswersSurveyQ4 = 'q4';
+  static const String tblAnswersSurveyQ5 = 'q5';
+  static const String tblAnswersSurveyQ6 = 'q6';
+  static const String tblAnswersSurveyQ7 = 'q7';
+  static const String tblAnswersSurveyQ8 = 'q8';
 
   static const String tblSurveysNo = 'no';
+  static const String tblSurveysDone = 'isDone';
   static const String tblSurveysBdIdx = 'bd_idx';
   static const String tblSurveysStartDate = 'start_date';
   static const String tblSurveysEndDate = 'end_date';
@@ -120,13 +123,13 @@ class MyDataBase
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
           });
 
-          await db.execute('CREATE TABLE ${_StaticDbInformation.tblSurveys} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblSurveysNo} TEXT,${_StaticDbInformation.tblSurveysBdIdx} TEXT,${_StaticDbInformation.tblSurveysStartDate} TEXT,${_StaticDbInformation.tblSurveysEndDate} TEXT, ${_StaticDbInformation.tblSurveysSubject} TEXT, ${_StaticDbInformation.tblSurveysContents} TEXT, ${_StaticDbInformation.tblSurveysQcnt} TEXT)').then((val){
+          await db.execute('CREATE TABLE ${_StaticDbInformation.tblSurveys} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblSurveysNo} TEXT, ${_StaticDbInformation.tblSurveysDone} TEXT,${_StaticDbInformation.tblSurveysBdIdx} TEXT,${_StaticDbInformation.tblSurveysStartDate} TEXT,${_StaticDbInformation.tblSurveysEndDate} TEXT, ${_StaticDbInformation.tblSurveysSubject} TEXT, ${_StaticDbInformation.tblSurveysContents} TEXT, ${_StaticDbInformation.tblSurveysQcnt} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblSurveys} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
           });
 
-          await db.execute('CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersSurveyIdx} TEXT, ${_StaticDbInformation.tblAnswersSurveyDone} TEXT,${_StaticDbInformation.tblAnswersSurveyStatus} TEXT,${_StaticDbInformation.tblAnswersSurveyAnswer1} TEXT,${_StaticDbInformation.tblAnswersSurveyAnswer2} TEXT, ${_StaticDbInformation.tblAnswersSurveyAnswer3} TEXT, ${_StaticDbInformation.tblAnswersSurveyAnswer4} TEXT, ${_StaticDbInformation.tblAnswersSurveyAnswer5} TEXT, ${_StaticDbInformation.tblAnswersSurveyAnswer6} TEXT)').then((val){
+          await db.execute('CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersSurveyIdx} TEXT, ${_StaticDbInformation.tblAnswersSurveyQN} TEXT,${_StaticDbInformation.tblAnswersSurveyQ1} TEXT,${_StaticDbInformation.tblAnswersSurveyQ2} TEXT,${_StaticDbInformation.tblAnswersSurveyQ3} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ4} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ5} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ6} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ7} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ8} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
@@ -283,7 +286,7 @@ class MyDataBase
     });
   }
 
-  void insertSurvey({onAdded(),String no, String bd_idx, String start_date, String end_date, String subject, String content, String q_cnt}) async
+  void insertSurvey({onAdded(),String no,String isDone,String bd_idx, String start_date, String end_date, String subject, String content, String q_cnt}) async
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -292,7 +295,7 @@ class MyDataBase
 
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'INSERT INTO ${_StaticDbInformation.tblSurveys} (${_StaticDbInformation.tblSurveysNo},${_StaticDbInformation.tblSurveysBdIdx},${_StaticDbInformation.tblSurveysStartDate}, ${_StaticDbInformation.tblSurveysEndDate}, ${_StaticDbInformation.tblSurveysSubject}, ${_StaticDbInformation.tblSurveysContents}, ${_StaticDbInformation.tblSurveysQcnt}) VALUES ("${no.toString()}","${bd_idx.toString()}","${start_date.toString()}","${end_date.toString()}","${subject.toString()}","${content.toString()}","${q_cnt.toString()}")');
+            'INSERT INTO ${_StaticDbInformation.tblSurveys} (${_StaticDbInformation.tblSurveysNo},${_StaticDbInformation.tblSurveysDone},${_StaticDbInformation.tblSurveysBdIdx},${_StaticDbInformation.tblSurveysStartDate}, ${_StaticDbInformation.tblSurveysEndDate}, ${_StaticDbInformation.tblSurveysSubject}, ${_StaticDbInformation.tblSurveysContents}, ${_StaticDbInformation.tblSurveysQcnt}) VALUES ("${no.toString()}","${isDone.toString()}","${bd_idx.toString()}","${start_date.toString()}","${end_date.toString()}","${subject.toString()}","${content.toString()}","${q_cnt.toString()}")');
         print(":::::::::: DB INSERT(survey) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
         onAdded();
@@ -362,7 +365,7 @@ class MyDataBase
     });
   }
 
-  void insertSurveyAnswer({String idx, String status = "i", String answer1 = "", String answer2 = "", String answer3 = "", String answer4 = "", String answer5 = "", String answer6 = "", onAdded(),}) async
+  void insertSurveyAnswer({String idx, String qTitle = "i", String answer1 = "", String answer2 = "", String answer3 = "", String answer4 = "", String answer5 = "", String answer6 = "",String answer7 = "",String answer8 = "", onAdded(),}) async
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -371,7 +374,7 @@ class MyDataBase
 
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'INSERT INTO ${_StaticDbInformation.tblSurveysAnswers} (${_StaticDbInformation.tblAnswersSurveyIdx},${_StaticDbInformation.tblAnswersSurveyDone},${_StaticDbInformation.tblAnswersSurveyStatus},${_StaticDbInformation.tblAnswersSurveyAnswer1}, ${_StaticDbInformation.tblAnswersSurveyAnswer2}, ${_StaticDbInformation.tblAnswersSurveyAnswer3}, ${_StaticDbInformation.tblAnswersSurveyAnswer4}, ${_StaticDbInformation.tblAnswersSurveyAnswer5}, ${_StaticDbInformation.tblAnswersSurveyAnswer6}) VALUES ("${idx.toString()}","FALSE","${status.toString()}","${answer1.toString()}","${answer2.toString()}","${answer3.toString()}","${answer4.toString()}","${answer5.toString()}","${answer6.toString()}")');
+            'INSERT INTO ${_StaticDbInformation.tblSurveysAnswers} (${_StaticDbInformation.tblAnswersSurveyIdx},${_StaticDbInformation.tblAnswersSurveyQN},${_StaticDbInformation.tblAnswersSurveyQ1},${_StaticDbInformation.tblAnswersSurveyQ2}, ${_StaticDbInformation.tblAnswersSurveyQ3}, ${_StaticDbInformation.tblAnswersSurveyQ4}, ${_StaticDbInformation.tblAnswersSurveyQ5}, ${_StaticDbInformation.tblAnswersSurveyQ6}, ${_StaticDbInformation.tblAnswersSurveyQ7}, ${_StaticDbInformation.tblAnswersSurveyQ8}) VALUES ("${idx.toString()}","FALSE","${qTitle.toString()}","${answer1.toString()}","${answer2.toString()}","${answer3.toString()}","${answer4.toString()}","${answer5.toString()}","${answer6.toString()}","${answer7.toString()},"${answer8.toString()}"")');
         print(":::::::::: DB INSERT(answer survey) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
         onAdded();
@@ -379,7 +382,7 @@ class MyDataBase
 
     });
   }
-  void updateSurveyAnswer({String idx, String voteDone = "FALSE" ,onUpdated(),}) async
+  void updateSurveyisDone({String idx, String voteDone = "FALSE" ,onUpdated(),}) async
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -388,7 +391,7 @@ class MyDataBase
 
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET ${_StaticDbInformation.tblAnswersSurveyDone} = "${voteDone.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}"');
+            'UPDATE ${_StaticDbInformation.tblSurveys} SET ${_StaticDbInformation.tblSurveysDone} = "${voteDone.toString()}" WHERE ${_StaticDbInformation.tblSurveysBdIdx} = "${idx.toString()}"');
         print(":::::::::: DB UPDATE(answer survey) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
         onUpdated();

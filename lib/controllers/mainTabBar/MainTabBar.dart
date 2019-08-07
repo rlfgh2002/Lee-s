@@ -49,6 +49,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             widget.db.checkSurveyExist(no: myList[i]['no'].toString(),onNoResult: (){
               widget.db.insertSurvey(
                   no: myList[i]['no'].toString(),
+                  isDone: 'FALSE',
                   bd_idx: myList[i]['bd_idx'].toString(),
                   start_date: myList[i]['start_date'].toString(),
                   end_date: myList[i]['end_date'].toString(),
@@ -57,22 +58,61 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   q_cnt: myList[i]['q_cnt'].toString(),
                   onAdded:(){
                     getSurveysAnswers(uid: uid, idx: myList[i]['bd_idx'].toString(),onSent: (response){
-                      var data = response['data'];
-                      widget.db.insertSurveyAnswer(
-                          idx: data['idx'].toString(),
-                          status: data['status'].toString(),
-                          answer1: data['a1'].toString(),
-                          answer2: data['a2'].toString(),
-                          answer3: data['a3'].toString(),
-                          answer4: data['a4'].toString(),
-                          answer5: data['a5'].toString(),
-                          answer6: data['a6'].toString(),
-                          onAdded: (){
-                            if(Notices.staticNoticesPage != null && Notices.staticNoticesPage.myChild != null){
-                              Notices.staticNoticesPage.myChild.refreshNotices();
+                      if(response['code'].toString() == "200"){
+                        Map<String, dynamic> dataAnswers = response['table'][0]['q_title'];
+                        int qCnt = int.parse(myList[i]['q_cnt'].toString());
+
+                        for(int j = 0; j < qCnt; j++){
+                          String qStr = "q${(j+1).toString()}";
+                          var qItems = dataAnswers['${qStr}_item'];
+                          int qItemsCount = qItems.length;
+
+                          String ans1 = "";String ans2 = "";String ans3 = "";
+                          String ans4 = "";String ans5 = "";String ans6 = "";
+                          String ans7 = "";String ans8 = "";
+
+                          for(int z = 0; z < qItemsCount; z++){
+                            if(z == 0){
+                              ans1 = qItems["${qStr.toString()}_${(z+1).toString()}"];
                             }
-                          }
-                      );
+                            if(z == 1){
+                              ans2 = qItems["${qStr.toString()}_${(z+1).toString()}"];
+                            }
+                            if(z == 2){
+                              ans3 = qItems["${qStr.toString()}_${(z+1).toString()}"];
+                            }
+                            if(z == 3){
+                              ans4 = qItems["${qStr.toString()}_${(z+1).toString()}"];
+                            }
+                            if(z == 4){
+                              ans5 = qItems["${qStr.toString()}_${(z+1).toString()}"];
+                            }
+                            if(z == 5){
+                              ans6 = qItems["${qStr.toString()}_${(z+1).toString()}"];
+                            }
+                          }// for loop 2
+
+                          widget.db.insertSurveyAnswer(
+                              idx: myList[i]['bd_idx'].toString(),
+                              qTitle: dataAnswers['q${(j+1).toString()}'].toString(),
+                              answer1: ans1,
+                              answer2: ans2,
+                              answer3: ans3,
+                              answer4: ans4,
+                              answer5: ans5,
+                              answer6: ans6,
+                              answer7: ans7,
+                              answer8: ans8,
+                              onAdded: (){
+                                print("ADDDEDDDD TOOO SANS");
+                                if(Notices.staticNoticesPage != null && Notices.staticNoticesPage.myChild != null){
+                                  Notices.staticNoticesPage.myChild.refreshNotices();
+                                }
+                              }
+                          );
+
+                        }// for loop
+                      }
                     });
                   }
               );
