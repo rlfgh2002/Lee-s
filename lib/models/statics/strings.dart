@@ -77,7 +77,11 @@ class _StringsControllerNoticesSnackBar {
 // NOTICES Controller //
 
 // PROFILE Controller //
-class _StringsControllerProfile {}
+class _StringsControllerProfile {
+  String memberType1 = "정회원";
+  String memberType2 = "준회원";
+  String memberTitle = "입니다.";
+}
 // PROFILE Controller //
 
 // SIGN IN Controller //

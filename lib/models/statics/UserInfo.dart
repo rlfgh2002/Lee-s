@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:haegisa2/models/User.dart';
-import 'package:haegisa2/models/database/MyDataBase.dart';
 import 'package:device_info/device_info.dart';
 import 'package:package_info/package_info.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math';
 import 'dart:async';
 import 'dart:io' show Platform;
 
@@ -26,6 +23,7 @@ class _UserInfo {
   String gender = ""; //0 : 여자, 1 : 남자
   String birth = ""; //0 : 여자, 1 : 남자
   String agree = "";
+  String memberType = ""; // 1:정회원 2:준회원
   User userData;
   int autoCheck = 0;
   int loginCheck = 0;
@@ -45,6 +43,7 @@ class _UserInfo {
     userInformation.agree = "";
     userInformation.autoCheck = 0;
     userInformation.loginCheck = 0;
+    userInformation.memberType = "";
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool("app_user_login_info_islogin", false);

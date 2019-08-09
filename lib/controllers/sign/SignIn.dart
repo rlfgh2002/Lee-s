@@ -211,10 +211,11 @@ class _SignInState extends State<SignIn> {
                         await deviceinfo();
 
                         userInformation.mode = "login";
-                        userInformation.fullName = resultPost.member_name;
+                        userInformation.fullName = resultPost.memberName;
                         userInformation.hp = resultPost.hp;
                         userInformation.loginCheck = 1;
                         userInformation.userID = idValue;
+                        userInformation.memberType = resultPost.memberType;
                         _firebaseMessaging.getToken().then((token) {
                           print(token);
                           userInformation.userToken = token;
@@ -383,21 +384,29 @@ Future<Result> createPost(String url, {Map body}) async {
 //JSON 데이터
 class Result {
   final String idx;
-  final String member_idx;
+  final String memberIdx;
   final String id;
-  final String member_name;
+  final String memberName;
   final String hp;
+  final String memberType;
 
-  Result({this.idx, this.member_idx, this.id, this.member_name, this.hp});
+  Result(
+      {this.idx,
+      this.memberIdx,
+      this.id,
+      this.memberName,
+      this.hp,
+      this.memberType});
 
   factory Result.fromJson(Map<String, dynamic> json, String url) {
     if (url == Strings.shared.controllers.jsonURL.loginJson) {
       return Result(
         idx: json['idx'],
-        member_idx: json['member_idx'],
+        memberIdx: json['member_idx'],
         id: json['id'],
-        member_name: json['member_name'],
+        memberName: json['member_name'],
         hp: json['hp'],
+        memberType: json['member_type'],
       );
     } else if (url == Strings.shared.controllers.jsonURL.loginJson) {}
   }
