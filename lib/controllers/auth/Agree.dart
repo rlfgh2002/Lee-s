@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:haegisa2/main.dart';
 import 'MiddleWare.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
-import 'package:haegisa2/controllers/auth/auth.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/views/buttons/Buttons.dart';
 import 'package:http/http.dart' as http;
 
 class Agree extends StatefulWidget {

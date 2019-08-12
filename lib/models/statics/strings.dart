@@ -78,9 +78,28 @@ class _StringsControllerNoticesSnackBar {
 
 // PROFILE Controller //
 class _StringsControllerProfile {
-  String memberType1 = "정회원";
-  String memberType2 = "준회원";
-  String memberTitle = "입니다.";
+  String appTitle = " 내 메뉴";
+  String memberType1 = "님은 정회원 입니다";
+  String memberType2 = "님은 준회원 입니다";
+  String feehistory = "회비납부 내역";
+  String inquiry = "1:1문의";
+  String occasion = "경조사 통보";
+  String advisory = "해기 자문센터";
+  String terms = "이용약관";
+  String alarm = "알림 수신동의";
+  String infoModify = "내 정보 수정";
+  String appVersion = "앱 버전";
+
+  //정보수정
+  String userinfoTitle = "내 정보 수정";
+  String userName = "이름";
+  String userType = "자격";
+  String userPhone = "전화번호";
+  String userMail = "이메일";
+  String userSchool = "출신학교";
+  String userGisu = "기수";
+  String save = "저장";
+  String modify = "수정";
 }
 // PROFILE Controller //
 

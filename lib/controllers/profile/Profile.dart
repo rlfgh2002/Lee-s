@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
+import 'package:haegisa2/controllers/profile/UserInfo.dart';
 import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 
 class Profile extends StatefulWidget {
@@ -13,12 +14,19 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     String typeAsset = "";
+    String typeTitle = "";
+    Color typeColor;
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
+
     if (userInformation.memberType == "51001") {
       typeAsset = "Resources/Icons/user_type_01.png";
+      typeTitle = Strings.shared.controllers.profile.memberType1;
+      typeColor = Statics.shared.colors.mainColor;
     } else {
       typeAsset = "Resources/Icons/user_type_02.png";
+      typeTitle = Strings.shared.controllers.profile.memberType2;
+      typeColor = Statics.shared.colors.subColor;
     }
 
     return new WillPopScope(
@@ -31,7 +39,7 @@ class _ProfileState extends State<Profile> {
 
       child: new Scaffold(
         appBar: AppBar(
-          title: Text("내 메뉴",
+          title: Text(Strings.shared.controllers.profile.appTitle,
               style: TextStyle(
                   color: Statics.shared.colors.titleTextColor,
                   fontSize: Statics.shared.fontSizes.title)),
@@ -48,13 +56,24 @@ class _ProfileState extends State<Profile> {
               Container(
                 child: Row(children: [
                   Image.asset(typeAsset, scale: 3),
-                  Text(" 홍길동님은 정회원 입니다.",
+                  Text(
+                      " " +
+                          userInformation.fullName +
+                          typeTitle.substring(0, 3),
+                      style: TextStyle(
+                          color: Statics.shared.colors.titleTextColor,
+                          fontSize: Statics.shared.fontSizes.titleInContent)),
+                  Text(typeTitle.substring(3, 6),
+                      style: TextStyle(
+                          color: typeColor,
+                          fontSize: Statics.shared.fontSizes.titleInContent)),
+                  Text(typeTitle.substring(6, 10),
                       style: TextStyle(
                           color: Statics.shared.colors.titleTextColor,
                           fontSize: Statics.shared.fontSizes.titleInContent)),
                 ]), // Row
                 alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 20, bottom: 5),
+                padding: const EdgeInsets.only(left: 20, bottom: 15, top: 15),
               ),
               Image.asset('Resources/Icons/Line3.png'),
               Container(
@@ -66,11 +85,15 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         SizedBox(
                             child: FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                               child: Row(children: [
                                 Image.asset(
                                     'Resources/Icons/btn_feehistory.png',
                                     scale: 2.5),
-                                Text("회비납부내역",
+                                Text(
+                                    Strings
+                                        .shared.controllers.profile.feehistory,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -80,14 +103,16 @@ class _ProfileState extends State<Profile> {
                               onPressed: () {},
                             ),
                             width: deviceWidth / 2,
-                            height: deviceWidth / 6),
+                            height: deviceWidth / 5),
                         VerticalDivider(width: 0),
                         SizedBox(
                             child: FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                               child: Row(children: [
                                 Image.asset('Resources/Icons/btn_inquiry.png',
                                     scale: 2.5),
-                                Text("1:1문의",
+                                Text(Strings.shared.controllers.profile.inquiry,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -97,7 +122,7 @@ class _ProfileState extends State<Profile> {
                               onPressed: () {},
                             ),
                             width: deviceWidth / 2,
-                            height: deviceWidth / 6)
+                            height: deviceWidth / 5)
                       ],
                     ), // Row Children
                   )),
@@ -111,10 +136,13 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         SizedBox(
                             child: FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                               child: Row(children: [
                                 Image.asset('Resources/Icons/btn_occasion.png',
                                     scale: 2.5),
-                                Text("경조사 통보",
+                                Text(
+                                    Strings.shared.controllers.profile.occasion,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -124,14 +152,17 @@ class _ProfileState extends State<Profile> {
                               onPressed: () {},
                             ),
                             width: deviceWidth / 2,
-                            height: deviceWidth / 6),
+                            height: deviceWidth / 5),
                         VerticalDivider(width: 0),
                         SizedBox(
                             child: FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                               child: Row(children: [
                                 Image.asset('Resources/Icons/btn_advisory.png',
                                     scale: 2.5),
-                                Text("해기 자문센터",
+                                Text(
+                                    Strings.shared.controllers.profile.advisory,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -141,7 +172,7 @@ class _ProfileState extends State<Profile> {
                               onPressed: () {},
                             ),
                             width: deviceWidth / 2,
-                            height: deviceWidth / 6)
+                            height: deviceWidth / 5)
                       ],
                     ), // Row Children
                   )),
@@ -149,29 +180,35 @@ class _ProfileState extends State<Profile> {
               ),
               Image.asset('Resources/Icons/Line3.png', width: 34),
               Container(
-                padding: const EdgeInsets.only(left: 20),
                 child: Column(children: [
                   Container(
-                    height: deviceWidth / 6,
-                    padding: const EdgeInsets.only(left: 20),
+                    height: deviceWidth / 5,
+                    padding: const EdgeInsets.only(left: 20, right: 5),
                     child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Row(children: [
-                          Text(
-                            "회비납부내역",
-                            style: TextStyle(
-                                color: Statics.shared.colors.titleTextColor,
-                                fontSize:
-                                    Statics.shared.fontSizes.supplementary),
-                            textAlign: TextAlign.left,
-                          ),
-                          FlatButton(
+                        Text(
+                          Strings.shared.controllers.profile.infoModify,
+                          style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary),
+                          textAlign: TextAlign.left,
+                        ),
+                        Spacer(),
+                        SizedBox(
+                          width: 50,
+                          child: FlatButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             child: Image.asset('Resources/Icons/Vector 3.2.png',
-                                scale: 2.5),
-                            onPressed: () {},
+                                width: 10, scale: 2.5),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new UserInfo()));
+                            },
                           ),
-                        ]),
+                        )
                       ],
                     ), // Row Children
                   ),
@@ -179,26 +216,28 @@ class _ProfileState extends State<Profile> {
                     Expanded(child: Divider(height: 0)),
                   ]),
                   Container(
-                    height: deviceWidth / 6,
-                    padding: const EdgeInsets.only(left: 20),
+                    height: deviceWidth / 5,
+                    padding: const EdgeInsets.only(left: 20, right: 5),
                     child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Row(children: [
-                          Text(
-                            "회비납부내역",
-                            style: TextStyle(
-                                color: Statics.shared.colors.titleTextColor,
-                                fontSize:
-                                    Statics.shared.fontSizes.supplementary),
-                            textAlign: TextAlign.left,
-                          ),
-                          FlatButton(
+                        Text(
+                          Strings.shared.controllers.profile.alarm,
+                          style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary),
+                          textAlign: TextAlign.left,
+                        ),
+                        Spacer(),
+                        SizedBox(
+                          width: 50,
+                          child: FlatButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             child: Image.asset('Resources/Icons/Vector 3.2.png',
-                                scale: 2.5),
+                                width: 10, scale: 2.5),
                             onPressed: () {},
                           ),
-                        ]),
+                        )
                       ],
                     ), // Row Children
                   ),
@@ -206,29 +245,60 @@ class _ProfileState extends State<Profile> {
                     Expanded(child: Divider(height: 0)),
                   ]),
                   Container(
-                    height: deviceWidth / 6,
-                    padding: const EdgeInsets.only(left: 20),
+                    height: deviceWidth / 5,
+                    padding: const EdgeInsets.only(left: 20, right: 5),
                     child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        Row(children: [
-                          Text(
-                            "회비납부내역",
-                            style: TextStyle(
-                                color: Statics.shared.colors.titleTextColor,
-                                fontSize:
-                                    Statics.shared.fontSizes.supplementary),
-                            textAlign: TextAlign.left,
-                          ),
-                          FlatButton(
+                        Text(
+                          Strings.shared.controllers.profile.terms,
+                          style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary),
+                          textAlign: TextAlign.left,
+                        ),
+                        Spacer(),
+                        SizedBox(
+                          width: 50,
+                          child: FlatButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             child: Image.asset('Resources/Icons/Vector 3.2.png',
-                                scale: 2.5),
+                                width: 10, scale: 2.5),
                             onPressed: () {},
                           ),
-                        ]),
+                        )
                       ],
                     ), // Row Children
                   ),
+                  Row(children: <Widget>[
+                    Expanded(child: Divider(height: 0)),
+                  ]),
+                  Container(
+                    height: deviceWidth / 5,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: new Row(
+                      children: <Widget>[
+                        Text(
+                          Strings.shared.controllers.profile.appVersion,
+                          style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary),
+                          textAlign: TextAlign.left,
+                        ),
+                        Spacer(),
+                        Text(
+                          "1.0.0 (최신)",
+                          style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary),
+                          textAlign: TextAlign.right,
+                        ),
+                      ],
+                    ), // Row Children
+                  ),
+                  Row(children: <Widget>[
+                    Expanded(child: Divider(height: 0)),
+                  ]),
                 ]), // Row
               ),
             ], // Row Children

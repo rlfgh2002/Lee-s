@@ -216,6 +216,7 @@ class _SignInState extends State<SignIn> {
                         userInformation.loginCheck = 1;
                         userInformation.userID = idValue;
                         userInformation.memberType = resultPost.memberType;
+                        userInformation.userIdx = resultPost.memberIdx;
                         _firebaseMessaging.getToken().then((token) {
                           print(token);
                           userInformation.userToken = token;

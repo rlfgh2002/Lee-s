@@ -58,11 +58,12 @@ class _SplashScreenState extends State<SplashScreen> {
     await deviceinfo();
 
     userInformation.mode = "login";
-    userInformation.fullName = resultPost.memberIdx;
+    userInformation.fullName = resultPost.memberName;
     userInformation.hp = resultPost.hp;
     userInformation.loginCheck = 1;
     userInformation.userID = userId;
     userInformation.memberType = resultPost.memberType;
+    userInformation.userIdx = resultPost.memberIdx;
     _firebaseMessaging.getToken().then((token) {
       print(token);
       userInformation.userToken = token;
