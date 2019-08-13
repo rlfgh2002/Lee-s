@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -13,6 +14,11 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
     String typeAsset = "";
     String typeTitle = "";
     Color typeColor;
@@ -45,6 +51,7 @@ class _ProfileState extends State<Profile> {
                   fontSize: Statics.shared.fontSizes.title)),
           titleSpacing: 16.0,
           backgroundColor: Colors.white,
+          brightness: Brightness.light,
           centerTitle: false,
           elevation: 0,
           iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
@@ -92,8 +99,9 @@ class _ProfileState extends State<Profile> {
                                     'Resources/Icons/btn_feehistory.png',
                                     scale: 2.5),
                                 Text(
-                                    Strings
-                                        .shared.controllers.profile.feehistory,
+                                    " " +
+                                        Strings.shared.controllers.profile
+                                            .feehistory,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -112,7 +120,10 @@ class _ProfileState extends State<Profile> {
                               child: Row(children: [
                                 Image.asset('Resources/Icons/btn_inquiry.png',
                                     scale: 2.5),
-                                Text(Strings.shared.controllers.profile.inquiry,
+                                Text(
+                                    " " +
+                                        Strings
+                                            .shared.controllers.profile.inquiry,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -142,7 +153,9 @@ class _ProfileState extends State<Profile> {
                                 Image.asset('Resources/Icons/btn_occasion.png',
                                     scale: 2.5),
                                 Text(
-                                    Strings.shared.controllers.profile.occasion,
+                                    " " +
+                                        Strings.shared.controllers.profile
+                                            .occasion,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -162,7 +175,9 @@ class _ProfileState extends State<Profile> {
                                 Image.asset('Resources/Icons/btn_advisory.png',
                                     scale: 2.5),
                                 Text(
-                                    Strings.shared.controllers.profile.advisory,
+                                    " " +
+                                        Strings.shared.controllers.profile
+                                            .advisory,
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,

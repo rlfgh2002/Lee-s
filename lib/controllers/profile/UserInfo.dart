@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 
 class UserInfo extends StatefulWidget {
   @override
@@ -56,7 +55,8 @@ class _UserInfoState extends State<UserInfo> {
                           Strings.shared.controllers.profile.userName,
                           style: TextStyle(
                               color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary),
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         width: deviceWidth / 5,
@@ -65,19 +65,12 @@ class _UserInfoState extends State<UserInfo> {
                       Text(
                         userInformation.fullName,
                         style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
+                          color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,
                         ),
                         textAlign: TextAlign.left,
                       ),
                       Spacer(),
-                      Text(
-                        "1.0.0 (최신)",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.supplementary),
-                        textAlign: TextAlign.right,
-                      ),
                     ],
                   ), // Row Children
                 ),
@@ -94,7 +87,8 @@ class _UserInfoState extends State<UserInfo> {
                           Strings.shared.controllers.profile.userType,
                           style: TextStyle(
                               color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary),
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         width: deviceWidth / 5,
@@ -103,18 +97,10 @@ class _UserInfoState extends State<UserInfo> {
                       Text(
                         userType,
                         style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
+                          color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,
                         ),
                         textAlign: TextAlign.left,
-                      ),
-                      Spacer(),
-                      Text(
-                        "1.0.0 (최신)",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.supplementary),
-                        textAlign: TextAlign.right,
                       ),
                     ],
                   ), // Row Children
@@ -132,7 +118,8 @@ class _UserInfoState extends State<UserInfo> {
                           Strings.shared.controllers.profile.userPhone,
                           style: TextStyle(
                               color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary),
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         width: deviceWidth / 5,
@@ -141,18 +128,28 @@ class _UserInfoState extends State<UserInfo> {
                       Text(
                         userInformation.hp,
                         style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
+                          color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,
                         ),
                         textAlign: TextAlign.left,
                       ),
                       Spacer(),
-                      Text(
-                        "1.0.0 (최신)",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.supplementary),
-                        textAlign: TextAlign.right,
+                      Container(
+                        width: deviceWidth / 6,
+                        child: new FlatButton(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: new Text(
+                            '수정',
+                            style: TextStyle(
+                              color: Statics.shared.colors.mainColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {},
+                        ),
                       ),
                     ],
                   ), // Row Children
@@ -170,7 +167,8 @@ class _UserInfoState extends State<UserInfo> {
                           Strings.shared.controllers.profile.userMail,
                           style: TextStyle(
                               color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary),
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         width: deviceWidth / 5,
@@ -179,18 +177,28 @@ class _UserInfoState extends State<UserInfo> {
                       Text(
                         userInformation.fullName,
                         style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
+                          color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,
                         ),
                         textAlign: TextAlign.left,
                       ),
                       Spacer(),
-                      Text(
-                        "1.0.0 (최신)",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.supplementary),
-                        textAlign: TextAlign.right,
+                      Container(
+                        width: deviceWidth / 6,
+                        child: new FlatButton(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: new Text(
+                            '수정',
+                            style: TextStyle(
+                              color: Statics.shared.colors.mainColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {},
+                        ),
                       ),
                     ],
                   ), // Row Children
@@ -208,7 +216,8 @@ class _UserInfoState extends State<UserInfo> {
                           Strings.shared.controllers.profile.userSchool,
                           style: TextStyle(
                               color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary),
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         width: deviceWidth / 5,
@@ -217,18 +226,28 @@ class _UserInfoState extends State<UserInfo> {
                       Text(
                         userInformation.fullName,
                         style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
+                          color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,
                         ),
                         textAlign: TextAlign.left,
                       ),
                       Spacer(),
-                      Text(
-                        "1.0.0 (최신)",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.supplementary),
-                        textAlign: TextAlign.right,
+                      Container(
+                        width: deviceWidth / 6,
+                        child: new FlatButton(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: new Text(
+                            '수정',
+                            style: TextStyle(
+                              color: Statics.shared.colors.mainColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {},
+                        ),
                       ),
                     ],
                   ), // Row Children
@@ -246,7 +265,8 @@ class _UserInfoState extends State<UserInfo> {
                           Strings.shared.controllers.profile.userGisu,
                           style: TextStyle(
                               color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary),
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontWeight: FontWeight.bold),
                           textAlign: TextAlign.left,
                         ),
                         width: deviceWidth / 5,
@@ -255,18 +275,28 @@ class _UserInfoState extends State<UserInfo> {
                       Text(
                         userInformation.fullName,
                         style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
+                          color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,
                         ),
                         textAlign: TextAlign.left,
                       ),
                       Spacer(),
-                      Text(
-                        "1.0.0 (최신)",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.supplementary),
-                        textAlign: TextAlign.right,
+                      Container(
+                        width: deviceWidth / 6,
+                        child: new FlatButton(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: new Text(
+                            '수정',
+                            style: TextStyle(
+                              color: Statics.shared.colors.mainColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {},
+                        ),
                       ),
                     ],
                   ), // Row Children
@@ -278,7 +308,6 @@ class _UserInfoState extends State<UserInfo> {
             ]),
           ], // Row Children
         ), // Row
-
         alignment: Alignment(0.0, 0.0),
       ), // Container
     );

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/Chat/Chat.dart';
 import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
@@ -381,6 +382,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
+        systemNavigationBarColor: Colors.blue));
     MainTabBarState.navBar = BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
