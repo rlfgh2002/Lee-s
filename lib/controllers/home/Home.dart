@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -5,6 +7,9 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/controllers/profile/UserInfo.dart';
 import 'package:haegisa2/controllers/profile/MiddleWare.dart';
+import 'package:http/http.dart' as http;
+
+double deviceWidth;
 
 class Home extends StatefulWidget {
   @override
@@ -12,6 +17,27 @@ class Home extends StatefulWidget {
 }
 
 class _ProfileState extends State<Home> {
+  List noticeList = List();
+  List introList = List();
+  bool _isLoading = false;
+  String url = Strings.shared.controllers.jsonURL.homeJson + "?mode=main";
+
+  Future<String> getMainJson() async {
+    var response = await http
+        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+    final String responseBody = utf8.decode(response.bodyBytes);
+    var responseJSON = json.decode(responseBody);
+
+    _isLoading = true;
+    noticeList = responseJSON["notice"];
+    print(noticeList[0]["subject"]);
+  }
+
+  @override
+  void initState() {
+    this.getMainJson();
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -22,8 +48,11 @@ class _ProfileState extends State<Home> {
     String typeAsset = "";
     String typeTitle = "";
     Color typeColor;
-    double deviceWidth = MediaQuery.of(context).size.width;
+    deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
+    if (_isLoading == false) {
+      getMainJson();
+    }
 
     if (userInformation.memberType == "51001") {
       typeAsset = "Resources/Icons/user_type_01.png";
@@ -107,42 +136,70 @@ class _ProfileState extends State<Home> {
                             onPressed: () {},
                           ),
                           height: deviceWidth / 6),
-                      Row(children: <Widget>[
-                        Expanded(child: Divider(height: 0)),
-                      ]),
-                      SizedBox(
-                          child: FlatButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Row(children: [
-                              Text("공지사항",
-                                  style: TextStyle(
-                                      color:
-                                          Statics.shared.colors.titleTextColor,
-                                      fontSize:
-                                          Statics.shared.fontSizes.subTitle)),
-                            ]),
-                            onPressed: () {},
-                          ),
-                          height: deviceWidth / 6),
-                      Row(children: <Widget>[
-                        Expanded(child: Divider(height: 0)),
-                      ]),
-                      SizedBox(
-                          child: FlatButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Row(children: [
-                              Text("공지사항",
-                                  style: TextStyle(
-                                      color:
-                                          Statics.shared.colors.titleTextColor,
-                                      fontSize:
-                                          Statics.shared.fontSizes.subTitle)),
-                            ]),
-                            onPressed: () {},
-                          ),
-                          height: deviceWidth / 6),
+                      new FutureBuilder<String>(
+                        future: getMainJson(), // a Future<String> or null
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.none:
+                              return new Text('Press button to start');
+                            case ConnectionState.waiting:
+                              return new Text('Awaiting result...');
+                            default:
+                              if (snapshot.hasError)
+                                return new Text('Error: ${snapshot.error}');
+                              else
+                                return ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      child: FlatButton(
+                                        splashColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        child: Row(children: [
+                                          Text("S",
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                  color: Statics.shared.colors
+                                                      .titleTextColor,
+                                                  fontSize: Statics.shared
+                                                      .fontSizes.subTitle)),
+                                        ]),
+                                        onPressed: () {},
+                                      ),
+                                      height: deviceWidth / 6,
+                                    );
+                                  },
+                                  itemCount: noticeList.length,
+                                );
+                          }
+                        },
+                      ),
+                      // _isLoading
+                      //     ? getMainJson()
+                      //     : new ListView.builder(
+                      //         itemCount:
+                      //             noticeList == null ? 0 : noticeList.length,
+                      //         itemBuilder: (BuildContext context, i) {
+                      //           return new ListTile(
+                      //             title: new Text(noticeList[i].subject),
+                      //             subtitle: new Text(noticeList[i].subject),
+                      //           );
+                      //         })
+
+                      // ListView.builder(
+                      //     itemCount: noticeList.length,
+                      //     itemBuilder: (BuildContext context, int index) {
+                      //       return ListTile(
+                      //         contentPadding: EdgeInsets.all(10.0),
+                      //         title: new Text(noticeList[index].subject),
+                      //         trailing: new Image.network(
+                      //           noticeList[index].subject,
+                      //           fit: BoxFit.cover,
+                      //           height: 40.0,
+                      //           width: 40.0,
+                      //         ),
+                      //       );
+                      //     })
                     ]),
                   ),
                 ]), // Row
@@ -368,5 +425,107 @@ class _ProfileState extends State<Home> {
         ), // Container
       ),
     );
+  }
+
+  Function noticeText = (String title) {
+    return Container(
+      child: FlatButton(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Row(children: [
+          Text(title,
+              softWrap: true,
+              style: TextStyle(
+                  color: Statics.shared.colors.titleTextColor,
+                  fontSize: Statics.shared.fontSizes.subTitle)),
+        ]),
+        onPressed: () {},
+      ),
+      height: deviceWidth / 6,
+    );
+  };
+}
+
+//JSON 데이터
+class Result {
+  final String subject;
+  final String cwriter;
+  final String content;
+  final String regDate;
+  final String serverFileName_1;
+  final String realFileName1;
+  final String fileUrl_1;
+  final String serverFileName_2;
+  final String realFileName2;
+  final String fileUrl_2;
+  final String serverFileName_3;
+  final String realFileName3;
+  final String fileUrl_3;
+  final String serverFileName_4;
+  final String realFileName4;
+  final String fileUrl_4;
+
+  final String name;
+  final String company;
+  final String shortContent;
+  final String listImgUrl;
+  final String viewImgUrl_1;
+  final String viewImgUrl_2;
+
+  Result(
+      {this.subject,
+      this.cwriter,
+      this.content,
+      this.regDate,
+      this.serverFileName_1,
+      this.realFileName1,
+      this.fileUrl_1,
+      this.serverFileName_2,
+      this.realFileName2,
+      this.fileUrl_2,
+      this.serverFileName_3,
+      this.realFileName3,
+      this.fileUrl_3,
+      this.serverFileName_4,
+      this.realFileName4,
+      this.fileUrl_4,
+      this.name,
+      this.company,
+      this.shortContent,
+      this.listImgUrl,
+      this.viewImgUrl_1,
+      this.viewImgUrl_2});
+
+  factory Result.fromJson(Map<String, dynamic> json, String table) {
+    if (table == "notice") {
+      return Result(
+        subject: json['subject'],
+        cwriter: json['cwriter'],
+        content: json['content'],
+        regDate: json['regDate'],
+        serverFileName_1: json['serverFileName_1'],
+        realFileName1: json['realFileName1'],
+        fileUrl_1: json['fileUrl_1'],
+        serverFileName_2: json['serverFileName_2'],
+        realFileName2: json['realFileName2'],
+        fileUrl_2: json['fileUrl_2'],
+        serverFileName_3: json['serverFileName_3'],
+        realFileName3: json['realFileName3'],
+        fileUrl_3: json['fileUrl_3'],
+        serverFileName_4: json['serverFileName_4'],
+        realFileName4: json['realFileName4'],
+        fileUrl_4: json['fileUrl_4'],
+      );
+    } else if (table == "introduction") {
+      return Result(
+          content: json['content'],
+          name: json['name'],
+          company: json['company'],
+          shortContent: json['shortContent'],
+          listImgUrl: json['listImgUrl'],
+          viewImgUrl_1: json['viewImgUrl_1'],
+          viewImgUrl_2: json['viewImgUrl_2'],
+          regDate: json['subject']);
+    }
   }
 }
