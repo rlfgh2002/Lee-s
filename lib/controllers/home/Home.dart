@@ -17,25 +17,28 @@ class Home extends StatefulWidget {
 }
 
 class _ProfileState extends State<Home> {
-  List noticeList = List();
+  List noticeList;
   List introList = List();
   bool _isLoading = false;
   String url = Strings.shared.controllers.jsonURL.homeJson + "?mode=main";
 
-  Future<String> getMainJson() async {
-    var response = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+  Future<List> getMainJson(String type) async {
+    var response = await http.get(Uri.encodeFull(url));
     final String responseBody = utf8.decode(response.bodyBytes);
     var responseJSON = json.decode(responseBody);
-
-    _isLoading = true;
+    var code = responseJSON["code"];
     noticeList = responseJSON["notice"];
-    print(noticeList[0]["subject"]);
-  }
 
-  @override
-  void initState() {
-    this.getMainJson();
+    if (type == "notice") {
+      return responseJSON["notice"];
+    } else if (type == "introduction") {
+      return responseJSON["introduction"];
+    }
+    // if (code == 200) {
+    //   for (var result in responseJSON["notice"]) {
+    //     return Result.fromJson(result, "notce");
+    //   }
+    // }
   }
 
   @override
@@ -50,9 +53,6 @@ class _ProfileState extends State<Home> {
     Color typeColor;
     deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-    if (_isLoading == false) {
-      getMainJson();
-    }
 
     if (userInformation.memberType == "51001") {
       typeAsset = "Resources/Icons/user_type_01.png";
@@ -112,7 +112,7 @@ class _ProfileState extends State<Home> {
                 child: Column(children: [
                   Container(
                     child: Column(children: <Widget>[
-                      SizedBox(
+                      Container(
                           child: FlatButton(
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
@@ -136,41 +136,39 @@ class _ProfileState extends State<Home> {
                             onPressed: () {},
                           ),
                           height: deviceWidth / 6),
-                      new FutureBuilder<String>(
-                        future: getMainJson(), // a Future<String> or null
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
+                      Row(children: <Widget>[
+                        Expanded(child: Divider(height: 0)),
+                      ]),
+                      new FutureBuilder(
+                        future:
+                            getMainJson("notice"), // a Future<String> or null
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          //print('project snapshot data is: ${snapshot.data}');
                           switch (snapshot.connectionState) {
                             case ConnectionState.none:
                               return new Text('Press button to start');
                             case ConnectionState.waiting:
-                              return new Text('Awaiting result...');
+                              return new Container(
+                                child: FlatButton(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  child: Text("로딩중..",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics
+                                              .shared.fontSizes.subTitle)),
+                                  onPressed: () {},
+                                ),
+                                height: deviceWidth / 6,
+                              );
                             default:
                               if (snapshot.hasError)
                                 return new Text('Error: ${snapshot.error}');
                               else
-                                return ListView.builder(
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      child: FlatButton(
-                                        splashColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        child: Row(children: [
-                                          Text("S",
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                  color: Statics.shared.colors
-                                                      .titleTextColor,
-                                                  fontSize: Statics.shared
-                                                      .fontSizes.subTitle)),
-                                        ]),
-                                        onPressed: () {},
-                                      ),
-                                      height: deviceWidth / 6,
-                                    );
-                                  },
-                                  itemCount: noticeList.length,
-                                );
+                                return noticeText(context, snapshot);
                           }
                         },
                       ),
@@ -221,7 +219,7 @@ class _ProfileState extends State<Home> {
                 child: Column(children: [
                   Container(
                     child: Column(children: <Widget>[
-                      SizedBox(
+                      Container(
                           child: FlatButton(
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
@@ -248,21 +246,39 @@ class _ProfileState extends State<Home> {
                       Row(children: <Widget>[
                         Expanded(child: Divider(height: 0)),
                       ]),
-                      SizedBox(
-                          child: FlatButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Row(children: [
-                              Text("공지사항",
-                                  style: TextStyle(
-                                      color:
-                                          Statics.shared.colors.titleTextColor,
-                                      fontSize:
-                                          Statics.shared.fontSizes.subTitle)),
-                            ]),
-                            onPressed: () {},
-                          ),
-                          height: deviceWidth / 6),
+                      new FutureBuilder(
+                        future: getMainJson(
+                            "introduction"), // a Future<String> or null
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          //print('project snapshot data is: ${snapshot.data}');
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.none:
+                              return new Text('Press button to start');
+                            case ConnectionState.waiting:
+                              return new Container(
+                                child: FlatButton(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  child: Text("로딩중..",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics
+                                              .shared.fontSizes.subTitle)),
+                                  onPressed: () {},
+                                ),
+                                height: deviceWidth / 6,
+                              );
+                            default:
+                              if (snapshot.hasError)
+                                return new Text('Error: ${snapshot.error}');
+                              else
+                                return introText(context, snapshot);
+                          }
+                        },
+                      ),
                     ]),
                   )
                 ]), // Row
@@ -427,23 +443,80 @@ class _ProfileState extends State<Home> {
     );
   }
 
-  Function noticeText = (String title) {
-    return Container(
-      child: FlatButton(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        child: Row(children: [
-          Text(title,
-              softWrap: true,
-              style: TextStyle(
-                  color: Statics.shared.colors.titleTextColor,
-                  fontSize: Statics.shared.fontSizes.subTitle)),
-        ]),
-        onPressed: () {},
-      ),
-      height: deviceWidth / 6,
+  Widget noticeText(BuildContext context, AsyncSnapshot snapshot) {
+    var values = snapshot.data;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        for (var item in values)
+          Column(
+            children: <Widget>[
+              Container(
+                child: FlatButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  child: Text(item["subject"],
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: Statics.shared.colors.titleTextColor,
+                          fontSize: Statics.shared.fontSizes.subTitle)),
+                  onPressed: () {},
+                ),
+                height: deviceWidth / 6,
+              ),
+              Row(children: <Widget>[
+                Expanded(child: Divider(height: 0)),
+              ]),
+            ],
+          )
+      ],
     );
-  };
+  }
+
+  Widget introText(BuildContext context, AsyncSnapshot snapshot) {
+    var values = snapshot.data;
+
+    return Container(
+        child: FlatButton(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          child: Container(
+            height: deviceWidth / 3,
+            child: Row(children: [
+              Image.network(
+                values[0]["viewImgUrl_1"],
+                scale: 2,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(values[0]["company"],
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: Statics.shared.colors.titleTextColor,
+                          fontSize: Statics.shared.fontSizes.subTitle,
+                          fontWeight: FontWeight.bold)),
+                  Text(values[0]["shortContent"],
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: Statics.shared.colors.titleTextColor,
+                        fontSize: Statics.shared.fontSizes.subTitle,
+                      )),
+                ],
+              ),
+            ]),
+          ),
+          onPressed: () {},
+        ),
+        height: deviceWidth / 3);
+  }
 }
 
 //JSON 데이터
