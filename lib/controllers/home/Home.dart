@@ -486,29 +486,34 @@ class _ProfileState extends State<Home> {
             height: deviceWidth / 3,
             child: Row(children: [
               Image.network(
-                values[0]["viewImgUrl_1"],
+                values[0]["viewImgUrl_1"].replaceAll("https://", "http://"),
                 scale: 2,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(values[0]["company"],
-                      textAlign: TextAlign.justify,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.subTitle,
-                          fontWeight: FontWeight.bold)),
-                  Text(values[0]["shortContent"],
-                      textAlign: TextAlign.justify,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                      )),
+                  Container(
+                      width: deviceWidth / 1.5 - 10,
+                      child: Text(values[0]["company"],
+                          textAlign: TextAlign.justify,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.subTitle,
+                              fontWeight: FontWeight.bold))),
+                  Container(
+                      width: deviceWidth,
+                      margin: EdgeInsets.only(left: 5, right: 10),
+                      child: Text(values[0]["shortContent"],
+                          textAlign: TextAlign.justify,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: Statics.shared.colors.titleTextColor,
+                            fontSize: Statics.shared.fontSizes.subTitle,
+                          )))
                 ],
               ),
             ]),
