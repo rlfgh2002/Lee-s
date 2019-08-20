@@ -31,13 +31,16 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
-  final TextEditingController txtSearchCtrl = TextEditingController();
-  final TextEditingController _textFieldAddUserIdController =
-      TextEditingController();
 
-  _displayAddUserDialog(context) async {
+  bool isSearched = false;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final TextEditingController txtSearchCtrl = TextEditingController();
+  final TextEditingController _textFieldAddUserIdController = TextEditingController();
+
+  _displayAddUserDialog() async {
     return showDialog(
-        context: context,
+        context: _scaffoldKey.currentContext,
         builder: (context) {
           return AlertDialog(
             title: Text('Start a Conversation'),
@@ -88,7 +91,7 @@ class _ChatsState extends State<Chats> {
         });
   }
 
-  Row showTopBarTitle(BuildContext context) {
+  Row showTopBarTitle() {
     return Row(
       children: [
         Container(
@@ -104,8 +107,8 @@ class _ChatsState extends State<Chats> {
                     width: 25),
                 onPressed: () {
                   setState(() {
-                    MiddleWare.shared.topBarWidget =
-                        this.showTopSearchBar(context);
+                    this.isSearched = true;
+                    MiddleWare.shared.topBarWidget = this.showTopSearchBar();
                   });
                 }),
             IconButton(
@@ -116,7 +119,7 @@ class _ChatsState extends State<Chats> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _displayAddUserDialog(context);
+                    _displayAddUserDialog();
                   });
                 })
           ],
@@ -126,7 +129,7 @@ class _ChatsState extends State<Chats> {
     );
   }
 
-  Row showTopSearchBar(BuildContext context) {
+  Row showTopSearchBar() {
     return Row(
       children: [
         Container(
@@ -142,7 +145,7 @@ class _ChatsState extends State<Chats> {
                   color: Statics.shared.colors.titleTextColor,
                   fontSize: Statics.shared.fontSizes.content),
               controller: txtSearchCtrl,
-              onChanged: (String search) {
+              onSubmitted: (String search){
                 if (search.isNotEmpty) {
                   setState(() {
                     searchMembers(search);
@@ -153,8 +156,7 @@ class _ChatsState extends State<Chats> {
                   });
                 } else {
                   setState(() {
-                    MiddleWare.shared.searchedConversations =
-                        MiddleWare.shared.conversations;
+                    MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
                   });
                 }
               },
@@ -163,7 +165,8 @@ class _ChatsState extends State<Chats> {
             icon: new Image.asset("Resources/Icons/x-mark.png", width: 25),
             onPressed: () {
               setState(() {
-                MiddleWare.shared.topBarWidget = this.showTopBarTitle(context);
+                this.isSearched = false;
+                MiddleWare.shared.topBarWidget = this.showTopBarTitle();
               });
             })
       ],
@@ -195,40 +198,71 @@ class _ChatsState extends State<Chats> {
   }
 
   void refreshList() {
+    print("REFRESHING MY LIST CONVERSATIONS.....");
     MiddleWare.shared.conversations = [];
     widget.db.selectConversations(onResult: (items) {
       for (int i = 0; i < items.length; i++) {
-        MiddleWare.shared.conversations.add(ConversationWidget(
-          title: items[i]['otherSideUserName'],
-          convId: items[i]['convId'],
-          avatarName: "협회",
-          badges: 0,
-          avatarLink: "",
-          shortDescription: items[i]['otherSideUserId'], //반갑습니다.
-          time: "오전 9:30",
-          onTapped: () {
-            String cID = items[i]['convId']; // Conversation ID
-            User usr = User(
-                UID: "${items[i]['otherSideUserId']}",
-                fullName: items[i]['otherSideUserName'],
-                avatar: "",
-                caption: "해양대학교 . 60기");
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) => new Chat(
-                          title: items[i]['otherSideUserName'],
-                          conversationId: cID,
-                          user: usr,
-                        )));
-          },
-        ) // conversation widget
-            );
+
+        widget.db.checkUsersBlock(userId: "${items[i]['otherSideUserId']}",isBlocked: (st){
+          if(st == false){
+
+            widget.db.selectLastChatContent(onResult: (itemContent){
+
+              bool hasBadge = false;
+              if(itemContent["seen"] == "0"){
+                hasBadge = true;
+              }else{
+                hasBadge = false;
+              }
+
+              String contentX = "";
+              if(itemContent != null){
+                contentX = itemContent["content"].toString();
+              }
+
+              MiddleWare.shared.conversations.add(ConversationWidget(
+                hasBadge: hasBadge,
+                title: items[i]['otherSideUserName'],
+                convId: items[i]['convId'],
+                avatarName: "협회",
+                badges: 0,
+                avatarLink: "",
+                shortDescription: "${contentX}", //반갑습니다.
+                time: "오전 9:30",
+                onTapped: () {
+                  String cID = items[i]['convId']; // Conversation ID
+                  User usr = User(
+                      UID: "${items[i]['otherSideUserId']}",
+                      fullName: items[i]['otherSideUserName'],
+                      avatar: "",
+                      caption: "해양대학교 . 60기");
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new Chat(
+                            title: items[i]['otherSideUserName'],
+                            conversationId: cID,
+                            user: usr,
+                          )));
+                },
+              ) // conversation widget
+              );
+
+              setState(() {
+                MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
+              });
+
+            },convId: items[i]['convId']);
+
+          }// ! blocked
+        });
       } // loop
+
       setState(() {
         MiddleWare.shared.searchedConversations =
             MiddleWare.shared.conversations;
       });
+
     });
   }
 
@@ -303,10 +337,6 @@ class _ChatsState extends State<Chats> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -314,11 +344,19 @@ class _ChatsState extends State<Chats> {
     MiddleWare.shared.screenWidth = MediaQuery.of(context).size.width;
     if (MiddleWare.shared.firstInitialize) {
       MiddleWare.shared.firstInitialize = false;
-      MiddleWare.shared.topBarWidget = this.showTopBarTitle(context);
+      MiddleWare.shared.conversations.sort((item1,item2)=>DateTime.parse(item2.time).compareTo(DateTime.parse(item1.time)));
       MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
     }
+    if(isSearched){
+      MiddleWare.shared.topBarWidget = this.showTopSearchBar();
+    }else{
+      MiddleWare.shared.topBarWidget = this.showTopBarTitle();
+    }
 
-    return Scaffold(
+    return new Builder(
+        builder: (context) {
+      return new Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: MiddleWare.shared.topBarWidget,
@@ -346,7 +384,9 @@ class _ChatsState extends State<Chats> {
               );
             },
           ),
-        ));
+        ),
+      );
+      });
   }
 }
 

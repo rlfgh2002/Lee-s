@@ -42,7 +42,7 @@ class NoticesState extends State<Notices> {
   }
 
   showPopUp({String content,String idx,String votingPeriod,List<String> votes, VoidCallback onPressApply, VoidCallback onPressClose, NoticeType nt = NoticeType.Vote, List<Map<String, dynamic>> surveys}){
-    double popUpWidth = MiddleWare.shared.screenWidth - 64;
+    double popUpWidth = MiddleWare.shared.screenWidth - 16;
     double height = MediaQuery.of(context).size.height / 1.5;
 
     if(MediaQuery.of(context).size.height < 750){
@@ -81,7 +81,7 @@ class NoticesState extends State<Notices> {
     });
   }
   showPopUpVotingComplete({VoidCallback onPressOk, NoticeType noticeType = NoticeType.Vote}){
-    double popUpWidth = MiddleWare.shared.screenWidth - 64;
+    double popUpWidth = MiddleWare.shared.screenWidth - 16;
     double height = MediaQuery.of(context).size.height / 1.5;
 
     if(MediaQuery.of(context).size.height < 750){
@@ -271,6 +271,7 @@ class NoticesState extends State<Notices> {
 
     Widget bodyWd = Container(color: Color.fromRGBO(244, 248, 255, 1),child: noNoticesFoundYet(),);
     if(this.widget.notices.length > 0){
+      this.widget.notices.sort((item1,item2)=>DateTime.parse(item2.time).compareTo(DateTime.parse(item1.time)));
       bodyWd = Container(color: Color.fromRGBO(244, 248, 255, 1),
         child: ListView(
           children: this.widget.notices,

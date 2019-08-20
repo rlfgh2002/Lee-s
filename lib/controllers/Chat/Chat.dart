@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/User.dart';
 import 'package:haegisa2/views/Chat/ChatWidget.dart';
@@ -206,6 +207,12 @@ class ChatState extends State<Chat> {
         },
         onPressYes: (){
           Navigator.pop(context);
+          print("USER:))) : ${MiddleWare.shared.user.UID}");
+          widget.db.insertBlockUsers(userId: MiddleWare.shared.user.UID,onBlock: (st){
+            // refresh chats
+            print("USER ${MiddleWare.shared.user.UID.toString()} BLOCK (${st.toString()})");
+            Chats.staticChatsPage.refresh();
+          });
         }
       ).dialog();
     });
@@ -391,6 +398,8 @@ class ChatState extends State<Chat> {
   @override
   void dispose() {
     MiddleWare.shared.isFirst = true;
+    print("CCCCCCC: ${chatCurrentConvId.toString()}");
+    widget.db.updateSeenChats(convId: chatCurrentConvId);
     print("DISPOSSSSSSSS CHAT PAGE");
     super.dispose();
   }

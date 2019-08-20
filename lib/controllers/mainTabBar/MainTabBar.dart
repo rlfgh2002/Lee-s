@@ -39,8 +39,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
-        final String responseBody = utf8.decode(val.bodyBytes);
-        Map<String, dynamic> body = json.decode(responseBody.trim());
+        Map<String, dynamic> body = json.decode(val.body.trim());
         if (body['code'] == "200") {
           var myList = body['table'];
           for (int i = 0; i < myList.length; i++) {
@@ -177,8 +176,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
-        final String responseBody = utf8.decode(val.bodyBytes);
-        var j = jsonDecode(responseBody);
+        var j = jsonDecode(val.body);
         print("OUTPUT JSON: ${j.toString()}");
         onSent(j);
       }
@@ -198,8 +196,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
-        final String responseBody = utf8.decode(val.bodyBytes);
-        var j = jsonDecode(responseBody);
+        var j = jsonDecode(val.body);
         print("OUTPUT JSON: ${j.toString()}");
         onSent(j);
       }
@@ -385,6 +382,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
         systemNavigationBarColor: Colors.blue));
+    widget.db.unBlockUsers(userId: "sajadmaste", onUpdated: (st) {});
+
     MainTabBarState.navBar = BottomNavigationBar(
       items: [
         BottomNavigationBarItem(

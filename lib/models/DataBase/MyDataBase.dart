@@ -14,6 +14,7 @@ class _StaticDbInformation
   static const String tblVotesAnswers = 'tblVotesAnswers';
   static const String tblSurveysAnswers = 'tblSurveysAnswers';
   static const String tblChats = 'tblChats';
+  static const String tblBlockUsers = 'tblBlockUsers';
   static const String tblSurveys = 'tblSurveys';
 
   static const String tblConversationFieldId = 'convId';
@@ -21,12 +22,14 @@ class _StaticDbInformation
   static const String tblConversationOtherSideUserId = 'otherSideUserId';
   static const String tblConversationOtherSideUserFromName = 'otherSideUserName';
 
+  static const String tblBlockUsersUserId = 'userId';
 
   static const String tblChatsChatId = 'chatId';
   static const String tblChatsChatDate = 'chatDate';
   static const String tblChatsConvId = 'convId';
   static const String tblChatsContent = 'content';
   static const String tblChatsIsYours = 'isYours';
+  static const String tblChatsSeen = 'seen';
 
   static const String tblVotesStartDate = 'startDate';
   static const String tblVotesEndDate = 'endDate';
@@ -106,7 +109,13 @@ class MyDataBase
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
           });
 
-          await db.execute('CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)').then((val){
+          await db.execute('CREATE TABLE ${_StaticDbInformation.tblBlockUsers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblBlockUsersUserId} TEXT)').then((val){
+            print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblChats} STATUS => [TRUE] ::::::::::");
+          }).catchError((error){
+            print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
+          });
+
+          await db.execute('CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsSeen} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblChats} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
@@ -156,6 +165,68 @@ class MyDataBase
   }
 
 
+  void insertBlockUsers({String userId, onBlock(bool st)}) async
+  {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    print(":::::::::: NEW Users Block GENERATING ... ::::::::::");
+    await openDatabase(path).then((db){
+      db.rawInsert(
+          'INSERT INTO ${_StaticDbInformation.tblBlockUsers} (${_StaticDbInformation.tblBlockUsersUserId}) VALUES ("${userId}")').catchError((err){
+        print(":::::::::: DB INSERT(NEW Users Block) ERROR => [${err.toString()}] ::::::::::");
+        onBlock(false);
+      }).then((val){
+        print(":::::::::: DB INSERT(NEW Users Block) QUERY => [${val.toString()}] ::::::::::");
+        onBlock(true);
+      }).whenComplete((){
+        //db.close();
+        print(":::::::::: DB CLOSE ::::::::::");
+      });
+    });
+  }
+  void checkUsersBlock({String userId = "", isBlocked(bool st)}) async
+  {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db){
+
+      Map<String, dynamic> obj;
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblBlockUsers} WHERE ${_StaticDbInformation.tblBlockUsersUserId} = '${userId}'").then((lists){
+        if(lists.length > 0){
+          print(":::::::::: DB SELECT(BlockUsers) ROW (${0}) => [${lists.first.toString()}] ::::::::::");
+          //db.close();
+          isBlocked(true);
+        }else{
+          print(":::::::::: DB SELECT(BlockUsers) ROW (${0}) => Not Found Any Items ::::::::::");
+          //db.close();
+          isBlocked(false);
+        }
+      });
+    });
+  }
+  void unBlockUsers({String userId, onUpdated(bool st)}) async
+  {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    print(":::::::::: Un Block User ... ::::::::::");
+    await openDatabase(path).then((db){
+      db.rawInsert(
+          "DELETE FROM ${_StaticDbInformation.tblBlockUsers} WHERE ${_StaticDbInformation.tblBlockUsersUserId} = '${userId.toString()}'").catchError((err){
+        print(":::::::::: DB Update(Un Users Block) ERROR => [${err.toString()}] ::::::::::");
+        onUpdated(false);
+      }).then((val){
+        print(":::::::::: DB Update(Un Users Block) QUERY => [${val.toString()}] ::::::::::");
+        onUpdated(true);
+      }).whenComplete((){
+        //db.close();
+        print(":::::::::: DB CLOSE ::::::::::");
+      });
+    });
+  }
+
   void insertConversation({String convId, String userId, String createDate, String fromName, String schoolName, onInserted(), onNoInerted()}) async
   {
     var databasesPath = await getDatabasesPath();
@@ -184,7 +255,7 @@ class MyDataBase
     await openDatabase(path).then((db){
 
       List<Map<String, dynamic>> myList = [];
-      db.rawQuery('SELECT * FROM ${_StaticDbInformation.tblConversation}').then((lists){
+      db.rawQuery('SELECT * FROM ${_StaticDbInformation.tblConversation} ORDER BY id DESC').then((lists){
         for(int i = 0; i < lists.length; i++){
           myList.add(lists[i]);
           print(":::::::::: DB SELECT(conversation) ROW (${i}) => [${lists[i].toString()}] ::::::::::");
@@ -234,7 +305,7 @@ class MyDataBase
     });
   }
 
-  void insertChat({String convId, String userId, String date, String content,String isYours = "FALSE", onAdded()}) async
+  void insertChat({String convId,String seen = "1",String userId, String date, String content,String isYours = "FALSE", onAdded()}) async
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -243,7 +314,7 @@ class MyDataBase
 
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'INSERT INTO ${_StaticDbInformation.tblChats} (${_StaticDbInformation.tblChatsConvId},${_StaticDbInformation.tblChatsContent},${_StaticDbInformation.tblChatsChatDate}, ${_StaticDbInformation.tblChatsIsYours}) VALUES ("${convId.toString()}","${content.toString()}","${date.toString()}","${isYours.toString()}")');
+            'INSERT INTO ${_StaticDbInformation.tblChats} (${_StaticDbInformation.tblChatsConvId},${_StaticDbInformation.tblChatsSeen},${_StaticDbInformation.tblChatsContent},${_StaticDbInformation.tblChatsChatDate}, ${_StaticDbInformation.tblChatsIsYours}) VALUES ("${convId.toString()}","${seen.toString()}","${content.toString()}","${date.toString()}","${isYours.toString()}")');
         print(":::::::::: DB INSERT(chat) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
         onAdded();
@@ -259,13 +330,34 @@ class MyDataBase
     await openDatabase(path).then((db){
 
       List<Map<String, dynamic>> myList = [];
-      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'").then((lists){
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC").then((lists){
         for(int i = 0; i < lists.length; i++){
           myList.add(lists[i]);
           print(":::::::::: DB SELECT ROW (${i}) => [${lists[i].toString()}] ::::::::::");
         }// for loop
         //db.close();
         onResult(myList);
+      });
+    });
+  }
+  void selectLastChatContent({onResult(Map<String, dynamic> res), String convId}) async
+  {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db){
+
+      db.rawQuery("SELECT content,seen FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC LIMIT 1").then((lists){
+        print(":::::::::: DB SELECT ROW LIMIT 1(${lists.length}) => [${lists.first.toString()}] ::::::::::");
+        //db.close();
+        if(lists.length > 0){
+          onResult(lists.first);
+        }else{
+          onResult(null);
+        }
+      }).catchError((error){
+        print(":::::::::: DB SELECT ROW LIMIT 1 ERROR => [${error.toString()}] ::::::::::");
+        onResult(null);
       });
     });
   }
@@ -286,6 +378,23 @@ class MyDataBase
       });
     });
   }
+  void updateSeenChats({String convId}) async
+  {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db){
+
+      db.rawQuery("UPDATE ${_StaticDbInformation.tblChats} SET seen = '1' WHERE convId = '${convId}'").then((lists){
+        print(":::::::::: DB UPDATE SEEN CHATS(${lists.length}) ::::::::::");
+        //db.close();
+
+      }).catchError((error){
+        print(":::::::::: DB UPDATE SEEN CHATS ERROR => [${error.toString()}] ::::::::::");
+      });
+    });
+  }
+
 
   void insertSurvey({onAdded(),String no,String isDone,String bd_idx, String start_date, String end_date, String subject, String content, String q_cnt}) async
   {
@@ -315,7 +424,7 @@ class MyDataBase
     await openDatabase(path).then((db){
 
       List<Map<String, dynamic>> myList = [];
-      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblSurveys}").then((lists){
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblSurveys}  ORDER BY id DESC").then((lists){
         for(int i = 0; i < lists.length; i++){
           myList.add(lists[i]);
           print(":::::::::: DB SELECT ROW (${i}) => [${lists[i].toString()}] ::::::::::");
@@ -533,7 +642,7 @@ class MyDataBase
 
     await openDatabase(path).then((db){
       List<VoteObject> myList = [];
-      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblVotes}").then((lists){
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblVotes}  ORDER BY id DESC").then((lists){
         for(int i = 0; i < lists.length; i++){
           var jso = {'data':lists[i]};
           myList.add(VoteObject.fromJson(jso));
