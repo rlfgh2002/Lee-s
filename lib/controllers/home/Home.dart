@@ -74,7 +74,6 @@ class _ProfileState extends State<Home> {
 
       child: new Scaffold(
         body: Container(
-          color: Color.fromRGBO(244, 248, 255, 1),
           child: ListView(
             children: [
               Container(
@@ -92,7 +91,19 @@ class _ProfileState extends State<Home> {
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(
                     left: 20, bottom: 30, top: 30, right: 15),
-                color: Statics.shared.colors.mainColor,
+
+                decoration: new BoxDecoration(
+                    color: Statics.shared.colors.mainColor,
+                    border: new Border.all(
+                      color: Statics.shared.colors.mainColor,
+                    ),
+                    boxShadow: [
+                      new BoxShadow(
+                          color: Statics.shared.colors.mainColor,
+                          offset: new Offset((deviceWidth / 6) * (1 / 3),
+                              (deviceWidth / 6) * (1 / 3)),
+                          spreadRadius: (deviceWidth / 6) * (1 / 3))
+                    ]),
               ),
               Container(
                 decoration: new BoxDecoration(
@@ -104,11 +115,9 @@ class _ProfileState extends State<Home> {
                       new BoxShadow(
                           color: Color.fromRGBO(235, 239, 245, 1),
                           offset: new Offset(0.0, 0.0),
-                          blurRadius: 10.0,
                           spreadRadius: 2.0)
                     ]),
-                margin:
-                    EdgeInsets.only(left: 10, bottom: 10, top: 10, right: 10),
+                margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
                 child: Column(children: [
                   Container(
                     child: Column(children: <Widget>[

@@ -43,124 +43,124 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         if (body['code'] == "200") {
           var myList = body['table'];
           for (int i = 0; i < myList.length; i++) {
-            widget.db.checkSurveyExist(
-                no: myList[i]['no'].toString(),
-                onNoResult: () {
-                  widget.db.insertSurvey(
-                      no: myList[i]['no'].toString(),
-                      isDone: 'FALSE',
-                      bd_idx: myList[i]['bd_idx'].toString(),
-                      start_date: myList[i]['start_date'].toString(),
-                      end_date: myList[i]['end_date'].toString(),
-                      subject: myList[i]['subject'].toString(),
-                      content: myList[i]['contents'].toString(),
-                      q_cnt: myList[i]['q_cnt'].toString(),
-                      onAdded: () {
-                        getSurveysAnswers(
-                            uid: uid,
-                            idx: myList[i]['bd_idx'].toString(),
-                            onSent: (response) {
-                              if (response['code'].toString() == "200") {
-                                Map<String, dynamic> dataAnswers =
-                                    response['table'][0]['q_title'];
-                                int qCnt =
-                                    int.parse(myList[i]['q_cnt'].toString());
+            // widget.db.checkSurveyExist(
+            //     no: myList[i]['no'].toString(),
+            //     onNoResult: () {
+            //       widget.db.insertSurvey(
+            //           no: myList[i]['no'].toString(),
+            //           isDone: 'FALSE',
+            //           bd_idx: myList[i]['bd_idx'].toString(),
+            //           start_date: myList[i]['start_date'].toString(),
+            //           end_date: myList[i]['end_date'].toString(),
+            //           subject: myList[i]['subject'].toString(),
+            //           content: myList[i]['contents'].toString(),
+            //           q_cnt: myList[i]['q_cnt'].toString(),
+            //           onAdded: () {
+            //             getSurveysAnswers(
+            //                 uid: uid,
+            //                 idx: myList[i]['bd_idx'].toString(),
+            //                 onSent: (response) {
+            //                   if (response['code'].toString() == "200") {
+            //                     Map<String, dynamic> dataAnswers =
+            //                         response['table'][0]['q_title'];
+            //                     int qCnt =
+            //                         int.parse(myList[i]['q_cnt'].toString());
 
-                                for (int j = 0; j < qCnt; j++) {
-                                  String qStr = "q${(j + 1).toString()}";
-                                  var qItems = dataAnswers['${qStr}_item'];
-                                  int qItemsCount = qItems.length;
+            //                     for (int j = 0; j < qCnt; j++) {
+            //                       String qStr = "q${(j + 1).toString()}";
+            //                       var qItems = dataAnswers['${qStr}_item'];
+            //                       int qItemsCount = qItems.length;
 
-                                  String ans1 = "";
-                                  String ans2 = "";
-                                  String ans3 = "";
-                                  String ans4 = "";
-                                  String ans5 = "";
-                                  String ans6 = "";
-                                  String ans7 = "";
-                                  String ans8 = "";
+            //                       String ans1 = "";
+            //                       String ans2 = "";
+            //                       String ans3 = "";
+            //                       String ans4 = "";
+            //                       String ans5 = "";
+            //                       String ans6 = "";
+            //                       String ans7 = "";
+            //                       String ans8 = "";
 
-                                  for (int z = 0; z < qItemsCount; z++) {
-                                    if (z == 0) {
-                                      ans1 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                    if (z == 1) {
-                                      ans2 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                    if (z == 2) {
-                                      ans3 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                    if (z == 3) {
-                                      ans4 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                    if (z == 4) {
-                                      ans5 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                    if (z == 5) {
-                                      ans6 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                    if (z == 6) {
-                                      ans7 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                    if (z == 7) {
-                                      ans8 = qItems[
-                                          "${qStr.toString()}_${(z + 1).toString()}"];
-                                    }
-                                  } // for loop 2
+            //                       for (int z = 0; z < qItemsCount; z++) {
+            //                         if (z == 0) {
+            //                           ans1 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                         if (z == 1) {
+            //                           ans2 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                         if (z == 2) {
+            //                           ans3 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                         if (z == 3) {
+            //                           ans4 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                         if (z == 4) {
+            //                           ans5 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                         if (z == 5) {
+            //                           ans6 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                         if (z == 6) {
+            //                           ans7 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                         if (z == 7) {
+            //                           ans8 = qItems[
+            //                               "${qStr.toString()}_${(z + 1).toString()}"];
+            //                         }
+            //                       } // for loop 2
 
-                                  print(
-                                      "**************************************************");
-                                  print("ANS 1 : ${ans1}");
-                                  print("ANS 2 : ${ans2}");
-                                  print("ANS 3 : ${ans3}");
-                                  print("ANS 4 : ${ans4}");
-                                  print("ANS 5 : ${ans5}");
-                                  print("ANS 6 : ${ans6}");
-                                  print("ANS 7 : ${ans7}");
-                                  print("ANS 8 : ${ans8}");
-                                  print(
-                                      "q Title : ${dataAnswers['q${(j + 1).toString()}'].toString()}");
-                                  print("QN : ${(j + 1).toString()}");
-                                  print(
-                                      "**************************************************");
+            //                       print(
+            //                           "**************************************************");
+            //                       print("ANS 1 : ${ans1}");
+            //                       print("ANS 2 : ${ans2}");
+            //                       print("ANS 3 : ${ans3}");
+            //                       print("ANS 4 : ${ans4}");
+            //                       print("ANS 5 : ${ans5}");
+            //                       print("ANS 6 : ${ans6}");
+            //                       print("ANS 7 : ${ans7}");
+            //                       print("ANS 8 : ${ans8}");
+            //                       print(
+            //                           "q Title : ${dataAnswers['q${(j + 1).toString()}'].toString()}");
+            //                       print("QN : ${(j + 1).toString()}");
+            //                       print(
+            //                           "**************************************************");
 
-                                  widget.db.insertSurveyAnswer(
-                                      idx: myList[i]['bd_idx'].toString(),
-                                      qTitle:
-                                          dataAnswers['q${(j + 1).toString()}']
-                                              .toString(),
-                                      qN: (j + 1).toString(),
-                                      answer1: ans1,
-                                      answer2: ans2,
-                                      answer3: ans3,
-                                      answer4: ans4,
-                                      answer5: ans5,
-                                      answer6: ans6,
-                                      answer7: ans7,
-                                      answer8: ans8,
-                                      cnt: qCnt.toString(),
-                                      onAdded: () {
-                                        print("ADDDEDDDD TOOO SANS");
-                                        if (Notices.staticNoticesPage != null &&
-                                            Notices.staticNoticesPage.myChild !=
-                                                null) {
-                                          Notices.staticNoticesPage.myChild
-                                              .refreshNotices();
-                                        }
-                                      });
-                                } // for loop
-                              }
-                            });
-                      });
-                },
-                onResult: (items) {});
+            //                       widget.db.insertSurveyAnswer(
+            //                           idx: myList[i]['bd_idx'].toString(),
+            //                           qTitle:
+            //                               dataAnswers['q${(j + 1).toString()}']
+            //                                   .toString(),
+            //                           qN: (j + 1).toString(),
+            //                           answer1: ans1,
+            //                           answer2: ans2,
+            //                           answer3: ans3,
+            //                           answer4: ans4,
+            //                           answer5: ans5,
+            //                           answer6: ans6,
+            //                           answer7: ans7,
+            //                           answer8: ans8,
+            //                           cnt: qCnt.toString(),
+            //                           onAdded: () {
+            //                             print("ADDDEDDDD TOOO SANS");
+            //                             if (Notices.staticNoticesPage != null &&
+            //                                 Notices.staticNoticesPage.myChild !=
+            //                                     null) {
+            //                               Notices.staticNoticesPage.myChild
+            //                                   .refreshNotices();
+            //                             }
+            //                           });
+            //                     } // for loop
+            //                   }
+            //                 });
+            //           });
+            //     },
+            //     onResult: (items) {});
           }
         }
       }
@@ -382,7 +382,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
         systemNavigationBarColor: Colors.blue));
-    widget.db.unBlockUsers(userId: "sajadmaste", onUpdated: (st) {});
+    //widget.db.unBlockUsers(userId: "sajadmaste", onUpdated: (st) {});
 
     MainTabBarState.navBar = BottomNavigationBar(
       items: [
