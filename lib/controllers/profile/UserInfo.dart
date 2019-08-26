@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
+import 'package:haegisa2/views/buttons/Buttons.dart';
 
 class UserInfo extends StatefulWidget {
   @override
@@ -306,6 +307,16 @@ class _UserInfoState extends State<UserInfo> {
             Row(children: <Widget>[
               Expanded(child: Divider(height: 0)),
             ]),
+            Column(
+              children: <Widget>[
+                SizedBox(width: MediaQuery.of(context).size.width / 2),
+                HaegisaButton(
+                  text: Strings.shared.controllers.signIn.loginBtnTitle,
+                  iconURL: "Resources/Icons/Vector 3.2.png",
+                  onPressed: () async {},
+                )
+              ],
+            )
           ], // Row Children
         ), // Row
         alignment: Alignment(0.0, 0.0),

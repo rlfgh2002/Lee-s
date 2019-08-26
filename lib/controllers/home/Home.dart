@@ -134,13 +134,8 @@ class _ProfileState extends State<Home> {
                                           Statics.shared.fontSizes.subTitle,
                                       fontWeight: FontWeight.bold)),
                               Spacer(),
-                              Text("+",
-                                  style: TextStyle(
-                                      color:
-                                          Statics.shared.colors.titleTextColor,
-                                      fontSize:
-                                          Statics.shared.fontSizes.subTitle,
-                                      fontWeight: FontWeight.bold))
+                              Image.asset('Resources/Icons/btn_more.png',
+                                  scale: 3.0),
                             ]),
                             onPressed: () {},
                           ),
@@ -181,32 +176,6 @@ class _ProfileState extends State<Home> {
                           }
                         },
                       ),
-                      // _isLoading
-                      //     ? getMainJson()
-                      //     : new ListView.builder(
-                      //         itemCount:
-                      //             noticeList == null ? 0 : noticeList.length,
-                      //         itemBuilder: (BuildContext context, i) {
-                      //           return new ListTile(
-                      //             title: new Text(noticeList[i].subject),
-                      //             subtitle: new Text(noticeList[i].subject),
-                      //           );
-                      //         })
-
-                      // ListView.builder(
-                      //     itemCount: noticeList.length,
-                      //     itemBuilder: (BuildContext context, int index) {
-                      //       return ListTile(
-                      //         contentPadding: EdgeInsets.all(10.0),
-                      //         title: new Text(noticeList[index].subject),
-                      //         trailing: new Image.network(
-                      //           noticeList[index].subject,
-                      //           fit: BoxFit.cover,
-                      //           height: 40.0,
-                      //           width: 40.0,
-                      //         ),
-                      //       );
-                      //     })
                     ]),
                   ),
                 ]), // Row
@@ -241,13 +210,8 @@ class _ProfileState extends State<Home> {
                                           Statics.shared.fontSizes.subTitle,
                                       fontWeight: FontWeight.bold)),
                               Spacer(),
-                              Text("+",
-                                  style: TextStyle(
-                                      color:
-                                          Statics.shared.colors.titleTextColor,
-                                      fontSize:
-                                          Statics.shared.fontSizes.subTitle,
-                                      fontWeight: FontWeight.bold))
+                              Image.asset('Resources/Icons/btn_more.png',
+                                  scale: 3.0)
                             ]),
                             onPressed: () {},
                           ),
@@ -503,6 +467,7 @@ class _ProfileState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
+                      padding: const EdgeInsets.only(left: 10.0),
                       width: deviceWidth / 1.5 - 10,
                       child: Text(values[0]["company"],
                           textAlign: TextAlign.justify,
@@ -513,16 +478,21 @@ class _ProfileState extends State<Home> {
                               fontSize: Statics.shared.fontSizes.subTitle,
                               fontWeight: FontWeight.bold))),
                   Container(
-                      width: deviceWidth,
-                      margin: EdgeInsets.only(left: 5, right: 10),
-                      child: Text(values[0]["shortContent"],
-                          textAlign: TextAlign.justify,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.subTitle,
-                          )))
+                    padding: const EdgeInsets.only(left: 10.0),
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: new Column(
+                      children: <Widget>[
+                        new Text(values[0]["shortContent"],
+                            textAlign: TextAlign.justify,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.subTitle,
+                            )),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ]),

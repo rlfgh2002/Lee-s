@@ -24,173 +24,198 @@ class MainTabBar extends StatefulWidget {
   MiddleWare mdw = MiddleWare.shared;
 
   @override
-  MainTabBarState createState()
-  {
+  MainTabBarState createState() {
     MainTabBar.mainTabBar = this;
     return MainTabBarState();
   }
-
 }
 
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static BottomNavigationBar navBar;
 
   void getAllSurveys({String uid}) async {
-
     String url = Statics.shared.urls.searchSurveys(uid);
-    await http.get(url).then((val){
-      if(val.statusCode == 200){
+    await http.get(url).then((val) {
+      if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
         Map<String, dynamic> body = json.decode(val.body.trim());
-        if(body['code'] == "200")
-        {
+        if (body['code'] == "200") {
           var myList = body['table'];
-          for(int i = 0; i < myList.length; i++){
-            widget.db.checkSurveyExist(no: myList[i]['no'].toString(),onNoResult: (){
-              widget.db.insertSurvey(
-                  no: myList[i]['no'].toString(),
-                  isDone: 'FALSE',
-                  bd_idx: myList[i]['bd_idx'].toString(),
-                  start_date: myList[i]['start_date'].toString(),
-                  end_date: myList[i]['end_date'].toString(),
-                  subject: myList[i]['subject'].toString(),
-                  content: myList[i]['contents'].toString(),
-                  q_cnt: myList[i]['q_cnt'].toString(),
-                  onAdded:(){
-                    getSurveysAnswers(uid: uid, idx: myList[i]['bd_idx'].toString(),onSent: (response){
-                      if(response['code'].toString() == "200"){
-                        Map<String, dynamic> dataAnswers = response['table'][0]['q_title'];
-                        int qCnt = int.parse(myList[i]['q_cnt'].toString());
+          for (int i = 0; i < myList.length; i++) {
+            widget.db.checkSurveyExist(
+                no: myList[i]['no'].toString(),
+                onNoResult: () {
+                  widget.db.insertSurvey(
+                      no: myList[i]['no'].toString(),
+                      isDone: 'FALSE',
+                      bd_idx: myList[i]['bd_idx'].toString(),
+                      start_date: myList[i]['start_date'].toString(),
+                      end_date: myList[i]['end_date'].toString(),
+                      subject: myList[i]['subject'].toString(),
+                      content: myList[i]['contents'].toString(),
+                      q_cnt: myList[i]['q_cnt'].toString(),
+                      onAdded: () {
+                        getSurveysAnswers(
+                            uid: uid,
+                            idx: myList[i]['bd_idx'].toString(),
+                            onSent: (response) {
+                              if (response['code'].toString() == "200") {
+                                Map<String, dynamic> dataAnswers =
+                                    response['table'][0]['q_title'];
+                                int qCnt =
+                                    int.parse(myList[i]['q_cnt'].toString());
 
-                        for(int j = 0; j < qCnt; j++){
-                          String qStr = "q${(j+1).toString()}";
-                          var qItems = dataAnswers['${qStr}_item'];
-                          int qItemsCount = qItems.length;
+                                for (int j = 0; j < qCnt; j++) {
+                                  String qStr = "q${(j + 1).toString()}";
+                                  var qItems = dataAnswers['${qStr}_item'];
+                                  int qItemsCount = qItems.length;
 
-                          String ans1 = "";String ans2 = "";String ans3 = "";
-                          String ans4 = "";String ans5 = "";String ans6 = "";
-                          String ans7 = "";String ans8 = "";
+                                  String ans1 = "";
+                                  String ans2 = "";
+                                  String ans3 = "";
+                                  String ans4 = "";
+                                  String ans5 = "";
+                                  String ans6 = "";
+                                  String ans7 = "";
+                                  String ans8 = "";
 
-                          for(int z = 0; z < qItemsCount; z++){
-                            if(z == 0){
-                              ans1 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                            if(z == 1){
-                              ans2 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                            if(z == 2){
-                              ans3 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                            if(z == 3){
-                              ans4 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                            if(z == 4){
-                              ans5 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                            if(z == 5){
-                              ans6 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                            if(z == 6){
-                              ans7 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                            if(z == 7){
-                              ans8 = qItems["${qStr.toString()}_${(z+1).toString()}"];
-                            }
-                          }// for loop 2
+                                  for (int z = 0; z < qItemsCount; z++) {
+                                    if (z == 0) {
+                                      ans1 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                    if (z == 1) {
+                                      ans2 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                    if (z == 2) {
+                                      ans3 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                    if (z == 3) {
+                                      ans4 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                    if (z == 4) {
+                                      ans5 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                    if (z == 5) {
+                                      ans6 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                    if (z == 6) {
+                                      ans7 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                    if (z == 7) {
+                                      ans8 = qItems[
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
+                                    }
+                                  } // for loop 2
 
-                          print("**************************************************");
-                          print("ANS 1 : ${ans1}");
-                          print("ANS 2 : ${ans2}");
-                          print("ANS 3 : ${ans3}");
-                          print("ANS 4 : ${ans4}");
-                          print("ANS 5 : ${ans5}");
-                          print("ANS 6 : ${ans6}");
-                          print("ANS 7 : ${ans7}");
-                          print("ANS 8 : ${ans8}");
-                          print("q Title : ${dataAnswers['q${(j+1).toString()}'].toString()}");
-                          print("QN : ${(j+1).toString()}");
-                          print("**************************************************");
+                                  print(
+                                      "**************************************************");
+                                  print("ANS 1 : ${ans1}");
+                                  print("ANS 2 : ${ans2}");
+                                  print("ANS 3 : ${ans3}");
+                                  print("ANS 4 : ${ans4}");
+                                  print("ANS 5 : ${ans5}");
+                                  print("ANS 6 : ${ans6}");
+                                  print("ANS 7 : ${ans7}");
+                                  print("ANS 8 : ${ans8}");
+                                  print(
+                                      "q Title : ${dataAnswers['q${(j + 1).toString()}'].toString()}");
+                                  print("QN : ${(j + 1).toString()}");
+                                  print(
+                                      "**************************************************");
 
-                          widget.db.insertSurveyAnswer(
-                              idx: myList[i]['bd_idx'].toString(),
-                              qTitle: dataAnswers['q${(j+1).toString()}'].toString(),
-                              qN: (j+1).toString(),
-                              answer1: ans1,
-                              answer2: ans2,
-                              answer3: ans3,
-                              answer4: ans4,
-                              answer5: ans5,
-                              answer6: ans6,
-                              answer7: ans7,
-                              answer8: ans8,
-                              cnt: qCnt.toString(),
-                              onAdded: (){
-                                print("ADDDEDDDD TOOO SANS");
-                                if(Notices.staticNoticesPage != null && Notices.staticNoticesPage.myChild != null){
-                                  Notices.staticNoticesPage.myChild.refreshNotices();
-                                }
+                                  widget.db.insertSurveyAnswer(
+                                      idx: myList[i]['bd_idx'].toString(),
+                                      qTitle:
+                                          dataAnswers['q${(j + 1).toString()}']
+                                              .toString(),
+                                      qN: (j + 1).toString(),
+                                      answer1: ans1,
+                                      answer2: ans2,
+                                      answer3: ans3,
+                                      answer4: ans4,
+                                      answer5: ans5,
+                                      answer6: ans6,
+                                      answer7: ans7,
+                                      answer8: ans8,
+                                      cnt: qCnt.toString(),
+                                      onAdded: () {
+                                        print("ADDDEDDDD TOOO SANS");
+                                        if (Notices.staticNoticesPage != null &&
+                                            Notices.staticNoticesPage.myChild !=
+                                                null) {
+                                          Notices.staticNoticesPage.myChild
+                                              .refreshNotices();
+                                        }
+                                      });
+                                } // for loop
                               }
-                          );
-
-                        }// for loop
-                      }
-                    });
-                  }
-              );
-            },
-              onResult: (items){
-
-              }
-            );
+                            });
+                      });
+                },
+                onResult: (items) {});
           }
         }
       }
-    }).catchError((error){
-      print(":::::::::::::::::: on getting Survey error : ${error.toString()} ::::::::::::::::::");
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on getting Survey error : ${error.toString()} ::::::::::::::::::");
     });
   }
-  void getSurveysAnswers({onSent(Map<String, dynamic> jj), String uid, String idx}) async {
 
+  void getSurveysAnswers(
+      {onSent(Map<String, dynamic> jj), String uid, String idx}) async {
     var url = Statics.shared.urls.searchSurveysAnswers(uid, idx);
-    await http.get(url).then((val){
-      if(val.statusCode == 200){
+    await http.get(url).then((val) {
+      if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
         var j = jsonDecode(val.body);
         print("OUTPUT JSON: ${j.toString()}");
         onSent(j);
       }
-    }).catchError((error){
-      print(":::::::::::::::::: on getting Surevey Answers error : ${error.toString()} ::::::::::::::::::");
-    }).whenComplete((){
-      print("::::::::::::::::::::: [ SEND URL SURVEY ANSWERS ] :::::::::::::::::::::");
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on getting Surevey Answers error : ${error.toString()} ::::::::::::::::::");
+    }).whenComplete(() {
+      print(
+          "::::::::::::::::::::: [ SEND URL SURVEY ANSWERS ] :::::::::::::::::::::");
       print("URL: ${url.toString()}");
-      print("::::::::::::::::::::: [ SEND URL SURVEY ANSWERS ] :::::::::::::::::::::");
+      print(
+          "::::::::::::::::::::: [ SEND URL SURVEY ANSWERS ] :::::::::::::::::::::");
     });
   }
+
   void getVoteAnswers({String url, onSent(Map<String, dynamic> jj)}) async {
-
-    await http.get(url).then((val){
-      if(val.statusCode == 200){
+    await http.get(url).then((val) {
+      if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
         var j = jsonDecode(val.body);
         print("OUTPUT JSON: ${j.toString()}");
         onSent(j);
       }
-    }).catchError((error){
-      print(":::::::::::::::::: on getting Vote Answers error : ${error.toString()} ::::::::::::::::::");
-    }).whenComplete((){
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on getting Vote Answers error : ${error.toString()} ::::::::::::::::::");
+    }).whenComplete(() {
       print("::::::::::::::::::::: [ SEND URL VOTE ] :::::::::::::::::::::");
       print("URL: ${url.toString()}");
       print("::::::::::::::::::::: [ SEND URL VOTE ] :::::::::::::::::::::");
     });
   }
-  void firebaseCloudMessaging_Listeners() async{
 
-    print("::::::::::::::::::::::::: [ Firebase Listening ] :::::::::::::::::::::::::");
+  void firebaseCloudMessaging_Listeners() async {
+    print(
+        "::::::::::::::::::::::::: [ Firebase Listening ] :::::::::::::::::::::::::");
 
     if (Platform.isIOS) iOS_Permission();
 
-    widget.mainFirebaseMessaging.getToken().then((token){
+    widget.mainFirebaseMessaging.getToken().then((token) {
       print(token);
     });
 
@@ -203,18 +228,22 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         print('on resume $message');
         analiseMessage(message);
 
-        if(message['data']['notificationType'].toString() == "chat"){
+        if (message['data']['notificationType'].toString() == "chat") {
           setState(() {
             MiddleWare.shared.tabc.animateTo(2);
-            Future.delayed(Duration(seconds: 1)).then((val){
-              Chats.staticChatsPage.myChild.openChat(message['data']['conversationId'],message['data']['fromId'],message['data']['fromName']);
+            Future.delayed(Duration(seconds: 1)).then((val) {
+              Chats.staticChatsPage.myChild.openChat(
+                  message['data']['conversationId'],
+                  message['data']['fromId'],
+                  message['data']['fromName']);
             });
           });
-        }else{
+        } else {
           setState(() {
             MiddleWare.shared.tabc.animateTo(3);
-            Future.delayed(Duration(seconds: 1)).then((val){
-              Notices.staticNoticesPage.myChild.openNotice(message['data']['idx']);
+            Future.delayed(Duration(seconds: 1)).then((val) {
+              Notices.staticNoticesPage.myChild
+                  .openNotice(message['data']['idx']);
             });
           });
         }
@@ -223,137 +252,149 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         print('on launch $message');
         analiseMessage(message);
 
-        if(message['data']['notificationType'].toString() == "chat"){
+        if (message['data']['notificationType'].toString() == "chat") {
           setState(() {
             MiddleWare.shared.tabc.animateTo(2);
-            Future.delayed(Duration(seconds: 1)).then((val){
-              Chats.staticChatsPage.myChild.openChat(message['data']['conversationId'],message['data']['fromId'],message['data']['fromName']);
+            Future.delayed(Duration(seconds: 1)).then((val) {
+              Chats.staticChatsPage.myChild.openChat(
+                  message['data']['conversationId'],
+                  message['data']['fromId'],
+                  message['data']['fromName']);
             });
           });
-        }else{
+        } else {
           setState(() {
             MiddleWare.shared.tabc.animateTo(3);
-            Future.delayed(Duration(seconds: 1)).then((val){
-              Notices.staticNoticesPage.myChild.openNotice(message['data']['idx']);
+            Future.delayed(Duration(seconds: 1)).then((val) {
+              Notices.staticNoticesPage.myChild
+                  .openNotice(message['data']['idx']);
             });
           });
         }
       },
     );
-
-
   }
+
   void iOS_Permission() {
     widget.mainFirebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true)
-    );
+        IosNotificationSettings(sound: true, badge: true, alert: true));
     widget.mainFirebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings)
-    {
+        .listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
     });
   }
-  void analiseMessage(Map<String, dynamic> message){
-    ChatObject chatItem = ChatObject.fromJson(message);
-    if(message['data']['notificationType'].toString() == "chat"){
-      widget.db.checkConversationExist(userId: chatItem.notificationFromId,convId: chatItem.notificationConversationId,onResult: (res){
-        widget.db.insertChat(
-            convId: chatItem.notificationConversationId,
-            userId: chatItem.notificationFromId,
-            content: chatItem.notificationContent,
-            date: chatItem.notificationRegDate,
-            isYours: "FALSE",
-            onAdded: (){
-              if(Chats.staticChatsPage != null){
-                Chats.staticChatsPage.refresh();
-              }
 
-              if(Chat.staticChatPage != null){
-                if(Chat.staticChatPage.isInThisPage == true){
-                  Chat.staticChatPage.myChild.addMessageToList(
-                      msg: chatItem.notificationContent,
-                      isYours: false,
-                      date: chatItem.notificationRegDate,
-                      senderName: chatItem.notificationFromName
-                  );
-                }
-              }
-            }
-        );
-      },onNoResult: (){
-        widget.db.insertConversation(
-            userId: chatItem.notificationFromId,
-            convId: chatItem.notificationConversationId,
-            createDate: chatItem.notificationRegDate,
-            fromName: chatItem.notificationFromName,
-            onInserted: (){
-              print(":::::::::::::::::: [new conversation added] ::::::::::::::::::");
-              widget.db.insertChat(
-                  convId: chatItem.notificationConversationId,
-                  userId: chatItem.notificationFromId,
-                  content: chatItem.notificationContent,
-                  date: chatItem.notificationRegDate,
-                  isYours: "FALSE",
-                  onAdded: (){
-                    if(Chats.staticChatsPage != null){
-                      Chats.staticChatsPage.refresh();
-                    }
-                    if(Chat.staticChatPage != null){
-                      if(Chat.staticChatPage.isInThisPage == true){
-                        Chat.staticChatPage.myChild.addMessageToList(
-                            msg: chatItem.notificationContent,
-                            isYours: false,
-                            date: chatItem.notificationRegDate,
-                            senderName: chatItem.notificationFromName
-                        );
-                      }
+  void analiseMessage(Map<String, dynamic> message) {
+    ChatObject chatItem = ChatObject.fromJson(message);
+    if (message['data']['notificationType'].toString() == "chat") {
+      widget.db.checkConversationExist(
+          userId: chatItem.notificationFromId,
+          convId: chatItem.notificationConversationId,
+          onResult: (res) {
+            widget.db.insertChat(
+                convId: chatItem.notificationConversationId,
+                userId: chatItem.notificationFromId,
+                content: chatItem.notificationContent,
+                date: chatItem.notificationRegDate,
+                isYours: "FALSE",
+                onAdded: () {
+                  if (Chats.staticChatsPage != null) {
+                    Chats.staticChatsPage.refresh();
+                  }
+
+                  if (Chat.staticChatPage != null) {
+                    if (Chat.staticChatPage.isInThisPage == true) {
+                      Chat.staticChatPage.myChild.addMessageToList(
+                          msg: chatItem.notificationContent,
+                          isYours: false,
+                          date: chatItem.notificationRegDate,
+                          senderName: chatItem.notificationFromName);
                     }
                   }
-              );
-            },
-            onNoInerted: (){
-              print(":::::::::::::::::: [new conversation not added !] ::::::::::::::::::");
-            }
-        );
-      });
+                });
+          },
+          onNoResult: () {
+            widget.db.insertConversation(
+                userId: chatItem.notificationFromId,
+                convId: chatItem.notificationConversationId,
+                createDate: chatItem.notificationRegDate,
+                fromName: chatItem.notificationFromName,
+                onInserted: () {
+                  print(
+                      ":::::::::::::::::: [new conversation added] ::::::::::::::::::");
+                  widget.db.insertChat(
+                      convId: chatItem.notificationConversationId,
+                      userId: chatItem.notificationFromId,
+                      content: chatItem.notificationContent,
+                      date: chatItem.notificationRegDate,
+                      isYours: "FALSE",
+                      onAdded: () {
+                        if (Chats.staticChatsPage != null) {
+                          Chats.staticChatsPage.refresh();
+                        }
+                        if (Chat.staticChatPage != null) {
+                          if (Chat.staticChatPage.isInThisPage == true) {
+                            Chat.staticChatPage.myChild.addMessageToList(
+                                msg: chatItem.notificationContent,
+                                isYours: false,
+                                date: chatItem.notificationRegDate,
+                                senderName: chatItem.notificationFromName);
+                          }
+                        }
+                      });
+                },
+                onNoInerted: () {
+                  print(
+                      ":::::::::::::::::: [new conversation not added !] ::::::::::::::::::");
+                });
+          });
       // chat notification
-    }
-    else{
-      if(message['data']['notificationType'].toString() == "vote"){
+    } else {
+      if (message['data']['notificationType'].toString() == "vote") {
         // vote notification
         VoteObject voteItem = VoteObject.fromJson(message);
 
-        widget.db.checkVoteExist(bd_idx: voteItem.idx, onRes: (){
-          print(":::::::::: DB INSERT(vote) Error Because this Vote ALready Exist ::::::::::");
-        },onNoResult: (){
-          widget.db.insertVote(voteItem: voteItem,onAdded: (){
-            String url = "${voteItem.httpPath.toString()}&userId=${this.widget.myUserId}&mode=view";
-            url = url.replaceAll("https://", "http://");
-            getVoteAnswers(url: url,onSent: (response){
-
-              widget.db.insertAnswer(onAdded: (){
-                if(Notices.staticNoticesPage != null){
-                  Notices.staticNoticesPage.myChild.refreshNotices();
-                }
-              },idx: voteItem.idx, status: response['data']['status'].toString(),
-                answer1: response['data']['a1'].toString(),
-                answer2: response['data']['a2'].toString(),
-                answer3: response['data']['a3'].toString(),
-                answer4: response['data']['a4'].toString(),
-                answer5: response['data']['a5'].toString(),
-                answer6: response['data']['a6'].toString(),
-              );
-
+        widget.db.checkVoteExist(
+            bd_idx: voteItem.idx,
+            onRes: () {
+              print(
+                  ":::::::::: DB INSERT(vote) Error Because this Vote ALready Exist ::::::::::");
+            },
+            onNoResult: () {
+              widget.db.insertVote(
+                  voteItem: voteItem,
+                  onAdded: () {
+                    String url =
+                        "${voteItem.httpPath.toString()}&userId=${this.widget.myUserId}&mode=view";
+                    url = url.replaceAll("https://", "http://");
+                    getVoteAnswers(
+                        url: url,
+                        onSent: (response) {
+                          widget.db.insertAnswer(
+                            onAdded: () {
+                              if (Notices.staticNoticesPage != null) {
+                                Notices.staticNoticesPage.myChild
+                                    .refreshNotices();
+                              }
+                            },
+                            idx: voteItem.idx,
+                            status: response['data']['status'].toString(),
+                            answer1: response['data']['a1'].toString(),
+                            answer2: response['data']['a2'].toString(),
+                            answer3: response['data']['a3'].toString(),
+                            answer4: response['data']['a4'].toString(),
+                            answer5: response['data']['a5'].toString(),
+                            answer6: response['data']['a6'].toString(),
+                          );
+                        });
+                  });
             });
-          });
-        });
-
       } // Vote Notification
     }
   }
-  void getUserId({onGetUserId(String userId)}) async
-  {
-    await SharedPreferences.getInstance().then((val){
+
+  void getUserId({onGetUserId(String userId)}) async {
+    await SharedPreferences.getInstance().then((val) {
       String uid = val.getString("app_user_login_info_userid");
       this.widget.myUserId = uid;
       onGetUserId(uid);
@@ -361,13 +402,12 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   @override
-  void initState()
-  {
+  void initState() {
     MainTabBar.myChild = this;
     MiddleWare.shared.tabc = TabController(
         length: MiddleWare.shared.myTabBarList.length, vsync: this);
 
-    getUserId(onGetUserId: (uid){
+    getUserId(onGetUserId: (uid) {
       getAllSurveys(uid: uid);
     });
     firebaseCloudMessaging_Listeners();
@@ -387,10 +427,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     MainTabBarState.navBar = BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
