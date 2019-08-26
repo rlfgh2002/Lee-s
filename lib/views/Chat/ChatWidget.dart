@@ -24,6 +24,19 @@ class ChatWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double chatMaxSize = screenWidth;
+
+    var dt = DateTime.now();
+    String clearDateTime = "";
+    if(this.time.contains("/")){
+      var splited = this.time.split(" ");
+      var dateSpt = splited[0].split("/");
+      var timeSpt = splited[1].split(":");
+      clearDateTime = "${dateSpt[0].toString()}-${dateSpt[1].toString()}-${dateSpt[2].toString()} at ${timeSpt[0].toString()}:${timeSpt[1].toString()}";
+    }else{
+      dt = DateTime.parse(this.time);
+      clearDateTime = "${dt.year.toString()}-${dt.month.toString()}-${dt.day.toString()} at ${dt.hour.toString()}:${dt.minute.toString()}";
+    }
+
     if(!this.isYours){
       return Padding(child: Column(
         children: [
@@ -35,7 +48,7 @@ class ChatWidget extends StatelessWidget {
               children: [
                 Text(this.senderName, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.subTitleInContent, fontWeight: FontWeight.bold),),
                 SizedBox(width: 5),
-                Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.small, fontWeight: FontWeight.normal),)
+                Text(clearDateTime, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.small, fontWeight: FontWeight.normal),)
               ],
               mainAxisAlignment: MainAxisAlignment.start,
             ),
@@ -75,7 +88,7 @@ class ChatWidget extends StatelessWidget {
               children: [
                 Text(this.senderName, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.subTitleInContent, fontWeight: FontWeight.bold),),
                 SizedBox(width: 5),
-                Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.small, fontWeight: FontWeight.normal),)
+                Text(clearDateTime, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.small, fontWeight: FontWeight.normal),)
               ],
               mainAxisAlignment: MainAxisAlignment.end,
             ),

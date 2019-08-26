@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:haegisa2/models/Vote/VoteObject.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -109,13 +110,13 @@ class MyDataBase
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
           });
 
-          await db.execute('CREATE TABLE ${_StaticDbInformation.tblBlockUsers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblBlockUsersUserId} TEXT)').then((val){
+          db.execute('CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsSeen} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblChats} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
           });
 
-          await db.execute('CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsSeen} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)').then((val){
+          await db.execute('CREATE TABLE ${_StaticDbInformation.tblBlockUsers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblBlockUsersUserId} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblChats} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
@@ -151,7 +152,7 @@ class MyDataBase
     ).then((val){
       prefs.setBool('my_database_iscreated',true);
       print(":::::::::: DB INITIALIZING STATUS => [TRUE] ::::::::::");
-      val.close();
+      //val.close();
     });
   }
   void _deleteDataBase() async
@@ -161,6 +162,46 @@ class MyDataBase
     String path = join(databasesPath, _StaticDbInformation.dbName);
     await deleteDatabase(path).then((val){
       prefs.setBool('my_database_iscreated',false);
+    });
+  }
+
+
+  void firstWelcomeMessage({VoidCallback whenComplete}){
+    print(":::::::::::::::::::::::: [Initializing First Welcome Message] ::::::::::::::::::::::::");
+    const adminConvId = 'x0x0';
+    const adminUserId = '0';
+    this.checkConversationExist(convId: adminConvId,userId: adminUserId, onResult: (res){
+
+      print(":::::::::: WELCOME MESSAGE ALREADY ADDED SUCCESFULLY ::::::::::");
+
+    }, onNoResult: (){
+
+      this.insertConversation(
+          convId: adminConvId,
+          userId: adminUserId,
+          createDate: DateTime.now().toString(),
+          fromName: '한국해기사협회',
+          schoolName: 'Haegisa Company',
+          onNoInerted: (){
+            print(":::::::::::::::::::::::: [Initialization First Conversation Welcome Message Failed!] ::::::::::::::::::::::::");
+          },
+          onInserted:(){
+            print(":::::::::::::::::::::::: [Initialization First Conversation Welcome Message Done.] ::::::::::::::::::::::::");
+            this.insertChat(
+                userId: adminUserId,
+                convId: adminConvId,
+                isYours: 'FALSE',
+                seen: "0",
+                date: DateTime.now().toString(),
+                content: "반갑습니다. 한국해기사협회입니다. 앞으로 다양한 소식과 정보를 앱으로 받아보실 수 있습니다.",
+                onAdded: (){
+                  whenComplete();
+                  print(":::::::::::::::::::::::: [Initialization First Chat Welcome Message Done.] ::::::::::::::::::::::::");
+                }
+            );
+          }
+      );
+
     });
   }
 
@@ -265,7 +306,7 @@ class MyDataBase
       //db.close();
     });
   }
-  void checkConversationExist({onResult(Map<String, dynamic> result), String userId = "", onNoResult()}) async
+  void checkConversationExist({onResult(Map<String, dynamic> result),String convId = "", String userId = "", onNoResult()}) async
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -273,7 +314,7 @@ class MyDataBase
     await openDatabase(path).then((db){
 
       Map<String, dynamic> obj;
-      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblConversation} WHERE ${_StaticDbInformation.tblConversationOtherSideUserId} = '${userId}'").then((lists){
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblConversation} WHERE ${_StaticDbInformation.tblConversationOtherSideUserId} = '${userId}' and ${_StaticDbInformation.tblConversationFieldId} = '${convId}'").then((lists){
         if(lists.length > 0){
           obj = lists.first;
           print(":::::::::: DB SELECT(conversation) ROW (${0}) => [${lists.first.toString()}] ::::::::::");
@@ -330,7 +371,7 @@ class MyDataBase
     await openDatabase(path).then((db){
 
       List<Map<String, dynamic>> myList = [];
-      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC").then((lists){
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id ASC").then((lists){
         for(int i = 0; i < lists.length; i++){
           myList.add(lists[i]);
           print(":::::::::: DB SELECT ROW (${i}) => [${lists[i].toString()}] ::::::::::");
@@ -616,6 +657,27 @@ class MyDataBase
   }
 
 
+  void checkVoteExist({VoidCallback onRes, String bd_idx = "", onNoResult()}) async
+  {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db){
+
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblVotes} WHERE ${_StaticDbInformation.tblVotesIdx} = '${bd_idx.toString()}'").then((lists){
+        if(lists.length > 0){
+          print(":::::::::: DB SELECT(Votes) ROW (${0}) => [${lists.first.toString()}] ::::::::::");
+          //db.close();
+          onRes();
+        }else{
+          print(":::::::::: DB SELECT(Votes) ROW (${0}) => Not Found Any Items ::::::::::");
+          //db.close();
+          onNoResult();
+        }
+      });
+
+    });
+  }
   void insertVote({VoteObject voteItem, onAdded()}) async
   {
     print(":::::::::: INSERTING VOTE ITEM IN DB ::::::::::");

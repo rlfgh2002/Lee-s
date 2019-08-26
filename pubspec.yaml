@@ -32,6 +32,7 @@ dependencies:
   device_info: ^0.4.0+2
   package_info: ^0.4.0+4
   sqflite: ^1.1.6
+  loading: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -130,7 +131,10 @@ flutter:
     - Resources/Icons/Line.png
     - Resources/Images/userAvatar.png
     - Resources/Images/userAlertTop.png
-
+    # SurveysTabs
+    - Resources/Icons/proceedingBackground.png
+    # Conversations
+    - Resources/Icons/userChatAvatar.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

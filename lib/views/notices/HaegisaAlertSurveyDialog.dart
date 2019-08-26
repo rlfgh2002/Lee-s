@@ -29,6 +29,7 @@ class HaegisaAlertSurveyDialog extends StatefulWidget {
 
   final db = MyDataBase();
 
+  Map<int, List<bool>> voteGroupItems;
 
   Widget bottomButton = Container();
   Widget surveyList = Container();
@@ -62,6 +63,14 @@ class HaegisaAlertSurveyDialog extends StatefulWidget {
 
 class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
 
+  void checkItemManager(int item, bool val,int gId){
+
+    for(int i=0;i<this.widget.voteGroupItems[gId].length;i++){
+      this.widget.voteGroupItems[gId][i] = !val;
+    }
+
+    this.widget.voteGroupItems[gId][item] = val;
+  }
   void submitSurvey({String bdxId}) async{
 
     String q1 = "";String q2 = "";String q3 = "";
@@ -219,6 +228,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       if(i == 0){
         percent = 95;
       }
+
       mySurveysList.add(Padding(child: Text("${this.widget.surveys[i]['title']}"),padding: const EdgeInsets.only(bottom: 8),));
       for(int j = 0; j < 8; j++){
         if(this.widget.surveys[i]['q${j+1}'] != ""){

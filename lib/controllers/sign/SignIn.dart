@@ -211,19 +211,17 @@ class _SignInState extends State<SignIn> {
                         await deviceinfo();
 
                         userInformation.mode = "login";
-                        userInformation.fullName = resultPost.memberName;
+                        userInformation.fullName = resultPost.member_name;
                         userInformation.hp = resultPost.hp;
                         userInformation.loginCheck = 1;
                         userInformation.userID = idValue;
-                        userInformation.memberType = resultPost.memberType;
-                        userInformation.userIdx = resultPost.memberIdx;
                         _firebaseMessaging.getToken().then((token) {
                           print(token);
                           userInformation.userToken = token;
                         });
 
                         this.refreshUserInfo(() {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               new MaterialPageRoute(
                                   builder: (context) => new SplashScreen()));
@@ -337,7 +335,7 @@ class _SignInState extends State<SignIn> {
                           onPressed: () {
                             userInformation.loginCheck = 0;
                             Navigator.of(context, rootNavigator: true).pop();
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 new MaterialPageRoute(
                                     builder: (context) => new SplashScreen()));
@@ -385,29 +383,21 @@ Future<Result> createPost(String url, {Map body}) async {
 //JSON 데이터
 class Result {
   final String idx;
-  final String memberIdx;
+  final String member_idx;
   final String id;
-  final String memberName;
+  final String member_name;
   final String hp;
-  final String memberType;
 
-  Result(
-      {this.idx,
-      this.memberIdx,
-      this.id,
-      this.memberName,
-      this.hp,
-      this.memberType});
+  Result({this.idx, this.member_idx, this.id, this.member_name, this.hp});
 
   factory Result.fromJson(Map<String, dynamic> json, String url) {
     if (url == Strings.shared.controllers.jsonURL.loginJson) {
       return Result(
         idx: json['idx'],
-        memberIdx: json['member_idx'],
+        member_idx: json['member_idx'],
         id: json['id'],
-        memberName: json['member_name'],
+        member_name: json['member_name'],
         hp: json['hp'],
-        memberType: json['member_type'],
       );
     } else if (url == Strings.shared.controllers.jsonURL.loginJson) {}
   }

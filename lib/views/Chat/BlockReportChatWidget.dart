@@ -25,12 +25,13 @@ class BlockReportChatWidget extends StatelessWidget {
             boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.1),blurRadius: 4)],
             color: Colors.white
             ),
-        height: 80,
-        margin: const EdgeInsets.all(32),
+        height: 55,
+        margin: const EdgeInsets.only(left: 32, right: 32, top: 32, bottom: 8),
         child: Row(
           children: [
-            Container(width: newW,color: Colors.white, height: 50,
+            Container(width: newW,color: Colors.transparent, height: 50,
               child: FlatButton(
+                color: Colors.transparent,
                 child: Row(
                   children: [
                     Image.asset("Resources/Icons/icon_Permission.png", height: 25,),
@@ -49,13 +50,14 @@ class BlockReportChatWidget extends StatelessWidget {
               ),
             ),
             Image.asset("Resources/Icons/Line.png", color: Statics.shared.colors.lineColor,height: 50,width: 2),
-            Container(width: newW,color: Colors.white, height: 50,
+            Container(width: newW,color: Colors.transparent, height: 50,
               child: FlatButton(
+                color: Colors.transparent,
                 child: Row(
                   children: [
                     Image.asset("Resources/Icons/icon_refusal.png", height: 25,color: Colors.red),
                     SizedBox(width: 10),
-                    Text(Strings.shared.controllers.chat.conversationPermission, style: TextStyle(
+                    Text(Strings.shared.controllers.chat.conversationBlock, style: TextStyle(
                         fontSize: Statics.shared.fontSizes.titleInContent,
                         color: Colors.red
                     ),)

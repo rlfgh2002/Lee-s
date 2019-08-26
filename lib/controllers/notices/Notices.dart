@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
@@ -118,10 +119,12 @@ class NoticesState extends State<Notices> {
   void refreshNotices(){
     widget.notices = [];
     List<NoticeWidget> myList = [];
+    List<NoticeWidget> myList2 = [];
 
     widget.db.selectSurvey(onResult: (res){
       for(int i = 0; i < res.length; i++){
         NoticeWidget item = NoticeWidget(title: res[i]['subject'].toString(),shortDescription: res[i]['contents'].toString(),time: res[i]['start_date'].toString(),type: NoticeType.Survey,
+          idx: "",
           onTapped: (){
             widget.db.selectSurveyAnswer(idx: res[i]['bd_idx'],onResult: (surveys){
               if(surveys.length > 0){
@@ -175,6 +178,7 @@ class NoticesState extends State<Notices> {
       if(results.length > 0){
         for(int i = 0; i < results.length; i++){
           NoticeWidget item = NoticeWidget(title: results[i].subject.toString(),shortDescription: results[i].content,time: results[i].regDate,type: NoticeType.Vote,
+            idx: results[i].idx,
             onTapped: (){
             widget.db.selectAnswer(idx: results[i].idx,onResult: (items){
               if(items.length > 0){
@@ -248,17 +252,28 @@ class NoticesState extends State<Notices> {
             });
             },
           );
-          myList.add(item);
+          myList2.add(item);
         }// for loop
 
         setState(() {
-          widget.notices = myList;
+          widget.notices = myList2 + myList;
         });
       }else{
         setState(() {
           widget.notices = myList;
         });
       }
+    });
+  }
+
+  void openNotice(String noticeId){
+    int i = 0;
+    widget.notices.forEach((item){
+      if(item.idx == noticeId){
+        widget.notices[i].onTapped();
+        print("Clicked On Notice(${noticeId.toString()}) ....");
+      }
+      i++;
     });
   }
 

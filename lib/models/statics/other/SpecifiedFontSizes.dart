@@ -9,5 +9,6 @@ class SpecifiedFontSizes
   double content = 18;
   double supplementary = 16;
 
+  double medium = 14;
   double small = 13;
 }

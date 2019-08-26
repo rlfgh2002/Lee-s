@@ -190,7 +190,7 @@ class ChatState extends State<Chat> {
           color: Statics.shared.colors.titleTextColor,
         ),
       ), // chat textfield
-      padding: const EdgeInsets.only(left: 16,right: 16,top: 16,bottom: 26),
+      padding: const EdgeInsets.only(left: 16,right: 16,top: 8,bottom: 8),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -201,7 +201,7 @@ class ChatState extends State<Chat> {
     showDialog(context: this.mainContext,builder: (BuildContext context) {
       return BlockAlertWidget(
         popUpWidth: MiddleWare.shared.screenWidth,
-        fullName: "${userInformation.fullName}\n", // Your User Name
+        fullName: "${MiddleWare.shared.user.fullName}\n", // Your User Name
         onPressNo: (){
           Navigator.pop(context);
         },
@@ -349,16 +349,36 @@ class ChatState extends State<Chat> {
       chatCurrentConvId = MiddleWare.shared.conversationID;
     }
 
-    MiddleWare.shared.messages.add(BlockReportChatWidget(
-      onPressBlock: (){
-        this.showBlockPopUp();
-      },
-      onPressPermission: (){}
-      ,));
+    if(chatCurrentConvId != 'x0x0' && MiddleWare.shared.user.UID != '0'){
+      SharedPreferences.getInstance().then((prefs){
+
+        if(prefs.getBool("USER_${chatCurrentConvId}_CHAT_PERMISSION") != true){
+          MiddleWare.shared.messages.add(BlockReportChatWidget(
+              onPressBlock: (){
+                this.showBlockPopUp();
+              },
+              onPressPermission: (){
+                this.hideBlockCell();
+              }
+          ));
+        }
+      });
+    }
+
     MiddleWare.shared.txtChat = TextEditingController();
 
     if (Platform.isIOS) iOS_Permission();
     super.initState();
+  }
+
+  void hideBlockCell() async{
+    await SharedPreferences.getInstance().then((prefs){
+      print("CONVIDD:${chatCurrentConvId.toString()}");
+      prefs.setBool("USER_${chatCurrentConvId}_CHAT_PERMISSION", true);
+      setState(() {
+        MiddleWare.shared.messages.removeAt(0);
+      });
+    });
   }
 
   void refreshChats() async

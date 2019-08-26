@@ -25,6 +25,8 @@ class _StringsDialogs {
   String wouldYouLikeToBlockPart2 = "하시겠어요?";
   String blockPopUpCaption = "차단하시면 다시 대화를 하실 수 없어요";
   String btnBlockTitle = "차단";
+
+  String proceedingWord = "진행중";
 }
 
 class _StringsControllers {
@@ -33,6 +35,7 @@ class _StringsControllers {
   _StringsControllerChats chats = _StringsControllerChats();
   _StringsControllerChat chat = _StringsControllerChat();
   _StringsControllerNotices notices = _StringsControllerNotices();
+  _StringsControllerSurveysTabs SurveysTabs = _StringsControllerSurveysTabs();
   _StringsControllerProfile profile = _StringsControllerProfile();
   _StringsSignInController signIn = _StringsSignInController();
   _StringSignSelectController signSelect = _StringSignSelectController();
@@ -43,6 +46,14 @@ class _StringsControllers {
 // HOME Controller //
 class _StringsControllerHome {}
 // HOME Controller //
+
+// SurveysTabs Controller //
+class _StringsControllerSurveysTabs {
+
+  String pageTitle = "설문조사";
+}
+
+// SurveysTabs Controller //
 
 // FIND USER Controller //
 class _StringsControllerFindUser {}

@@ -11,6 +11,8 @@ import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Chats extends StatefulWidget {
   static Chats staticChatsPage;
 
@@ -180,6 +182,11 @@ class _ChatsState extends State<Chats> {
           convId: widget.db.generateRandomNumber(6),
           createDate: DateTime.now().toString(),
           userId: _textFieldAddUserIdController.text,
+          fromName: _textFieldAddUserIdController.text,
+          schoolName: "",
+          onNoInerted: (){
+            print("NOT INSERTED !!!");
+          },
           onInserted: () {
             Navigator.of(context).pop();
             refreshList();
@@ -197,72 +204,88 @@ class _ChatsState extends State<Chats> {
         });
   }
 
-  void refreshList() {
-    print("REFRESHING MY LIST CONVERSATIONS.....");
-    MiddleWare.shared.conversations = [];
-    widget.db.selectConversations(onResult: (items) {
-      for (int i = 0; i < items.length; i++) {
-
-        widget.db.checkUsersBlock(userId: "${items[i]['otherSideUserId']}",isBlocked: (st){
-          if(st == false){
-
-            widget.db.selectLastChatContent(onResult: (itemContent){
-
-              bool hasBadge = false;
-              if(itemContent["seen"] == "0"){
-                hasBadge = true;
-              }else{
-                hasBadge = false;
-              }
-
-              String contentX = "";
-              if(itemContent != null){
-                contentX = itemContent["content"].toString();
-              }
-
-              MiddleWare.shared.conversations.add(ConversationWidget(
-                hasBadge: hasBadge,
-                title: items[i]['otherSideUserName'],
-                convId: items[i]['convId'],
-                avatarName: "협회",
-                badges: 0,
-                avatarLink: "",
-                shortDescription: "${contentX}", //반갑습니다.
-                time: "오전 9:30",
-                onTapped: () {
-                  String cID = items[i]['convId']; // Conversation ID
-                  User usr = User(
-                      UID: "${items[i]['otherSideUserId']}",
-                      fullName: items[i]['otherSideUserName'],
-                      avatar: "",
-                      caption: "해양대학교 . 60기");
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new Chat(
-                            title: items[i]['otherSideUserName'],
-                            conversationId: cID,
-                            user: usr,
-                          )));
-                },
-              ) // conversation widget
-              );
-
-              setState(() {
-                MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
-              });
-
-            },convId: items[i]['convId']);
-
-          }// ! blocked
+  void refreshList() async {
+    await SharedPreferences.getInstance().then((val){
+      if(val.get("HAD_FIRST_WELCOME_MSG") != true){
+       // welcome message
+        widget.db.firstWelcomeMessage(whenComplete: (){
+          val.setBool("HAD_FIRST_WELCOME_MSG",true);
+          this.refreshList();
         });
-      } // loop
+      }else
+      {// else 2
+        print("REFRESHING MY LIST CONVERSATIONS.....");
+        MiddleWare.shared.conversations = [];
+        widget.db.selectConversations(onResult: (items) {
+          for (int i = 0; i < items.length; i++) {
 
-      setState(() {
-        MiddleWare.shared.searchedConversations =
-            MiddleWare.shared.conversations;
-      });
+            widget.db.checkUsersBlock(userId: "${items[i]['otherSideUserId']}",isBlocked: (st){
+              if(st == false){
 
+                widget.db.selectLastChatContent(onResult: (itemContent){
+
+                  bool hasBadge = false;
+                  String contentX = "";
+
+                  if(itemContent != null){
+                    hasBadge = false;
+                    if(itemContent["seen"] == "0"){
+                      hasBadge = true;
+                    }else{
+                      hasBadge = false;
+                    }
+
+                    if(itemContent != null){
+                      contentX = itemContent["content"].toString();
+                    }
+                    //itemContent != null
+                  }else{
+                    hasBadge = false;
+                    contentX = "";
+                    //itemContent is null
+                  }
+
+                  String avatarLink = "";
+                  String avatarName = "";
+                  if(items[i]['convId'] == "x0x0" && items[i]['otherSideUserId'] == "0"){
+                    avatarLink = "";
+                    avatarName = "협회";
+                  }else{
+                    avatarLink = "Resources/Icons/userChatAvatar.png";
+                    avatarName = "";
+                  }
+                  MiddleWare.shared.conversations.add(ConversationWidget(
+                    hasBadge: hasBadge,
+                    title: items[i]['otherSideUserName'],
+                    convId: items[i]['convId'],
+                    avatarName: avatarName,
+                    badges: 0,
+                    avatarLink: avatarLink,
+                    shortDescription: "${contentX}", //반갑습니다.
+                    time: "오전 9:30",
+                    onTapped: () {
+                      this.openChat(items[i]['convId'], "${items[i]['otherSideUserId']}", items[i]['otherSideUserName']);
+                    },
+                  ) // conversation widget
+                  );
+
+                  setState(() {
+                    MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
+                  });
+
+                },convId: items[i]['convId']);
+
+              }// ! blocked
+            });
+          } // loop
+
+          setState(() {
+            MiddleWare.shared.searchedConversations =
+                MiddleWare.shared.conversations;
+          });
+
+        });
+      }// else 2
     });
   }
 
@@ -337,6 +360,22 @@ class _ChatsState extends State<Chats> {
     super.initState();
   }
 
+  void openChat(String convId,String uId, String uName){
+    String cID = convId; // Conversation ID
+    User usr = User(
+        UID: uId,
+        fullName: uName,
+        avatar: "",
+        caption: "해양대학교 . 60기");
+    Navigator.push(
+        _scaffoldKey.currentContext,
+        new MaterialPageRoute(
+            builder: (context) => new Chat(
+              title: uName,
+              conversationId: cID,
+              user: usr,
+            )));
+  }
 
   @override
   Widget build(BuildContext context) {

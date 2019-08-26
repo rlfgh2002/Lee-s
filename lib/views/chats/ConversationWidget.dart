@@ -35,9 +35,11 @@ class ConversationWidget extends StatelessWidget {
       badge = Container(width: 5,height: 5,decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)),color: Colors.red),margin: const EdgeInsets.only(top: 20),);
     }
 
-    NetworkImage avatar;
+    //NetworkImage avatar;
+    AssetImage avatar;
     if(this.avatarLink != ""){
-      avatar = NetworkImage(this.avatarLink);
+      //avatar = NetworkImage(this.avatarLink);
+      avatar = AssetImage(this.avatarLink);
     }
 
     return Container(color: Colors.white, height: 100,margin: const EdgeInsets.only(top: 5),
@@ -62,7 +64,7 @@ class ConversationWidget extends StatelessWidget {
                     SizedBox(height: 5),
                     Container(child: Text(this.shortDescription,style: TextStyle(fontSize: Statics.shared.fontSizes.subTitleInContent, color: Statics.shared.colors.subTitleTextColor)),
                       width: MediaQuery.of(context).size.width - 60 - 10 - 48 - 10 - 16 - 16,
-                      height: 30,
+                      height: 25,
                     ),
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
