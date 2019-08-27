@@ -304,18 +304,10 @@ class _UserInfoState extends State<UserInfo> {
                 ),
               ]), // Row
             ),
-            Row(children: <Widget>[
-              Expanded(child: Divider(height: 0)),
-            ]),
-            Column(
-              children: <Widget>[
-                SizedBox(width: MediaQuery.of(context).size.width / 2),
-                HaegisaButton(
-                  text: Strings.shared.controllers.signIn.loginBtnTitle,
-                  iconURL: "Resources/Icons/Vector 3.2.png",
-                  onPressed: () async {},
-                )
-              ],
+            HaegisaButton(
+              text: Strings.shared.controllers.signIn.loginBtnTitle,
+              iconURL: "Resources/Icons/Vector 3.2.png",
+              onPressed: () async {},
             )
           ], // Row Children
         ), // Row

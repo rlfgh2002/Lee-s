@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -13,11 +14,17 @@ import 'dart:io';
 import 'package:haegisa2/models/Chat/chatObject.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:connectivity/connectivity.dart';
+import 'package:haegisa2/views/MainTabBar/NoInternetPopUp.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MainTabBar extends StatefulWidget {
   final MyDataBase db = MyDataBase();
   FirebaseMessaging mainFirebaseMessaging = FirebaseMessaging();
 
+  Position userLocation;
+
+  StreamSubscription subscription;
   String myUserId = '';
   static MainTabBar mainTabBar;
   static MainTabBarState myChild;
@@ -32,6 +39,18 @@ class MainTabBar extends StatefulWidget {
 
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static BottomNavigationBar navBar;
+  Geolocator geolocator = Geolocator();
+
+  Future<Position> _getLocation() async {
+    var currentLocation;
+    try {
+      currentLocation = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      currentLocation = null;
+    }
+    return currentLocation;
+  }
 
   void getAllSurveys({String uid}) async {
     String url = Statics.shared.urls.searchSurveys(uid);
@@ -231,20 +250,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         if (message['data']['notificationType'].toString() == "chat") {
           setState(() {
             MiddleWare.shared.tabc.animateTo(2);
-            Future.delayed(Duration(seconds: 1)).then((val) {
-              Chats.staticChatsPage.myChild.openChat(
-                  message['data']['conversationId'],
-                  message['data']['fromId'],
-                  message['data']['fromName']);
-            });
+            Chats.staticChatsPage.myChild.openChat(
+                message['data']['conversationId'],
+                message['data']['fromId'],
+                message['data']['fromName']);
           });
         } else {
           setState(() {
             MiddleWare.shared.tabc.animateTo(3);
-            Future.delayed(Duration(seconds: 1)).then((val) {
-              Notices.staticNoticesPage.myChild
-                  .openNotice(message['data']['idx']);
-            });
+            Notices.staticNoticesPage.myChild
+                .openNotice(message['data']['idx']);
           });
         }
       },
@@ -255,20 +270,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         if (message['data']['notificationType'].toString() == "chat") {
           setState(() {
             MiddleWare.shared.tabc.animateTo(2);
-            Future.delayed(Duration(seconds: 1)).then((val) {
-              Chats.staticChatsPage.myChild.openChat(
-                  message['data']['conversationId'],
-                  message['data']['fromId'],
-                  message['data']['fromName']);
-            });
+            Chats.staticChatsPage.myChild.openChat(
+                message['data']['conversationId'],
+                message['data']['fromId'],
+                message['data']['fromName']);
           });
         } else {
           setState(() {
             MiddleWare.shared.tabc.animateTo(3);
-            Future.delayed(Duration(seconds: 1)).then((val) {
-              Notices.staticNoticesPage.myChild
-                  .openNotice(message['data']['idx']);
-            });
+            Notices.staticNoticesPage.myChild
+                .openNotice(message['data']['idx']);
           });
         }
       },
@@ -412,12 +423,58 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
     firebaseCloudMessaging_Listeners();
     print("Main TabBar New...");
+
+    widget.subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result.index != 0) {
+        // no internet connected
+        showNoInternet(context);
+      }
+    });
+
+    this.updateUserLocation();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+
+    widget.subscription.cancel();
+  }
+
+  void updateUserLocation() async {
+    print("...::: updating user location... :::...");
+    geolocator.isLocationServiceEnabled().then((val) {
+      if (val) {
+        geolocator.checkGeolocationPermissionStatus().then((val) {
+          if (val.value == 2) {
+            geolocator
+                .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+                .then((val) {
+              this.widget.userLocation = val;
+              if ((val.longitude >= 125.758758 &&
+                      val.longitude <= 129.691407) &&
+                  (val.latitude >= 34.385830 && val.latitude <= 38.627163)) {
+                print("...::: the user is inside of korea. :-) :::...");
+              } else {
+                print("... ::: the user is not inside of korea! :-( :::...");
+              }
+            }).catchError((error) {
+              print(
+                  "...::: updating user location was failed => ${error.toString()} :::...");
+            });
+          } else {
+            print(
+                "...::: updating user location was failed => (access to GPS failed) :::...");
+          }
+        });
+      } else {
+        print(
+            "...::: updating user location was failed => (GPS Service was disabled) :::...");
+      }
+    });
   }
 
   void clickToChangeMenu(index) {
@@ -425,6 +482,27 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       MiddleWare.shared.currentIndex = index;
       MiddleWare.shared.tabc.animateTo(index);
     });
+  }
+
+  void checkInternet(BuildContext ctx) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.mobile &&
+        connectivityResult != ConnectivityResult.wifi) {
+      showNoInternet(ctx);
+    }
+  }
+
+  void showNoInternet(BuildContext ctx) {
+    showDialog(
+        context: ctx,
+        builder: (BuildContext context) {
+          return NoInternetAlertWidget(
+            popUpWidth: MiddleWare.shared.screenWidth,
+            onPressClose: () {
+              Navigator.pop(context);
+            },
+          ).dialog();
+        });
   }
 
   @override
@@ -469,6 +547,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         clickToChangeMenu(index);
       },
     );
+    MiddleWare.shared.screenWidth = MediaQuery.of(context).size.width;
+
+    checkInternet(context);
 
     return new WillPopScope(
       onWillPop: () async => false,

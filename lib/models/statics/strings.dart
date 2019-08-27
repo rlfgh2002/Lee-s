@@ -27,6 +27,9 @@ class _StringsDialogs {
   String btnBlockTitle = "차단";
 
   String proceedingWord = "진행중";
+
+  String internetPopUpTitle = "LTE/WIFI 환경을 확인하세요";
+  String internetPopUpBody = "현재 스마트폰의 통신 상태가 불안정하여 서비스 이용이 원활하지 않습니다.";
 }
 
 class _StringsControllers {
@@ -49,7 +52,6 @@ class _StringsControllerHome {}
 
 // SurveysTabs Controller //
 class _StringsControllerSurveysTabs {
-
   String pageTitle = "설문조사";
 }
 

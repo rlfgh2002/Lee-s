@@ -361,20 +361,22 @@ class _ChatsState extends State<Chats> {
   }
 
   void openChat(String convId,String uId, String uName){
-    String cID = convId; // Conversation ID
-    User usr = User(
-        UID: uId,
-        fullName: uName,
-        avatar: "",
-        caption: "해양대학교 . 60기");
-    Navigator.push(
-        _scaffoldKey.currentContext,
-        new MaterialPageRoute(
-            builder: (context) => new Chat(
-              title: uName,
-              conversationId: cID,
-              user: usr,
-            )));
+    Future.delayed(Duration(seconds: 2)).then((val){
+//      String cID = convId; // Conversation ID
+//      User usr = User(
+//          UID: uId,
+//          fullName: uName,
+//          avatar: "",
+//          caption: "해양대학교 . 60기");
+//      Navigator.push(
+//          _scaffoldKey.currentContext,
+//          new MaterialPageRoute(
+//              builder: (context) => new Chat(
+//                title: uName,
+//                conversationId: cID,
+//                user: usr,
+//              )));
+    });
   }
 
   @override
