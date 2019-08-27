@@ -191,7 +191,7 @@ class TermsState extends State<TermsPage> {
               ),
             ),
           ),
-          RaisedButton(
+          FlatButton(
             padding: EdgeInsets.all(20),
             color: Statics.shared.colors.mainColor,
             disabledColor: Statics.shared.colors.subTitleTextColor,

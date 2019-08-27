@@ -17,7 +17,8 @@ class _UserInfoState extends State<UserInfo> {
     Color typeColor;
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-
+    var txt = TextEditingController();
+    txt.text = "sdfsdf";
     if (userInformation.memberType == "51001") {
       typeAsset = "Resources/Icons/user_type_01.png";
       userType = "정회원";
@@ -126,31 +127,19 @@ class _UserInfoState extends State<UserInfo> {
                         width: deviceWidth / 5,
                         padding: const EdgeInsets.only(right: 10),
                       ),
-                      Text(
-                        userInformation.hp,
-                        style: TextStyle(
-                          color: Statics.shared.colors.subTitleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                      Spacer(),
                       Container(
-                        width: deviceWidth / 6,
-                        child: new FlatButton(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: new Text(
-                            '수정',
-                            style: TextStyle(
-                              color: Statics.shared.colors.mainColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
+                        color: Colors.black,
+                        child: FlatButton(
+                            child: Text(
+                              "전화번호",
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.right,
                             ),
-                            textAlign: TextAlign.right,
-                          ),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                        ),
+                            onPressed: () {}),
                       ),
                     ],
                   ), // Row Children
@@ -183,24 +172,6 @@ class _UserInfoState extends State<UserInfo> {
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      Spacer(),
-                      Container(
-                        width: deviceWidth / 6,
-                        child: new FlatButton(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: new Text(
-                            '수정',
-                            style: TextStyle(
-                              color: Statics.shared.colors.mainColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                        ),
-                      ),
                     ],
                   ), // Row Children
                 ),
@@ -231,24 +202,6 @@ class _UserInfoState extends State<UserInfo> {
                           fontSize: Statics.shared.fontSizes.supplementary,
                         ),
                         textAlign: TextAlign.left,
-                      ),
-                      Spacer(),
-                      Container(
-                        width: deviceWidth / 6,
-                        child: new FlatButton(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: new Text(
-                            '수정',
-                            style: TextStyle(
-                              color: Statics.shared.colors.mainColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                        ),
                       ),
                     ],
                   ), // Row Children
@@ -281,34 +234,24 @@ class _UserInfoState extends State<UserInfo> {
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      Spacer(),
-                      Container(
-                        width: deviceWidth / 6,
-                        child: new FlatButton(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: new Text(
-                            '수정',
-                            style: TextStyle(
-                              color: Statics.shared.colors.mainColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {},
-                        ),
-                      ),
                     ],
                   ), // Row Children
                 ),
               ]), // Row
             ),
-            HaegisaButton(
-              text: Strings.shared.controllers.signIn.loginBtnTitle,
-              iconURL: "Resources/Icons/Vector 3.2.png",
-              onPressed: () async {},
-            )
+            SizedBox(
+              height: 10,
+            ),
+            FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                padding: EdgeInsets.all(20),
+                color: Statics.shared.colors.mainColor,
+                child: Text("수정",
+                    style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.titleInContent,
+                        color: Colors.white)),
+                onPressed: () {})
           ], // Row Children
         ), // Row
         alignment: Alignment(0.0, 0.0),
