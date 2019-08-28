@@ -179,6 +179,8 @@ class _StringJsonURL {
   String privacy =
       "https://www.mariners.or.kr/app_middle/terms/privacy_term.html";
   String homeJson = "http://www.mariners.or.kr/app_middle/etc/main_json.php";
+  String schoolJson =
+      "http://www.mariners.or.kr/app_middle/etc/school_json.php";
   String button2 = "회원가입하기 ";
 }
 // JSON URL //

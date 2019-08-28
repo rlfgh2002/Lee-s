@@ -78,7 +78,7 @@ class _ProfileState extends State<Home> {
             children: [
               Container(
                 child: Column(children: [
-                  Text("이길호님, 안녕하세요",
+                  Text(userInformation.fullName + "님, 안녕하세요",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: Statics.shared.fontSizes.titleInContent,

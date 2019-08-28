@@ -24,6 +24,10 @@ class _UserInfo {
   String birth = ""; //0 : 여자, 1 : 남자
   String agree = "";
   String memberType = ""; // 1:정회원 2:준회원
+  String email; //이메일
+  String school; //학교코드
+  String gisu; //기수
+
   User userData;
   int autoCheck = 0;
   int loginCheck = 0;
@@ -44,6 +48,9 @@ class _UserInfo {
     userInformation.autoCheck = 0;
     userInformation.loginCheck = 0;
     userInformation.memberType = "";
+    userInformation.email = "";
+    userInformation.school = "";
+    userInformation.gisu = "";
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool("app_user_login_info_islogin", false);
@@ -77,104 +84,3 @@ Future<Null> deviceinfo() async {
     userInformation.userDeviceOS = "e";
   }
 }
-
-class UserinfoDB {
-  int idx;
-  String userIdx;
-  String userID;
-  String userToken;
-  int agree;
-  int autoCheck;
-  int loginCheck;
-  int pushStatus;
-
-  UserinfoDB({
-    this.idx,
-    this.userIdx,
-    this.userID,
-    this.userToken,
-    this.agree,
-    this.autoCheck,
-    this.loginCheck,
-    this.pushStatus,
-  });
-
-  factory UserinfoDB.fromJson(Map<String, dynamic> data) => new UserinfoDB(
-        idx: data["idx"],
-        userIdx: data["userIdx"],
-        userID: data["userID"],
-        userToken: data["userToken"],
-        agree: data["agree"],
-        autoCheck: data["autoCheck"],
-        loginCheck: data["loginCheck"],
-        pushStatus: data["pushStatus"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "idx": idx,
-        "userIdx": userIdx,
-        "userID": userID,
-        "userToken": userToken,
-        "agree": agree,
-        "autoCheck": autoCheck,
-        "loginCheck": loginCheck,
-        "pushStatus": pushStatus,
-      };
-}
-
-// Future<List> getUserinfo() async {
-//   var database = await createDatabase();
-//   var result = database.rawQuery('SELECT * FROM userInfo');
-//   return result.toList();
-// }
-
-getUserinfo() async {
-  var databasesPath = await getDatabasesPath();
-  String path = join(databasesPath, 'my_db.db');
-  // open the database
-  await openDatabase(path).then((db) {
-    List<Map<String, dynamic>> myList = [];
-    db.rawQuery("SELECT * FROM tblUserinfo WHERE Id = 1").then((lists) {
-      for (int i = 0; i < lists.length; i++) {
-        myList.add(lists[i]);
-        print(
-            ":::::::::: DB SELECT ROW (${i}) => [${lists[i].toString()}] ::::::::::");
-        print("list : " + myList[0]['agree'].toString());
-      } // for loop
-      Map<String, dynamic> resultMap() => {
-            "idx": myList[0]['id'].toString(),
-            "userIdx": myList[0]['userIdx'].toString(),
-            "userID": myList[0]['userID'].toString(),
-            "userToken": myList[0]['userToken'].toString(),
-            "agree": myList[0]['agree'].toString(),
-            "autoCheck": myList[0]['autoCheck'].toString(),
-            "loginCheck": myList[0]['loginCheck'].toString(),
-            "pushStatus": myList[0]['pushStatus'].parseInt(),
-          };
-      userInformation.agree = myList[0]['agree'].toString();
-      print(userInformation.agree);
-      return UserinfoDB.fromJson(resultMap());
-    });
-    db.close();
-  });
-}
-
-// getUserinfo() async {
-//   var database = await createDatabase();
-//   var result = database.rawQuery('SELECT * FROM userInfo WHERE idx = 1');
-
-//   return result;
-
-//   // Map<String, dynamic> resultMap() => {
-//   //       "idx": idx,
-//   //       "userIdx": userIdx,
-//   //       "userID": userID,
-//   //       "userToken": userToken,
-//   //       "agree": agree,
-//   //       "autoCheck": autoCheck,
-//   //       "loginCheck": loginCheck,
-//   //       "pushStatus": pushStatus,
-//   //     };
-
-//   //return Userinfo.fromJson(resultMap());
-// }

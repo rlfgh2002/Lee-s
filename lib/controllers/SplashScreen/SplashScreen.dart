@@ -64,6 +64,9 @@ class _SplashScreenState extends State<SplashScreen> {
     userInformation.userID = userId;
     userInformation.memberType = resultPost.memberType;
     userInformation.userIdx = resultPost.memberIdx;
+    userInformation.email = resultPost.email;
+    userInformation.school = resultPost.school;
+    userInformation.gisu = resultPost.gisu;
     _firebaseMessaging.getToken().then((token) {
       print(token);
       userInformation.userToken = token;
@@ -149,13 +152,20 @@ class Result {
   final String memberName;
   final String hp;
   final String memberType;
+  final String email;
+  final String school;
+  final String gisu;
+
   Result(
       {this.idx,
       this.memberIdx,
       this.id,
       this.memberName,
       this.hp,
-      this.memberType});
+      this.memberType,
+      this.email,
+      this.school,
+      this.gisu});
 
   factory Result.fromJson(Map<String, dynamic> json, String url) {
     if (url == Strings.shared.controllers.jsonURL.userinfoJson) {
@@ -165,7 +175,10 @@ class Result {
           id: json['id'],
           memberName: json['member_name'],
           hp: json['hp'],
-          memberType: json['userType']);
+          memberType: json['userType'],
+          email: json['email'],
+          school: json['school'],
+          gisu: json['gisu']);
     } else if (url == Strings.shared.controllers.jsonURL.loginJson) {}
   }
 }
