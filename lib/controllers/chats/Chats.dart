@@ -226,8 +226,17 @@ class _ChatsState extends State<Chats> {
 
                   bool hasBadge = false;
                   String contentX = "";
+                  DateTime lastChatDate = DateTime.now();
 
                   if(itemContent != null){
+
+                    if(itemContent["chatDate2"].contains("-")){
+                      var splited = itemContent["chatDate2"].split(" ");
+                      var dateSpt = splited[0].split("-");
+                      var timeSpt = splited[1].split(":");
+                      lastChatDate = new DateTime(int.parse(dateSpt[0]),int.parse(dateSpt[1]),int.parse(dateSpt[2]),int.parse(timeSpt[0]),int.parse(timeSpt[1]));
+                    }
+
                     hasBadge = false;
                     if(itemContent["seen"] == "0"){
                       hasBadge = true;
@@ -238,6 +247,7 @@ class _ChatsState extends State<Chats> {
                     if(itemContent != null){
                       contentX = itemContent["content"].toString();
                     }
+
                     //itemContent != null
                   }else{
                     hasBadge = false;
@@ -263,8 +273,9 @@ class _ChatsState extends State<Chats> {
                     avatarLink: avatarLink,
                     shortDescription: "${contentX}", //반갑습니다.
                     time: "오전 9:30",
+                    lastChatDate: lastChatDate,
                     onTapped: () {
-                      this.openChat(items[i]['convId'], "${items[i]['otherSideUserId']}", items[i]['otherSideUserName']);
+                      this.openChat(convId: items[i]['convId'],uId: "${items[i]['otherSideUserId']}",uName: items[i]['otherSideUserName'],withDuration: false);
                     },
                   ) // conversation widget
                   );
@@ -280,8 +291,7 @@ class _ChatsState extends State<Chats> {
           } // loop
 
           setState(() {
-            MiddleWare.shared.searchedConversations =
-                MiddleWare.shared.conversations;
+            MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
           });
 
         });
@@ -360,23 +370,40 @@ class _ChatsState extends State<Chats> {
     super.initState();
   }
 
-  void openChat(String convId,String uId, String uName){
-    Future.delayed(Duration(seconds: 2)).then((val){
-//      String cID = convId; // Conversation ID
-//      User usr = User(
-//          UID: uId,
-//          fullName: uName,
-//          avatar: "",
-//          caption: "해양대학교 . 60기");
-//      Navigator.push(
-//          _scaffoldKey.currentContext,
-//          new MaterialPageRoute(
-//              builder: (context) => new Chat(
-//                title: uName,
-//                conversationId: cID,
-//                user: usr,
-//              )));
-    });
+  void openChat({String convId,String uId, String uName, bool withDuration = false}){
+    if(withDuration == true){
+      Future.delayed(Duration(seconds: 2)).then((val){
+        String cID = convId; // Conversation ID
+        User usr = User(
+            UID: uId,
+            fullName: uName,
+            avatar: "",
+            caption: "해양대학교 . 60기");
+        Navigator.push(
+            _scaffoldKey.currentContext,
+            new MaterialPageRoute(
+                builder: (context) => new Chat(
+                  title: uName,
+                  conversationId: cID,
+                  user: usr,
+                )));
+      });
+    }else{
+      String cID = convId; // Conversation ID
+      User usr = User(
+          UID: uId,
+          fullName: uName,
+          avatar: "",
+          caption: "해양대학교 . 60기");
+      Navigator.push(
+          _scaffoldKey.currentContext,
+          new MaterialPageRoute(
+              builder: (context) => new Chat(
+                title: uName,
+                conversationId: cID,
+                user: usr,
+              )));
+    }
   }
 
   @override
@@ -393,6 +420,8 @@ class _ChatsState extends State<Chats> {
     }else{
       MiddleWare.shared.topBarWidget = this.showTopBarTitle();
     }
+
+    MiddleWare.shared.searchedConversations.sort((a,b)=>b.lastChatDate.compareTo(a.lastChatDate));
 
     return new Builder(
         builder: (context) {

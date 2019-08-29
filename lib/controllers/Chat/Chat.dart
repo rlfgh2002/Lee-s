@@ -103,7 +103,7 @@ class ChatState extends State<Chat> {
           isYours: "TRUE",
           date: date,
           onAdded: (){
-            //refreshChats();
+            Chats.staticChatsPage.refresh();
             addMessageToList(date: date,isYours: true,msg: msg,senderName: "");
           }
       );
@@ -231,67 +231,6 @@ class ChatState extends State<Chat> {
     });
   }
 
-  void firebaseCloudMessaging_Listeners() {
-
-    print("::::::::::::::::::::::::: [ Firebase Listening in Chat Page ] :::::::::::::::::::::::::");
-
-    if (Platform.isIOS) iOS_Permission();
-
-    MainTabBar.mainTabBar.mainFirebaseMessaging.getToken().then((token){
-      print(token);
-    });
-
-
-    MainTabBar.mainTabBar.mainFirebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message Chat Page $message');
-        ChatObject chatItem = ChatObject.fromJson(message);
-
-        widget.db.checkConversationExist(userId: chatItem.notificationFromId,onResult: (res){
-          widget.db.insertChat(
-              convId: chatItem.notificationConversationId,
-              userId: chatItem.notificationFromId,
-              content: chatItem.notificationContent,
-              date: chatItem.notificationRegDate,
-              isYours: "FALSE",
-              onAdded: (){
-                print("SHOULD BE REFRESH >>>>");
-              }
-          );
-        },onNoResult: (){
-          widget.db.insertConversation(
-              userId: chatItem.notificationFromId,
-              convId: chatItem.notificationConversationId,
-              createDate: chatItem.notificationRegDate,
-              onInserted: (){
-                print(":::::::::::::::::: [new conversation added] ::::::::::::::::::");
-                widget.db.insertChat(
-                    convId: chatItem.notificationConversationId,
-                    userId: chatItem.notificationFromId,
-                    content: chatItem.notificationContent,
-                    date: chatItem.notificationRegDate,
-                    isYours: "FALSE",
-                    onAdded: (){
-                      print("SHOULD BE REFRESH >>>>");
-                    }
-                );
-              },
-              onNoInerted: (){
-                print(":::::::::::::::::: [new conversation not added !] ::::::::::::::::::");
-              }
-          );
-        });
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
-
-
-  }
   void iOS_Permission() {
     MainTabBar.mainTabBar.mainFirebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true)
@@ -313,8 +252,7 @@ class ChatState extends State<Chat> {
       print(":::::::::::: [ USERID IS ${res} ] ::::::::::::");
       this.widget.userId = res;
     });
-
-    //firebaseCloudMessaging_Listeners();
+    
     _scrollController = new ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true);
     this.refreshChats();
 
@@ -368,6 +306,8 @@ class ChatState extends State<Chat> {
     MiddleWare.shared.txtChat = TextEditingController();
 
     if (Platform.isIOS) iOS_Permission();
+    widget.db.updateSeenChats(convId: chatCurrentConvId);
+    Chats.staticChatsPage.refresh();
     super.initState();
   }
 
@@ -419,7 +359,7 @@ class ChatState extends State<Chat> {
   void dispose() {
     MiddleWare.shared.isFirst = true;
     print("CCCCCCC: ${chatCurrentConvId.toString()}");
-    widget.db.updateSeenChats(convId: chatCurrentConvId);
+
     print("DISPOSSSSSSSS CHAT PAGE");
     super.dispose();
   }

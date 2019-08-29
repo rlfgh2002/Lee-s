@@ -20,6 +20,7 @@ class _StaticDbInformation
 
   static const String tblConversationFieldId = 'convId';
   static const String tblConversationCreateDate = 'createDate';
+  static const String tblConversationUpdaterField = 'updaterField';
   static const String tblConversationOtherSideUserId = 'otherSideUserId';
   static const String tblConversationOtherSideUserFromName = 'otherSideUserName';
 
@@ -27,6 +28,7 @@ class _StaticDbInformation
 
   static const String tblChatsChatId = 'chatId';
   static const String tblChatsChatDate = 'chatDate';
+  static const String tblChatsChatDate2 = 'chatDate2';
   static const String tblChatsConvId = 'convId';
   static const String tblChatsContent = 'content';
   static const String tblChatsIsYours = 'isYours';
@@ -104,13 +106,13 @@ class MyDataBase
         path, version: 1,
         onCreate: (Database db, int version) async {
           // When creating the db, create the table
-          await db.execute('CREATE TABLE ${_StaticDbInformation.tblConversation} (id INTEGER PRIMARY KEY AUTOINCREMENT ,${_StaticDbInformation.tblConversationFieldId} TEXT,${_StaticDbInformation.tblConversationOtherSideUserId} TEXT,${_StaticDbInformation.tblConversationCreateDate} TEXT, ${_StaticDbInformation.tblConversationOtherSideUserFromName} TEXT)').then((val){
+          await db.execute('CREATE TABLE ${_StaticDbInformation.tblConversation} (id INTEGER PRIMARY KEY AUTOINCREMENT , ${_StaticDbInformation.tblConversationUpdaterField} INTEGER,${_StaticDbInformation.tblConversationFieldId} TEXT,${_StaticDbInformation.tblConversationOtherSideUserId} TEXT,${_StaticDbInformation.tblConversationCreateDate} TEXT, ${_StaticDbInformation.tblConversationOtherSideUserFromName} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblConversation} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
           });
 
-          db.execute('CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsSeen} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)').then((val){
+          db.execute('CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsSeen} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT,${_StaticDbInformation.tblChatsChatDate2} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)').then((val){
             print(":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblChats} STATUS => [TRUE] ::::::::::");
           }).catchError((error){
             print(":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
@@ -276,7 +278,7 @@ class MyDataBase
     print(":::::::::: NEW Conversation GENERATING ... ::::::::::");
     await openDatabase(path).then((db){
        db.rawInsert(
-          'INSERT INTO ${_StaticDbInformation.tblConversation} (${_StaticDbInformation.tblConversationFieldId},${_StaticDbInformation.tblConversationOtherSideUserId},${_StaticDbInformation.tblConversationCreateDate}, ${_StaticDbInformation.tblConversationOtherSideUserFromName}) VALUES ("${convId.toString()}","${userId.toString()}","${createDate.toString()}","${fromName.toString()}")').catchError((err){
+          'INSERT INTO ${_StaticDbInformation.tblConversation} (${_StaticDbInformation.tblConversationFieldId},${_StaticDbInformation.tblConversationUpdaterField},${_StaticDbInformation.tblConversationOtherSideUserId},${_StaticDbInformation.tblConversationCreateDate}, ${_StaticDbInformation.tblConversationOtherSideUserFromName}) VALUES ("${convId.toString()}","0","${userId.toString()}","${createDate.toString()}","${fromName.toString()}")').catchError((err){
         print(":::::::::: DB INSERT(conversation) ERROR => [${err.toString()}] ::::::::::");
         onNoInerted();
       }).then((val){
@@ -345,6 +347,24 @@ class MyDataBase
       });
     });
   }
+  void updateConversation({String convId, VoidCallback onComplete}) async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db){
+
+      List<Map<String, dynamic>> myList = [];
+      db.rawQuery('UPDATE ${_StaticDbInformation.tblConversation} SET ${_StaticDbInformation.tblConversationUpdaterField} = (id + 1) WHERE ${_StaticDbInformation.tblConversationFieldId} = "${convId.toString()}"').then((lists){
+        if(lists.length > 0){
+          print(":::::::::: DB UPDATE(conversation) Was Successfull. ::::::::::");
+          onComplete();
+        }else{
+          print(":::::::::: DB UPDATE(conversation) Was Failed. ::::::::::");
+        }
+      });
+      //db.close();
+    });
+  }
 
   void insertChat({String convId,String seen = "1",String userId, String date, String content,String isYours = "FALSE", onAdded()}) async
   {
@@ -353,9 +373,12 @@ class MyDataBase
     // open the database
     await openDatabase(path).then((db){
 
+      String dt = "";
+      dt = "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day} ${DateTime.now().hour}:${DateTime.now().minute}";
+
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'INSERT INTO ${_StaticDbInformation.tblChats} (${_StaticDbInformation.tblChatsConvId},${_StaticDbInformation.tblChatsSeen},${_StaticDbInformation.tblChatsContent},${_StaticDbInformation.tblChatsChatDate}, ${_StaticDbInformation.tblChatsIsYours}) VALUES ("${convId.toString()}","${seen.toString()}","${content.toString()}","${date.toString()}","${isYours.toString()}")');
+            'INSERT INTO ${_StaticDbInformation.tblChats} (${_StaticDbInformation.tblChatsConvId},${_StaticDbInformation.tblChatsSeen},${_StaticDbInformation.tblChatsContent},${_StaticDbInformation.tblChatsChatDate},${_StaticDbInformation.tblChatsChatDate2}, ${_StaticDbInformation.tblChatsIsYours}) VALUES ("${convId.toString()}","${seen.toString()}","${content.toString()}","${date.toString()}","${dt.toString()}","${isYours.toString()}")');
         print(":::::::::: DB INSERT(chat) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
         onAdded();
@@ -388,7 +411,7 @@ class MyDataBase
     // open the database
     await openDatabase(path).then((db){
 
-      db.rawQuery("SELECT content,seen FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC LIMIT 1").then((lists){
+      db.rawQuery("SELECT content,seen,chatDate2 FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC LIMIT 1").then((lists){
         print(":::::::::: DB SELECT ROW LIMIT 1(${lists.length}) => [${lists.first.toString()}] ::::::::::");
         //db.close();
         if(lists.length > 0){

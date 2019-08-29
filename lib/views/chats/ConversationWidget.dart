@@ -14,8 +14,10 @@ class ConversationWidget extends StatelessWidget {
   String time = "";
   VoidCallback onTapped;
   bool hasBadge = false;
+  DateTime lastChatDate = DateTime.now();
 
-  ConversationWidget({bool hasBadge = false,String title = "", int badges = 0, String avatarLink = "", String avatarName = "", String shortDescription = "",String time = "", VoidCallback onTapped, String convId = ""}){
+  ConversationWidget({DateTime lastChatDate,bool hasBadge = false,String title = "", int badges = 0, String avatarLink = "", String avatarName = "", String shortDescription = "",String time = "", VoidCallback onTapped, String convId = ""}){
+    this.lastChatDate = lastChatDate;
     this.title = title;
     this.hasBadge = hasBadge;
     this.badges = badges;

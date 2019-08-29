@@ -374,7 +374,10 @@ class _ProfileState extends State<Home> {
                                         'Resources/Icons/icon_survey.png',
                                         scale: 4.0),
                                   ]),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(context, new MaterialPageRoute(builder: (context) => new SurveysTabs()));
+
+                                  },
                                 ),
                                 Text("설문조사",
                                     style: TextStyle(
