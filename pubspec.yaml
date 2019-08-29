@@ -35,12 +35,15 @@ dependencies:
   loading: ^1.0.1
   connectivity: ^0.4.3+7
   geolocator: ^5.1.3
+  splashscreen: ^1.2.0
+  flutter_launcher_icons: ^0.7.2+1 #아이콘 추가
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^2.0.3 #json
-  flutter_launcher_icons: ^0.7.2+1 #아이콘 추가
+
+
 
 flutter_icons:
   image_path_ios: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
@@ -127,6 +130,7 @@ flutter:
     - Resources/Images/ill_service.png
     - Resources/Images/ill_vote.png
     - Resources/Images/no_member.png
+    - Resources/Images/splash.png
     # Single Chat Page
     - Resources/Images/leftEdge.png
     - Resources/Images/rightEdge.png

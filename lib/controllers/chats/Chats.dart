@@ -33,12 +33,12 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
-
   bool isSearched = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController txtSearchCtrl = TextEditingController();
-  final TextEditingController _textFieldAddUserIdController = TextEditingController();
+  final TextEditingController _textFieldAddUserIdController =
+      TextEditingController();
 
   _displayAddUserDialog() async {
     return showDialog(
@@ -147,7 +147,7 @@ class _ChatsState extends State<Chats> {
                   color: Statics.shared.colors.titleTextColor,
                   fontSize: Statics.shared.fontSizes.content),
               controller: txtSearchCtrl,
-              onSubmitted: (String search){
+              onSubmitted: (String search) {
                 if (search.isNotEmpty) {
                   setState(() {
                     searchMembers(search);
@@ -158,7 +158,8 @@ class _ChatsState extends State<Chats> {
                   });
                 } else {
                   setState(() {
-                    MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
+                    MiddleWare.shared.searchedConversations =
+                        MiddleWare.shared.conversations;
                   });
                 }
               },
@@ -184,7 +185,7 @@ class _ChatsState extends State<Chats> {
           userId: _textFieldAddUserIdController.text,
           fromName: _textFieldAddUserIdController.text,
           schoolName: "",
-          onNoInerted: (){
+          onNoInerted: () {
             print("NOT INSERTED !!!");
           },
           onInserted: () {
@@ -205,97 +206,107 @@ class _ChatsState extends State<Chats> {
   }
 
   void refreshList() async {
-    await SharedPreferences.getInstance().then((val){
-      if(val.get("HAD_FIRST_WELCOME_MSG") != true){
-       // welcome message
-        widget.db.firstWelcomeMessage(whenComplete: (){
-          val.setBool("HAD_FIRST_WELCOME_MSG",true);
+    await SharedPreferences.getInstance().then((val) {
+      if (val.get("HAD_FIRST_WELCOME_MSG") != true) {
+        // welcome message
+        widget.db.firstWelcomeMessage(whenComplete: () {
+          val.setBool("HAD_FIRST_WELCOME_MSG", true);
           this.refreshList();
         });
-      }else
-      {// else 2
+      } else {
+        // else 2
         print("REFRESHING MY LIST CONVERSATIONS.....");
         MiddleWare.shared.conversations = [];
         widget.db.selectConversations(onResult: (items) {
           for (int i = 0; i < items.length; i++) {
+            widget.db.checkUsersBlock(
+                userId: "${items[i]['otherSideUserId']}",
+                isBlocked: (st) {
+                  if (st == false) {
+                    widget.db.selectLastChatContent(
+                        onResult: (itemContent) {
+                          bool hasBadge = false;
+                          String contentX = "";
+                          DateTime lastChatDate = DateTime.now();
 
-            widget.db.checkUsersBlock(userId: "${items[i]['otherSideUserId']}",isBlocked: (st){
-              if(st == false){
+                          if (itemContent != null) {
+                            if (itemContent["chatDate2"].contains("-")) {
+                              var splited = itemContent["chatDate2"].split(" ");
+                              var dateSpt = splited[0].split("-");
+                              var timeSpt = splited[1].split(":");
+                              lastChatDate = new DateTime(
+                                  int.parse(dateSpt[0]),
+                                  int.parse(dateSpt[1]),
+                                  int.parse(dateSpt[2]),
+                                  int.parse(timeSpt[0]),
+                                  int.parse(timeSpt[1]));
+                            }
 
-                widget.db.selectLastChatContent(onResult: (itemContent){
+                            hasBadge = false;
+                            if (itemContent["seen"] == "0") {
+                              hasBadge = true;
+                            } else {
+                              hasBadge = false;
+                            }
 
-                  bool hasBadge = false;
-                  String contentX = "";
-                  DateTime lastChatDate = DateTime.now();
+                            if (itemContent != null) {
+                              contentX = itemContent["content"].toString();
+                            }
 
-                  if(itemContent != null){
+                            //itemContent != null
+                          } else {
+                            hasBadge = false;
+                            contentX = "";
+                            //itemContent is null
+                          }
 
-                    if(itemContent["chatDate2"].contains("-")){
-                      var splited = itemContent["chatDate2"].split(" ");
-                      var dateSpt = splited[0].split("-");
-                      var timeSpt = splited[1].split(":");
-                      lastChatDate = new DateTime(int.parse(dateSpt[0]),int.parse(dateSpt[1]),int.parse(dateSpt[2]),int.parse(timeSpt[0]),int.parse(timeSpt[1]));
-                    }
+                          String avatarLink = "";
+                          String avatarName = "";
+                          if (items[i]['convId'] == "x0x0" &&
+                              items[i]['otherSideUserId'] == "0") {
+                            avatarLink = "";
+                            avatarName = "협회";
+                          } else {
+                            avatarLink = "Resources/Icons/userChatAvatar.png";
+                            avatarName = "";
+                          }
+                          MiddleWare.shared.conversations
+                              .add(ConversationWidget(
+                            hasBadge: hasBadge,
+                            title: items[i]['otherSideUserName'],
+                            convId: items[i]['convId'],
+                            avatarName: avatarName,
+                            badges: 0,
+                            avatarLink: avatarLink,
+                            shortDescription: "${contentX}", //반갑습니다.
+                            time: "오전 9:30",
+                            lastChatDate: lastChatDate,
+                            onTapped: () {
+                              this.openChat(
+                                  convId: items[i]['convId'],
+                                  uId: "${items[i]['otherSideUserId']}",
+                                  uName: items[i]['otherSideUserName'],
+                                  withDuration: false);
+                            },
+                          ) // conversation widget
+                                  );
 
-                    hasBadge = false;
-                    if(itemContent["seen"] == "0"){
-                      hasBadge = true;
-                    }else{
-                      hasBadge = false;
-                    }
-
-                    if(itemContent != null){
-                      contentX = itemContent["content"].toString();
-                    }
-
-                    //itemContent != null
-                  }else{
-                    hasBadge = false;
-                    contentX = "";
-                    //itemContent is null
-                  }
-
-                  String avatarLink = "";
-                  String avatarName = "";
-                  if(items[i]['convId'] == "x0x0" && items[i]['otherSideUserId'] == "0"){
-                    avatarLink = "";
-                    avatarName = "협회";
-                  }else{
-                    avatarLink = "Resources/Icons/userChatAvatar.png";
-                    avatarName = "";
-                  }
-                  MiddleWare.shared.conversations.add(ConversationWidget(
-                    hasBadge: hasBadge,
-                    title: items[i]['otherSideUserName'],
-                    convId: items[i]['convId'],
-                    avatarName: avatarName,
-                    badges: 0,
-                    avatarLink: avatarLink,
-                    shortDescription: "${contentX}", //반갑습니다.
-                    time: "오전 9:30",
-                    lastChatDate: lastChatDate,
-                    onTapped: () {
-                      this.openChat(convId: items[i]['convId'],uId: "${items[i]['otherSideUserId']}",uName: items[i]['otherSideUserName'],withDuration: false);
-                    },
-                  ) // conversation widget
-                  );
-
-                  setState(() {
-                    MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
-                  });
-
-                },convId: items[i]['convId']);
-
-              }// ! blocked
-            });
+                          setState(() {
+                            MiddleWare.shared.searchedConversations =
+                                MiddleWare.shared.conversations;
+                          });
+                        },
+                        convId: items[i]['convId']);
+                  } // ! blocked
+                });
           } // loop
 
           setState(() {
-            MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
+            MiddleWare.shared.searchedConversations =
+                MiddleWare.shared.conversations;
           });
-
         });
-      }// else 2
+      } // else 2
     });
   }
 
@@ -370,39 +381,34 @@ class _ChatsState extends State<Chats> {
     super.initState();
   }
 
-  void openChat({String convId,String uId, String uName, bool withDuration = false}){
-    if(withDuration == true){
-      Future.delayed(Duration(seconds: 2)).then((val){
+  void openChat(
+      {String convId, String uId, String uName, bool withDuration = false}) {
+    if (withDuration == true) {
+      Future.delayed(Duration(seconds: 2)).then((val) {
         String cID = convId; // Conversation ID
-        User usr = User(
-            UID: uId,
-            fullName: uName,
-            avatar: "",
-            caption: "해양대학교 . 60기");
+        User usr =
+            User(UID: uId, fullName: uName, avatar: "", caption: "해양대학교 . 60기");
         Navigator.push(
             _scaffoldKey.currentContext,
             new MaterialPageRoute(
                 builder: (context) => new Chat(
-                  title: uName,
-                  conversationId: cID,
-                  user: usr,
-                )));
+                      title: uName,
+                      conversationId: cID,
+                      user: usr,
+                    )));
       });
-    }else{
+    } else {
       String cID = convId; // Conversation ID
-      User usr = User(
-          UID: uId,
-          fullName: uName,
-          avatar: "",
-          caption: "해양대학교 . 60기");
+      User usr =
+          User(UID: uId, fullName: uName, avatar: "", caption: "해양대학교 . 60기");
       Navigator.push(
           _scaffoldKey.currentContext,
           new MaterialPageRoute(
               builder: (context) => new Chat(
-                title: uName,
-                conversationId: cID,
-                user: usr,
-              )));
+                    title: uName,
+                    conversationId: cID,
+                    user: usr,
+                  )));
     }
   }
 
@@ -412,22 +418,24 @@ class _ChatsState extends State<Chats> {
     MiddleWare.shared.screenWidth = MediaQuery.of(context).size.width;
     if (MiddleWare.shared.firstInitialize) {
       MiddleWare.shared.firstInitialize = false;
-      MiddleWare.shared.conversations.sort((item1,item2)=>DateTime.parse(item2.time).compareTo(DateTime.parse(item1.time)));
+      MiddleWare.shared.conversations.sort((item1, item2) =>
+          DateTime.parse(item2.time).compareTo(DateTime.parse(item1.time)));
       MiddleWare.shared.searchedConversations = MiddleWare.shared.conversations;
     }
-    if(isSearched){
+    if (isSearched) {
       MiddleWare.shared.topBarWidget = this.showTopSearchBar();
-    }else{
+    } else {
       MiddleWare.shared.topBarWidget = this.showTopBarTitle();
     }
 
-    MiddleWare.shared.searchedConversations.sort((a,b)=>b.lastChatDate.compareTo(a.lastChatDate));
+    MiddleWare.shared.searchedConversations
+        .sort((a, b) => b.lastChatDate.compareTo(a.lastChatDate));
 
-    return new Builder(
-        builder: (context) {
+    return new Builder(builder: (context) {
       return new Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           title: MiddleWare.shared.topBarWidget,
           centerTitle: false,
@@ -456,7 +464,7 @@ class _ChatsState extends State<Chats> {
           ),
         ),
       );
-      });
+    });
   }
 }
 

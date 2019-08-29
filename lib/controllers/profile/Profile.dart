@@ -37,14 +37,9 @@ class _ProfileState extends State<Profile> {
 
     return new WillPopScope(
       onWillPop: () async => false,
-
-      // onWillPop: () async {
-      //   Future.value(
-      //       false); //return a `Future` with false value so this route cant be popped or closed.
-      // },
-
       child: new Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text(Strings.shared.controllers.profile.appTitle,
               style: TextStyle(
                   color: Statics.shared.colors.titleTextColor,

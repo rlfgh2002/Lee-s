@@ -9,11 +9,30 @@ import 'controllers/sign/SignSelect.dart';
 import 'models/statics/UserInfo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
-// test
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(new MaterialApp(
+    home: new MyApp(),
+  ));
+}
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    new Future.delayed(
+        const Duration(seconds: 3),
+        () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SplashScreen()),
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     FirebaseMessaging()
@@ -25,14 +44,21 @@ class MyApp extends StatelessWidget {
       userInformation.userToken = token;
     });
 
-    return WillPopScope(
+    return new WillPopScope(
         onWillPop: () async => false,
-        child: new MaterialApp(
-          title: 'Haegisa',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
+        child: new Scaffold(
+          backgroundColor: Colors.white,
+          body: Container(
+            child: new Column(children: <Widget>[
+              new Image.asset(
+                'Resources/Images/splash.png',
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                repeat: ImageRepeat.noRepeat,
+              ),
+            ]),
           ),
-          home: SplashScreen(),
         ));
   }
 }

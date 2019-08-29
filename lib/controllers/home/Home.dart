@@ -8,6 +8,7 @@ import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/controllers/profile/UserInfo.dart';
 import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 import 'package:http/http.dart' as http;
+import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 
 double deviceWidth;
 
@@ -375,8 +376,11 @@ class _ProfileState extends State<Home> {
                                         scale: 4.0),
                                   ]),
                                   onPressed: () {
-                                    Navigator.push(context, new MaterialPageRoute(builder: (context) => new SurveysTabs()));
-
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                new SurveysTabs()));
                                   },
                                 ),
                                 Text("설문조사",
