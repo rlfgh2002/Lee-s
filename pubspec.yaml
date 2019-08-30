@@ -67,6 +67,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     # Icons
+    - Resources/Icons/wifi.png
     - Resources/Icons/left-arrow.png
     - Resources/Icons/button_check.png
     - Resources/Icons/radio_active.png
@@ -141,6 +142,10 @@ flutter:
     - proceedingBackground.png
     # Conversations
     - userChatAvatar.png
+
+    # Find User
+    - Resources/Images/findUserImageBottom.png
+    - Resources/Icons/chatIcon.png
 
     # SurveysTabs
     - Resources/Icons/proceedingBackground.png

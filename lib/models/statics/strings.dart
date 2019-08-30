@@ -58,7 +58,12 @@ class _StringsControllerSurveysTabs {
 // SurveysTabs Controller //
 
 // FIND USER Controller //
-class _StringsControllerFindUser {}
+class _StringsControllerFindUser {
+  String pageTitle = "회원검색";
+  String title1 = "협회 회원중에\n찾고 싶은 분이 계신가요?";
+  String caption1 = "검색창에서 회원을 검색해보세요!";
+  String searchPlaceHolder = "예) 홍길동";
+}
 // FIND USER Controller //
 
 // CHATS Controller //
