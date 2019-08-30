@@ -6,6 +6,9 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 
+List<String> _categoryList;
+String _selectedLocation;
+
 class UserInfo extends StatefulWidget {
   @override
   _UserInfoState createState() => _UserInfoState();
@@ -295,39 +298,32 @@ class _UserInfoState extends State<UserInfo> {
   Widget schoolDropbox(BuildContext context, AsyncSnapshot snapshot) {
     var values = snapshot.data;
 
-    List<DropdownMenuItem<String>> _dropDownMenuItems;
-    String _currentCity;
+    for (var i = 0; i < values.length; i++) {
+      // here we are creating the drop down menu items, you can customize the item right here
+      // but I'll just use a simple text for this
 
-    List<DropdownMenuItem<String>> getDropDownMenuItems() {
-      List<DropdownMenuItem<String>> items = new List();
-      for (var i = 0; i < values.length; i++) {
-        // here we are creating the drop down menu items, you can customize the item right here
-        // but I'll just use a simple text for this
-        items.add(new DropdownMenuItem(
-            key: values[i]["CHCODE"],
-            value: values[i]["CCNAME"],
-            child: new Text(values[i]["CCNAME"])));
-      }
-      return items;
+      _categoryList.add(values[i]["CCNAME"]);
+      _selectedLocation = values[0]["CCNAME"];
     }
 
-    void changedDropDownItem(String selectedCity) {
-      setState(() {
-        _currentCity = selectedCity;
-      });
-    }
+    return _createDropDownMenu();
+  }
 
-    _dropDownMenuItems = getDropDownMenuItems();
-    if (userInformation.school != "") {
-      _currentCity = userInformation.school;
-    } else {
-      _currentCity = values[0]["CHCODE"];
-    }
-
-    return DropdownButton(
-      value: _currentCity,
-      items: _dropDownMenuItems,
-      onChanged: changedDropDownItem,
+  Widget _createDropDownMenu() {
+    return DropdownButton<String>(
+      hint: Text('Please choose'), // Not necessary for Option 1
+      value: _selectedLocation,
+      onChanged: (newValue) {
+        setState(() {
+          _selectedLocation = newValue;
+        });
+      },
+      items: _categoryList.map((data) {
+        return DropdownMenuItem<String>(
+          child: new Text(data),
+          value: data,
+        );
+      }).toList(),
     );
   }
 }
@@ -343,7 +339,7 @@ Future<List> getSchool() async {
     var code = responseJSON["code"];
 
     if (statusCode == 200) {
-      if (code == "200") {
+      if (code == 200) {
         return responseJSON["table"];
       }
     } else {
