@@ -6,8 +6,7 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 
-List<String> _categoryList;
-String _selectedLocation;
+var schoolTable = new List();
 
 class UserInfo extends StatefulWidget {
   @override
@@ -15,6 +14,14 @@ class UserInfo extends StatefulWidget {
 }
 
 class _UserInfoState extends State<UserInfo> {
+  List<String> _schoolList = [];
+  String _selectedLocation;
+
+  String hp = userInformation.hp.replaceAll("-", "");
+  String email = userInformation.email;
+  String school = userInformation.school;
+  String gisu = userInformation.gisu;
+
   @override
   Widget build(BuildContext context) {
     String typeAsset = "";
@@ -142,7 +149,10 @@ class _UserInfoState extends State<UserInfo> {
                               fontSize: Statics.shared.fontSizes.supplementary,
                               color: Statics.shared.colors.titleTextColor,
                             ),
-                            hintText: userInformation.hp.replaceAll("-", "")),
+                            hintText: hp),
+                        onChanged: (String str) {
+                          hp = str;
+                        },
                       )),
                     ],
                   ), // Row Children
@@ -170,12 +180,16 @@ class _UserInfoState extends State<UserInfo> {
                       Expanded(
                           child: TextField(
                         decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              color: Statics.shared.colors.titleTextColor,
-                            ),
-                            hintText: userInformation.email),
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            fontSize: Statics.shared.fontSizes.supplementary,
+                            color: Statics.shared.colors.titleTextColor,
+                          ),
+                          hintText: email,
+                        ),
+                        onChanged: (String str) {
+                          email = str;
+                        },
                       )),
                       SizedBox(
                         width: deviceWidth / 5,
@@ -262,13 +276,17 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                       Expanded(
                           child: TextField(
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintStyle: TextStyle(
                               fontSize: Statics.shared.fontSizes.supplementary,
                               color: Statics.shared.colors.titleTextColor,
                             ),
-                            hintText: userInformation.gisu),
+                            hintText: gisu),
+                        onChanged: (String str) {
+                          gisu = str;
+                        },
                       )),
                     ],
                   ), // Row Children
@@ -298,12 +316,15 @@ class _UserInfoState extends State<UserInfo> {
   Widget schoolDropbox(BuildContext context, AsyncSnapshot snapshot) {
     var values = snapshot.data;
 
-    for (var i = 0; i < values.length; i++) {
-      // here we are creating the drop down menu items, you can customize the item right here
-      // but I'll just use a simple text for this
+    var list = [];
 
-      _categoryList.add(values[i]["CCNAME"]);
-      _selectedLocation = values[0]["CCNAME"];
+    if (_schoolList.length == 0) {
+      for (var i = 0; i < values.length; i++) {
+        // here we are creating the drop down menu items, you can customize the item right here
+        // but I'll just use a simple text for this
+
+        _schoolList.add(values[i]["CCNAME"]);
+      }
     }
 
     return _createDropDownMenu();
@@ -311,14 +332,14 @@ class _UserInfoState extends State<UserInfo> {
 
   Widget _createDropDownMenu() {
     return DropdownButton<String>(
-      hint: Text('Please choose'), // Not necessary for Option 1
+      hint: Text('선택하세요'), // Not necessary for Option 1
       value: _selectedLocation,
       onChanged: (newValue) {
         setState(() {
           _selectedLocation = newValue;
         });
       },
-      items: _categoryList.map((data) {
+      items: _schoolList.map((data) {
         return DropdownMenuItem<String>(
           child: new Text(data),
           value: data,
@@ -329,24 +350,28 @@ class _UserInfoState extends State<UserInfo> {
 }
 
 Future<List> getSchool() async {
-  return http
-      .post(Strings.shared.controllers.jsonURL.schoolJson)
-      .then((http.Response response) {
-    final int statusCode = response.statusCode;
-    //final String responseBody = response.body; //한글 깨짐
-    final String responseBody = utf8.decode(response.bodyBytes);
-    var responseJSON = json.decode(responseBody);
-    var code = responseJSON["code"];
+  if (schoolTable.length == 0) {
+    return http
+        .post(Strings.shared.controllers.jsonURL.schoolJson)
+        .then((http.Response response) {
+      final int statusCode = response.statusCode;
+      //final String responseBody = response.body; //한글 깨짐
+      final String responseBody = utf8.decode(response.bodyBytes);
+      var responseJSON = json.decode(responseBody);
+      var code = responseJSON["code"];
 
-    if (statusCode == 200) {
-      if (code == 200) {
-        return responseJSON["table"];
+      if (statusCode == 200) {
+        if (code == 200) {
+          schoolTable = responseJSON["table"];
+          return responseJSON["table"];
+        }
+      } else {
+        // If that call was not successful, throw an error.
+        throw Exception('Failed to load post');
       }
-    } else {
-      // If that call was not successful, throw an error.
-      throw Exception('Failed to load post');
-    }
-  });
+    });
+  } else
+    return schoolTable;
 }
 
 //JSON 데이터
