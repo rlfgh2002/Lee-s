@@ -146,6 +146,11 @@ flutter:
     # Find User
     - Resources/Images/findUserImageBottom.png
     - Resources/Icons/chatIcon.png
+    - Resources/Icons/wondeIconr.png
+
+    # Magazines
+    - Resources/Icons/magazineIcon.png
+    - Resources/Images/bgMagazine.png
 
     # SurveysTabs
     - Resources/Icons/proceedingBackground.png

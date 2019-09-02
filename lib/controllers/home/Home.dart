@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -355,7 +356,13 @@ class _ProfileState extends State<Home> {
                                         'Resources/Icons/icon_webzine.png',
                                         scale: 4.0),
                                   ]),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                new Magazines()));
+                                  },
                                 ),
                                 Text("웹진",
                                     style: TextStyle(

@@ -41,6 +41,7 @@ class _StringsControllers {
   _StringsControllerSurveysTabs SurveysTabs = _StringsControllerSurveysTabs();
   _StringsControllerProfile profile = _StringsControllerProfile();
   _StringsSignInController signIn = _StringsSignInController();
+  _StringsControllerMagazines magazines = _StringsControllerMagazines();
   _StringSignSelectController signSelect = _StringSignSelectController();
   _StringTermController term = _StringTermController();
   _StringJsonURL jsonURL = _StringJsonURL();
@@ -63,8 +64,25 @@ class _StringsControllerFindUser {
   String title1 = "협회 회원중에\n찾고 싶은 분이 계신가요?";
   String caption1 = "검색창에서 회원을 검색해보세요!";
   String searchPlaceHolder = "예) 홍길동";
+  String notFound = "검색 결과가 없습니다";
 }
 // FIND USER Controller //
+
+// MAGAZINES Controller //
+class _StringsControllerMagazines {
+  String pageTitle = "월간 海바라기";
+  String toastMessage = "다운로드가 완료되었습니다.";
+//  ** Reaction toast popup message
+//  버튼 탭했을때 토스트메세지 노출하고 그 전 화면으로 이동
+//  Toast message exposure when button tap
+
+  String title1 = "월간 海바라기";
+  String caption1 = "한국해기사협회 매거진입니다.";
+  String downloadKeyword = "다운로드";
+  String exampleKeyword = "보기";
+  String downloadMoreKey = "더보기";
+}
+// MAGAZINES Controller //
 
 // CHATS Controller //
 class _StringsControllerChats {

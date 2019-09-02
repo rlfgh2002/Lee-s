@@ -26,6 +26,31 @@ class _FindUserSearchState extends State<FindUserSearch> {
     double height = MediaQuery.of(context).size.height;
     Color iconSearchColor = Statics.shared.colors.mainColor;//Color.fromRGBO(241,244,250, 1);
 
+    Widget dataView = ListView(
+      children: [
+        MemberObject(
+          title: "ê¹€ìŠ¹ì™„",
+          shortDescription: "í•œ*ëŒ€ 60ê¸°",
+          hasBlueBadge: true,
+          onTapped: (){},
+        ),
+        MemberObject(
+          title: "ê¹€ìŠ¹ì™„",
+          shortDescription: "í•œ*ëŒ€ 60ê¸°",
+          hasBlueBadge: false,
+          onTapped: (){},
+        ),
+      ],
+      padding: const EdgeInsets.only(top: 20, bottom: 20),
+    );
+    Widget notFoundView = Container(child: Column(
+      children: <Widget>[
+        Image.asset("Resources/Icons/wondeIconr.png", width: 60),
+        SizedBox(height: 20),
+        Text(Strings.shared.controllers.findUser.notFound, style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.captionColor)),
+      ],
+    ),color: Colors.white, alignment: Alignment.center,padding: const EdgeInsets.only(top: 120),);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -75,23 +100,7 @@ class _FindUserSearchState extends State<FindUserSearch> {
               height: 61,
               color: Colors.white,
           ),
-          Container(child: ListView(
-            children: [
-              MemberObject(
-                title: "±è½Â¿Ï",
-                shortDescription: "ÇÑ*´ë 60±â",
-                hasBlueBadge: true,
-                onTapped: (){},
-              ),
-              MemberObject(
-                title: "±è½Â¿Ï",
-                shortDescription: "ÇÑ*´ë 60±â",
-                hasBlueBadge: false,
-                onTapped: (){},
-              ),
-            ],
-            padding: const EdgeInsets.only(top: 20, bottom: 20),
-          ), height: height - 141, color: Colors.white,),
+          Container(child: dataView, height: height - 141, color: Colors.white,),
         ],
       ),// Column
       ), // end Body
