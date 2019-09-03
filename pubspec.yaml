@@ -156,6 +156,9 @@ flutter:
     - Resources/Icons/proceedingBackground.png
     # Conversations
     - Resources/Icons/userChatAvatar.png
+    
+    - Resources/Images/noticeListHeader.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

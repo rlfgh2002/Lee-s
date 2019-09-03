@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 
@@ -7,9 +8,11 @@ class MagazineWidget extends StatelessWidget {
   String title = "";
   bool isDownload = false;
   VoidCallback onTap;
+  MagazineObject obj;
 
-  MagazineWidget({String title,bool isDownload = false, VoidCallback onTap}){
+  MagazineWidget({String title,bool isDownload = false, VoidCallback onTap, MagazineObject obj}){
     this.title = title;
+    this.obj = obj;
     this.isDownload = isDownload;
     this.onTap = onTap;
   }

@@ -38,6 +38,7 @@ class _StringsControllers {
   _StringsControllerChats chats = _StringsControllerChats();
   _StringsControllerChat chat = _StringsControllerChat();
   _StringsControllerNotices notices = _StringsControllerNotices();
+  _StringsControllerNoticesList noticesList = _StringsControllerNoticesList();
   _StringsControllerSurveysTabs SurveysTabs = _StringsControllerSurveysTabs();
   _StringsControllerProfile profile = _StringsControllerProfile();
   _StringsSignInController signIn = _StringsSignInController();
@@ -98,6 +99,13 @@ class _StringsControllerChat {
   String errorWhileSendingChatMessage = "메시지가 전송되지 않았습니다!"; // Message Not Sent
 }
 // Single Chat Controller //
+
+// noticesList
+class _StringsControllerNoticesList {
+  String pageTitle = "공지사항";
+  String listKeyword = "목록";
+}
+// noticesList
 
 // NOTICES Controller //
 class _StringsControllerNotices {

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/Magazines/Magazines.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Magazines extends StatefulWidget {
 
   bool isFirstInit = true;
   Magazines({ Key key }) : super(key: key);
   List<Widget> myList = [];
+  List<Widget> magazinesList = [];
 
   @override
   _MagazinesState createState() => _MagazinesState();
@@ -18,10 +22,8 @@ class _MagazinesState extends State<Magazines> {
 
   final _scaffold = GlobalKey<ScaffoldState>();
 
-  void download5MoreMagazines({int page = 0}) async {
-    print("PAGE : ${page}");
+  void refreshList(int pCurrent,pTotal){
     widget.myList = [];
-
     double screenWidth = MediaQuery.of(context).size.width;
     Widget topView = Container(child: Stack(
       children: [
@@ -50,39 +52,81 @@ class _MagazinesState extends State<Magazines> {
       ],
     ), alignment: Alignment.center, height: 100,color: Colors.red,);
     Widget blueSplitter = Container(color: Colors.blue,height: 3,margin: const EdgeInsets.only(left: 16,right: 16));
-    Widget downloadMoreView = Container(
-      child: FlatButton(
-        child: Container(
-          child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle, fontWeight: FontWeight.w600)),
-          alignment: Alignment.center,
-        ),
-        onPressed: (){
-          // download 5 more magazines ...
-          this.download5MoreMagazines(page: page + 1);
-        },
-        padding: const EdgeInsets.all(0),
-      ),
-      decoration: BoxDecoration(border: Border.all(width: 2, color: Statics.shared.colors.mainColor)),
-      width: screenWidth,
-      height: 60,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(top: 20, right: 16, left: 16),
-    );
-
-    List<Widget> newList = [];
-    newList.add(MagazineWidget(title: "해바라기 2019년 06월호",isDownload: true));
-    newList.add(MagazineWidget(title: "해바라기 2019년 05월호",isDownload: false));
-    newList.add(MagazineWidget(title: "해바라기 2019년 04월호",isDownload: true));
-    newList.add(MagazineWidget(title: "해바라기 2019년 03월호",isDownload: true));
-    newList.add(MagazineWidget(title: "해바라기 2019년 02월호",isDownload: false));
-
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
-    widget.myList.addAll(newList); // fetch from server
-    widget.myList.add(downloadMoreView);
 
+    widget.myList.addAll(this.widget.magazinesList); // fetch from server
+
+    if(pTotal > pCurrent){
+      Widget downloadMoreView = Container(
+        child: FlatButton(
+          child: Container(
+            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle, fontWeight: FontWeight.w600)),
+            alignment: Alignment.center,
+          ),
+          onPressed: (){
+            // download 5 more magazines ...
+            this.download5MoreMagazines(page: pCurrent + 1);
+          },
+          padding: const EdgeInsets.all(0),
+        ),
+        decoration: BoxDecoration(border: Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+        width: screenWidth,
+        height: 60,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
+      );
+      widget.myList.add(downloadMoreView);
+    }
     setState(() {
 
+    });
+  }
+  void download5MoreMagazines({int page = 1}) async {
+
+    http.get(Statics.shared.urls.magazines(page: page)
+    ).then((val){
+      if(val.statusCode == 200){
+        print("::::::::::::::::::::: [ Getting Magazines Start ] :::::::::::::::::::::");
+        print("BODY: ${val.body.toString()}");
+        var json = jsonDecode(val.body);
+
+        int code = json["code"];
+        if(code == 200){
+          List<MagazineObject> myReturnList = [];
+          int pTotal = json["totalPageNum"];
+          int pCurrent = json["nowPageNum"];
+          List<dynamic> rows = json["rows"];
+
+          List<Widget> newList = [];
+          rows.forEach((item){
+
+            MagazineObject object = MagazineObject(
+              subject: item["subject"].toString(),
+              fileUrl: item["subject"].toString(),
+              realFileName: item["subject"].toString(),
+              serverFileName: item["subject"].toString(),
+            );
+            if(item["fileUrl"].toString().isEmpty){
+              newList.add(MagazineWidget(title: item["subject"].toString(),isDownload: false,obj: object));
+            }else{
+              newList.add(MagazineWidget(title: item["subject"].toString(),isDownload: true, obj: object));
+            }
+          });
+          if(page == 1){
+            this.widget.magazinesList = newList;
+          }else{
+            this.widget.magazinesList.addAll(newList);
+          }
+          this.refreshList(pCurrent, pTotal);
+
+        }
+        print("::::::::::::::::::::: [ Getting Magazines End ] :::::::::::::::::::::");
+      }else{
+        print(":::::::::::::::::: on Getting Magazines error :: Server Error ::::::::::::::::::");
+      }
+    }).catchError((error){
+      print(":::::::::::::::::: on Getting Magazines error : ${error.toString()} ::::::::::::::::::");
     });
   }
 
@@ -90,7 +134,7 @@ class _MagazinesState extends State<Magazines> {
   Widget build(BuildContext context) {
 
     if(widget.isFirstInit){
-      download5MoreMagazines(page: 0);
+      download5MoreMagazines(page: 1);
       widget.isFirstInit = false;
     }
 
@@ -106,7 +150,7 @@ class _MagazinesState extends State<Magazines> {
       ),
       body: Container(
         child: ListView(
-          children: widget.myList,
+          children: this.widget.myList,
         ),
         color: Colors.white,
       ), // end Body

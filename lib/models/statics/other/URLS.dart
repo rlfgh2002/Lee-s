@@ -8,10 +8,18 @@ class URLS {
   }
 
   String searchSurveysAnswers(String uid, String idx) {
-    return "http://mariners.or.kr/app_middle/survey/survey_json.php?bd_idx=${idx}&mode=view&userId=${uid}";
+    return "http://mariners.or.kr/app_middle/survey/survey_json.php?bd_idx=${idx.toString()}&mode=view&userId=${uid.toString()}";
   }
 
   String submitSurvey() {
     return "http://mariners.or.kr/app_middle/survey/survey_json.php";
+  }
+
+  String magazines({int page = 0}) {
+    return "http://mariners.or.kr/app_middle/etc/magazine_json.php?mode=list&pageNum=${page.toString()}";
+  }
+
+  String noticesList({int page = 0}) {
+    return "http://mariners.or.kr/app_middle/etc/notice_json.php?mode=list&pageNum=${page.toString()}";
   }
 }

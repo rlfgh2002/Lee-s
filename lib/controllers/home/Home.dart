@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
+import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -139,7 +140,12 @@ class _ProfileState extends State<Home> {
                               Image.asset('Resources/Icons/btn_more.png',
                                   scale: 3.0),
                             ]),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new NoticesList()));
+                            },
                           ),
                           height: deviceWidth / 6),
                       Row(children: <Widget>[
