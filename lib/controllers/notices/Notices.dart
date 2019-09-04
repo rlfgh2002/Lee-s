@@ -364,6 +364,7 @@ class NoticesState extends State<Notices> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
+            brightness: Brightness.light,
             title: MiddleWare.shared.topBarWidget,
             centerTitle: false,
             elevation: 0,

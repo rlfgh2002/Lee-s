@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/profile/FeeHistory.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -103,7 +104,13 @@ class _ProfileState extends State<Profile> {
                                         fontSize: Statics
                                             .shared.fontSizes.supplementary)),
                               ]),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new FeeHistory()));
+                              },
                             ),
                             width: deviceWidth / 2,
                             height: deviceWidth / 5),
@@ -313,7 +320,6 @@ class _ProfileState extends State<Profile> {
               ),
             ], // Row Children
           ), // Row
-
           alignment: Alignment(0.0, 0.0),
         ), // Container
       ),

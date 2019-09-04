@@ -31,6 +31,7 @@ class _FindUserState extends State<FindUser> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
+            brightness: Brightness.light,
             title: Container(
                 child: Text(Strings.shared.controllers.findUser.pageTitle,
                     style: TextStyle(

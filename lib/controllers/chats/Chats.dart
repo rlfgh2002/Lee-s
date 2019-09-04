@@ -437,6 +437,7 @@ class _ChatsState extends State<Chats> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
+          brightness: Brightness.light,
           title: MiddleWare.shared.topBarWidget,
           centerTitle: false,
           elevation: 0,
