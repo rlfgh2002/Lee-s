@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 
 var schoolTable = new List();
 
+//textfield값이 없을때는 hint값으로 저장.
 class UserInfo extends StatefulWidget {
   @override
   _UserInfoState createState() => _UserInfoState();

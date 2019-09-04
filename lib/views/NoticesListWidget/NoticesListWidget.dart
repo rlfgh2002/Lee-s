@@ -26,7 +26,7 @@ class NoticesListWidget extends StatelessWidget {
     return FlatButton(
       child: Container(child: Row(
         children: [
-          Container(width: buttonSize,child: Text("°øÁö", style: TextStyle(color: Statics.shared.colors.mainColor, fontWeight: FontWeight.w700, fontSize: Statics.shared.fontSizes.content)),
+          Container(width: buttonSize,child: Text("ê³µì§€", style: TextStyle(color: Statics.shared.colors.mainColor, fontWeight: FontWeight.w700, fontSize: Statics.shared.fontSizes.content)),
             alignment: Alignment.center,
           ),
           Column(
