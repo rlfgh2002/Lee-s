@@ -39,6 +39,7 @@ class _StringsControllers {
   _StringsControllerChat chat = _StringsControllerChat();
   _StringsControllerNotices notices = _StringsControllerNotices();
   _StringsControllerNoticesList noticesList = _StringsControllerNoticesList();
+  _StringsControllerIOList iO = _StringsControllerIOList();
   _StringsControllerSurveysTabs SurveysTabs = _StringsControllerSurveysTabs();
   _StringsControllerProfile profile = _StringsControllerProfile();
   _StringsSignInController signIn = _StringsSignInController();
@@ -99,6 +100,14 @@ class _StringsControllerChat {
   String errorWhileSendingChatMessage = "메시지가 전송되지 않았습니다!"; // Message Not Sent
 }
 // Single Chat Controller //
+
+// Introduce Occupation
+class _StringsControllerIOList {
+  String pageTitle = "직역소개";
+  String title1 = "해기사의 직역소개";
+  String caption1 = "이달의 해기사의 직역을 소개합니다.";
+}
+// Introduce Occupation
 
 // noticesList
 class _StringsControllerNoticesList {

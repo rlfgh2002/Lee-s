@@ -221,7 +221,9 @@ class _ProfileState extends State<Home> {
                               Image.asset('Resources/Icons/btn_more.png',
                                   scale: 3.0)
                             ]),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, new MaterialPageRoute(builder: (context) => new IntroduceOccupation()));
+                            },
                           ),
                           height: deviceWidth / 6),
                       Row(children: <Widget>[

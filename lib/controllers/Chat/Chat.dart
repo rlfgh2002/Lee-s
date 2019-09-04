@@ -307,7 +307,9 @@ class ChatState extends State<Chat> {
 
     if (Platform.isIOS) iOS_Permission();
     widget.db.updateSeenChats(convId: chatCurrentConvId);
-    Chats.staticChatsPage.refresh();
+    if(Chats.staticChatsPage != null){
+      Chats.staticChatsPage.refresh();
+    }
     super.initState();
   }
 

@@ -35,6 +35,7 @@ dependencies:
   loading: ^1.0.1
   connectivity: ^0.4.3+7
   geolocator: ^5.1.3
+  carousel_slider: ^1.3.0
   splashscreen: ^1.2.0
   flutter_launcher_icons: ^0.7.2+1 #아이콘 추가
 
@@ -151,6 +152,10 @@ flutter:
     # Magazines
     - Resources/Icons/magazineIcon.png
     - Resources/Images/bgMagazine.png
+
+    # introduce occupation
+    - Resources/Icons/sailorIcon.png
+    - Resources/Images/bgSailor.png
 
     # SurveysTabs
     - Resources/Icons/proceedingBackground.png
