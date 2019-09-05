@@ -26,6 +26,8 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  bool _idChecked = false;
+  bool _pwdChecked = false;
 
   void refreshUserInfo(onComplete()) async {
     await SharedPreferences.getInstance().then((val) {
@@ -109,6 +111,11 @@ class _SignInState extends State<SignIn> {
                           .shared.controllers.signIn.txtHintUser), // decoration
                   onChanged: (String str) {
                     idValue = str;
+                    if (str.length > 0) {
+                      _idChecked = true;
+                    } else {
+                      _idChecked = false;
+                    }
                   },
                 ),
                 alignment: Alignment.centerLeft),
@@ -128,6 +135,11 @@ class _SignInState extends State<SignIn> {
                   obscureText: true, // decoration
                   onChanged: (String str) {
                     passValue = str;
+                    if (str.length > 0) {
+                      _pwdChecked = true;
+                    } else {
+                      _pwdChecked = false;
+                    }
                   },
                 ),
                 alignment: Alignment.centerLeft),
@@ -177,60 +189,95 @@ class _SignInState extends State<SignIn> {
             Container(
               child: Row(
                 children: [
-                  HaegisaButton(
-                    text: Strings.shared.controllers.signIn.loginBtnTitle,
-                    iconURL: "Resources/Icons/Vector 3.2.png",
-                    onPressed: () async {
-                      if (trim(idValue) == "") {
-                        _displaySnackBar(
-                            context, Strings.shared.controllers.signIn.enterID);
-                      } else if (trim(passValue) == "") {
-                        _displaySnackBar(context,
-                            Strings.shared.controllers.signIn.enterPass);
-                      }
+                  Container(
+                    child: ButtonTheme(
+                      child: FlatButton(
+                        onPressed: () async {
+                          if (_idChecked == true && _pwdChecked) {
+                            if (trim(idValue) == "") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.enterID);
+                            } else if (trim(passValue) == "") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.enterPass);
+                            }
 
-                      var map = new Map<String, dynamic>();
-                      map["id"] = idValue;
-                      map["pwd"] = passValue;
-                      Result resultPost = await createPost(
-                          Strings.shared.controllers.jsonURL.loginJson,
-                          body: map);
-                      if (jsonMsg == "ID is Wrong") {
-                        _displaySnackBar(
-                            context, Strings.shared.controllers.signIn.wrongID);
-                      } else if (jsonMsg == "PASSWORD is Wrong") {
-                        _displaySnackBar(context,
-                            Strings.shared.controllers.signIn.wrongPass);
-                      } else if (jsonMsg == "no haegisa member") {
-                        //해기사 회원이 아닐 시 팝업
-                        await showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (_) => authAlert());
-                      } else if (jsonMsg == "success") {
-                        await deviceinfo();
+                            var map = new Map<String, dynamic>();
+                            map["id"] = idValue;
+                            map["pwd"] = passValue;
+                            Result resultPost = await createPost(
+                                Strings.shared.controllers.jsonURL.loginJson,
+                                body: map);
+                            if (jsonMsg == "ID is Wrong") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.wrongID);
+                            } else if (jsonMsg == "PASSWORD is Wrong") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.wrongPass);
+                            } else if (jsonMsg == "no haegisa member") {
+                              //해기사 회원이 아닐 시 팝업
+                              await showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (_) => authAlert());
+                            } else if (jsonMsg == "success") {
+                              await deviceinfo();
 
-                        userInformation.mode = "login";
-                        userInformation.fullName = resultPost.memberName;
-                        userInformation.hp = resultPost.hp;
-                        userInformation.loginCheck = 1;
-                        userInformation.userID = idValue;
-                        userInformation.memberType = resultPost.memberType;
-                        userInformation.userIdx = resultPost.memberIdx;
+                              userInformation.mode = "login";
+                              userInformation.fullName = resultPost.memberName;
+                              userInformation.hp = resultPost.hp;
+                              userInformation.loginCheck = 1;
+                              userInformation.userID = idValue;
+                              userInformation.memberType =
+                                  resultPost.memberType;
+                              userInformation.userIdx = resultPost.memberIdx;
 
-                        _firebaseMessaging.getToken().then((token) {
-                          print(token);
-                          userInformation.userToken = token;
-                        });
+                              _firebaseMessaging.getToken().then((token) {
+                                print(token);
+                                userInformation.userToken = token;
+                              });
 
-                        this.refreshUserInfo(() {
-                          Navigator.pushReplacement(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new SplashScreen()));
-                        });
-                      }
-                    },
+                              this.refreshUserInfo(() {
+                                Navigator.pushReplacement(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new SplashScreen()));
+                              });
+                            }
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              Strings.shared.controllers.signIn.loginBtnTitle,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:
+                                      Statics.shared.fontSizes.titleInContent),
+                            ), // Text
+                            SizedBox(width: 10),
+                            Image.asset(
+                              "Resources/Icons/Vector 3.2.png",
+                              width: 10,
+                              color: Colors.white,
+                              alignment: Alignment.center,
+                            ),
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, top: 10, bottom: 10),
+                      ), // Next Button
+                      height: 60,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(40)),
+                      color: _idChecked && _pwdChecked
+                          ? Statics.shared.colors.mainColor
+                          : Statics.shared.colors.subTitleTextColor,
+                    ),
                   )
                 ],
                 mainAxisAlignment: MainAxisAlignment.end,

@@ -166,7 +166,7 @@ class _ProfileState extends State<Home> {
                                 child: FlatButton(
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
-                                  child: Text("로딩중..",
+                                  child: Text("",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: Statics
@@ -248,7 +248,7 @@ class _ProfileState extends State<Home> {
                                 child: FlatButton(
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
-                                  child: Text("로딩중..",
+                                  child: Text("",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: Statics

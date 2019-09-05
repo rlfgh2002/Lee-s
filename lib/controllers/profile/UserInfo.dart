@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -72,280 +73,358 @@ class _UserInfoState extends State<UserInfo> {
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
       body: Container(
-        color: Colors.white,
-        child: ListView(
+        color: Statics.shared.colors.lineColor,
+        child: Column(
           children: [
-            Image.asset('Resources/Icons/Line3.png', width: 34),
-            Container(
-              child: Column(children: [
+            SizedBox(height: 10),
+            Expanded(
+                child: ListView(
+              children: <Widget>[
                 Container(
-                  height: deviceWidth / 5,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: new Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          Strings.shared.controllers.profile.userName,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left,
-                        ),
-                        width: deviceWidth / 5,
-                        padding: const EdgeInsets.only(right: 10),
-                      ),
-                      Text(
-                        userInformation.fullName,
-                        style: TextStyle(
-                          color: Statics.shared.colors.subTitleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                      Spacer(),
-                    ],
-                  ), // Row Children
-                ),
-                Row(children: <Widget>[
-                  Expanded(child: Divider(height: 0)),
-                ]),
-                Container(
-                  height: deviceWidth / 5,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: new Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          Strings.shared.controllers.profile.userType,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left,
-                        ),
-                        width: deviceWidth / 5,
-                        padding: const EdgeInsets.only(right: 10),
-                      ),
-                      Text(
-                        userType,
-                        style: TextStyle(
-                          color: Statics.shared.colors.subTitleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
-                  ), // Row Children
-                ),
-                Row(children: <Widget>[
-                  Expanded(child: Divider(height: 0)),
-                ]),
-                Container(
-                  height: deviceWidth / 5,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: new Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          Strings.shared.controllers.profile.userPhone,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left,
-                        ),
-                        width: deviceWidth / 5,
-                        padding: const EdgeInsets.only(right: 10),
-                      ),
-                      Expanded(
-                          child: TextField(
-                        controller: _hpController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              color: Statics.shared.colors.subTitleTextColor,
+                  color: Colors.white,
+                  child: Column(children: [
+                    Container(
+                      height: deviceWidth / 5,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              Strings.shared.controllers.profile.userName,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
                             ),
-                            hintText:
-                                Strings.shared.controllers.profile.userPhone),
-                      )),
-                    ],
-                  ), // Row Children
-                ),
-                Row(children: <Widget>[
-                  Expanded(child: Divider(height: 0)),
-                ]),
-                Container(
-                  height: deviceWidth / 5,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: new Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          Strings.shared.controllers.profile.userMail,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left,
-                        ),
-                        width: deviceWidth / 5,
-                        padding: const EdgeInsets.only(right: 10),
-                      ),
-                      Expanded(
-                          child: TextField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontSize: Statics.shared.fontSizes.supplementary,
-                            color: Statics.shared.colors.subTitleTextColor,
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
                           ),
-                          hintText: Strings.shared.controllers.profile.userMail,
-                        ),
-                      )),
-                      SizedBox(
-                        width: deviceWidth / 5,
-                      )
-                    ],
-                  ), // Row Children
-                ),
-                Row(children: <Widget>[
-                  Expanded(child: Divider(height: 0)),
-                ]),
-                Container(
-                  height: deviceWidth / 5,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: new Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          Strings.shared.controllers.profile.userSchool,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left,
-                        ),
-                        width: deviceWidth / 5,
-                        padding: const EdgeInsets.only(right: 10),
-                      ),
-                      Expanded(
-                        child: new FutureBuilder(
-                          future: getSchool(), // a Future<String> or null
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            //print('project snapshot data is: ${snapshot.data}');
-                            switch (snapshot.connectionState) {
-                              case ConnectionState.none:
-                                return new Text('Press button to start');
-                              case ConnectionState.waiting:
-                                return new Container(
-                                  child: FlatButton(
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    child: Text("로딩중..",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: Statics
-                                                .shared.colors.titleTextColor,
-                                            fontSize: Statics
-                                                .shared.fontSizes.subTitle)),
-                                    onPressed: () {},
-                                  ),
-                                  height: deviceWidth / 6,
-                                );
-                              default:
-                                if (snapshot.hasError)
-                                  return new Text('Error: ${snapshot.error}');
-                                else
-                                  return schoolDropbox(context, snapshot);
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ), // Row Children
-                ),
-                Row(children: <Widget>[
-                  Expanded(child: Divider(height: 0)),
-                ]),
-                Container(
-                  height: deviceWidth / 5,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: new Row(
-                    children: <Widget>[
-                      Container(
-                        child: Text(
-                          Strings.shared.controllers.profile.userGisu,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.left,
-                        ),
-                        width: deviceWidth / 5,
-                        padding: const EdgeInsets.only(right: 10),
-                      ),
-                      Expanded(
-                          child: TextField(
-                        controller: _gisuController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(
-                              fontSize: Statics.shared.fontSizes.supplementary,
+                          Text(
+                            userInformation.fullName,
+                            style: TextStyle(
                               color: Statics.shared.colors.subTitleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
                             ),
-                            hintText:
-                                Strings.shared.controllers.profile.userGisu),
-                      )),
-                    ],
-                  ), // Row Children
+                            textAlign: TextAlign.left,
+                          ),
+                          Spacer(),
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 5,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              Strings.shared.controllers.profile.userType,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Text(
+                            userType,
+                            style: TextStyle(
+                              color: Statics.shared.colors.subTitleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 5,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              Strings.shared.controllers.profile.userPhone,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Expanded(
+                              child: TextField(
+                            controller: _hpController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  color:
+                                      Statics.shared.colors.subTitleTextColor,
+                                ),
+                                hintText: Strings
+                                    .shared.controllers.profile.userPhone),
+                          )),
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 5,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              Strings.shared.controllers.profile.userMail,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Expanded(
+                              child: TextField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary,
+                                color: Statics.shared.colors.subTitleTextColor,
+                              ),
+                              hintText:
+                                  Strings.shared.controllers.profile.userMail,
+                            ),
+                          )),
+                          SizedBox(
+                            width: deviceWidth / 5,
+                          )
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 5,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              Strings.shared.controllers.profile.userSchool,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Expanded(
+                            child: new FutureBuilder(
+                              future: getSchool(), // a Future<String> or null
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                //print('project snapshot data is: ${snapshot.data}');
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.none:
+                                    return new Text('Press button to start');
+                                  case ConnectionState.waiting:
+                                    return new Container(
+                                      child: FlatButton(
+                                        splashColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        child: Text("",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: Statics.shared
+                                                    .fontSizes.subTitle)),
+                                        onPressed: () {},
+                                      ),
+                                      height: deviceWidth / 6,
+                                    );
+                                  default:
+                                    if (snapshot.hasError)
+                                      return new Text(
+                                          'Error: ${snapshot.error}');
+                                    else
+                                      return schoolDropbox(context, snapshot);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 5,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              Strings.shared.controllers.profile.userGisu,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Expanded(
+                              child: TextField(
+                            controller: _gisuController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  color:
+                                      Statics.shared.colors.subTitleTextColor,
+                                ),
+                                hintText: Strings
+                                    .shared.controllers.profile.userGisu),
+                          )),
+                        ],
+                      ), // Row Children
+                    ),
+                  ]), // Row
                 ),
-              ]), // Row
-            ),
+              ],
+            )),
             SizedBox(
               height: 10,
             ),
-            FlatButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                padding: EdgeInsets.all(20),
-                color: Statics.shared.colors.mainColor,
-                child: Text("수정",
-                    style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.titleInContent,
-                        color: Colors.white)),
-                onPressed: () async {
-                  print("전화번호 : ${_hpController.text}");
-                  print("이메일 : ${_emailController.text}");
-                  print("출신학교 : ${school.toString()}");
-                  print("기수 : ${userInformation.memberType}");
+            Column(
+              children: <Widget>[
+                Container(
+                    alignment: Alignment.centerRight,
+                    child: FlatButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        padding: EdgeInsets.all(20),
+                        child: Image.asset(
+                          "Resources/Icons/logout.png",
+                          scale: 3.0,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    title: new Text("로그아웃"),
+                                    content: new Text("로그아웃 하시겠어요?",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    actions: <Widget>[
+                                      // usually buttons at the bottom of the dialog
+                                      new FlatButton(
+                                        child: new Text("취소",
+                                            style: TextStyle(
+                                                fontSize: Statics.shared
+                                                    .fontSizes.supplementary,
+                                                color: Colors.black)),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      new FlatButton(
+                                        child: new Text(
+                                          "로그아웃",
+                                          style: TextStyle(
+                                              fontSize: Statics.shared.fontSizes
+                                                  .supplementary,
+                                              color: Colors.red),
+                                        ),
+                                        onPressed: () {
+                                          userInformation.logout();
+                                          Navigator.push(
+                                              context,
+                                              new MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      new SplashScreen()));
+                                        },
+                                      ),
+                                    ],
+                                  ));
+                        })),
+                Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: FlatButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        padding: EdgeInsets.all(20),
+                        color: Statics.shared.colors.mainColor,
+                        child: Text("정보수정",
+                            style: TextStyle(
+                                fontSize:
+                                    Statics.shared.fontSizes.titleInContent,
+                                color: Colors.white)),
+                        onPressed: () async {
+                          print("전화번호 : ${_hpController.text}");
+                          print("이메일 : ${_emailController.text}");
+                          print("출신학교 : ${school.toString()}");
+                          print("기수 : ${userInformation.memberType}");
 
-                  var infomap = new Map<String, dynamic>();
-                  infomap["id"] = userInformation.userID;
-                  infomap["memberIdx"] = userInformation.userIdx;
-                  infomap["name"] = userInformation.fullName;
-                  infomap["memberType"] = userInformation.memberType;
-                  infomap["hp"] = _hpController.text;
-                  infomap["email"] = _emailController.text;
-                  infomap["school"] = school;
-                  infomap["gisu"] = _gisuController.text;
-                  await infoModify(
-                      Strings.shared.controllers.jsonURL.userinfoModifyJson,
-                      body: infomap);
+                          var infomap = new Map<String, dynamic>();
+                          infomap["id"] = userInformation.userID;
+                          infomap["memberIdx"] = userInformation.userIdx;
+                          infomap["name"] = userInformation.fullName;
+                          infomap["memberType"] = userInformation.memberType;
+                          infomap["hp"] = _hpController.text;
+                          infomap["email"] = _emailController.text;
+                          infomap["school"] = school;
+                          infomap["gisu"] = _gisuController.text;
+                          await infoModify(
+                              Strings.shared.controllers.jsonURL
+                                  .userinfoModifyJson,
+                              body: infomap);
 
-                  userInformation.hp = _hpController.text;
-                  userInformation.email = _emailController.text;
-                  userInformation.school = school;
-                  userInformation.gisu = _gisuController.text;
+                          userInformation.hp = _hpController.text;
+                          userInformation.email = _emailController.text;
+                          userInformation.school = school;
+                          userInformation.gisu = _gisuController.text;
 
-                  _displaySnackBar(context, "수정완료");
-                  return;
-                })
+                          _displaySnackBar(context, "수정되었습니다.");
+                          return;
+                        }))
+              ],
+            )
           ], // Row Children
         ), // Row
         alignment: Alignment(0.0, 0.0),

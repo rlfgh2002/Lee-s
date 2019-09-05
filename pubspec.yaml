@@ -144,6 +144,11 @@ flutter:
     # Conversations
     - userChatAvatar.png
 
+    # Profile
+    - Resources/Images/feeHistory.png
+    - Resources/Images/occasion.png
+    - Resources/Icons/logout.png
+
     # Find User
     - Resources/Images/findUserImageBottom.png
     - Resources/Icons/chatIcon.png

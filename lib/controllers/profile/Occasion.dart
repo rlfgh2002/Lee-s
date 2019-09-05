@@ -6,12 +6,12 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 
-class FeeHistory extends StatefulWidget {
+class Occasion extends StatefulWidget {
   @override
-  _FeeHistoryState createState() => _FeeHistoryState();
+  _OccasionState createState() => _OccasionState();
 }
 
-class _FeeHistoryState extends State<FeeHistory> {
+class _OccasionState extends State<Occasion> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -19,10 +19,16 @@ class _FeeHistoryState extends State<FeeHistory> {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
 
+    TextEditingController _nameController;
+    TextEditingController _birthController;
+    bool _nameChecked = false;
+    bool _birthChecked = false;
+    String name;
+    String birth;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("회비납부내역",
+        title: Text("경조사 통보",
             style: TextStyle(
                 color: Statics.shared.colors.titleTextColor,
                 fontSize: Statics.shared.fontSizes.title)),
@@ -40,53 +46,61 @@ class _FeeHistoryState extends State<FeeHistory> {
               Container(
                 height: deviceHeight / 5,
                 child: Image.asset(
-                  "Resources/Images/feeHistory.png",
+                  "Resources/Images/occasion.png",
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(left: 20, bottom: 5),
-                alignment: Alignment.bottomLeft,
-                height: deviceHeight / 12,
-                child: Text("납부내역",
-                    style: TextStyle(
-                        color: Statics.shared.colors.subTitleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitle)),
-              ),
-              Row(children: <Widget>[
-                Expanded(child: Divider(height: 0)),
-              ]),
             ],
           ),
         ),
         Expanded(
-          child: new FutureBuilder(
-            future: getfeeList(), // a Future<String> or null
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              //print('project snapshot data is: ${snapshot.data}');
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  return new Text('Press button to start');
-                case ConnectionState.waiting:
-                  return new Container(
-                    child: FlatButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      child: Text("",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics.shared.fontSizes.subTitle)),
-                      onPressed: () {},
-                    ),
-                    height: deviceWidth / 6,
-                  );
-                default:
-                  if (snapshot.hasError)
-                    return new Text('Error: ${snapshot.error}');
-                  else
-                    return feeListview(context, snapshot);
-              }
-            },
+          child: ListView(
+            children: <Widget>[
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 5,
+                        ),
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height / 12,
+                        child: txtField(_nameController, TextInputType.text,
+                            "이름", name, _nameChecked)),
+                    Container(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 5,
+                        ),
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height / 12,
+                        child: txtField(_birthController, TextInputType.number,
+                            "생년월일", birth, _birthChecked)),
+                    Container(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 5,
+                        ),
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height / 12,
+                        child: txtField(_nameController, TextInputType.text,
+                            "회사명", name, _nameChecked)),
+                    Container(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          right: 10,
+                          bottom: 5,
+                        ),
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height / 12,
+                        child: txtField(_nameController, TextInputType.number,
+                            "휴대폰번호", name, _nameChecked)),
+                  ])
+            ],
           ),
         )
       ]),
@@ -121,6 +135,29 @@ class _FeeHistoryState extends State<FeeHistory> {
         throw Exception('Failed to load post');
       }
     });
+  }
+
+  Widget txtField(controller, inputType, hint, content, checked) {
+    return TextField(
+      controller: controller,
+      keyboardType: inputType,
+      decoration: InputDecoration(
+          hintStyle: TextStyle(
+            fontSize: Statics.shared.fontSizes.subTitle,
+            color: Statics.shared.colors.subTitleTextColor,
+          ),
+          border: OutlineInputBorder(),
+          hintText: hint),
+      obscureText: false, // decoration
+      onChanged: (String str) {
+        content = str;
+        if (str.length > 0) {
+          checked = true;
+        } else {
+          checked = false;
+        }
+      },
+    );
   }
 
   Widget feeListview(BuildContext context, AsyncSnapshot snapshot) {
