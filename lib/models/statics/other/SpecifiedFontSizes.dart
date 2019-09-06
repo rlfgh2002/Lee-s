@@ -1,4 +1,5 @@
-class SpecifiedFontSizes {
+class SpecifiedFontSizes
+{
   double title = 30;
   double subTitle = 20;
 
@@ -9,7 +10,6 @@ class SpecifiedFontSizes {
   double supplementaryBig = 19;
 
   double content = 18;
-
   double supplementary = 16;
 
   double medium = 14;

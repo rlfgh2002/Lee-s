@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dart';
+import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -142,6 +143,8 @@ class _ProfileState extends State<Home> {
                                   scale: 3.0),
                             ]),
                             onPressed: () {
+                              // NoticesList()
+                              // LicenseTestQuestions()
                               Navigator.push(
                                   context,
                                   new MaterialPageRoute(

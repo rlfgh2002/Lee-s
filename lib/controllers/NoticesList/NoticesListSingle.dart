@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
