@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/profile/AlarmAgree.dart';
 import 'package:haegisa2/controllers/profile/FeeHistory.dart';
 import 'package:haegisa2/controllers/profile/Inquiry.dart';
 import 'package:haegisa2/controllers/profile/Occasion.dart';
@@ -10,6 +11,7 @@ import 'package:haegisa2/controllers/profile/UserInfo.dart';
 import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 
 import 'Advisory.dart';
+import 'Terms.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -271,7 +273,12 @@ class _ProfileState extends State<Profile> {
                             highlightColor: Colors.transparent,
                             child: Image.asset('Resources/Icons/Vector 3.2.png',
                                 width: 10, scale: 2.5),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new AlarmAgree()));
+                            },
                           ),
                         )
                       ],
@@ -300,7 +307,12 @@ class _ProfileState extends State<Profile> {
                             highlightColor: Colors.transparent,
                             child: Image.asset('Resources/Icons/Vector 3.2.png',
                                 width: 10, scale: 2.5),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new Terms()));
+                            },
                           ),
                         )
                       ],

@@ -227,6 +227,8 @@ class _StringJsonURL {
       "http://www.mariners.or.kr/app_middle/member/payment_json.php";
   String inquiryJson = "http://www.mariners.or.kr/app_middle/etc/qna_json.php";
   String advisoryJson = "http://www.mariners.or.kr/app_middle/etc/ask_json.php";
+  String occasionJson =
+      "http://www.mariners.or.kr/app_middle/etc/occasion_json.php";
 }
 // JSON URL //
 

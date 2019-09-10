@@ -19,6 +19,7 @@ class _TermsView extends State<TermsView> {
   final flutterWebviewPlugin = FlutterWebviewPlugin();
 
   static String selectedUrl = "";
+  String title = "";
 
   // On destroy stream
   StreamSubscription _onDestroy;
@@ -40,13 +41,19 @@ class _TermsView extends State<TermsView> {
   Widget build(BuildContext context) {
     if (userInformation.mode == "Terms") {
       selectedUrl = Strings.shared.controllers.jsonURL.terms;
+      title = Strings.shared.controllers.term.terms_terms_title;
     } else if (userInformation.mode == "Privacy") {
       selectedUrl = Strings.shared.controllers.jsonURL.privacy;
+      title = Strings.shared.controllers.term.terms_policy_title;
     }
     //MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
     return WebviewScaffold(
       url: selectedUrl,
       appBar: AppBar(
+        title: Text(title,
+            style: TextStyle(
+                color: Statics.shared.colors.titleTextColor,
+                fontSize: Statics.shared.fontSizes.title)),
         backgroundColor: Colors.white,
         centerTitle: false,
         elevation: 0,
