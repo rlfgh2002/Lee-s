@@ -6,6 +6,7 @@ import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dar
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
+import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -352,7 +353,12 @@ class _ProfileState extends State<Home> {
                                         'Resources/Icons/icon_intro.png',
                                         scale: 4.0),
                                   ]),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) => new Intro()));
+                                  },
                                 ),
                                 Text("협회소개",
                                     style: TextStyle(

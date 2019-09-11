@@ -142,6 +142,9 @@ class _OccasionState extends State<Occasion> {
                                 color: Statics.shared.colors.subTitleTextColor,
                               ),
                               border: OutlineInputBorder(),
+                              labelStyle: TextStyle(
+                                color: Statics.shared.colors.subTitleTextColor,
+                              ),
                               hintText: "생년월일"),
                           format: DateFormat("yyyy-MM-dd"),
                           onChanged: (DateTime value) {
@@ -419,12 +422,16 @@ class _OccasionState extends State<Occasion> {
       inputFormatters: [
         LengthLimitingTextInputFormatter(size),
       ],
+
       decoration: InputDecoration(
           hintStyle: TextStyle(
             fontSize: Statics.shared.fontSizes.subTitle,
             color: Statics.shared.colors.subTitleTextColor,
           ),
           border: OutlineInputBorder(),
+          labelStyle: TextStyle(
+            color: Statics.shared.colors.subTitleTextColor,
+          ),
           hintText: hint),
       obscureText: false, // decoration
       onChanged: (String str) {
@@ -585,6 +592,9 @@ class _OccasionState extends State<Occasion> {
                 color: Statics.shared.colors.subTitleTextColor,
               ),
               border: OutlineInputBorder(),
+              labelStyle: TextStyle(
+                color: Statics.shared.colors.subTitleTextColor,
+              ),
               hintText: "결혼식 일시"),
           format: DateFormat("yyyy-MM-dd"),
           onChanged: (DateTime value) {
@@ -739,6 +749,9 @@ class _OccasionState extends State<Occasion> {
                 color: Statics.shared.colors.subTitleTextColor,
               ),
               border: OutlineInputBorder(),
+              labelStyle: TextStyle(
+                color: Statics.shared.colors.subTitleTextColor,
+              ),
               hintText: "발인 일시"),
           format: DateFormat("yyyy-MM-dd"),
           onChanged: (DateTime value) {

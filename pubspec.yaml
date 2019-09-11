@@ -157,6 +157,11 @@ flutter:
     - Resources/Icons/push_off.png
     - Resources/Icons/push_on.png
 
+    # intro
+    - Resources/Images/intro.png
+    - Resources/Images/organization.png
+    - Resources/Images/organization2.png
+
     # Find User
     - Resources/Images/findUserImageBottom.png
     - Resources/Icons/chatIcon.png
