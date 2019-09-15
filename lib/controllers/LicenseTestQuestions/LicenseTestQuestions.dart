@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestionSingle.dart';
 import 'package:haegisa2/models/LicenseTestQuestions/LicenseTestQuestionObject.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -29,7 +30,7 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
         Image.asset("Resources/Images/bgLicense.png",width: screenWidth, height: 100,),
         Container(child: Image.asset("Resources/Icons/archive.png", width: 45),alignment: Alignment.centerRight,margin: const EdgeInsets.only(right: 16),)
       ],
-    ), alignment: Alignment.center, height: 100,color: Colors.red,);
+    ), alignment: Alignment.center, height: 100,);
     Widget blueSplitter = Container(color: Colors.blue,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
@@ -63,10 +64,10 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
   }
   void download5MoreLicense({int page = 1}) async {
 
-    http.get(Statics.shared.urls.noticesList(page: page)
+    http.get(Statics.shared.urls.licenseTestQuestions(page: page)
     ).then((val){
       if(val.statusCode == 200){
-        print("::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
+        print("::::::::::::::::::::: [ Getting License Test Qs Start ] :::::::::::::::::::::");
         print("BODY: ${val.body.toString()}");
         var json = jsonDecode(val.body);
 
@@ -100,7 +101,7 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
               serverFileName_4: item["serverFileName_4"].toString(),
             );
             newList.add(LicenseTestQuestionWidget(title: item["subject"].toString(),obj: object,onTap: (){
-              //Navigator.push(context, new MaterialPageRoute(builder: (context) => new NoticesListSingle(obj: object)));
+              Navigator.push(context, new MaterialPageRoute(builder: (context) => new LicenseTestQuestionSingle(obj: object)));
             }));
           });
           if(page == 1){
@@ -111,12 +112,12 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
           this.refreshList(pCurrent, pTotal);
 
         }
-        print("::::::::::::::::::::: [ Getting NoticesList End ] :::::::::::::::::::::");
+        print("::::::::::::::::::::: [ Getting License Test Qs End ] :::::::::::::::::::::");
       }else{
-        print(":::::::::::::::::: on Getting NoticesList error :: Server Error ::::::::::::::::::");
+        print(":::::::::::::::::: on Getting License Test Qs error :: Server Error ::::::::::::::::::");
       }
     }).catchError((error){
-      print(":::::::::::::::::: on Getting NoticesList error : ${error.toString()} ::::::::::::::::::");
+      print(":::::::::::::::::: on Getting License Test Qs error : ${error.toString()} ::::::::::::::::::");
     });
   }
 
