@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -115,6 +115,8 @@ flutter:
     - Resources/Icons/icon_survey.png
     - Resources/Icons/icon_refusal.png
     - Resources/Icons/icon_send.png
+    - Resources/Icons/icon_mail.png
+    - Resources/Icons/icon_call.png
     - Resources/Icons/btn_next_green.png
     - Resources/Icons/btn_next_blue.png
     - Resources/Icons/btn_notice.png
@@ -128,13 +130,8 @@ flutter:
     - Resources/Icons/Line5.png
     - Resources/Icons/login_join.png
     - Resources/Icons/login_sign.png
-    - Resources/Icons/btn_certi.png
-    - Resources/Icons/user_type_01.png
-    - Resources/Icons/user_type_02.png
-    - Resources/Icons/btn_feehistory.png
-    - Resources/Icons/btn_advisory.png
-    - Resources/Icons/btn_occasion.png
-    - Resources/Icons/btn_inquiry.png
+    - Resources/Icons/arrow_up.png
+    - Resources/Icons/arrow_down.png
     # Images
     - Resources/Images/ill_survey.png
     - Resources/Images/ill_service.png
@@ -151,6 +148,15 @@ flutter:
     - proceedingBackground.png
     # Conversations
     - userChatAvatar.png
+
+    # home
+    - Resources/Icons/btn_certi.png
+    - Resources/Icons/user_type_01.png
+    - Resources/Icons/user_type_02.png
+    - Resources/Icons/btn_feehistory.png
+    - Resources/Icons/btn_advisory.png
+    - Resources/Icons/btn_occasion.png
+    - Resources/Icons/btn_inquiry.png
 
     # Profile
     - Resources/Images/feeHistory.png

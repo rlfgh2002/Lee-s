@@ -7,8 +7,6 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 
-var schoolTable = new List();
-
 class UserInfo extends StatefulWidget {
   @override
   _UserInfoState createState() => _UserInfoState();
@@ -16,6 +14,7 @@ class UserInfo extends StatefulWidget {
 
 class _UserInfoState extends State<UserInfo> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  var schoolTable = new List();
   List<School> _schoolList = new List();
   TextEditingController _emailController;
   TextEditingController _hpController;
