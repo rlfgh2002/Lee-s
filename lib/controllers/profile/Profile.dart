@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/profile/AlarmAgree.dart';
@@ -8,7 +10,7 @@ import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/controllers/profile/UserInfo.dart';
-import 'package:haegisa2/controllers/profile/MiddleWare.dart';
+import 'package:http/http.dart' as http;
 
 import 'Advisory.dart';
 import 'Terms.dart';
@@ -31,15 +33,18 @@ class _ProfileState extends State<Profile> {
     Color typeColor;
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
+    bool _isMember = false;
 
     if (userInformation.memberType == "51001") {
       typeAsset = "Resources/Icons/user_type_01.png";
       typeTitle = Strings.shared.controllers.profile.memberType1;
       typeColor = Statics.shared.colors.mainColor;
+      _isMember = false;
     } else {
       typeAsset = "Resources/Icons/user_type_02.png";
       typeTitle = Strings.shared.controllers.profile.memberType2;
       typeColor = Statics.shared.colors.subColor;
+      _isMember = true;
     }
 
     return new WillPopScope(
@@ -63,24 +68,54 @@ class _ProfileState extends State<Profile> {
           child: ListView(
             children: [
               Container(
-                child: Row(children: [
-                  Image.asset(typeAsset, scale: 3),
-                  Text(
-                      " " +
-                          userInformation.fullName +
-                          typeTitle.substring(0, 3),
-                      style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.titleInContent)),
-                  Text(typeTitle.substring(3, 6),
-                      style: TextStyle(
-                          color: typeColor,
-                          fontSize: Statics.shared.fontSizes.titleInContent)),
-                  Text(typeTitle.substring(6, 10),
-                      style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.titleInContent)),
-                ]), // Row
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(typeAsset, scale: 3),
+                      Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Text(
+                                      userInformation.fullName +
+                                          typeTitle.substring(0, 3),
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics.shared.fontSizes
+                                              .titleInContent)),
+                                  Text(typeTitle.substring(3, 6),
+                                      style: TextStyle(
+                                          color: typeColor,
+                                          fontSize: Statics.shared.fontSizes
+                                              .titleInContent)),
+                                  Text(typeTitle.substring(6, 10),
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics.shared.fontSizes
+                                              .titleInContent)),
+                                ],
+                              ),
+                              Visibility(
+                                visible: true,
+                                child: new InkWell(
+                                  onTap: () {
+                                    print("requestMembership");
+                                    typeSubmit();
+                                  },
+                                  child: Text(Strings
+                                      .shared.controllers.profile.submitType),
+                                ),
+                              )
+                            ],
+                          ))
+                    ]), //Row
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 20, bottom: 15, top: 15),
               ),
@@ -355,5 +390,34 @@ class _ProfileState extends State<Profile> {
         ), // Container
       ),
     );
+  }
+
+  typeSubmit() {
+    var infomap = new Map<String, dynamic>();
+    infomap["mode"] = "submit";
+    infomap["userId"] = userInformation.userID;
+
+    return http
+        .post(Strings.shared.controllers.jsonURL.requestMemberJson,
+            body: infomap)
+        .then((http.Response response) {
+      final int statusCode = response.statusCode;
+      //final String responseBody = response.body; //한글 깨짐
+      final String responseBody = utf8.decode(response.bodyBytes);
+      var responseJSON = json.decode(responseBody);
+      var code = responseJSON["code"];
+
+      if (statusCode == 200) {
+        if (code == 200) {
+          // If the call to the server was successful, parse the JSON
+        } else {
+          // If that call was not successful, throw an error.
+          throw Exception('Failed to load post');
+        }
+      } else {
+        // If that call was not successful, throw an error.
+        throw Exception('Failed to load post');
+      }
+    });
   }
 }

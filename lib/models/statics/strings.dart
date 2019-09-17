@@ -142,6 +142,7 @@ class _StringsControllerProfile {
   String alarm = "알림 수신동의";
   String infoModify = "내 정보 수정";
   String appVersion = "앱 버전";
+  String submitType = "정회원으로 전환 >";
 
   //정보수정
   String userinfoTitle = "내 정보 수정";
@@ -231,6 +232,8 @@ class _StringJsonURL {
       "http://www.mariners.or.kr/app_middle/etc/occasion_json.php";
   String organizationJSon =
       "http://mariners.or.kr/app_middle/etc/manager_json.php";
+  String requestMemberJson =
+      "http://mariners.or.kr/app_middle/member/requestMembership.php";
 }
 // JSON URL //
 

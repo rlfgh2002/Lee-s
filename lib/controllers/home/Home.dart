@@ -26,6 +26,7 @@ class _ProfileState extends State<Home> {
   List noticeList;
   List introList = List();
   bool _isLoading = false;
+
   String url = Strings.shared.controllers.jsonURL.homeJson + "?mode=main";
 
   Future<List> getMainJson(String type) async {
@@ -83,18 +84,33 @@ class _ProfileState extends State<Home> {
           child: ListView(
             children: [
               Container(
-                child: Column(children: [
-                  Text(userInformation.fullName + "님, 안녕하세요",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: Statics.shared.fontSizes.titleInContent,
-                          fontWeight: FontWeight.bold)),
-                  Text("오늘도 안전운항 하세요 ^^",
-                      style: TextStyle(
-                          color: Statics.shared.colors.subTitleTextColor,
-                          fontSize: Statics.shared.fontSizes.subTitleInContent))
-                ]), // Row
                 alignment: Alignment.centerLeft,
+                child: Column(children: [
+                  Row(
+                    children: <Widget>[
+                      Text(userInformation.fullName + "님, 안녕하세요",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Statics.shared.fontSizes.titleInContent,
+                              fontWeight: FontWeight.bold)),
+                      Spacer(),
+                      FlatButton(
+                        child: Image.asset("Resources/Icons/icon_barcode.png",
+                            scale: 2.0),
+                        onPressed: () {},
+                      )
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text("오늘도 안전운항 하세요 ^^",
+                        style: TextStyle(
+                            color: Statics.shared.colors.subTitleTextColor,
+                            fontSize:
+                                Statics.shared.fontSizes.subTitleInContent)),
+                  )
+                ]), // Row
+
                 padding: const EdgeInsets.only(
                     left: 20, bottom: 30, top: 30, right: 15),
 
@@ -124,8 +140,10 @@ class _ProfileState extends State<Home> {
                           spreadRadius: 2.0)
                     ]),
                 margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+
                 child: Column(children: [
                   Container(
+                    width: deviceWidth / 1.1,
                     child: Column(children: <Widget>[
                       Container(
                           child: FlatButton(
@@ -149,7 +167,7 @@ class _ProfileState extends State<Home> {
                               Navigator.push(
                                   context,
                                   new MaterialPageRoute(
- +                                       builder: (context) => new NoticesList()));
+                                      builder: (context) => new NoticesList()));
                             },
                           ),
                           height: deviceWidth / 6),
@@ -211,6 +229,7 @@ class _ProfileState extends State<Home> {
                   Container(
                     child: Column(children: <Widget>[
                       Container(
+                          width: deviceWidth / 1.1,
                           child: FlatButton(
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
@@ -290,6 +309,7 @@ class _ProfileState extends State<Home> {
                     ]),
                 margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
                 child: Container(
+                  width: deviceWidth / 1.1,
                   alignment: Alignment.center,
                   child: Row(children: <Widget>[
                     Container(
@@ -303,23 +323,34 @@ class _ProfileState extends State<Home> {
                           onPressed: () {},
                         ),
                         height: deviceWidth / 4),
-                    Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(children: [
-                          Text("한국해기사협회의",
-                              style: TextStyle(
-                                color: Statics.shared.colors.titleTextColor,
-                                fontSize:
-                                    Statics.shared.fontSizes.supplementary,
-                              ),
-                              textAlign: TextAlign.left),
-                          Text("종합서비스센터 업무대행 소개",
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text("해기사협회의",
+                                style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                ),
+                                textAlign: TextAlign.left),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.64,
+                            child: Text(
+                              "통합서비스센터 업무대행 소개",
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                               style: TextStyle(
                                   color: Statics.shared.colors.titleTextColor,
                                   fontSize: Statics.shared.fontSizes.subTitle,
                                   fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left),
-                        ]))
+                            ),
+                          )
+                        ])
                   ]),
                 ),
               ),
@@ -337,7 +368,7 @@ class _ProfileState extends State<Home> {
                             blurRadius: 0.5,
                             spreadRadius: 0)
                       ]),
-                  margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
+                  margin: EdgeInsets.only(left: 10, right: 10),
                   child: Container(
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -443,6 +474,28 @@ class _ProfileState extends State<Home> {
                   ),
                   height: deviceWidth / 3),
               Image.asset('Resources/Icons/Line3.png'),
+              Container(
+                decoration: new BoxDecoration(
+                    color: Colors.white,
+                    border: new Border.all(
+                      color: Color.fromRGBO(235, 239, 245, 1),
+                    ),
+                    boxShadow: [
+                      new BoxShadow(
+                          color: Color.fromRGBO(235, 239, 245, 1),
+                          offset: new Offset(3.0, 3.0),
+                          blurRadius: 0.5,
+                          spreadRadius: 0)
+                    ]),
+                margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
+                child: FlatButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  child: Image.asset('Resources/Images/gichul.png',
+                      width: deviceWidth / 1.2),
+                  onPressed: () {},
+                ),
+              ),
             ], // Row Children
           ), // Row
 
