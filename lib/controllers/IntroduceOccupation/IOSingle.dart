@@ -3,6 +3,7 @@ import 'package:haegisa2/models/iO/IOObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_html_view/flutter_html_view.dart';
 
 class IOSingle extends StatefulWidget {
 
@@ -98,13 +99,11 @@ class _IOSingle extends State<IOSingle> {
                 height: 300,
               ),
             ),
-            Padding(child: Text(this.widget.object.content,
-              style: TextStyle(
-                fontSize: Statics.shared.fontSizes.content,
-                color: Statics.shared.colors.titleTextColor,
-                fontWeight: FontWeight.w300,
-              ), // TextStyle
-            ),padding: const EdgeInsets.only(left: 32, right: 32)),
+            HtmlView(
+              data: this.widget.object.content,
+              scrollable: false,
+              padding: const EdgeInsets.only(left: 32, right: 32),
+            ),
             greySplitter,
             listBtn
           ],// Children

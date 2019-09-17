@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 
 class MiddleWare
 {
-
   List<MemberObject> membersList = [];
   TextEditingController ctrlTxtSearch = TextEditingController();
 
@@ -20,6 +19,7 @@ class MiddleWare
 }
 
 class FindUserSearch extends StatefulWidget {
+  bool isMyFirstInit = true;
   FindUserSearch({ Key key }) : super(key: key);
 
   @override
@@ -36,8 +36,7 @@ class _FindUserSearchState extends State<FindUserSearch> {
   }
 
   searchMembers(String name) async {
-    print(
-        "::::::::::::::::::::: [ START SEARCHING MEMBERS ] :::::::::::::::::::::");
+    print("::::::::::::::::::::: [ START SEARCHING MEMBERS ] :::::::::::::::::::::");
     final response = await http.post(Statics.shared.urls.searchMembers, body: {
       'mode': 'search',
       'searchName': name,
@@ -46,10 +45,15 @@ class _FindUserSearchState extends State<FindUserSearch> {
 
     if (response.statusCode == 200) {
       // If server returns an OK response, parse the JSON.
-      var responseBodyJson = jsonDecode(response.body.toString());
-      if (responseBodyJson['code'] == 200) {
+      var responseBodyJson = json.decode(utf8.decode(response.bodyBytes));
+      print("::::::::::::::::::::: [ START SEARCHING MEMBERS ... ]=>[${responseBodyJson.toString()}] ::::::::::::::::::::: ");
+      if (responseBodyJson['code'] == 100) {
+        setState(() {MiddleWare.shared.membersList = [];});
+      }
+      else if (responseBodyJson['code'] == 200) {
         List<SearchMemberObject> searchedItems = [];
         if (responseBodyJson['rowsCnt'] > 0) {
+          print("::::::::::::::::::::: [ START SEARCHING MEMBERS ]=> [${responseBodyJson.toString()}] :::::::::::::::::::::");
           List<dynamic> rows = responseBodyJson['rows'];
           for (int i = 0; i < rows.length; i++) {
             searchedItems.add(SearchMemberObject.fromJson(rows[i]));
@@ -80,11 +84,14 @@ class _FindUserSearchState extends State<FindUserSearch> {
             } // for loop
           });
         } else {
+          setState(() {MiddleWare.shared.membersList = [];});
           print("There Are Nothing!");
         }
       } // results
     } else {
       // If that response was not OK, throw an error.
+      setState(() {});
+      print("Failed to load post Server Error");
       throw Exception('Failed to load post Server Error');
     }
   }
@@ -107,10 +114,15 @@ class _FindUserSearchState extends State<FindUserSearch> {
       ],
     ),color: Colors.white, alignment: Alignment.center,padding: const EdgeInsets.only(top: 120),);
 
-    Widget shoW = notFoundView;
+    Widget shoW = Container();
     if(MiddleWare.shared.membersList.length > 0){
       shoW = dataView;
+    }else{
+      if(!this.widget.isMyFirstInit){
+        shoW = notFoundView;
+      }
     }
+    this.widget.isMyFirstInit = false;
 
     return Scaffold(
       appBar: AppBar(

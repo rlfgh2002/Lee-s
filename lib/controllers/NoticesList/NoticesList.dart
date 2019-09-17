@@ -68,14 +68,14 @@ class _NoticesListState extends State<NoticesList> {
       if(val.statusCode == 200){
         print("::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
         print("BODY: ${val.body.toString()}");
-        var json = jsonDecode(val.body);
+        var myJson = json.decode(utf8.decode(val.bodyBytes));
 
-        int code = json["code"];
+        int code = myJson["code"];
         if(code == 200){
           List<NoticesListObject> myReturnList = [];
-          int pTotal = json["totalPageNum"];
-          int pCurrent = json["nowPageNum"];
-          List<dynamic> rows = json["rows"];
+          int pTotal = myJson["totalPageNum"];
+          int pCurrent = myJson["nowPageNum"];
+          List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
           rows.forEach((item){

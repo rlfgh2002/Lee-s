@@ -377,6 +377,39 @@ class ChatState extends State<Chat> {
       widget.isFirstInit = false;
     }
 
+    List<Widget> myActions = [];
+    if(chatCurrentConvId != 'x0x0' && MiddleWare.shared.user.UID != '0'){
+      myActions = [
+        Padding(
+          padding: const EdgeInsets.only(right: 0),
+          child: IconButton(icon: new Image.asset("Resources/Icons/profile.png", width: 22),onPressed: (){
+            setState(() {
+              this.showProfilePopUp();
+            });
+          }),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: IconButton(icon: new Image.asset("Resources/Icons/icon_refusal.png", width: 22, color: Colors.white,),onPressed: (){
+            setState(() {
+              this.showBlockPopUp();
+            });
+          }),
+        )
+      ];
+    }else{
+      myActions = [
+        Padding(
+          padding: const EdgeInsets.only(right: 0),
+          child: IconButton(icon: new Image.asset("Resources/Icons/profile.png", width: 22),onPressed: (){
+            setState(() {
+              this.showProfilePopUp();
+            });
+          }),
+        ),
+      ];
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -396,24 +429,7 @@ class ChatState extends State<Chat> {
           },
           padding: const EdgeInsets.all(0),
         ),
-        actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 0),
-              child: IconButton(icon: new Image.asset("Resources/Icons/profile.png", width: 22),onPressed: (){
-            setState(() {
-              this.showProfilePopUp();
-            });
-          }),
-          ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: IconButton(icon: new Image.asset("Resources/Icons/icon_refusal.png", width: 22, color: Colors.white,),onPressed: (){
-              setState(() {
-                this.showBlockPopUp();
-              });
-            }),
-          )
-        ],
+        actions: myActions,
       ),
       body: Container(color: Color.fromRGBO(232, 240, 254, 1),
         child: Column(

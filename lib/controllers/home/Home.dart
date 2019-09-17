@@ -149,7 +149,7 @@ class _ProfileState extends State<Home> {
                               Navigator.push(
                                   context,
                                   new MaterialPageRoute(
-                                      builder: (context) => new NoticesList()));
+ +                                       builder: (context) => new NoticesList()));
                             },
                           ),
                           height: deviceWidth / 6),

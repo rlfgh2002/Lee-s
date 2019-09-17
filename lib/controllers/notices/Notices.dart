@@ -325,15 +325,15 @@ class NoticesState extends State<Notices> {
   }
 
   void openNotice(String noticeId) {
-    Future.delayed(Duration(seconds: 2)).then((val) {
-//      int i = 0;
-//      widget.notices.forEach((item){
-//        if(item.idx == noticeId){
-//          widget.notices[i].onTapped();
-//          print("Clicked On Notice(${noticeId.toString()}) ....");
-//        }
-//        i++;
-//      });
+    Future.delayed(Duration(seconds: 1)).then((val) {
+      int i = 0;
+      widget.notices.forEach((item){
+        if(item.idx == noticeId){
+          widget.notices[i].onTapped();
+          print("Clicked On Notice(${noticeId.toString()}) ....");
+        }
+        i++;
+      });
     });
   }
 

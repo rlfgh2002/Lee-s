@@ -18,6 +18,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:haegisa2/views/MainTabBar/NoInternetPopUp.dart';
 import 'package:geolocator/geolocator.dart';
 
+
 class MainTabBar extends StatefulWidget {
   final MyDataBase db = MyDataBase();
   FirebaseMessaging mainFirebaseMessaging = FirebaseMessaging();
@@ -195,7 +196,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
-        var j = jsonDecode(val.body);
+        var j = json.decode(utf8.decode(val.bodyBytes));
         print("OUTPUT JSON: ${j.toString()}");
         onSent(j);
       }
@@ -215,7 +216,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
-        var j = jsonDecode(val.body);
+        var j = json.decode(utf8.decode(val.bodyBytes));
         print("OUTPUT JSON: ${j.toString()}");
         onSent(j);
       }
@@ -241,50 +242,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print('on message Main $message');
-        analiseMessage(message);
+        print('MSGX=> on messageX Main $message');
+        analiseMessage(message,true);
       },
       onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-        analiseMessage(message);
-
-        if (message['data']['notificationType'].toString() == "chat") {
-          setState(() {
-            MiddleWare.shared.tabc.animateTo(2);
-            Chats.staticChatsPage.myChild.openChat(
-                convId: message['data']['conversationId'],
-                uId: message['data']['fromId'],
-                uName: message['data']['fromName'],
-                withDuration: true);
-          });
-        } else {
-          setState(() {
-            MiddleWare.shared.tabc.animateTo(3);
-            Notices.staticNoticesPage.myChild
-                .openNotice(message['data']['idx']);
-          });
-        }
+        print('MSGX=> on resumeX $message');
+        analiseMessage(message,false);
       },
       onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-        analiseMessage(message);
-
-        if (message['data']['notificationType'].toString() == "chat") {
-          setState(() {
-            MiddleWare.shared.tabc.animateTo(2);
-            Chats.staticChatsPage.myChild.openChat(
-                convId: message['data']['conversationId'],
-                uName: message['data']['fromName'],
-                uId: message['data']['fromId'],
-                withDuration: true);
-          });
-        } else {
-          setState(() {
-            MiddleWare.shared.tabc.animateTo(3);
-            Notices.staticNoticesPage.myChild
-                .openNotice(message['data']['idx']);
-          });
-        }
+        print('MSGX=> on launchX $message');
+        analiseMessage(message,false);
       },
     );
   }
@@ -298,7 +265,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
-  void analiseMessage(Map<String, dynamic> message) {
+  void analiseMessage(Map<String, dynamic> message,bool isOnMessage) {
     ChatObject chatItem = ChatObject.fromJson(message);
     if (message['data']['notificationType'].toString() == "chat") {
       widget.db.checkConversationExist(
@@ -318,8 +285,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
                   if (Chat.staticChatPage != null) {
                     if (Chat.staticChatPage.isInThisPage == true) {
-                      if (chatCurrentConvId ==
-                          chatItem.notificationConversationId) {
+                      if (chatCurrentConvId == chatItem.notificationConversationId) {
                         Chat.staticChatPage.myChild.addMessageToList(
                             msg: chatItem.notificationContent,
                             isYours: false,
@@ -328,6 +294,24 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                       }
                     }
                   }
+
+                  Future.delayed(Duration(seconds: 2)).then((val){
+                    print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                    if(isOnMessage != true){
+                      /* GOTO CHAT PAGE */
+                      setState(() {
+                        MiddleWare.shared.tabc.animateTo(2);
+                        Chats.staticChatsPage.myChild.openChat(
+                            convId: message['data']['conversationId'],
+                            uId: message['data']['fromId'],
+                            uName: message['data']['fromName'],
+                            withDuration: true);
+                      });
+                      /* GOTO CHAT PAGE */
+                    }
+                    print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                  });
+
                 });
           },
           onNoResult: () {
@@ -349,6 +333,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                         if (Chats.staticChatsPage != null) {
                           Chats.staticChatsPage.refresh();
                         }
+
                         if (Chat.staticChatPage != null) {
                           if (Chat.staticChatPage.isInThisPage == true) {
                             if (chatCurrentConvId ==
@@ -361,6 +346,24 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                             }
                           }
                         }
+
+                        Future.delayed(Duration(seconds: 2)).then((val){
+                          print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                          if(isOnMessage != true){
+                            /* GOTO CHAT PAGE */
+                            setState(() {
+                              MiddleWare.shared.tabc.animateTo(2);
+                              Chats.staticChatsPage.myChild.openChat(
+                                  convId: message['data']['conversationId'],
+                                  uId: message['data']['fromId'],
+                                  uName: message['data']['fromName'],
+                                  withDuration: true);
+                            });
+                            /* GOTO CHAT PAGE */
+                          }
+                          print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                        });
+
                       });
                 },
                 onNoInerted: () {
@@ -388,8 +391,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                           widget.db.insertAnswer(
                             onAdded: () {
                               if (Notices.staticNoticesPage != null) {
-                                Notices.staticNoticesPage.myChild
-                                    .refreshNotices();
+                                Notices.staticNoticesPage.myChild.refreshNotices();
                               }
                             },
                             idx: voteItem.idx,
@@ -402,6 +404,14 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                             answer6: response['data']['a6'].toString(),
                           );
                         });
+
+                    /* GOTO VOTE PAGE */
+                    setState(() {
+                      MiddleWare.shared.tabc.animateTo(3);
+                      Notices.staticNoticesPage.myChild.openNotice(message['data']['idx']);
+                    });
+                    /* GOTO VOTE PAGE */
+
                   });
             });
       } // Vote Notification

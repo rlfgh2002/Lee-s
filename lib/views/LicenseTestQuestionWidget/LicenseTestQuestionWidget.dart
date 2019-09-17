@@ -35,6 +35,7 @@ class LicenseTestQuestionWidget extends StatelessWidget {
               Container(child: Text(this.title, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content)),width: (screenWidth - (paddingSize * 2)) - buttonSize,constraints: BoxConstraints(maxHeight: 45)),
               Container(child: Text(this.obj.writer, style: TextStyle(color: Statics.shared.colors.captionColor, fontSize: Statics.shared.fontSizes.small)),width: (screenWidth - (paddingSize * 2)) - buttonSize,padding: const EdgeInsets.only(top: 5)),
             ],
+            mainAxisAlignment: MainAxisAlignment.center,
           ),
         ],
       ),

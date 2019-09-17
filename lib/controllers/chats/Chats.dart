@@ -33,6 +33,9 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
+
+  BuildContext myCurrentContext;
+
   bool isSearched = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -40,33 +43,33 @@ class _ChatsState extends State<Chats> {
   final TextEditingController _textFieldAddUserIdController =
       TextEditingController();
 
-  _displayAddUserDialog() async {
-    return showDialog(
-        context: _scaffoldKey.currentContext,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Start a Conversation'),
-            content: TextField(
-              controller: _textFieldAddUserIdController,
-              decoration: InputDecoration(hintText: "Enter a user id"),
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                child: new Text('CANCEL'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              new FlatButton(
-                child: new Text('CREATE'),
-                onPressed: () {
-                  addConversation(context);
-                },
-              )
-            ],
-          );
-        });
-  }
+//  _displayAddUserDialog() async {
+//    return showDialog(
+//        context: _scaffoldKey.currentContext,
+//        builder: (context) {
+//          return AlertDialog(
+//            title: Text('Start a Conversation'),
+//            content: TextField(
+//              controller: _textFieldAddUserIdController,
+//              decoration: InputDecoration(hintText: "Enter a user id"),
+//            ),
+//            actions: <Widget>[
+//              new FlatButton(
+//                child: new Text('CANCEL'),
+//                onPressed: () {
+//                  Navigator.of(context).pop();
+//                },
+//              ),
+//              new FlatButton(
+//                child: new Text('CREATE'),
+//                onPressed: () {
+//                  addConversation(context);
+//                },
+//              )
+//            ],
+//          );
+//        });
+//  }
 
   _confirmDisMissDialog(context, String convId, onDeleted()) async {
     return showDialog(
@@ -113,17 +116,17 @@ class _ChatsState extends State<Chats> {
                     MiddleWare.shared.topBarWidget = this.showTopSearchBar();
                   });
                 }),
-            IconButton(
-                icon: Icon(
-                  Icons.add,
-                  size: 30,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _displayAddUserDialog();
-                  });
-                })
+//            IconButton(
+//                icon: Icon(
+//                  Icons.add,
+//                  size: 30,
+//                  color: Colors.grey,
+//                ),
+//                onPressed: () {
+//                  setState(() {
+//                    _displayAddUserDialog();
+//                  });
+//                })
           ],
         ),
       ],
@@ -138,7 +141,7 @@ class _ChatsState extends State<Chats> {
             width: MiddleWare.shared.screenWidth - 32 - 32 - 25,
             child: TextField(
               decoration: InputDecoration.collapsed(
-                hintText: "Search",
+                hintText: "채팅방, 대화내용 검색",
                 hintStyle: TextStyle(
                     color: Statics.shared.colors.subTitleTextColor,
                     fontSize: Statics.shared.fontSizes.content),
@@ -171,6 +174,7 @@ class _ChatsState extends State<Chats> {
                 this.isSearched = false;
                 MiddleWare.shared.topBarWidget = this.showTopBarTitle();
               });
+              refreshList();
             })
       ],
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,8 +214,9 @@ class _ChatsState extends State<Chats> {
       if (val.get("HAD_FIRST_WELCOME_MSG") != true) {
         // welcome message
         widget.db.firstWelcomeMessage(whenComplete: () {
-          val.setBool("HAD_FIRST_WELCOME_MSG", true);
-          this.refreshList();
+          val.setBool("HAD_FIRST_WELCOME_MSG", true).then((val){
+            this.refreshList();
+          });
         });
       } else {
         // else 2
@@ -335,32 +340,61 @@ class _ChatsState extends State<Chats> {
           setState(() {
             MiddleWare.shared.searchedConversations = [];
             for (int i = 0; i < searchedItems.length; i++) {
-              ConversationWidget obj = ConversationWidget(
-                title: searchedItems[i].userName,
-                convId: 'xxx',
-                avatarName: "협회",
-                badges: 0,
-                avatarLink: "",
-                shortDescription: searchedItems[i].userName,
-                time: "오전 9:30",
-                onTapped: () {
-                  String cID = 'xxx'; // Conversation ID
-                  User usr = User(
-                      UID: "${searchedItems[i].userId}",
-                      fullName: "${searchedItems[i].userName}",
-                      avatar: "",
-                      caption: "${searchedItems[i].schoolName}");
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new Chat(
-                                title: "${searchedItems[i].userName}",
-                                conversationId: cID,
-                                user: usr,
-                              )));
-                },
-              );
-              MiddleWare.shared.searchedConversations.add(obj);
+              this.widget.db.checkConversationExistByUser(userId: searchedItems[i].userId,onResult: (res){
+                ConversationWidget obj = ConversationWidget(
+                  title: searchedItems[i].userName,
+                  convId: res["convId"],
+                  avatarName: "협회",
+                  badges: 0,
+                  avatarLink: "",
+                  shortDescription: searchedItems[i].userName,
+                  time: "오전 9:30",
+                  onTapped: () {
+                    String cID = res['convId']; // Conversation ID
+                    User usr = User(
+                        UID: "${searchedItems[i].userId}",
+                        fullName: "${searchedItems[i].userName}",
+                        avatar: "",
+                        caption: "${searchedItems[i].schoolName}");
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new Chat(
+                              title: "${searchedItems[i].userName}",
+                              conversationId: cID,
+                              user: usr,
+                            )));
+                  },
+                );
+                MiddleWare.shared.searchedConversations.add(obj);
+              },onNoResult: (){
+                ConversationWidget obj = ConversationWidget(
+                  title: searchedItems[i].userName,
+                  convId: 'xxx',
+                  avatarName: "협회",
+                  badges: 0,
+                  avatarLink: "",
+                  shortDescription: searchedItems[i].userName,
+                  time: "오전 9:30",
+                  onTapped: () {
+                    String cID = 'xxx'; // Conversation ID
+                    User usr = User(
+                        UID: "${searchedItems[i].userId}",
+                        fullName: "${searchedItems[i].userName}",
+                        avatar: "",
+                        caption: "${searchedItems[i].schoolName}");
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new Chat(
+                              title: "${searchedItems[i].userName}",
+                              conversationId: cID,
+                              user: usr,
+                            )));
+                  },
+                );
+                MiddleWare.shared.searchedConversations.add(obj);
+              });
             } // for loop
           });
         } else {
@@ -376,15 +410,14 @@ class _ChatsState extends State<Chats> {
   @override
   void initState() {
     Chats.staticChatsPage = this.widget;
+    this.widget.myChild = this;
     refreshList();
-    MainTabBar.myChild.firebaseCloudMessaging_Listeners();
     super.initState();
   }
 
-  void openChat(
-      {String convId, String uId, String uName, bool withDuration = false}) {
+  void openChat({String convId, String uId, String uName, bool withDuration = false}) {
     if (withDuration == true) {
-      Future.delayed(Duration(seconds: 2)).then((val) {
+      Future.delayed(Duration(seconds: 1)).then((val) {
         String cID = convId; // Conversation ID
         User usr =
             User(UID: uId, fullName: uName, avatar: "", caption: "해양대학교 . 60기");
@@ -414,6 +447,7 @@ class _ChatsState extends State<Chats> {
 
   @override
   Widget build(BuildContext context) {
+    this.myCurrentContext = context;
     this.widget.myChild = this;
     MiddleWare.shared.screenWidth = MediaQuery.of(context).size.width;
     if (MiddleWare.shared.firstInitialize) {
@@ -431,6 +465,36 @@ class _ChatsState extends State<Chats> {
     MiddleWare.shared.searchedConversations
         .sort((a, b) => b.lastChatDate.compareTo(a.lastChatDate));
 
+
+    Widget notFoundView = Container(child: Column(
+      children: <Widget>[
+        Image.asset("Resources/Icons/wondeIconr.png", width: 60),
+        SizedBox(height: 20),
+        Text(Strings.shared.controllers.findUser.notFound, style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.captionColor)),
+      ],
+    ), alignment: Alignment.center,padding: const EdgeInsets.only(top: 120),);
+    Widget dataShow = ListView.builder(
+      itemCount: MiddleWare.shared.searchedConversations.length,
+      itemBuilder: (context, index) {
+        var result = MiddleWare.shared.searchedConversations[index];
+        return Dismissible(
+          key: Key(index.toString()),
+          child: ListTile(key: Key(index.toString()), title: result),
+          onDismissed: (direction) {},
+          confirmDismiss: (bl) {
+            setState(() {
+              _confirmDisMissDialog(context, result.convId, () {
+                MiddleWare.shared.searchedConversations.removeAt(index);
+              });
+            });
+          },
+        );
+      },
+    );
+    if(MiddleWare.shared.searchedConversations.length <= 0){
+      dataShow = notFoundView;
+    }
+
     return new Builder(builder: (context) {
       return new Scaffold(
         key: _scaffoldKey,
@@ -445,24 +509,7 @@ class _ChatsState extends State<Chats> {
         ),
         body: Container(
           color: Color.fromRGBO(244, 248, 255, 1),
-          child: ListView.builder(
-            itemCount: MiddleWare.shared.searchedConversations.length,
-            itemBuilder: (context, index) {
-              var result = MiddleWare.shared.searchedConversations[index];
-              return Dismissible(
-                key: Key(index.toString()),
-                child: ListTile(key: Key(index.toString()), title: result),
-                onDismissed: (direction) {},
-                confirmDismiss: (bl) {
-                  setState(() {
-                    _confirmDisMissDialog(context, result.convId, () {
-                      MiddleWare.shared.searchedConversations.removeAt(index);
-                    });
-                  });
-                },
-              );
-            },
-          ),
+          child: dataShow,
         ),
       );
     });

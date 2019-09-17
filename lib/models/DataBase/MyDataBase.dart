@@ -330,6 +330,28 @@ class MyDataBase
       });
     });
   }
+  void checkConversationExistByUser({onResult(Map<String, dynamic> result), String userId = "", onNoResult()}) async
+  {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db){
+
+      Map<String, dynamic> obj;
+      db.rawQuery("SELECT * FROM ${_StaticDbInformation.tblConversation} WHERE ${_StaticDbInformation.tblConversationOtherSideUserId} = '${userId}'").then((lists){
+        if(lists.length > 0){
+          obj = lists.first;
+          print(":::::::::: DB SELECT(conversation) ROW (${0}) => [${lists.first.toString()}] ::::::::::");
+          //db.close();
+          onResult(obj);
+        }else{
+          print(":::::::::: DB SELECT(conversation) ROW (${0}) => Not Found Any Items ::::::::::");
+          //db.close();
+          onNoResult();
+        }
+      });
+    });
+  }
   void deleteConversation({String convId = "", onDeleted(bool st)}) async
   {
     var databasesPath = await getDatabasesPath();
@@ -609,7 +631,7 @@ class MyDataBase
     });
   }
 
-  void insertAnswer({String idx, String status = "i", String answer1 = "", String answer2 = "", String answer3 = "", String answer4 = "", String answer5 = "", String answer6 = "", onAdded(),}) async
+  void insertAnswer({String idx, String status = "i", String answer1 = "", String answer2 = "", String answer3 = "", String answer4 = "", String answer5 = "", String answer6 = "", onAdded()}) async
   {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
