@@ -150,9 +150,10 @@ flutter:
     - userChatAvatar.png
 
     # home
-    - Resources/Icons/btn_certi.png
+    - Resources/Icons/icon_barcode.png
     - Resources/Icons/user_type_01.png
     - Resources/Icons/user_type_02.png
+    - Resources/Icons/btn_certi.png
     - Resources/Icons/btn_feehistory.png
     - Resources/Icons/btn_advisory.png
     - Resources/Icons/btn_occasion.png

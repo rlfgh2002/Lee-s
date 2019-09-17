@@ -18,7 +18,6 @@ class Intro extends StatefulWidget {
 
 class _IntroState extends State<Intro> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  ScrollController _scrollController = new ScrollController();
   String pushState = "";
   bool _aTeamVisible = false;
   bool _bTeamVisible = false;
@@ -29,7 +28,6 @@ class _IntroState extends State<Intro> {
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-    _scrollController = null;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.white, // Color for Android
         systemNavigationBarColor:
@@ -78,7 +76,6 @@ class _IntroState extends State<Intro> {
             Column(children: <Widget>[
               Expanded(
                 child: ListView(
-                  controller: _scrollController,
                   padding: const EdgeInsets.only(bottom: 10.0),
                   children: <Widget>[
                     Column(
@@ -193,31 +190,26 @@ class _IntroState extends State<Intro> {
                       fontSize: Statics.shared.fontSizes.subTitle,
                       fontWeight: FontWeight.bold)),
               Spacer(),
-              Image.asset(
-                  _aTeamVisible
-                      ? 'Resources/Icons/arrow_up.png'
-                      : 'Resources/Icons/arrow_down.png',
-                  scale: 3.0),
+              // Image.asset(
+              //     _aTeamVisible
+              //         ? 'Resources/Icons/arrow_up.png'
+              //         : 'Resources/Icons/arrow_down.png',
+              //     scale: 3.0),
             ]),
             onPressed: () {
-              setState(() {
-                _aTeamVisible = !_aTeamVisible;
-              });
-
-              Timer.periodic(Duration(milliseconds: 100), (timer) {
-                if (_aTeamVisible == true) {
-                  _scrollController
-                      .jumpTo(_scrollController.position.maxScrollExtent);
-                }
-              });
+              // setState(() {
+              //   _aTeamVisible = !_aTeamVisible;
+              // });
             },
           ),
         ),
         Visibility(
-          visible: _aTeamVisible ? true : false,
+          // visible: _aTeamVisible ? true : false,
+          visible: true,
           child: Column(
             children: <Widget>[
               Container(
+                margin: const EdgeInsets.only(top: 10.0),
                 width: deviceWidth / 1.5,
                 child: Text(
                     "- 예산편성 집행관리\n- 경리,회계업무\n- 각종 문서수발 및 보관관리\n- 소유재산 및 자산관리\n- 회비징수 및 관리업무\n- 직원의 인사관리 및 후생복지\n- 각종 전산관리 업무\n- 서무, 일반행정"),
@@ -245,30 +237,27 @@ class _IntroState extends State<Intro> {
                       fontSize: Statics.shared.fontSizes.subTitle,
                       fontWeight: FontWeight.bold)),
               Spacer(),
-              Image.asset(
-                  _bTeamVisible
-                      ? 'Resources/Icons/arrow_up.png'
-                      : 'Resources/Icons/arrow_down.png',
-                  scale: 3.0),
+
+              // Image.asset(
+              //     _bTeamVisible
+              //         ? 'Resources/Icons/arrow_up.png'
+              //         : 'Resources/Icons/arrow_down.png',
+              //     scale: 3.0),
             ]),
             onPressed: () {
-              setState(() {
-                _bTeamVisible = !_bTeamVisible;
-              });
-              Timer.periodic(Duration(milliseconds: 100), (timer) {
-                if (_bTeamVisible == true) {
-                  _scrollController
-                      .jumpTo(_scrollController.position.maxScrollExtent);
-                }
-              });
+              // setState(() {
+              //   _bTeamVisible = !_bTeamVisible;
+              // });
             },
           ),
         ),
         Visibility(
-            visible: _bTeamVisible ? true : false,
+            // visible: _bTeamVisible ? true : false,
+            visible: true,
             child: Column(
               children: <Widget>[
                 Container(
+                  margin: const EdgeInsets.only(top: 10.0),
                   width: deviceWidth / 1.5,
                   child: Text(
                       "- 해기사 관련 대외 정책 및 전략수립\n- 유관기관 및 단체, 업체와의 유대관리\n- 대의원 및 회장선거와 관련된 제반 업무\n- 정관, 제 규정의 제정, 개정 및 폐지\n- 각종 행사 및 세미나 주관\n- 홍보편집"),
@@ -295,31 +284,26 @@ class _IntroState extends State<Intro> {
                       fontSize: Statics.shared.fontSizes.subTitle,
                       fontWeight: FontWeight.bold)),
               Spacer(),
-              Image.asset(
-                  _cTeamVisible
-                      ? 'Resources/Icons/arrow_up.png'
-                      : 'Resources/Icons/arrow_down.png',
-                  scale: 3.0),
+              // Image.asset(
+              //     _cTeamVisible
+              //         ? 'Resources/Icons/arrow_up.png'
+              //         : 'Resources/Icons/arrow_down.png',
+              //     scale: 3.0),
             ]),
             onPressed: () {
-              setState(() {
-                _cTeamVisible = !_cTeamVisible;
-              });
-
-              Timer.periodic(Duration(milliseconds: 100), (timer) {
-                if (_cTeamVisible == true) {
-                  _scrollController
-                      .jumpTo(_scrollController.position.maxScrollExtent);
-                }
-              });
+              // setState(() {
+              //   _cTeamVisible = !_cTeamVisible;
+              // });
             },
           ),
         ),
         Visibility(
-            visible: _cTeamVisible ? true : false,
+            //visible: _cTeamVisible ? true : false,
+            visible: true,
             child: Column(
               children: <Widget>[
                 Container(
+                  margin: const EdgeInsets.only(top: 10.0),
                   width: deviceWidth / 1.5,
                   child: Text(
                       "- 회원조직 관리업무\n- 해기사시험보도 접수 및 관련업무\n- 한국면허갱신접수 대행업무\n- 외국면허 수첩 및 특별 자격증 발급에 관련된 제반업무\n- 회원고충상담 및 처리업무\n- 회원복지 및 친목에 관련된 제반업무\n- 해기 기술의 검토 및 자문"),
