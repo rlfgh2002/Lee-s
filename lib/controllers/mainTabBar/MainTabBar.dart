@@ -7,6 +7,7 @@ import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/models/Vote/VoteObject.dart';
 import 'package:haegisa2/models/statics/statics.dart';
+import 'package:haegisa2/views/MainTabBar/locationPopUpWidget.dart';
 import 'MiddleWare.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -41,6 +42,7 @@ class MainTabBar extends StatefulWidget {
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static BottomNavigationBar navBar;
   Geolocator geolocator = Geolocator();
+  final GlobalKey<MainTabBarState> _scaffoldKey = new GlobalKey<MainTabBarState>();
 
   Future<Position> _getLocation() async {
     var currentLocation;
@@ -267,6 +269,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   void analiseMessage(Map<String, dynamic> message,bool isOnMessage) {
     ChatObject chatItem = ChatObject.fromJson(message);
+
+    String seen = "0";
+    if (Chat.staticChatPage != null) {
+      if (Chat.staticChatPage.isInThisPage == true) {
+        if (chatCurrentConvId == chatItem.notificationConversationId) {
+          seen = "1";
+        }
+      }
+    }
+
     if (message['data']['notificationType'].toString() == "chat") {
       widget.db.checkConversationExist(
           userId: chatItem.notificationFromId,
@@ -277,22 +289,19 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                 userId: chatItem.notificationFromId,
                 content: chatItem.notificationContent,
                 date: chatItem.notificationRegDate,
+                seen: seen,
                 isYours: "FALSE",
                 onAdded: () {
                   if (Chats.staticChatsPage != null) {
                     Chats.staticChatsPage.refresh();
                   }
 
-                  if (Chat.staticChatPage != null) {
-                    if (Chat.staticChatPage.isInThisPage == true) {
-                      if (chatCurrentConvId == chatItem.notificationConversationId) {
-                        Chat.staticChatPage.myChild.addMessageToList(
-                            msg: chatItem.notificationContent,
-                            isYours: false,
-                            date: chatItem.notificationRegDate,
-                            senderName: chatItem.notificationFromName);
-                      }
-                    }
+                  if(seen == "1"){
+                    Chat.staticChatPage.myChild.addMessageToList(
+                        msg: chatItem.notificationContent,
+                        isYours: false,
+                        date: chatItem.notificationRegDate,
+                        senderName: chatItem.notificationFromName);
                   }
 
                   Future.delayed(Duration(seconds: 2)).then((val){
@@ -328,23 +337,19 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                       userId: chatItem.notificationFromId,
                       content: chatItem.notificationContent,
                       date: chatItem.notificationRegDate,
+                      seen: seen,
                       isYours: "FALSE",
                       onAdded: () {
                         if (Chats.staticChatsPage != null) {
                           Chats.staticChatsPage.refresh();
                         }
 
-                        if (Chat.staticChatPage != null) {
-                          if (Chat.staticChatPage.isInThisPage == true) {
-                            if (chatCurrentConvId ==
-                                chatItem.notificationConversationId) {
-                              Chat.staticChatPage.myChild.addMessageToList(
-                                  msg: chatItem.notificationContent,
-                                  isYours: false,
-                                  date: chatItem.notificationRegDate,
-                                  senderName: chatItem.notificationFromName);
-                            }
-                          }
+                        if(seen == "1"){
+                          Chat.staticChatPage.myChild.addMessageToList(
+                              msg: chatItem.notificationContent,
+                              isYours: false,
+                              date: chatItem.notificationRegDate,
+                              senderName: chatItem.notificationFromName);
                         }
 
                         Future.delayed(Duration(seconds: 2)).then((val){
@@ -458,6 +463,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void updateUserLocation() async {
+    print("...::: Checking Location Start :::...");
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.wifi) {
       print("...::: updating user location... :::...");
@@ -475,22 +481,27 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   print("...::: the user is inside of korea. :-) :::...");
                 } else {
                   print("... ::: the user is not inside of korea! :-( :::...");
+                  showLocationPopUp(_scaffoldKey.currentContext);
                 }
               }).catchError((error) {
                 print(
                     "...::: updating user location was failed => ${error.toString()} :::...");
+                    showLocationPopUp(_scaffoldKey.currentContext);
               });
             } else {
               print(
                   "...::: updating user location was failed => (access to GPS failed) :::...");
+                  showLocationPopUp(_scaffoldKey.currentContext);
             }
           });
         } else {
           print(
               "...::: updating user location was failed => (GPS Service was disabled) :::...");
+              showLocationPopUp(_scaffoldKey.currentContext);
         }
       });
     }
+    print("...::: Checking Location End :::...");
   }
 
   void clickToChangeMenu(index) {
@@ -514,6 +525,18 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         builder: (BuildContext context) {
           return NoInternetAlertWidget(
             popUpWidth: MiddleWare.shared.screenWidth,
+            onPressClose: () {
+              Navigator.pop(context);
+            },
+          ).dialog();
+        });
+  }
+  void showLocationPopUp(BuildContext ctx) {
+    showDialog(
+        context: ctx,
+        builder: (BuildContext context) {
+          return LocationPopUpWidget(
+            popUpWidth: MiddleWare.shared.screenWidth - 32,
             onPressClose: () {
               Navigator.pop(context);
             },
@@ -566,6 +589,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     return new WillPopScope(
       onWillPop: () async => false,
+      key: _scaffoldKey,
       child: new Scaffold(
         backgroundColor: Colors.white,
         body: TabBarView(

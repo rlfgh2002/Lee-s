@@ -30,6 +30,8 @@ class _StringsDialogs {
 
   String internetPopUpTitle = "LTE/WIFI 환경을 확인하세요";
   String internetPopUpBody = "현재 스마트폰의 통신 상태가 불안정하여 서비스 이용이 원활하지 않습니다.";
+
+  String sevenDaysNoSee = "7일간 보지않기";
 }
 
 class _StringsControllers {

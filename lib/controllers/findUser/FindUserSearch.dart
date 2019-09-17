@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:haegisa2/controllers/Chat/Chat.dart';
+import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/SearchMembers/MemberObject.dart';
 import 'package:haegisa2/models/SearchMembers/SearchMemberObject.dart';
 import 'package:haegisa2/models/User.dart';
@@ -19,6 +20,7 @@ class MiddleWare
 }
 
 class FindUserSearch extends StatefulWidget {
+  final db = MyDataBase();
   bool isMyFirstInit = true;
   FindUserSearch({ Key key }) : super(key: key);
 
@@ -63,13 +65,20 @@ class _FindUserSearchState extends State<FindUserSearch> {
             MiddleWare.shared.membersList = [];
             for (int i = 0; i < searchedItems.length; i++) {
 
+              String convIdFromDb = 'xxx';
+              this.widget.db.checkConversationExistByUser(userId: searchedItems[i].userId,onResult: (res){
+                convIdFromDb = res["convId"];
+              },onNoResult: (){
+                convIdFromDb = 'xxx';
+              });
+
               MemberObject obj = MemberObject(
                 title: searchedItems[i].userName,
                 shortDescription: searchedItems[i].schoolName,
                 hasBlueBadge: true,
                 onTapped: (){
 
-                  String cID = 'xxx'; // Conversation ID
+                  String cID = convIdFromDb; // Conversation ID
                   User usr = User(
                       UID: "${searchedItems[i].userId}",
                       fullName: "${searchedItems[i].userName}",

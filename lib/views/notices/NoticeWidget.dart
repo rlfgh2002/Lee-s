@@ -70,14 +70,14 @@ class NoticeWidget extends StatelessWidget {
                     children: [
                       Container(child: Text(this.title,style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.titleTextColor), overflow: TextOverflow.fade,),
                         width: screenSize - 100 - 100,),
-                      Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),overflow: TextOverflow.fade,),
-                        width: 100,),
+//                      Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),overflow: TextOverflow.fade,),
+//                        width: 100,),
                     ],
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   ),width: screenSize-100),
                   SizedBox(height: 5),
-                  Container(child: Text(this.shortDescription,style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.subTitleTextColor)
+                  Container(child: Text(this.time,style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.subTitleTextColor)
                     ,overflow: TextOverflow.fade,
                   ),width: screenSize-100,)
                 ],

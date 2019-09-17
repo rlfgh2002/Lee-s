@@ -195,6 +195,7 @@ flutter:
 
     - Resources/Images/bgLicense.png
     - Resources/Icons/archive.png
+    - Resources/Images/popUpLocation.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
