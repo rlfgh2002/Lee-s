@@ -160,7 +160,10 @@ class _AdvisoryState extends State<Advisory> {
   }
 
   _displaySnackBar(BuildContext context, String str) {
-    final snackBar = SnackBar(content: Text(str));
+    final snackBar = SnackBar(
+      content: Text(str),
+      duration: Duration(milliseconds: 500),
+    );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 

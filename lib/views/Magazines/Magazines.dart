@@ -2,16 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 
 class MagazineWidget extends StatelessWidget {
-
   String title = "";
+  String fileURL = "";
   bool isDownload = false;
   VoidCallback onTap;
   MagazineObject obj;
 
-  MagazineWidget({String title,bool isDownload = false, VoidCallback onTap, MagazineObject obj}){
+  MagazineWidget(
+      {String title,
+      bool isDownload = false,
+      String fileURL,
+      VoidCallback onTap,
+      MagazineObject obj}) {
     this.title = title;
+    this.fileURL = fileURL;
     this.obj = obj;
     this.isDownload = isDownload;
     this.onTap = onTap;
@@ -19,7 +29,6 @@ class MagazineWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     double paddingSize = 16;
     double buttonSize = 100;
     double buttonRealSize = buttonSize - 10;
@@ -27,43 +36,94 @@ class MagazineWidget extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     Widget downloadButton = Container(
-      child: Text(Strings.shared.controllers.magazines.downloadKeyword,style: TextStyle(color: Colors.white, fontSize: Statics.shared.fontSizes.content)),
-      decoration: BoxDecoration(border: Border.all(width: 1.5, color: Statics.shared.colors.mainColor),color: Statics.shared.colors.mainColor),
+      child: Text(Strings.shared.controllers.magazines.downloadKeyword,
+          style: TextStyle(
+              color: Colors.white, fontSize: Statics.shared.fontSizes.content)),
+      decoration: BoxDecoration(
+          border:
+              Border.all(width: 1.5, color: Statics.shared.colors.mainColor),
+          color: Statics.shared.colors.mainColor),
       width: buttonRealSize,
       height: buttonHeight,
       alignment: Alignment.center,
     );
     Widget exampleButton = Container(
-      child: Text(Strings.shared.controllers.magazines.exampleKeyword,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.content)),
-      decoration: BoxDecoration(border: Border.all(width: 1.5, color: Statics.shared.colors.mainColor)),
+      child: Text(Strings.shared.controllers.magazines.exampleKeyword,
+          style: TextStyle(
+              color: Statics.shared.colors.mainColor,
+              fontSize: Statics.shared.fontSizes.content)),
+      decoration: BoxDecoration(
+          border:
+              Border.all(width: 1.5, color: Statics.shared.colors.mainColor)),
       width: buttonRealSize,
       height: buttonHeight,
       alignment: Alignment.center,
     );
     Widget selectedButton;
-    if(this.isDownload){
+    if (this.isDownload) {
       selectedButton = downloadButton;
-    }else{
+    } else {
       selectedButton = exampleButton;
     }
 
     return FlatButton(
-      child: Container(child: Row(
-        children: [
-          Container(child: Text(this.title, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content)),width: (screenWidth - (paddingSize * 2)) - buttonSize,),
-          Container(width: buttonSize,child: selectedButton,
-            alignment: Alignment.center,
-          ),
-        ],
-      ),
+      child: Container(
+        child: Row(
+          children: [
+            Container(
+              child: Text(this.title,
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.content)),
+              width: (screenWidth - (paddingSize * 2)) - buttonSize,
+            ),
+            Container(
+              width: buttonSize,
+              child: selectedButton,
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Statics.shared.colors.lineColor)),
+          border: Border(
+              bottom: BorderSide(color: Statics.shared.colors.lineColor)),
         ),
         height: 70,
-        margin: const EdgeInsets.only(left: 16,right: 16),
+        margin: const EdgeInsets.only(left: 16, right: 16),
       ),
       padding: const EdgeInsets.all(0),
-      onPressed: (){onTap();},
+      onPressed: () async {
+        print(fileURL);
+
+        Directory appDocDirectory = await getApplicationDocumentsDirectory();
+
+        final myDir = new Directory(appDocDirectory.path + '/' + 'Magazines');
+        myDir.exists().then((isThere) {
+          if (isThere) {
+            print('exists');
+          } else {
+            print('non-existent');
+
+            new Directory(appDocDirectory.path + '/' + 'Magazines')
+                .create(recursive: true)
+// The created directory is returned as a Future.
+                .then((Directory directory) {
+              print('Path of New Dir: ' + directory.path);
+            });
+          }
+        });
+
+        final taskId = await FlutterDownloader.enqueue(
+          url: fileURL,
+          savedDir: appDocDirectory.path + '/' + 'Magazines',
+          showNotification:
+              true, // show download progress in status bar (for Android)
+          openFileFromNotification:
+              true, // click on notification to open downloaded file (for Android)
+        );
+
+        FlutterDownloader.open(taskId: taskId);
+      },
     );
   }
 }

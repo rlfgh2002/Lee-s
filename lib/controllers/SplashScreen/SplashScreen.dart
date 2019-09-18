@@ -87,12 +87,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    setStatusBar(backgroundColor: Colors.white, isForegroundWhite: false);
     this.checkUserAgree((st) {
       if (st) {
         this.checkUserIsLogin((st) {
           if (st) {
-            Navigator.pushReplacement(context,
-                new MaterialPageRoute(builder: (context) => new MainTabBar()));
+            if (userInformation.mode == "") {
+              //아직 로딩이 덜 되었을 경우. (main위젯 로드 후에 정보json를 뒤늦게 파싱)
+              setState(() {});
+            } else {
+              Navigator.pushReplacement(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => new MainTabBar()));
+            }
           } // user is logged in
           else {
             Navigator.pushReplacement(context,

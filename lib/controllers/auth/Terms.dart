@@ -307,7 +307,9 @@ class TermsDetailPage extends StatelessWidget {
     return new Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
       ),
       body: Container(
         margin: EdgeInsets.only(top: 32, left: 36, right: 36),

@@ -8,9 +8,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Magazines extends StatefulWidget {
-
   bool isFirstInit = true;
-  Magazines({ Key key }) : super(key: key);
+  Magazines({Key key}) : super(key: key);
   List<Widget> myList = [];
   List<Widget> magazinesList = [];
 
@@ -19,58 +18,92 @@ class Magazines extends StatefulWidget {
 }
 
 class _MagazinesState extends State<Magazines> {
-
   final _scaffold = GlobalKey<ScaffoldState>();
 
-  void refreshList(int pCurrent,pTotal){
+  void refreshList(int pCurrent, pTotal) {
     widget.myList = [];
     double screenWidth = MediaQuery.of(context).size.width;
-    Widget topView = Container(child: Stack(
-      children: [
-        Image.asset("Resources/Images/bgMagazine.png",width: screenWidth, height: 100,),
-        Row(
-          children: [
-            Padding(child: Column(
-              children: [
-                Container(child: Text(Strings.shared.controllers.magazines.title1,textAlign: TextAlign.left,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle,fontWeight: FontWeight.w800)),width:(screenWidth-64)-40,),
-                SizedBox(height: 5),
-                Container(child: Text(Strings.shared.controllers.magazines.caption1,textAlign: TextAlign.left,style: TextStyle(color: Statics.shared.colors.captionColor, fontSize: Statics.shared.fontSizes.medium)),width: (screenWidth-64)-40,),
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-            ),
-                padding: const EdgeInsets.only(left: 32)
-            ),
-            Padding(
-              child: Image.asset("Resources/Icons/magazineIcon.png", width: 40),
-              padding: const EdgeInsets.only(right: 32),
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-        ),// Row
-      ],
-    ), alignment: Alignment.center, height: 100,color: Colors.red,);
-    Widget blueSplitter = Container(color: Colors.blue,height: 3,margin: const EdgeInsets.only(left: 16,right: 16));
+    Widget topView = Container(
+      child: Stack(
+        children: [
+          Image.asset(
+            "Resources/Images/bgMagazine.png",
+            width: screenWidth,
+            height: 100,
+          ),
+          Row(
+            children: [
+              Padding(
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Text(Strings.shared.controllers.magazines.title1,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Statics.shared.colors.mainColor,
+                                fontSize: Statics.shared.fontSizes.subTitle,
+                                fontWeight: FontWeight.w800)),
+                        width: (screenWidth - 64) - 40,
+                      ),
+                      SizedBox(height: 5),
+                      Container(
+                        child: Text(
+                            Strings.shared.controllers.magazines.caption1,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                color: Statics.shared.colors.captionColor,
+                                fontSize: Statics.shared.fontSizes.medium)),
+                        width: (screenWidth - 64) - 40,
+                      ),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+                  padding: const EdgeInsets.only(left: 32)),
+              Padding(
+                child:
+                    Image.asset("Resources/Icons/magazineIcon.png", width: 40),
+                padding: const EdgeInsets.only(right: 32),
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+          ), // Row
+        ],
+      ),
+      alignment: Alignment.center,
+      height: 100,
+      color: Colors.red,
+    );
+    Widget blueSplitter = Container(
+        color: Colors.blue,
+        height: 3,
+        margin: const EdgeInsets.only(left: 16, right: 16));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
     widget.myList.addAll(this.widget.magazinesList); // fetch from server
 
-    if(pTotal > pCurrent){
+    if (pTotal > pCurrent) {
       Widget downloadMoreView = Container(
         child: FlatButton(
           child: Container(
-            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle, fontWeight: FontWeight.w600)),
+            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,
+                style: TextStyle(
+                    color: Statics.shared.colors.mainColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.w600)),
             alignment: Alignment.center,
           ),
-          onPressed: (){
+          onPressed: () {
             // download 5 more magazines ...
             this.download5MoreMagazines(page: pCurrent + 1);
           },
           padding: const EdgeInsets.all(0),
         ),
-        decoration: BoxDecoration(border: Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+        decoration: BoxDecoration(
+            border:
+                Border.all(width: 2, color: Statics.shared.colors.mainColor)),
         width: screenWidth,
         height: 60,
         alignment: Alignment.center,
@@ -78,62 +111,68 @@ class _MagazinesState extends State<Magazines> {
       );
       widget.myList.add(downloadMoreView);
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
-  void download5MoreMagazines({int page = 1}) async {
 
-    http.get(Statics.shared.urls.magazines(page: page)
-    ).then((val){
-      if(val.statusCode == 200){
-        print("::::::::::::::::::::: [ Getting Magazines Start ] :::::::::::::::::::::");
+  void download5MoreMagazines({int page = 1}) async {
+    http.get(Statics.shared.urls.magazines(page: page)).then((val) {
+      if (val.statusCode == 200) {
+        print(
+            "::::::::::::::::::::: [ Getting Magazines Start ] :::::::::::::::::::::");
         print("BODY: ${val.body.toString()}");
         var myJson = json.decode(utf8.decode(val.bodyBytes));
 
         int code = myJson["code"];
-        if(code == 200){
+        if (code == 200) {
           List<MagazineObject> myReturnList = [];
           int pTotal = myJson["totalPageNum"];
           int pCurrent = myJson["nowPageNum"];
           List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
-          rows.forEach((item){
-
+          rows.forEach((item) {
             MagazineObject object = MagazineObject(
               subject: item["subject"].toString(),
               fileUrl: item["subject"].toString(),
               realFileName: item["subject"].toString(),
               serverFileName: item["subject"].toString(),
             );
-            if(item["fileUrl"].toString().isEmpty){
-              newList.add(MagazineWidget(title: item["subject"].toString(),isDownload: false,obj: object));
-            }else{
-              newList.add(MagazineWidget(title: item["subject"].toString(),isDownload: true, obj: object));
+            if (item["fileUrl"].toString().isEmpty) {
+              newList.add(MagazineWidget(
+                  title: item["subject"].toString(),
+                  isDownload: false,
+                  fileURL: item["fileUrl"],
+                  obj: object));
+            } else {
+              newList.add(MagazineWidget(
+                  title: item["subject"].toString(),
+                  isDownload: true,
+                  fileURL: item["fileUrl"],
+                  obj: object));
             }
           });
-          if(page == 1){
+          if (page == 1) {
             this.widget.magazinesList = newList;
-          }else{
+          } else {
             this.widget.magazinesList.addAll(newList);
           }
           this.refreshList(pCurrent, pTotal);
-
         }
-        print("::::::::::::::::::::: [ Getting Magazines End ] :::::::::::::::::::::");
-      }else{
-        print(":::::::::::::::::: on Getting Magazines error :: Server Error ::::::::::::::::::");
+        print(
+            "::::::::::::::::::::: [ Getting Magazines End ] :::::::::::::::::::::");
+      } else {
+        print(
+            ":::::::::::::::::: on Getting Magazines error :: Server Error ::::::::::::::::::");
       }
-    }).catchError((error){
-      print(":::::::::::::::::: on Getting Magazines error : ${error.toString()} ::::::::::::::::::");
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on Getting Magazines error : ${error.toString()} ::::::::::::::::::");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(widget.isFirstInit){
+    if (widget.isFirstInit) {
       download5MoreMagazines(page: 1);
       widget.isFirstInit = false;
     }
@@ -141,12 +180,15 @@ class _MagazinesState extends State<Magazines> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Container(child: Text(Strings.shared.controllers.magazines.pageTitle, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.subTitle)),margin: const EdgeInsets.only(left: 8)),
+        title: Container(
+            child: Text(Strings.shared.controllers.magazines.pageTitle,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle)),
+            margin: const EdgeInsets.only(left: 8)),
         centerTitle: false,
         elevation: 0,
-        iconTheme: IconThemeData(
-            color: Color.fromRGBO(0, 0, 0, 1)
-        ),
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
       body: Container(
         child: ListView(

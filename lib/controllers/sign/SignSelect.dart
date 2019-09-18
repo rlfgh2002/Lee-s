@@ -30,16 +30,19 @@ class _SignInState extends State<SignSelect> {
   String agree = userInformation.agree;
   @override
   Widget build(BuildContext context) {
+    
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     int deviceWidth = MediaQuery.of(context).size.width.round().toInt();
     return new WillPopScope(
+      
       onWillPop: () async => false,
       // onWillPop: () async {
       //   Future.value(
       //       false); //return a `Future` with false value so this route cant be popped or closed.
       // },
       child: new Scaffold(
+        
         body: Container(
           color: Colors.white,
           child: Column(
