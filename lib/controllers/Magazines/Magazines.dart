@@ -1,14 +1,31 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/Magazines/Magazines.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
 import 'dart:convert';
 
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+bool isDownload = true; //다운로드 할수 있는지 이미 다운된것은 false
+
+var _localPath = userInformation.dirPath.path + "/Magazines";
+
+//magazinesList를 myList에 넣는다.
+//myList는 0행,1행,마지막행은 Container가 들어가고 그 가운데 magazineList가 들어간다.
+//리스트 값을 변경할 때에는 해당 두 리스트의 값을 다 변경해야한다.
 class Magazines extends StatefulWidget {
   bool isFirstInit = true;
+
   Magazines({Key key}) : super(key: key);
   List<Widget> myList = [];
   List<Widget> magazinesList = [];
@@ -18,6 +35,7 @@ class Magazines extends StatefulWidget {
 }
 
 class _MagazinesState extends State<Magazines> {
+  int magazineNum = 0;
   final _scaffold = GlobalKey<ScaffoldState>();
 
   void refreshList(int pCurrent, pTotal) {
@@ -130,32 +148,49 @@ class _MagazinesState extends State<Magazines> {
           List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
-          rows.forEach((item) {
+          rows.forEach((item) async {
             MagazineObject object = MagazineObject(
               subject: item["subject"].toString(),
               fileUrl: item["subject"].toString(),
               realFileName: item["subject"].toString(),
               serverFileName: item["subject"].toString(),
             );
-            if (item["fileUrl"].toString().isEmpty) {
-              newList.add(MagazineWidget(
-                  title: item["subject"].toString(),
-                  isDownload: false,
-                  fileURL: item["fileUrl"],
-                  obj: object));
+
+            final myFile = File(_localPath + "/" + item["serverFileName"]);
+
+            bool aa = myFile.existsSync();
+            if (aa) {
+              isDownload = false;
             } else {
-              newList.add(MagazineWidget(
-                  title: item["subject"].toString(),
-                  isDownload: true,
-                  fileURL: item["fileUrl"],
-                  obj: object));
+              isDownload = true;
             }
+
+            if (item["fileUrl"].toString().isEmpty) {
+              newList.add(buttonList(
+                  item["subject"].toString(),
+                  item["fileUrl"],
+                  item["serverFileName"],
+                  magazineNum - 1,
+                  false,
+                  object));
+            } else {
+              newList.add(buttonList(
+                  item["subject"].toString(),
+                  item["fileUrl"],
+                  item["serverFileName"],
+                  magazineNum - 1,
+                  isDownload,
+                  object));
+            }
+            magazineNum++;
+            print(magazineNum - 1);
           });
           if (page == 1) {
             this.widget.magazinesList = newList;
           } else {
             this.widget.magazinesList.addAll(newList);
           }
+          print(widget.myList);
           this.refreshList(pCurrent, pTotal);
         }
         print(
@@ -177,7 +212,7 @@ class _MagazinesState extends State<Magazines> {
       widget.isFirstInit = false;
     }
 
-    return Scaffold(
+    return new Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Container(
@@ -190,13 +225,131 @@ class _MagazinesState extends State<Magazines> {
         elevation: 0,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
-      body: Container(
-        child: ListView(
-          children: this.widget.myList,
-        ),
+      body: new Container(
+        child: new ListView.builder(
+            itemCount:
+                this.widget.myList.length, // number of items in your list
+
+            //here the implementation of itemBuilder. take a look at flutter docs to see details
+            itemBuilder: (BuildContext context, int Itemindex) {
+              return this.widget.myList[Itemindex]; // return your widget
+            }),
         color: Colors.white,
       ), // end Body
       key: _scaffold,
+    );
+  }
+
+  buttonList(String title, String fileURL, String serverFileName,
+      int magazineNum, bool isDownload, MagazineObject obj) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double paddingSize = 16;
+    double buttonSize = 100;
+    double buttonRealSize = buttonSize - 10;
+    double buttonHeight = 40;
+    Widget downloadButton = Container(
+      child: Text(Strings.shared.controllers.magazines.downloadKeyword,
+          style: TextStyle(
+              color: Colors.white, fontSize: Statics.shared.fontSizes.content)),
+      decoration: BoxDecoration(
+          border:
+              Border.all(width: 1.5, color: Statics.shared.colors.mainColor),
+          color: Statics.shared.colors.mainColor),
+      width: buttonRealSize,
+      height: buttonHeight,
+      alignment: Alignment.center,
+    );
+    Widget exampleButton = Container(
+      child: Text(Strings.shared.controllers.magazines.exampleKeyword,
+          style: TextStyle(
+              color: Statics.shared.colors.mainColor,
+              fontSize: Statics.shared.fontSizes.content)),
+      decoration: BoxDecoration(
+          border:
+              Border.all(width: 1.5, color: Statics.shared.colors.mainColor)),
+      width: buttonRealSize,
+      height: buttonHeight,
+      alignment: Alignment.center,
+    );
+
+    Widget selectedButton;
+    if (isDownload) {
+      selectedButton = downloadButton;
+    } else {
+      selectedButton = exampleButton;
+    }
+    return FlatButton(
+      child: Container(
+        child: Row(
+          children: [
+            Container(
+              child: Text(title,
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.content)),
+              width: (screenWidth - (paddingSize * 2)) - buttonSize,
+            ),
+            Container(
+              width: buttonSize,
+              child: selectedButton,
+              alignment: Alignment.center,
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(color: Statics.shared.colors.lineColor)),
+        ),
+        height: 70,
+        margin: const EdgeInsets.only(left: 16, right: 16),
+      ),
+      padding: const EdgeInsets.all(0),
+      onPressed: () async {
+        if (isDownload == true) {
+          print(fileURL);
+
+          final taskId = await FlutterDownloader.enqueue(
+            url: fileURL,
+            savedDir: _localPath,
+            showNotification:
+                true, // show download progress in status bar (for Android)
+            openFileFromNotification:
+                true, // click on notification to open downloaded file (for Android)
+          );
+
+          FlutterDownloader.registerCallback((id, status, progress) {
+            // code to update your UI
+            if (status == DownloadTaskStatus.complete) {
+              FlutterDownloader.open(taskId: taskId);
+              print("다운완료");
+              setState(() {
+                widget.magazinesList[magazineNum + 1] = buttonList(
+                    title, fileURL, serverFileName, magazineNum, false, obj);
+                widget.myList[magazineNum + 3] = buttonList(
+                    title, fileURL, serverFileName, magazineNum, false, obj);
+              });
+            } else if (status == DownloadTaskStatus.failed) {
+              print("다운실패");
+            }
+          });
+
+          var file = Directory(_localPath).listSync();
+          print(file);
+        } else {
+          print("파일 오픈");
+          launch(fileURL);
+
+          //OpenFile.open(_localPath + "/" + serverFileName);
+
+          // final ByteData bytes = await DefaultAssetBundle.of(context)
+          //     .load(_localPath + "/" + serverFileName);
+          // final Uint8List list = bytes.buffer.asUint8List();
+
+          // final file = await File(_localPath + "/" + serverFileName)
+          //     .create(recursive: true);
+          // file.writeAsBytesSync(list);
+        }
+      },
     );
   }
 }

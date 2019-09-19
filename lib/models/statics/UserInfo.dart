@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:io' show Directory, Platform;
 
 class _UserInfo {
   static _UserInfo shared = _UserInfo();
@@ -27,6 +27,7 @@ class _UserInfo {
   String email; //이메일
   String school; //학교코드
   String gisu; //기수
+  Directory dirPath; //첨부파일 다운로드 기본경로
 
   User userData;
   int autoCheck = 0;
@@ -51,6 +52,7 @@ class _UserInfo {
     userInformation.email = "";
     userInformation.school = "";
     userInformation.gisu = "";
+    userInformation.dirPath;
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool("app_user_login_info_islogin", false);

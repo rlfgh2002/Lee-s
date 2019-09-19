@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haegisa2/controllers/auth/Terms.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -10,18 +11,21 @@ import 'package:path_provider/path_provider.dart';
 class MagazineWidget extends StatelessWidget {
   String title = "";
   String fileURL = "";
+  String serverFileName = "";
   bool isDownload = false;
   VoidCallback onTap;
   MagazineObject obj;
 
   MagazineWidget(
       {String title,
-      bool isDownload = false,
+      bool isDownload,
       String fileURL,
+      String serverFileName,
       VoidCallback onTap,
       MagazineObject obj}) {
     this.title = title;
     this.fileURL = fileURL;
+    this.serverFileName = serverFileName;
     this.obj = obj;
     this.isDownload = isDownload;
     this.onTap = onTap;
@@ -96,17 +100,26 @@ class MagazineWidget extends StatelessWidget {
         print(fileURL);
 
         Directory appDocDirectory = await getApplicationDocumentsDirectory();
-
-        final myDir = new Directory(appDocDirectory.path + '/' + 'Magazines');
-        myDir.exists().then((isThere) {
-          if (isThere) {
+        var _localPath = appDocDirectory.path + "/Magazines";
+        final myDir = new Directory(_localPath);
+        myDir.exists().then((dirExist) {
+          if (dirExist) {
             print('exists');
+
+            final myFile = File(_localPath + "/" + serverFileName);
+            myFile.exists().then((fileExist) {
+              if (fileExist) {
+                print("파일이미 존재");
+                isDownload = false;
+              } else {
+                print("없음");
+              }
+            });
           } else {
             print('non-existent');
 
-            new Directory(appDocDirectory.path + '/' + 'Magazines')
-                .create(recursive: true)
-// The created directory is returned as a Future.
+            new Directory(_localPath).create(recursive: true)
+                // The created directory is returned as a Future.
                 .then((Directory directory) {
               print('Path of New Dir: ' + directory.path);
             });
@@ -115,14 +128,25 @@ class MagazineWidget extends StatelessWidget {
 
         final taskId = await FlutterDownloader.enqueue(
           url: fileURL,
-          savedDir: appDocDirectory.path + '/' + 'Magazines',
+          savedDir: _localPath,
           showNotification:
               true, // show download progress in status bar (for Android)
           openFileFromNotification:
               true, // click on notification to open downloaded file (for Android)
         );
 
-        FlutterDownloader.open(taskId: taskId);
+        FlutterDownloader.registerCallback((id, status, progress) {
+          // code to update your UI
+          if (status == DownloadTaskStatus.complete) {
+            FlutterDownloader.open(taskId: taskId);
+            print("다운완료");
+          } else if (status == DownloadTaskStatus.failed) {
+            print("다운실패");
+          }
+        });
+
+        var file = Directory(_localPath).listSync();
+        print(file);
       },
     );
   }

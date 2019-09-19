@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/sign/SignSelect.dart';
@@ -34,6 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         onComplete(true);
         getUserinfoJson();
+        createDir();
       }
     });
   }
@@ -83,6 +87,26 @@ class _SplashScreenState extends State<SplashScreen> {
     infomap["push_status"] = pushState;
     await createPost(Strings.shared.controllers.jsonURL.logininfoJson,
         body: infomap);
+  }
+
+  createDir() async {
+    Directory appDocDirectory = await getApplicationDocumentsDirectory();
+    userInformation.dirPath = appDocDirectory;
+    var _localPath = appDocDirectory.path + "/Magazines";
+    final myDir = new Directory(_localPath);
+    myDir.exists().then((dirExist) {
+      if (dirExist) {
+        print('exists');
+      } else {
+        print('non-existent');
+
+        new Directory(_localPath).create(recursive: true)
+            // The created directory is returned as a Future.
+            .then((Directory directory) {
+          print('Path of New Dir: ' + directory.path);
+        });
+      }
+    });
   }
 
   @override
