@@ -150,10 +150,10 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       margin: const EdgeInsets.only(top: 15),
       child: Row(
         children: [
-          Container(color: Statics.shared.colors.subTitleTextColor, child: FlatButton(child: Text(Strings.shared.dialogs.closeBtnTitle, style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.subTitleInContent, color: Colors.white),),onPressed: (){
+          Container(color: Statics.shared.colors.subTitleTextColor,alignment: Alignment.center, child: FlatButton(child: Text(Strings.shared.dialogs.closeBtnTitle, style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.content, color: Colors.white),),onPressed: (){
             this.widget.onPressClose();
           },),width: (this.widget.popUpWidth-16) / 2,),
-          Container(color: Statics.shared.colors.mainColor, child: FlatButton(child: Text(Strings.shared.dialogs.submitBtnTitle, style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.subTitleInContent, color: Colors.white),),onPressed: (){
+          Container(color: Statics.shared.colors.mainColor,alignment: Alignment.center, child: FlatButton(child: Text(Strings.shared.dialogs.submitBtnTitle, style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.content, color: Colors.white),),onPressed: (){
             // submit Survey
             // Submit this Survey to Server ...
             print("Connect To Server ........");
@@ -175,7 +175,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       height: 60,
       width: this.widget.popUpWidth,
       margin: const EdgeInsets.only(top: 15),
-      child: Container(color: Statics.shared.colors.mainColor, child: FlatButton(child: Text(Strings.shared.dialogs.closeBtnTitle, style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.subTitleInContent, color: Colors.white),),onPressed: (){
+      child: Container(color: Statics.shared.colors.mainColor,alignment: Alignment.center, child: FlatButton(child: Text(Strings.shared.dialogs.closeBtnTitle, style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.content, color: Colors.white),),onPressed: (){
         Navigator.pop(context);
       },),width: (this.widget.popUpWidth-16) / 2),
     );
@@ -261,14 +261,14 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
             Container(child: Stack(
               children: [
                 Container(
-                  child: Text(Strings.shared.dialogs.survey, style: TextStyle(fontSize: Statics.shared.fontSizes.title, color: Statics.shared.colors.titleTextColor, fontWeight: FontWeight.bold),),
+                  child: Text(Strings.shared.dialogs.survey, style: TextStyle(fontSize: Statics.shared.fontSizes.titleInContent, color: Statics.shared.colors.titleTextColor, fontWeight: FontWeight.bold),),
                   padding: const EdgeInsets.only(left: 32),
                   alignment: Alignment.centerLeft,
                   height: 100,
                   color: Color.fromRGBO(244, 248, 255, 1),
                 ),
                 Container(
-                  child: Image.asset("Resources/Images/ill_survey.png", width: this.widget.popUpWidth/2.6,),alignment: Alignment.bottomRight,
+                  child: Image.asset("Resources/Images/ill_survey.png", width: this.widget.popUpWidth/3.2,),alignment: Alignment.bottomRight,
                   padding: const EdgeInsets.only(right: 32),
                   margin: const EdgeInsets.only(top: 20),
                   height: 100,

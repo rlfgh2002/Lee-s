@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dart';
+import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
+import 'package:haegisa2/controllers/profile/UserInfo.dart';
+import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 
@@ -92,7 +95,7 @@ class _ProfileState extends State<Home> {
                               fontWeight: FontWeight.bold)),
                       Spacer(),
                       FlatButton(
-                        splashColor: Colors.transparent,
+		        splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         child: Image.asset("Resources/Icons/icon_barcode.png",
                             scale: 2.0),

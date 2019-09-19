@@ -14,4 +14,6 @@ class SpecifiedFontSizes
 
   double medium = 14;
   double small = 13;
+
+  double verySmall = 11;
 }

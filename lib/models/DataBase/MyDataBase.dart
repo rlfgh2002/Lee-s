@@ -433,7 +433,7 @@ class MyDataBase
     // open the database
     await openDatabase(path).then((db){
 
-      db.rawQuery("SELECT content,seen,chatDate2 FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC LIMIT 1").then((lists){
+      db.rawQuery("SELECT content,seen,chatDate,chatDate2 FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC LIMIT 1").then((lists){
         print(":::::::::: DB SELECT ROW LIMIT 1(${lists.length}) => [${lists.first.toString()}] ::::::::::");
         //db.close();
         if(lists.length > 0){
@@ -471,7 +471,8 @@ class MyDataBase
     // open the database
     await openDatabase(path).then((db){
 
-      db.rawQuery("UPDATE ${_StaticDbInformation.tblChats} SET seen = '1' WHERE convId = '${convId}'").then((lists){
+      String lastDate = "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day} ${DateTime.now().hour}:${DateTime.now().minute}";
+      db.rawQuery("UPDATE ${_StaticDbInformation.tblChats} SET seen = '1', chatDate2 = '${lastDate.toString()}' WHERE convId = '${convId}'").then((lists){
         print(":::::::::: DB UPDATE SEEN CHATS(${lists.length}) ::::::::::");
         //db.close();
 

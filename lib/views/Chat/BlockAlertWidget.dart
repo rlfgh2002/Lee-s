@@ -37,7 +37,7 @@ class BlockAlertWidget
           children: [
             Container(
               child: RichText(text: TextSpan(children: [
-                TextSpan(text: this.fullName, style: TextStyle(color: Statics.shared.colors.titleTextColor,fontWeight: FontWeight.bold, fontSize: Statics.shared.fontSizes.titleInContent)),
+                TextSpan(text: this.fullName, style: TextStyle(color: Statics.shared.colors.titleTextColor,fontWeight: FontWeight.w600, fontSize: Statics.shared.fontSizes.titleInContent)),
                 TextSpan(text: preContent, style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold, fontSize: Statics.shared.fontSizes.titleInContent),),
                 TextSpan(text: content, style: TextStyle(color: Statics.shared.colors.titleTextColor,fontWeight: FontWeight.bold, fontSize: Statics.shared.fontSizes.titleInContent)),
               ]),),
@@ -47,7 +47,7 @@ class BlockAlertWidget
             ),
             Container(
               child: Text(Strings.shared.dialogs.blockPopUpCaption,style: TextStyle(color: Statics.shared.colors.subTitleTextColor,fontWeight: FontWeight.normal, fontSize: Statics.shared.fontSizes.subTitleInContent),textAlign: TextAlign.left,),
-              margin: const EdgeInsets.only(top: 10),
+              margin: const EdgeInsets.only(top: 20),
               padding: const EdgeInsets.only(left: 50, right: 50),
               width: popUpWidth,
             ),
@@ -69,7 +69,7 @@ class BlockAlertWidget
                   Container(color: Colors.white,
                     child: FlatButton(
                       child: Text(Strings.shared.dialogs.closeBtnTitle,
-                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.subTitleInContent,
+                        style: TextStyle(fontWeight: FontWeight.w200,fontSize: Statics.shared.fontSizes.subTitleInContent,
                             color: Statics.shared.colors.titleTextColor
                         ),
                       ),
@@ -81,7 +81,7 @@ class BlockAlertWidget
                   Container(color: Colors.white,
                     child: FlatButton(
                       child: Text(Strings.shared.dialogs.btnBlockTitle,
-                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.subTitleInContent,
+                        style: TextStyle(fontWeight: FontWeight.w200,fontSize: Statics.shared.fontSizes.subTitleInContent,
                             color: Statics.shared.colors.titleTextColor
                         ),
                       ),

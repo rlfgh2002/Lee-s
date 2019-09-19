@@ -122,11 +122,11 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
             Stack(
               children: [
                 Container(
-                  child: Text(Strings.shared.dialogs.vote, style: TextStyle(fontSize: Statics.shared.fontSizes.title, color: Statics.shared.colors.titleTextColor, fontWeight: FontWeight.bold),),
+                  child: Text(Strings.shared.dialogs.vote, style: TextStyle(fontSize: Statics.shared.fontSizes.titleInContent, color: Statics.shared.colors.titleTextColor, fontWeight: FontWeight.bold),),
                   padding: const EdgeInsets.only(top: 70, left: 32),
                 ),
                 Container(
-                  child: Image.asset("Resources/Images/ill_vote.png", width: this.widget.popUpWidth/1.9,),alignment: Alignment.topRight,
+                  child: Image.asset("Resources/Images/ill_vote.png", width: this.widget.popUpWidth/3.2,),alignment: Alignment.topRight,
                   padding: const EdgeInsets.only(right: 32),
                 )
               ],

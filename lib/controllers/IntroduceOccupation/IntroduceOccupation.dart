@@ -35,7 +35,7 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
               children: [
                 Container(child: Text(Strings.shared.controllers.iO.title1,textAlign: TextAlign.left,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle,fontWeight: FontWeight.w800)),width:(screenWidth-64)-80,),
                 SizedBox(height: 5),
-                Container(child: Text(Strings.shared.controllers.iO.caption1,textAlign: TextAlign.left,style: TextStyle(color: Statics.shared.colors.captionColor, fontSize: Statics.shared.fontSizes.medium)),width: (screenWidth-64)-80,),
+                Container(child: Text(Strings.shared.controllers.iO.caption1,textAlign: TextAlign.left,style: TextStyle(color: Color.fromRGBO(51,54,75,1), fontSize: Statics.shared.fontSizes.medium)),width: (screenWidth-64)-80,),
               ],
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,7 +52,7 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
         ),// Row
       ],
     ), alignment: Alignment.center, height: 100,color: Colors.red,);
-    Widget blueSplitter = Container(color: Colors.blue,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10));
+    Widget blueSplitter = Container(color: Statics.shared.colors.blueLineColor,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10, top: 10));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
@@ -62,7 +62,7 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
       Widget downloadMoreView = Container(
         child: FlatButton(
           child: Container(
-            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle, fontWeight: FontWeight.w600)),
+            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.w200)),
             alignment: Alignment.center,
           ),
           onPressed: (){
@@ -71,7 +71,7 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
           },
           padding: const EdgeInsets.all(0),
         ),
-        decoration: BoxDecoration(border: Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+        decoration: BoxDecoration(border: Border.all(width: 1, color: Statics.shared.colors.mainColor)),
         width: screenWidth,
         height: 60,
         alignment: Alignment.center,

@@ -46,9 +46,9 @@ class ChatWidget extends StatelessWidget {
             constraints: BoxConstraints(minWidth: 20, maxWidth: chatMaxSize),
             child: Row(
               children: [
-                Text(this.senderName, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.subTitleInContent, fontWeight: FontWeight.bold),),
+                Text(this.senderName, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.medium, fontWeight: FontWeight.w700),),
                 SizedBox(width: 5),
-                Text(clearDateTime, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.small, fontWeight: FontWeight.normal),)
+                Text(clearDateTime, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.verySmall, fontWeight: FontWeight.normal),)
               ],
               mainAxisAlignment: MainAxisAlignment.start,
             ),
@@ -56,7 +56,7 @@ class ChatWidget extends StatelessWidget {
           Stack(
             children: [
               Container(
-                child: Text(this.content, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content),textAlign: TextAlign.start,),
+                child: Text(this.content, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.medium, fontWeight: FontWeight.w400),textAlign: TextAlign.start,),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(5)),

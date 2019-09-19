@@ -233,6 +233,7 @@ class _ChatsState extends State<Chats> {
                           bool hasBadge = false;
                           String contentX = "";
                           DateTime lastChatDate = DateTime.now();
+                          String chosenTime = "오전 9:30";
 
                           if (itemContent != null) {
                             if (itemContent["chatDate2"].contains("-")) {
@@ -256,6 +257,12 @@ class _ChatsState extends State<Chats> {
 
                             if (itemContent != null) {
                               contentX = itemContent["content"].toString();
+
+                              if(itemContent['chatDate2'] != null){
+                                if (itemContent['chatDate2'].toString() != ""){
+                                  chosenTime = itemContent['chatDate2'].toString();
+                                }
+                              }
                             }
 
                             //itemContent != null
@@ -275,6 +282,7 @@ class _ChatsState extends State<Chats> {
                             avatarLink = "Resources/Icons/userChatAvatar.png";
                             avatarName = "";
                           }
+
                           MiddleWare.shared.conversations
                               .add(ConversationWidget(
                             hasBadge: hasBadge,
@@ -283,8 +291,8 @@ class _ChatsState extends State<Chats> {
                             avatarName: avatarName,
                             badges: 0,
                             avatarLink: avatarLink,
-                            shortDescription: "${contentX}", //반갑습니다.
-                            time: "오전 9:30",
+                            shortDescription: "${contentX.toString()}", //반갑습니다.
+                            time: chosenTime,
                             lastChatDate: lastChatDate,
                             onTapped: () {
                               this.openChat(
@@ -341,6 +349,9 @@ class _ChatsState extends State<Chats> {
             MiddleWare.shared.searchedConversations = [];
             for (int i = 0; i < searchedItems.length; i++) {
               this.widget.db.checkConversationExistByUser(userId: searchedItems[i].userId,onResult: (res){
+
+                String chosenTime = "오전 9:30";
+
                 ConversationWidget obj = ConversationWidget(
                   title: searchedItems[i].userName,
                   convId: res["convId"],
@@ -348,7 +359,7 @@ class _ChatsState extends State<Chats> {
                   badges: 0,
                   avatarLink: "",
                   shortDescription: searchedItems[i].userName,
-                  time: "오전 9:30",
+                  time: chosenTime,
                   onTapped: () {
                     String cID = res['convId']; // Conversation ID
                     User usr = User(
@@ -473,13 +484,15 @@ class _ChatsState extends State<Chats> {
         Text(Strings.shared.controllers.findUser.notFound, style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.captionColor)),
       ],
     ), alignment: Alignment.center,padding: const EdgeInsets.only(top: 120),);
+
     Widget dataShow = ListView.builder(
+      padding: const EdgeInsets.all(0),
       itemCount: MiddleWare.shared.searchedConversations.length,
       itemBuilder: (context, index) {
         var result = MiddleWare.shared.searchedConversations[index];
         return Dismissible(
           key: Key(index.toString()),
-          child: ListTile(key: Key(index.toString()), title: result),
+          child: ListTile(key: Key(index.toString()), title: result, contentPadding: const EdgeInsets.all(0),),
           onDismissed: (direction) {},
           confirmDismiss: (bl) {
             setState(() {
@@ -508,7 +521,9 @@ class _ChatsState extends State<Chats> {
           iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
         ),
         body: Container(
-          color: Color.fromRGBO(244, 248, 255, 1),
+          color: Colors.white,
+          padding: const EdgeInsets.only(top: 20,right: 0, left: 0),
+          margin: const EdgeInsets.all(0),
           child: dataShow,
         ),
       );

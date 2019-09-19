@@ -16,7 +16,7 @@ class IOWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     double paddingSize = 16;
-    double buttonSize = 140;
+    double buttonSize = 120;
     double screenWidth = MediaQuery.of(context).size.width;
 
     return FlatButton(
@@ -28,10 +28,10 @@ class IOWidget extends StatelessWidget {
           Padding(
             child: Column(
               children: <Widget>[
-                Container(child: Text(this.obj.name, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.contentBig, fontWeight: FontWeight.w800)),width: (screenWidth - (paddingSize * 2)) - buttonSize,constraints: BoxConstraints(maxHeight: 45),height: 25,),
-                Container(child: Text(this.obj.company, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.w100)),width: (screenWidth - (paddingSize * 2)) - buttonSize,padding: const EdgeInsets.only(top: 5),height: 25,),
-                SizedBox(height: 15),
-                Container(child: Text(this.obj.shortContent, style: TextStyle(color: Statics.shared.colors.captionColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.w100)),width: (screenWidth - (paddingSize * 2)) - buttonSize,padding: const EdgeInsets.only(top: 5),height: 70,),
+                Container(child: Text(this.obj.name, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content, fontWeight: FontWeight.w800)),width: (screenWidth - (paddingSize * 2)) - buttonSize,constraints: BoxConstraints(maxHeight: 45),height: 25,),
+                Container(child: Text(this.obj.company, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.medium, fontWeight: FontWeight.w100)),width: (screenWidth - (paddingSize * 2)) - buttonSize,padding: const EdgeInsets.only(top: 5),height: 25,),
+                SizedBox(height: 5),
+                Container(child: Text(this.obj.shortContent, style: TextStyle(color: Statics.shared.colors.captionColor, fontSize: Statics.shared.fontSizes.medium, fontWeight: FontWeight.w100)),width: (screenWidth - (paddingSize * 2)) - buttonSize,padding: const EdgeInsets.only(top: 5),height: 70,),
               ],
             ),
             padding: const EdgeInsets.only(top: 25, left: 16),

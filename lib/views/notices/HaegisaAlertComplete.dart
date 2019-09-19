@@ -65,7 +65,7 @@ class HaegisaAlertCompleteDialog
               child: Container(color: Colors.white,
                 child: FlatButton(
                   child: Text(Strings.shared.dialogs.closeBtnTitle,
-                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.subTitleInContent,
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: Statics.shared.fontSizes.content,
                         color: Statics.shared.colors.titleTextColor
                     ),
                   ),

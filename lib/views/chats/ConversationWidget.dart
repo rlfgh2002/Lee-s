@@ -32,9 +32,12 @@ class ConversationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    double topPadding = 5;
     Widget badge = Container();
     if(this.hasBadge){
       badge = Container(width: 5,height: 5,decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)),color: Colors.red),margin: const EdgeInsets.only(top: 20),);
+    }else{
+      topPadding = 0;
     }
 
     //NetworkImage avatar;
@@ -44,29 +47,35 @@ class ConversationWidget extends StatelessWidget {
       avatar = AssetImage(this.avatarLink);
     }
 
-    return Container(color: Colors.white, height: 100,margin: const EdgeInsets.only(top: 5),
+    return Container(
+      constraints: BoxConstraints(minHeight: 70),
+      margin: const EdgeInsets.all(0),
+      padding: const EdgeInsets.only(bottom: 20, top: 20, right: 24, left: 24),
+      alignment: Alignment.center,
       child: FlatButton(
-        child: Container(padding: const EdgeInsets.only(left: 24, right: 24),
-          child: Stack(
+        child:
+          Container(
+            padding: const EdgeInsets.only(left: 0, right: 0),
+            child: Stack(
             children: <Widget>[
               Row(children: [
                 Container(child: CircleAvatar(
-                  child: Center(child: Text(this.avatarName, style: TextStyle(color: Colors.white, fontSize: Statics.shared.fontSizes.titleInContent))),
+                  child: Center(child: Text(this.avatarName, style: TextStyle(color: Colors.white, fontSize: Statics.shared.fontSizes.subTitleInContent))),
                   radius: this.avatarRadius,
                   backgroundImage: avatar,
                   backgroundColor: Statics.shared.colors.mainColor,
-                ),width: 60,height: 60),
+                ),width: 55,height: 55),
                 SizedBox(width: 10),
                 Column(
                   children: [
-                    Container(child: Text(this.title,style: TextStyle(fontSize: Statics.shared.fontSizes.titleInContent, color: Statics.shared.colors.titleTextColor)),
-                      width: MediaQuery.of(context).size.width - 60 - 10 - 48 - 10 - 16 - 75,
-                      height: 50,
+                    Container(child: Text(this.title,style: TextStyle(fontSize: Statics.shared.fontSizes.content,fontWeight: FontWeight.w600, color: Statics.shared.colors.titleTextColor)),
+                      width: MediaQuery.of(context).size.width - 60 - 10 - 48 - 10 - 16 - 45,
+                      height: 25,
                     ),
                     SizedBox(height: 5),
-                    Container(child: Text(this.shortDescription,style: TextStyle(fontSize: Statics.shared.fontSizes.subTitleInContent, color: Statics.shared.colors.subTitleTextColor)),
-                      width: MediaQuery.of(context).size.width - 60 - 10 - 48 - 10 - 16 - 16,
-                      height: 25,
+                    Container(child: Text(this.shortDescription,overflow: TextOverflow.fade,style: TextStyle(fontSize: Statics.shared.fontSizes.supplementary,fontWeight: FontWeight.w200, color: Statics.shared.colors.subTitleTextColor)),
+                      width: MediaQuery.of(context).size.width - 60 - 10 - 120,
+                      constraints: BoxConstraints(maxHeight: 40),
                     ),
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -86,11 +95,14 @@ class ConversationWidget extends StatelessWidget {
               ),
               Container(child: Column(
                 children: [
-                  Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),),
+                  Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.medium, fontWeight: FontWeight.w300),),
+                  padding: const EdgeInsets.only(top: 0),
+                  ),
                   badge
                 ],
                 crossAxisAlignment: CrossAxisAlignment.end,
-              ), alignment: Alignment.topRight, padding: const EdgeInsets.only(top: 24),)
+              ), alignment: Alignment.topRight, padding: EdgeInsets.only(top: topPadding),
+              )
             ],
           ),
         ),
@@ -98,6 +110,10 @@ class ConversationWidget extends StatelessWidget {
         onPressed: (){
           this.onTapped();
         },
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(bottom: BorderSide(width: 1,color: Statics.shared.colors.lineColor))
       ),
     );
   }

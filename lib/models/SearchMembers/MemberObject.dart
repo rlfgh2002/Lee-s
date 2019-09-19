@@ -69,16 +69,16 @@ class MemberObject extends StatelessWidget {
                     ),
                     ),
                   ],
-                ),width: 60,height: 60),
+                ),width: 55,height: 55),
                 SizedBox(width: 10),
                 Column(
                   children: [
-                    Container(child: Text(this.title,style: TextStyle(fontSize: Statics.shared.fontSizes.titleInContent, color: Statics.shared.colors.titleTextColor)),
+                    Container(child: Text(this.title,style: TextStyle(fontSize: Statics.shared.fontSizes.subTitleInContent, color: Statics.shared.colors.titleTextColor)),
                       width: MediaQuery.of(context).size.width - 60 - 10 - 48 - 10 - 16 - 30,
                       height: 25,
                     ),
                     SizedBox(height: 5),
-                    Container(child: Text(this.shortDescription,style: TextStyle(fontSize: Statics.shared.fontSizes.subTitleInContent, color: Statics.shared.colors.subTitleTextColor)),
+                    Container(child: Text(this.shortDescription,style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.subTitleTextColor)),
                       width: MediaQuery.of(context).size.width - 60 - 10 - 48 - 10 - 16 - 30,
                       height: 25,
                     ),
@@ -90,7 +90,7 @@ class MemberObject extends StatelessWidget {
                 Expanded(child: Container()),
                 Container(
                   child: Image.asset("Resources/Icons/chatIcon.png",),
-                  width: 27,
+                  width: 25,
                   alignment: Alignment.centerRight,
                 ),
               ]

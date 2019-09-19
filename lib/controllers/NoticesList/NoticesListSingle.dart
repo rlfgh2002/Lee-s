@@ -28,12 +28,12 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
-    Widget blueSplitter = Container(color: Colors.blue,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 20, top: 10));
+    Widget blueSplitter = Container(color: Statics.shared.colors.blueLineColor,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 20, top: 10));
     Widget greySplitter = Container(color: Statics.shared.colors.lineColor,height: 1,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10, top: 10));
     Widget listBtn = Container(
       child: FlatButton(
         child: Container(
-          child: Text(Strings.shared.controllers.noticesList.listKeyword,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle, fontWeight: FontWeight.w600)),
+          child: Text(Strings.shared.controllers.noticesList.listKeyword,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.w200)),
           alignment: Alignment.center,
         ),
         onPressed: (){
@@ -41,7 +41,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
         },
         padding: const EdgeInsets.all(0),
       ),
-      decoration: BoxDecoration(border: Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+      decoration: BoxDecoration(border: Border.all(width: 1, color: Statics.shared.colors.mainColor)),
       width: screenWidth,
       height: 60,
       alignment: Alignment.center,
@@ -69,7 +69,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
                 fontWeight: FontWeight.w600,
               ), // TextStyle
             ),padding: const EdgeInsets.only(left: 32, right: 32)),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             Padding(child: Row(
               children: <Widget>[
                 Text(this.widget.object.writer,

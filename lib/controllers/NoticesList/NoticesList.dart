@@ -29,8 +29,8 @@ class _NoticesListState extends State<NoticesList> {
       children: [
         Image.asset("Resources/Images/noticeListHeader.png",width: screenWidth, height: 100,),
       ],
-    ), alignment: Alignment.center, height: 100,color: Colors.red,);
-    Widget blueSplitter = Container(color: Colors.blue,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10));
+    ), alignment: Alignment.center, height: 100,);
+    Widget blueSplitter = Container(color: Statics.shared.colors.blueLineColor,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10, top: 10));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
@@ -40,7 +40,7 @@ class _NoticesListState extends State<NoticesList> {
       Widget downloadMoreView = Container(
         child: FlatButton(
           child: Container(
-            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle, fontWeight: FontWeight.w600)),
+            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.w200)),
             alignment: Alignment.center,
           ),
           onPressed: (){
@@ -49,7 +49,7 @@ class _NoticesListState extends State<NoticesList> {
           },
           padding: const EdgeInsets.all(0),
         ),
-        decoration: BoxDecoration(border: Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+        decoration: BoxDecoration(border: Border.all(width: 1, color: Statics.shared.colors.mainColor)),
         width: screenWidth,
         height: 60,
         alignment: Alignment.center,

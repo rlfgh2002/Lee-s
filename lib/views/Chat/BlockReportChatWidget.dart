@@ -16,7 +16,7 @@ class BlockReportChatWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     double screenWidth = MediaQuery.of(context).size.width;
-    double newW = (screenWidth-32-32) / 2;
+    double newW = (screenWidth-32) / 2;
     newW = newW - 2;
 
     return Container(
@@ -25,8 +25,9 @@ class BlockReportChatWidget extends StatelessWidget {
             boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.1),blurRadius: 4)],
             color: Colors.white
             ),
-        height: 55,
-        margin: const EdgeInsets.only(left: 32, right: 32, top: 32, bottom: 8),
+        height: 65,
+        margin: const EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 8),
+        alignment: Alignment.center,
         child: Row(
           children: [
             Container(width: newW,color: Colors.transparent, height: 50,
@@ -34,10 +35,10 @@ class BlockReportChatWidget extends StatelessWidget {
                 color: Colors.transparent,
                 child: Row(
                   children: [
-                    Image.asset("Resources/Icons/icon_Permission.png", height: 25,),
+                    Image.asset("Resources/Icons/icon_Permission.png", height: 18,),
                     SizedBox(width: 10),
                     Text(Strings.shared.controllers.chat.conversationPermission, style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.titleInContent
+                        fontSize: Statics.shared.fontSizes.content
                     ),)
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -49,16 +50,16 @@ class BlockReportChatWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(0),
               ),
             ),
-            Image.asset("Resources/Icons/Line.png", color: Statics.shared.colors.lineColor,height: 50,width: 2),
-            Container(width: newW,color: Colors.transparent, height: 50,
+            Image.asset("Resources/Icons/Line.png", color: Statics.shared.colors.lineColor,height: 30,width: 2),
+            Container(width: newW,color: Colors.transparent, height: 30,
               child: FlatButton(
                 color: Colors.transparent,
                 child: Row(
                   children: [
-                    Image.asset("Resources/Icons/icon_refusal.png", height: 25,color: Colors.red),
+                    Image.asset("Resources/Icons/icon_refusal.png", height: 18,color: Colors.red),
                     SizedBox(width: 10),
                     Text(Strings.shared.controllers.chat.conversationBlock, style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.titleInContent,
+                        fontSize: Statics.shared.fontSizes.content,
                         color: Colors.red
                     ),)
                   ],
