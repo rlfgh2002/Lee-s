@@ -95,7 +95,7 @@ class _ProfileState extends State<Home> {
                               fontWeight: FontWeight.bold)),
                       Spacer(),
                       FlatButton(
-		        splashColor: Colors.transparent,
+                        splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         child: Image.asset("Resources/Icons/icon_barcode.png",
                             scale: 2.0),
@@ -107,7 +107,7 @@ class _ProfileState extends State<Home> {
                     alignment: Alignment.centerLeft,
                     child: Text("오늘도 안전운항 하세요 ^^",
                         style: TextStyle(
-                            color: Statics.shared.colors.subTitleTextColor,
+                            color: Color(0xffb2ccf5),
                             fontSize:
                                 Statics.shared.fontSizes.subTitleInContent)),
                   )
@@ -171,7 +171,7 @@ class _ProfileState extends State<Home> {
                                       builder: (context) => new NoticesList()));
                             },
                           ),
-                          height: deviceWidth / 6),
+                          height: deviceWidth / 8),
                       Row(children: <Widget>[
                         Expanded(child: Divider(height: 0)),
                       ]),
@@ -254,7 +254,7 @@ class _ProfileState extends State<Home> {
                                           new IntroduceOccupation()));
                             },
                           ),
-                          height: deviceWidth / 6),
+                          height: deviceWidth / 8),
                       Row(children: <Widget>[
                         Expanded(child: Divider(height: 0)),
                       ]),
@@ -309,50 +309,12 @@ class _ProfileState extends State<Home> {
                           spreadRadius: 0)
                     ]),
                 margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
-                child: Container(
-                  width: deviceWidth / 1.1,
-                  alignment: Alignment.center,
-                  child: Row(children: <Widget>[
-                    Container(
-                        child: FlatButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          child: Row(children: [
-                            Image.asset('Resources/Images/ill_service.png',
-                                scale: 4.0),
-                          ]),
-                          onPressed: () {},
-                        ),
-                        height: deviceWidth / 4),
-                    Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text("해기사협회의",
-                                style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                ),
-                                textAlign: TextAlign.left),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.64,
-                            child: Text(
-                              "통합서비스센터 업무대행 소개",
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize: Statics.shared.fontSizes.subTitle,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ])
-                  ]),
+                child: FlatButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  child: Image.asset('Resources/Images/totalWork.png',
+                      width: deviceWidth / 1.2),
+                  onPressed: () {},
                 ),
               ),
               Container(
@@ -376,104 +338,117 @@ class _ProfileState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
-                              child: Column(children: [
-                                FlatButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  child: Row(children: [
-                                    Image.asset(
+                              alignment: Alignment.center,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    FlatButton(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      child: Image.asset(
                                         'Resources/Icons/icon_intro.png',
-                                        scale: 4.0),
+                                        scale: 4.0,
+                                        alignment: Alignment.center,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) =>
+                                                    new Intro()));
+                                      },
+                                    ),
+                                    Text("협회소개",
+                                        style: TextStyle(
+                                            color: Statics
+                                                .shared.colors.titleTextColor,
+                                            fontSize: 13),
+                                        textAlign: TextAlign.center),
                                   ]),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) => new Intro()));
-                                  },
-                                ),
-                                Text("협회소개",
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: 13),
-                                    textAlign: TextAlign.left),
-                              ]),
-                              height: deviceWidth / 5),
+                              height: deviceWidth / 5,
+                              width: deviceWidth / 4.5),
                           Container(
-                              child: Column(children: [
-                                FlatButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  child: Row(children: [
-                                    Image.asset(
-                                        'Resources/Icons/icon_webzine.png',
-                                        scale: 4.0),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    FlatButton(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      child: Image.asset(
+                                          'Resources/Icons/icon_webzine.png',
+                                          scale: 4.0),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) =>
+                                                    new Magazines()));
+                                      },
+                                    ),
+                                    Text("해바라기",
+                                        style: TextStyle(
+                                            color: Statics
+                                                .shared.colors.titleTextColor,
+                                            fontSize: 13),
+                                        textAlign: TextAlign.left),
                                   ]),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                new Magazines()));
-                                  },
-                                ),
-                                Text("웹진",
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: 13),
-                                    textAlign: TextAlign.left),
-                              ]),
-                              height: deviceWidth / 5),
+                              height: deviceWidth / 5,
+                              width: deviceWidth / 4.5),
                           Container(
-                              child: Column(children: [
-                                FlatButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  child: Row(children: [
-                                    Image.asset(
-                                        'Resources/Icons/icon_survey.png',
-                                        scale: 4.0),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    FlatButton(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      child: Image.asset(
+                                          'Resources/Icons/icon_survey.png',
+                                          scale: 4.0),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) =>
+                                                    new SurveysTabs()));
+                                      },
+                                    ),
+                                    Text("설문조사",
+                                        style: TextStyle(
+                                            color: Statics
+                                                .shared.colors.titleTextColor,
+                                            fontSize: 13),
+                                        textAlign: TextAlign.left),
                                   ]),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                new SurveysTabs()));
-                                  },
-                                ),
-                                Text("설문조사",
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: 13),
-                                    textAlign: TextAlign.left),
-                              ]),
-                              height: deviceWidth / 5),
+                              height: deviceWidth / 5,
+                              width: deviceWidth / 4.5),
                           Container(
-                              child: Column(children: [
-                                FlatButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  child: Row(children: [
-                                    Image.asset('Resources/Icons/icon_map.png',
-                                        scale: 4.0),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    FlatButton(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      child: Image.asset(
+                                          'Resources/Icons/icon_map.png',
+                                          scale: 4.0),
+                                      onPressed: () {},
+                                    ),
+                                    Text("선사지도",
+                                        style: TextStyle(
+                                            color: Statics
+                                                .shared.colors.titleTextColor,
+                                            fontSize: 13),
+                                        textAlign: TextAlign.left),
                                   ]),
-                                  onPressed: () {},
-                                ),
-                                Text("해운선사지도",
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: 13),
-                                    textAlign: TextAlign.left),
-                              ]),
-                              height: deviceWidth / 5),
+                              height: deviceWidth / 5,
+                              width: deviceWidth / 4.5),
                         ]),
                   ),
-                  height: deviceWidth / 3),
+                  height: deviceWidth / 4),
               Image.asset('Resources/Icons/Line3.png'),
               Container(
                 decoration: new BoxDecoration(
@@ -527,7 +502,7 @@ class _ProfileState extends State<Home> {
                           fontSize: Statics.shared.fontSizes.subTitle)),
                   onPressed: () {},
                 ),
-                height: deviceWidth / 6,
+                height: deviceWidth / 8,
               ),
               Row(children: <Widget>[
                 Expanded(child: Divider(height: 0)),

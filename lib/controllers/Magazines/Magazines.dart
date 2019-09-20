@@ -35,8 +35,8 @@ class Magazines extends StatefulWidget {
 }
 
 class _MagazinesState extends State<Magazines> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   int magazineNum = 0;
-  final _scaffold = GlobalKey<ScaffoldState>();
 
   void refreshList(int pCurrent, pTotal) {
     widget.myList = [];
@@ -91,12 +91,13 @@ class _MagazinesState extends State<Magazines> {
       ),
       alignment: Alignment.center,
       height: 100,
-      color: Colors.red,
+      //color: Colors.red,
     );
     Widget blueSplitter = Container(
-        color: Colors.blue,
-        height: 3,
-        margin: const EdgeInsets.only(left: 16, right: 16));
+      color: Colors.blue,
+      height: 3,
+      //margin: const EdgeInsets.only(left: 16, right: 16)
+    );
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
@@ -158,8 +159,7 @@ class _MagazinesState extends State<Magazines> {
 
             final myFile = File(_localPath + "/" + item["serverFileName"]);
 
-            bool aa = myFile.existsSync();
-            if (aa) {
+            if (myFile.existsSync()) {
               isDownload = false;
             } else {
               isDownload = true;
@@ -213,6 +213,7 @@ class _MagazinesState extends State<Magazines> {
     }
 
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Container(
@@ -236,8 +237,15 @@ class _MagazinesState extends State<Magazines> {
             }),
         color: Colors.white,
       ), // end Body
-      key: _scaffold,
     );
+  }
+
+  _displaySnackBar(BuildContext context, String str) {
+    final snackBar = SnackBar(
+      content: Text(str),
+      duration: Duration(milliseconds: 500),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   buttonList(String title, String fileURL, String serverFileName,
@@ -307,9 +315,15 @@ class _MagazinesState extends State<Magazines> {
       onPressed: () async {
         if (isDownload == true) {
           print(fileURL);
+          var changeURL;
+          if (userInformation.userDeviceOS != "i") {
+            changeURL = fileURL.replaceAll(new RegExp("https://"), "http://");
+          } else {
+            changeURL = fileURL;
+          }
 
           final taskId = await FlutterDownloader.enqueue(
-            url: fileURL,
+            url: changeURL,
             savedDir: _localPath,
             showNotification:
                 true, // show download progress in status bar (for Android)
@@ -327,9 +341,14 @@ class _MagazinesState extends State<Magazines> {
                     title, fileURL, serverFileName, magazineNum, false, obj);
                 widget.myList[magazineNum + 3] = buttonList(
                     title, fileURL, serverFileName, magazineNum, false, obj);
+
+                _displaySnackBar(context, "다운로드 완료");
+                return;
               });
             } else if (status == DownloadTaskStatus.failed) {
               print("다운실패");
+              _displaySnackBar(context, "다운로드 실패");
+              return;
             }
           });
 
@@ -337,9 +356,9 @@ class _MagazinesState extends State<Magazines> {
           print(file);
         } else {
           print("파일 오픈");
-          launch(fileURL);
+          //launch(fileURL);
 
-          //OpenFile.open(_localPath + "/" + serverFileName);
+          OpenFile.open(_localPath + "/" + serverFileName);
 
           // final ByteData bytes = await DefaultAssetBundle.of(context)
           //     .load(_localPath + "/" + serverFileName);

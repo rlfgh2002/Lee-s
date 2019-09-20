@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/home/Home.dart';
@@ -23,7 +23,7 @@ class _IntroState extends State<Intro> {
   bool _bTeamVisible = false;
   bool _cTeamVisible = false;
   var orgTable = new List();
-
+  int _activeMeterIndex;
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -34,6 +34,7 @@ class _IntroState extends State<Intro> {
             Colors.black // Dark == white status bar -- for IOS.
         ));
 
+    final GlobalKey<_IntroState> expansionTile = new GlobalKey();
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -171,212 +172,275 @@ class _IntroState extends State<Intro> {
   orgList(BuildContext context, AsyncSnapshot snapshot) {
     var values = snapshot.data;
 
-    return Container(
-        child: Column(
-      children: <Widget>[
-        Container(
-          height: deviceWidth / 8,
-          margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-          decoration: new BoxDecoration(
-              border: new Border.all(
-                  color: Statics.shared.colors.subTitleTextColor)),
-          child: FlatButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            child: Row(children: [
-              Text(values[0]["department_name"],
-                  style: TextStyle(
-                      color: Statics.shared.colors.titleTextColor,
-                      fontSize: Statics.shared.fontSizes.subTitle,
-                      fontWeight: FontWeight.bold)),
-              Spacer(),
-              // Image.asset(
-              //     _aTeamVisible
-              //         ? 'Resources/Icons/arrow_up.png'
-              //         : 'Resources/Icons/arrow_down.png',
-              //     scale: 3.0),
-            ]),
-            onPressed: () {
-              // setState(() {
-              //   _aTeamVisible = !_aTeamVisible;
-              // });
-            },
-          ),
-        ),
-        Visibility(
-          // visible: _aTeamVisible ? true : false,
-          visible: true,
-          child: Column(
+    return Column(children: <Widget>[
+      Container(
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        decoration: new BoxDecoration(
+            border:
+                new Border.all(color: Statics.shared.colors.subTitleTextColor)),
+        child: AppExpansionTile(
+            title: Text(values[0]["department_name"]),
+            backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
             children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(top: 10.0),
-                width: deviceWidth / 1.5,
-                child: Text(
+              new ListTile(
+                title: const Text(
                     "- 예산편성 집행관리\n- 경리,회계업무\n- 각종 문서수발 및 보관관리\n- 소유재산 및 자산관리\n- 회비징수 및 관리업무\n- 직원의 인사관리 및 후생복지\n- 각종 전산관리 업무\n- 서무, 일반행정"),
               ),
-              memberList(values[0]["department_member"]),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          height: deviceWidth / 8,
-          margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-          decoration: new BoxDecoration(
-              border: new Border.all(
-                  color: Statics.shared.colors.subTitleTextColor)),
-          child: FlatButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            child: Row(children: [
-              Text(values[1]["department_name"],
-                  style: TextStyle(
-                      color: Statics.shared.colors.titleTextColor,
-                      fontSize: Statics.shared.fontSizes.subTitle,
-                      fontWeight: FontWeight.bold)),
-              Spacer(),
+              for (var i = 0; i < values[0]["department_member"].length; i++)
+                memberList(values[0]["department_member"][i])
+            ]),
+      ),
+      SizedBox(height: 10),
+      Container(
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        decoration: new BoxDecoration(
+            border:
+                new Border.all(color: Statics.shared.colors.subTitleTextColor)),
+        child: AppExpansionTile(
+            title: Text(values[1]["department_name"]),
+            backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
+            children: <Widget>[
+              new ListTile(
+                title: const Text(
+                    "- 해기사 관련 대외 정책 및 전략수립\n- 유관기관 및 단체, 업체와의 유대관리\n- 대의원 및 회장선거와 관련된 제반 업무\n- 정관, 제 규정의 제정, 개정 및 폐지\n- 각종 행사 및 세미나 주관\n- 홍보편집"),
+              ),
+              for (var i = 0; i < values[0]["department_member"].length; i++)
+                memberList(values[1]["department_member"][i])
+            ]),
+      ),
+      SizedBox(height: 10),
+      Container(
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        decoration: new BoxDecoration(
+            border:
+                new Border.all(color: Statics.shared.colors.subTitleTextColor)),
+        child: AppExpansionTile(
+            title: Text(values[2]["department_name"]),
+            backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
+            children: <Widget>[
+              new ListTile(
+                title: const Text(
+                    "- 회원조직 관리업무\n- 해기사시험보도 접수 및 관련업무\n- 한국면허갱신접수 대행업무\n- 외국면허 수첩 및 특별 자격증 발급에 관련된 제반업무\n- 회원고충상담 및 처리업무\n- 회원복지 및 친목에 관련된 제반업무\n- 해기 기술의 검토 및 자문"),
+              ),
+              for (var i = 0; i < values[0]["department_member"].length; i++)
+                memberList(values[2]["department_member"][i])
+            ]),
+      ),
+    ]);
+  }
 
-              // Image.asset(
-              //     _bTeamVisible
-              //         ? 'Resources/Icons/arrow_up.png'
-              //         : 'Resources/Icons/arrow_down.png',
-              //     scale: 3.0),
-            ]),
-            onPressed: () {
-              // setState(() {
-              //   _bTeamVisible = !_bTeamVisible;
-              // });
-            },
-          ),
-        ),
-        Visibility(
-            // visible: _bTeamVisible ? true : false,
-            visible: true,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(top: 10.0),
-                  width: deviceWidth / 1.5,
-                  child: Text(
-                      "- 해기사 관련 대외 정책 및 전략수립\n- 유관기관 및 단체, 업체와의 유대관리\n- 대의원 및 회장선거와 관련된 제반 업무\n- 정관, 제 규정의 제정, 개정 및 폐지\n- 각종 행사 및 세미나 주관\n- 홍보편집"),
-                ),
-                memberList(values[1]["department_member"]),
-              ],
-            )),
-        SizedBox(
-          height: 10,
+  memberList(Map<String, dynamic> member) {
+    var a = member;
+
+    return ListTile(
+        title: Row(
+      children: <Widget>[
+        Container(
+          width: deviceWidth / 4.5,
+          child: Text(member["position"],
+              style: TextStyle(
+                color: Statics.shared.colors.mainColor,
+                fontSize: Statics.shared.fontSizes.subTitle,
+              )),
         ),
         Container(
-          height: deviceWidth / 8,
-          margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-          decoration: new BoxDecoration(
-              border: new Border.all(
-                  color: Statics.shared.colors.subTitleTextColor)),
-          child: FlatButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            child: Row(children: [
-              Text(values[2]["department_name"],
-                  style: TextStyle(
-                      color: Statics.shared.colors.titleTextColor,
-                      fontSize: Statics.shared.fontSizes.subTitle,
-                      fontWeight: FontWeight.bold)),
-              Spacer(),
-              // Image.asset(
-              //     _cTeamVisible
-              //         ? 'Resources/Icons/arrow_up.png'
-              //         : 'Resources/Icons/arrow_down.png',
-              //     scale: 3.0),
-            ]),
-            onPressed: () {
-              // setState(() {
-              //   _cTeamVisible = !_cTeamVisible;
-              // });
-            },
+          height: deviceWidth / 14,
+          child: VerticalDivider(
+            width: 0,
+            color: Colors.black38,
           ),
         ),
-        Visibility(
-            //visible: _cTeamVisible ? true : false,
-            visible: true,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(top: 10.0),
-                  width: deviceWidth / 1.5,
-                  child: Text(
-                      "- 회원조직 관리업무\n- 해기사시험보도 접수 및 관련업무\n- 한국면허갱신접수 대행업무\n- 외국면허 수첩 및 특별 자격증 발급에 관련된 제반업무\n- 회원고충상담 및 처리업무\n- 회원복지 및 친목에 관련된 제반업무\n- 해기 기술의 검토 및 자문"),
-                ),
-                memberList(values[2]["department_member"]),
-              ],
-            )),
+        Container(
+          width: deviceWidth / 4.5,
+          margin: const EdgeInsets.only(left: 10.0),
+          child: Text(member["name"],
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: Statics.shared.fontSizes.subTitle,
+                fontWeight: FontWeight.normal,
+              )),
+        ),
+        Spacer(),
+        FlatButton(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          child: Image.asset("Resources/Icons/icon_call.png", scale: 2.0),
+          onPressed: () {
+            launch("tel://" + member["tel"]);
+          },
+        )
       ],
     ));
   }
+}
 
-  memberList(List member) {
-    return Container(
-        child: Column(
-      children: <Widget>[
-        for (var i = 0; i < member.length; i++)
-          Column(
-            children: <Widget>[
-              Container(
-                height: deviceWidth / 8,
-                margin: const EdgeInsets.only(left: 40.0, right: 20.0),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: deviceWidth / 4.5,
-                      child: Text(member[i]["position"],
-                          style: TextStyle(
-                            color: Statics.shared.colors.mainColor,
-                            fontSize: Statics.shared.fontSizes.subTitle,
-                          )),
-                    ),
-                    Container(
-                      height: deviceWidth / 14,
-                      child: VerticalDivider(
-                        width: 0,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Container(
-                      width: deviceWidth / 4.5,
-                      margin: const EdgeInsets.only(left: 10.0),
-                      child: Text(member[i]["name"],
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: Statics.shared.fontSizes.subTitle,
-                            fontWeight: FontWeight.normal,
-                          )),
-                    ),
-                    Spacer(),
-                    FlatButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      child: Image.asset("Resources/Icons/icon_call.png",
-                          scale: 2.0),
-                      onPressed: () {
-                        launch("tel://" + member[i]["tel"]);
-                      },
-                    )
-                  ],
-                ),
+class AppExpansionTile extends StatefulWidget {
+  static AppExpansionTileState of(BuildContext context) {
+    return context
+        .ancestorStateOfType(const TypeMatcher<AppExpansionTileState>());
+  }
+
+  const AppExpansionTile({
+    Key key,
+    this.leading,
+    @required this.title,
+    this.backgroundColor,
+    this.onExpansionChanged,
+    this.children: const <Widget>[],
+    this.trailing,
+    this.initiallyExpanded: false,
+  })  : assert(initiallyExpanded != null),
+        super(key: key);
+
+  final Widget leading;
+  final Widget title;
+  final ValueChanged<bool> onExpansionChanged;
+  final List<Widget> children;
+  final Color backgroundColor;
+  final Widget trailing;
+  final bool initiallyExpanded;
+
+  @override
+  AppExpansionTileState createState() => new AppExpansionTileState();
+}
+
+const Duration _kExpand = const Duration(milliseconds: 200);
+
+class AppExpansionTileState extends State<AppExpansionTile>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  CurvedAnimation _easeOutAnimation;
+  CurvedAnimation _easeInAnimation;
+  ColorTween _borderColor;
+  ColorTween _headerColor;
+  ColorTween _iconColor;
+  ColorTween _backgroundColor;
+  Animation<double> _iconTurns;
+
+  bool _isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = new AnimationController(duration: _kExpand, vsync: this);
+    _easeOutAnimation =
+        new CurvedAnimation(parent: _controller, curve: Curves.easeOut);
+    _easeInAnimation =
+        new CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _borderColor = new ColorTween();
+    _headerColor = new ColorTween();
+    _iconColor = new ColorTween();
+    _iconTurns =
+        new Tween<double>(begin: 0.0, end: 0.5).animate(_easeInAnimation);
+    _backgroundColor = new ColorTween();
+
+    _isExpanded =
+        PageStorage.of(context)?.readState(context) ?? widget.initiallyExpanded;
+    if (_isExpanded) _controller.value = 1.0;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void expand() {
+    _setExpanded(true);
+  }
+
+  void collapse() {
+    _setExpanded(false);
+  }
+
+  void toggle() {
+    _setExpanded(!_isExpanded);
+  }
+
+  void _setExpanded(bool isExpanded) {
+    if (_isExpanded != isExpanded) {
+      setState(() {
+        _isExpanded = isExpanded;
+        if (_isExpanded)
+          _controller.forward();
+        else
+          _controller.reverse().then<void>((void value) {
+            setState(() {
+              // Rebuild without widget.children.
+            });
+          });
+        PageStorage.of(context)?.writeState(context, _isExpanded);
+      });
+      if (widget.onExpansionChanged != null) {
+        widget.onExpansionChanged(_isExpanded);
+      }
+    }
+  }
+
+  Widget _buildChildren(BuildContext context, Widget child) {
+    final Color borderSideColor =
+        _borderColor.evaluate(_easeOutAnimation) ?? Colors.transparent;
+    final Color titleColor = _headerColor.evaluate(_easeInAnimation);
+
+    return new Container(
+      decoration: new BoxDecoration(
+          color: _backgroundColor.evaluate(_easeOutAnimation) ??
+              Colors.transparent,
+          border: new Border(
+            top: new BorderSide(color: borderSideColor),
+            bottom: new BorderSide(color: borderSideColor),
+          )),
+      child: new Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          IconTheme.merge(
+            data:
+                new IconThemeData(color: _iconColor.evaluate(_easeInAnimation)),
+            child: new ListTile(
+              onTap: toggle,
+              leading: widget.leading,
+              title: new DefaultTextStyle(
+                style: Theme.of(context)
+                    .textTheme
+                    .subhead
+                    .copyWith(color: titleColor),
+                child: widget.title,
               ),
-              Container(
-                  margin: const EdgeInsets.only(left: 40.0, right: 40.0),
-                  child: Row(children: <Widget>[
-                    Expanded(
-                        child: Divider(
-                      height: 0,
-                      color: Colors.black38,
-                    )),
-                  ]))
-            ],
-          )
-      ],
-    ));
+              trailing: widget.trailing ??
+                  new RotationTransition(
+                    turns: _iconTurns,
+                    child: const Icon(Icons.expand_more),
+                  ),
+            ),
+          ),
+          new ClipRect(
+            child: new Align(
+              heightFactor: _easeInAnimation.value,
+              child: child,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    _borderColor.end = theme.dividerColor;
+    _headerColor
+      ..begin = theme.textTheme.subhead.color
+      ..end = theme.accentColor;
+    _iconColor
+      ..begin = theme.unselectedWidgetColor
+      ..end = theme.accentColor;
+    _backgroundColor.end = widget.backgroundColor;
+
+    final bool closed = !_isExpanded && _controller.isDismissed;
+    return new AnimatedBuilder(
+      animation: _controller.view,
+      builder: _buildChildren,
+      child: closed ? null : new Column(children: widget.children),
+    );
   }
 }

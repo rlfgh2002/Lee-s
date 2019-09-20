@@ -154,6 +154,7 @@ flutter:
     # home
     - Resources/Images/ill_service.png
     - Resources/Images/gichul.png
+    - Resources/Images/totalWork.png
     - Resources/Icons/icon_barcode.png
     - Resources/Icons/user_type_01.png
     - Resources/Icons/user_type_02.png
