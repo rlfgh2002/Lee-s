@@ -5,12 +5,12 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_html_view/flutter_html_view.dart';
 
-class IOSingle extends StatefulWidget {
+import 'IntroduceOccupation.dart';
 
+class IOSingle extends StatefulWidget {
   IOObject object;
 
-  IOSingle({IOObject obj})
-  {
+  IOSingle({IOObject obj}) {
     this.object = obj;
   }
 
@@ -19,27 +19,41 @@ class IOSingle extends StatefulWidget {
 }
 
 class _IOSingle extends State<IOSingle> {
-
   final _scaffold = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
-    Widget blueSplitter = Container(color: Statics.shared.colors.blueLineColor,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 20, top: 10));
-    Widget greySplitter = Container(color: Statics.shared.colors.lineColor,height: 1,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10, top: 10));
+    Widget blueSplitter = Container(
+        color: Statics.shared.colors.blueLineColor,
+        height: 3,
+        margin:
+            const EdgeInsets.only(left: 16, right: 16, bottom: 20, top: 10));
+    Widget greySplitter = Container(
+        color: Statics.shared.colors.lineColor,
+        height: 1,
+        margin:
+            const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 10));
     Widget listBtn = Container(
       child: FlatButton(
         child: Container(
-          child: Text(Strings.shared.controllers.noticesList.listKeyword,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.w200)),
+          child: Text(Strings.shared.controllers.noticesList.listKeyword,
+              style: TextStyle(
+                  color: Statics.shared.colors.mainColor,
+                  fontSize: Statics.shared.fontSizes.supplementary,
+                  fontWeight: FontWeight.w200)),
           alignment: Alignment.center,
         ),
-        onPressed: (){
-
+        onPressed: () {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new IntroduceOccupation()));
         },
         padding: const EdgeInsets.all(0),
       ),
-      decoration: BoxDecoration(border: Border.all(width: 1, color: Statics.shared.colors.mainColor)),
+      decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Statics.shared.colors.mainColor)),
       width: screenWidth,
       height: 60,
       alignment: Alignment.center,
@@ -47,54 +61,79 @@ class _IOSingle extends State<IOSingle> {
     );
 
     List<Widget> myImages = [];
-    if(this.widget.object.viewImgUrl_1.isNotEmpty){
-      myImages.add(Image.network(this.widget.object.viewImgUrl_1.replaceAll("https://", "http://"),fit: BoxFit.cover,width: screenWidth,));
+    if (this.widget.object.viewImgUrl_1.isNotEmpty) {
+      myImages.add(Image.network(
+        this.widget.object.viewImgUrl_1.replaceAll("https://", "http://"),
+        fit: BoxFit.cover,
+        width: screenWidth / 1.5,
+      ));
     }
-    if(this.widget.object.viewImgUrl_2.isNotEmpty){
-      myImages.add(Image.network(this.widget.object.viewImgUrl_2.replaceAll("https://", "http://"),fit: BoxFit.cover,width: screenWidth,));
+    if (this.widget.object.viewImgUrl_2.isNotEmpty) {
+      myImages.add(Image.network(
+        this.widget.object.viewImgUrl_2.replaceAll("https://", "http://"),
+        fit: BoxFit.cover,
+        width: screenWidth / 1.5,
+      ));
     }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Container(child: Text("", style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.subTitle)),margin: const EdgeInsets.only(left: 8)),
+        title: Container(
+            child: Text("",
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle)),
+            margin: const EdgeInsets.only(left: 8)),
         centerTitle: false,
         elevation: 0,
-        iconTheme: IconThemeData(
-            color: Color.fromRGBO(0, 0, 0, 1)
-        ),
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
       body: Container(
         child: ListView(
           children: [
             blueSplitter,
-            Padding(child: Text(this.widget.object.name,
-              style: TextStyle(
-                fontSize: Statics.shared.fontSizes.subTitleInContent,
-                color: Statics.shared.colors.titleTextColor,
-                fontWeight: FontWeight.w600,
-              ), // TextStyle
-            ),padding: const EdgeInsets.only(left: 32, right: 32)),
-            SizedBox(height: 10),
-            Padding(child: Row(
-              children: <Widget>[
-                Text(this.widget.object.company,
+            Padding(
+                child: Text(
+                  this.widget.object.name,
                   style: TextStyle(
-                    fontSize: Statics.shared.fontSizes.medium,
-                    color: Statics.shared.colors.captionColor,
-                    fontWeight: FontWeight.w300,
+                    fontSize: Statics.shared.fontSizes.subTitleInContent,
+                    color: Statics.shared.colors.titleTextColor,
+                    fontWeight: FontWeight.w600,
                   ), // TextStyle
                 ),
-              ], // Children
-            ),padding: const EdgeInsets.only(left: 32, right: 32)),
+                padding: const EdgeInsets.only(left: 32, right: 32)),
+            SizedBox(height: 10),
+            Padding(
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      this.widget.object.company,
+                      style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.medium,
+                        color: Statics.shared.colors.captionColor,
+                        fontWeight: FontWeight.w300,
+                      ), // TextStyle
+                    ),
+                  ], // Children
+                ),
+                padding: const EdgeInsets.only(left: 32, right: 32)),
             greySplitter,
             Container(
               height: 300,
-              margin: const EdgeInsets.only(left: 0, right: 0, bottom: 20),
-              child: CarouselSlider(
-                items: myImages,
-                height: 300,
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Image.network(
+                this
+                    .widget
+                    .object
+                    .viewImgUrl_1
+                    .replaceAll("https://", "http://"),
               ),
+
+              // CarouselSlider(
+              //   items: myImages,
+              //   height: 300,
+              // ),
             ),
             HtmlView(
               data: this.widget.object.content,
@@ -103,7 +142,7 @@ class _IOSingle extends State<IOSingle> {
             ),
             greySplitter,
             listBtn
-          ],// Children
+          ], // Children
         ),
         color: Colors.white,
       ), // end Body

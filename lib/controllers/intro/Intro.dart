@@ -68,8 +68,47 @@ class _IntroState extends State<Intro> {
             //tab1
             Column(
               children: <Widget>[
-                Container(
-                  child: Image.asset("Resources/Images/intro.png"),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Image.asset("Resources/Images/intro.png"),
+                          Container(
+                            padding:
+                                const EdgeInsets.only(left: 5.0, right: 10.0),
+                            child: Image.asset("Resources/Images/intro2.png"),
+                          ),
+                          SizedBox(height: 30),
+                          Container(
+                            padding:
+                                const EdgeInsets.only(left: 20.0, right: 20.0),
+                            child: Text(
+                                "사단법인 한국해기사협회는 선박의 운항, 경영, 관리의 전문직업인 '해기사'들의 권익단체입니다",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize: Statics
+                                        .shared.fontSizes.supplementaryBig,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          SizedBox(height: 30),
+                          Container(
+                            padding:
+                                const EdgeInsets.only(left: 20.0, right: 20.0),
+                            child: Text(
+                                " 해기사들의 친목 도모와 권익 신장 그리고 해사 전문 기술의 향상을 위해 존재합니다. \n\n우리 협회는 어플을 회원들과의 쌍방향 소통 창구로 활용하여 정보를 전달하고 의견을 수렴, '회원이 찾는 협회'의 비전을 실현하겠습니다. \n\n감사합니다",
+                                style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                )),
+                          ),
+                          SizedBox(height: 30),
+                        ],
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
@@ -120,6 +159,7 @@ class _IntroState extends State<Intro> {
                             }
                           },
                         ),
+                        SizedBox(height: 30),
                       ],
                     ),
                   ],

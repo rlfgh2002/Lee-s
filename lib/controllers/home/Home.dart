@@ -15,6 +15,11 @@ import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 
+import '../../models/NoticesList/NoticesListObject.dart';
+import '../../models/iO/IOObject.dart';
+import '../IntroduceOccupation/IOSingle.dart';
+import '../NoticesList/NoticesListSingle.dart';
+
 double deviceWidth;
 
 class Home extends StatefulWidget {
@@ -500,7 +505,33 @@ class _ProfileState extends State<Home> {
                       style: TextStyle(
                           color: Statics.shared.colors.titleTextColor,
                           fontSize: Statics.shared.fontSizes.subTitle)),
-                  onPressed: () {},
+                  onPressed: () {
+                    NoticesListObject object = NoticesListObject(
+                      subject: item["subject"].toString(),
+                      no: 0,
+                      content: item["content"].toString(),
+                      regDate: item["regDate"].toString(),
+                      writer: item["writer"].toString(),
+                      fileUrl_1: item["fileUrl_1"].toString(),
+                      fileUrl_2: item["fileUrl_2"].toString(),
+                      fileUrl_3: item["fileUrl_3"].toString(),
+                      fileUrl_4: item["fileUrl_4"].toString(),
+                      realFileName1: item["realFileName1"].toString(),
+                      realFileName2: item["realFileName2"].toString(),
+                      realFileName3: item["realFileName3"].toString(),
+                      realFileName4: item["realFileName4"].toString(),
+                      serverFileName_1: item["serverFileName_1"].toString(),
+                      serverFileName_2: item["serverFileName_2"].toString(),
+                      serverFileName_3: item["serverFileName_3"].toString(),
+                      serverFileName_4: item["serverFileName_4"].toString(),
+                    );
+
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) =>
+                                new NoticesListSingle(obj: object)));
+                  },
                 ),
                 height: deviceWidth / 8,
               ),
@@ -562,7 +593,21 @@ class _ProfileState extends State<Home> {
               ),
             ]),
           ),
-          onPressed: () {},
+          onPressed: () {
+            IOObject object = IOObject(
+              name: values[0]["name"].toString(),
+              content: values[0]["content"].toString(),
+              company: values[0]["company"].toString(),
+              shortContent: values[0]["shortContent"].toString(),
+              listImgUrl: values[0]["listImgUrl"].toString(),
+              viewImgUrl_1: values[0]["viewImgUrl_1"].toString(),
+              viewImgUrl_2: values[0]["viewImgUrl_2"].toString(),
+            );
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new IOSingle(obj: object)));
+          },
         ),
         height: deviceWidth / 3);
   }
