@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
@@ -23,18 +24,18 @@ var _localPath = userInformation.dirPath.path + "/Magazines";
 //magazinesList를 myList에 넣는다.
 //myList는 0행,1행,마지막행은 Container가 들어가고 그 가운데 magazineList가 들어간다.
 //리스트 값을 변경할 때에는 해당 두 리스트의 값을 다 변경해야한다.
-class Magazines extends StatefulWidget {
+class MapPage extends StatefulWidget {
   bool isFirstInit = true;
 
-  Magazines({Key key}) : super(key: key);
+  MapPage({Key key}) : super(key: key);
   List<Widget> myList = [];
   List<Widget> magazinesList = [];
 
   @override
-  _MagazinesState createState() => _MagazinesState();
+  _MapPageState createState() => _MapPageState();
 }
 
-class _MagazinesState extends State<Magazines> {
+class _MapPageState extends State<MapPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int magazineNum = 0;
 
@@ -147,6 +148,12 @@ class _MagazinesState extends State<Magazines> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     if (widget.isFirstInit) {
       download5MoreMagazines(page: 1);
       widget.isFirstInit = false;
@@ -156,8 +163,9 @@ class _MagazinesState extends State<Magazines> {
         key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.white,
+          brightness: Brightness.light,
           title: Container(
-              child: Text(Strings.shared.controllers.magazines.pageTitle,
+              child: Text(Strings.shared.controllers.map.pageTitle,
                   style: TextStyle(
                       color: Statics.shared.colors.titleTextColor,
                       fontSize: Statics.shared.fontSizes.subTitle)),
@@ -169,66 +177,28 @@ class _MagazinesState extends State<Magazines> {
         body: new Column(
           children: <Widget>[
             Container(
-              child: Stack(
-                children: [
-                  Image.asset(
-                    "Resources/Images/bgMagazine.png",
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Text(
-                                    Strings.shared.controllers.magazines.title1,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color: Statics.shared.colors.mainColor,
-                                        fontSize:
-                                            Statics.shared.fontSizes.subTitle,
-                                        fontWeight: FontWeight.w800)),
-                                width:
-                                    (MediaQuery.of(context).size.width - 64) -
-                                        40,
-                              ),
-                              SizedBox(height: 5),
-                              Container(
-                                child: Text(
-                                    Strings
-                                        .shared.controllers.magazines.caption1,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        color:
-                                            Statics.shared.colors.captionColor,
-                                        fontSize:
-                                            Statics.shared.fontSizes.medium)),
-                                width:
-                                    (MediaQuery.of(context).size.width - 64) -
-                                        40,
-                              ),
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                color: Statics.shared.colors.mainBackgroundVeryLightSilverBlue,
+                child: Column(
+                  children: <Widget>[
+                    Image.asset(
+                      "Resources/Images/map.png",
+                      scale: 3.0,
+                    ),
+                    Container(
+                        padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                        child: FlatButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          child: Image.asset(
+                            "Resources/Icons/mapDownload.png",
+                            scale: 3.0,
                           ),
-                          padding: const EdgeInsets.only(left: 32)),
-                      Padding(
-                        child: Image.asset("Resources/Icons/magazineIcon.png",
-                            width: 40),
-                        padding: const EdgeInsets.only(right: 32),
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                  ), // Row
-                ],
-              ),
-              alignment: Alignment.center,
-              height: 100,
-              //color: Colors.red,
-            ),
+                          onPressed: () {},
+                        ))
+                  ],
+                )
+                //color: Colors.red,
+                ),
             Container(
               color: Colors.blue,
               height: 3,

@@ -164,6 +164,10 @@ flutter:
     - Resources/Icons/btn_occasion.png
     - Resources/Icons/btn_inquiry.png
 
+    # map
+    - Resources/Images/map.png
+    - Resources/Icons/mapDownload.png
+
     # Profile
     - Resources/Images/feeHistory.png
     - Resources/Images/occasion.png

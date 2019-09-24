@@ -43,6 +43,7 @@ class _StringsControllers {
   _StringsControllerNoticesList noticesList = _StringsControllerNoticesList();
   _StringsControllerIOList iO = _StringsControllerIOList();
   _StringsControllerSurveysTabs SurveysTabs = _StringsControllerSurveysTabs();
+  _StringsControllerMap map = _StringsControllerMap();
   _StringsControllerProfile profile = _StringsControllerProfile();
   _StringsSignInController signIn = _StringsSignInController();
   _StringsControllerMagazines magazines = _StringsControllerMagazines();
@@ -52,7 +53,9 @@ class _StringsControllers {
 }
 
 // HOME Controller //
-class _StringsControllerHome {}
+class _StringsControllerHome {
+  String cnter = "종합서비스센터";
+}
 // HOME Controller //
 
 // SurveysTabs Controller //
@@ -75,6 +78,22 @@ class _StringsControllerFindUser {
 // MAGAZINES Controller //
 class _StringsControllerMagazines {
   String pageTitle = "월간 海바라기";
+  String toastMessage = "다운로드가 완료되었습니다.";
+//  ** Reaction toast popup message
+//  버튼 탭했을때 토스트메세지 노출하고 그 전 화면으로 이동
+//  Toast message exposure when button tap
+
+  String title1 = "월간 海바라기";
+  String caption1 = "한국해기사협회 매거진입니다.";
+  String downloadKeyword = "다운로드";
+  String exampleKeyword = "보기";
+  String downloadMoreKey = "더보기";
+}
+// MAGAZINES Controller //
+
+// MAGAZINES Controller //
+class _StringsControllerMap {
+  String pageTitle = "해운선사지도";
   String toastMessage = "다운로드가 완료되었습니다.";
 //  ** Reaction toast popup message
 //  버튼 탭했을때 토스트메세지 노출하고 그 전 화면으로 이동
@@ -219,10 +238,6 @@ class _StringJsonURL {
       "http://www.mariners.or.kr/app_middle/member/user_info_json.php";
   String userinfoModifyJson =
       "http://www.mariners.or.kr/app_middle/member/user_info_modify_json.php";
-  String terms =
-      "https://www.mariners.or.kr/app_middle/terms/service_term.html";
-  String privacy =
-      "https://www.mariners.or.kr/app_middle/terms/privacy_term.html";
   String homeJson = "http://www.mariners.or.kr/app_middle/etc/main_json.php";
   String schoolJson =
       "http://www.mariners.or.kr/app_middle/etc/school_json.php";
@@ -236,6 +251,11 @@ class _StringJsonURL {
       "http://mariners.or.kr/app_middle/etc/manager_json.php";
   String requestMemberJson =
       "http://mariners.or.kr/app_middle/member/requestMembership.php";
+  String terms =
+      "https://www.mariners.or.kr/app_middle/terms/service_term.html";
+  String privacy =
+      "https://www.mariners.or.kr/app_middle/terms/privacy_term.html";
+  String center = "http://www.mariners.or.kr/app_middle/etc/center.html";
 }
 // JSON URL //
 

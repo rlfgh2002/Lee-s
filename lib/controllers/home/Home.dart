@@ -7,6 +7,7 @@ import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.d
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
+import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -19,6 +20,7 @@ import '../../models/NoticesList/NoticesListObject.dart';
 import '../../models/iO/IOObject.dart';
 import '../IntroduceOccupation/IOSingle.dart';
 import '../NoticesList/NoticesListSingle.dart';
+import 'HomeWebview.dart';
 
 double deviceWidth;
 
@@ -319,7 +321,10 @@ class _ProfileState extends State<Home> {
                   highlightColor: Colors.transparent,
                   child: Image.asset('Resources/Images/totalWork.png',
                       width: deviceWidth / 1.2),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeWebview()));
+                  },
                 ),
               ),
               Container(
@@ -440,7 +445,13 @@ class _ProfileState extends State<Home> {
                                       child: Image.asset(
                                           'Resources/Icons/icon_map.png',
                                           scale: 4.0),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) =>
+                                                    new MapPage()));
+                                      },
                                     ),
                                     Text("선사지도",
                                         style: TextStyle(
