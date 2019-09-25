@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/main.dart';
 import 'package:haegisa2/controllers/sign/SignAuth.dart';
-import 'package:haegisa2/controllers/member/find_id.dart';
-import 'package:haegisa2/controllers/member/join.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -11,12 +8,7 @@ import 'SignIn.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/views/buttons/Buttons.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'dart:io' show Platform;
 
 String idValue = "";
 String passValue = "";

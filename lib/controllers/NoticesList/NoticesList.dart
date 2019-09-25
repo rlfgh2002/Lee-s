@@ -163,7 +163,8 @@ class _NoticesListState extends State<NoticesList> {
             child: Text(Strings.shared.controllers.noticesList.pageTitle,
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.subTitle)),
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
             margin: const EdgeInsets.only(left: 8)),
         centerTitle: false,
         elevation: 0,

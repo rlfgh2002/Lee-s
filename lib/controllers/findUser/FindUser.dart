@@ -43,7 +43,8 @@ class _FindUserState extends State<FindUser> {
                 child: Text(Strings.shared.controllers.findUser.pageTitle,
                     style: TextStyle(
                         color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.title)),
+                        fontSize: Statics.shared.fontSizes.subTitle,
+                        fontWeight: FontWeight.bold)),
                 margin: const EdgeInsets.only(left: 8)),
             centerTitle: false,
             elevation: 0,

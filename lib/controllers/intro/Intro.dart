@@ -6,9 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/home/Home.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Intro extends StatefulWidget {
@@ -45,7 +43,8 @@ class _IntroState extends State<Intro> {
           title: Text("협회소개",
               style: TextStyle(
                   color: Statics.shared.colors.titleTextColor,
-                  fontSize: Statics.shared.fontSizes.title)),
+                  fontSize: Statics.shared.fontSizes.subTitle,
+                  fontWeight: FontWeight.bold)),
           titleSpacing: 16.0,
           bottom: TabBar(
             labelColor: Statics.shared.colors.titleTextColor,

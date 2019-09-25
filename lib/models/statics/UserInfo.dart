@@ -1,8 +1,6 @@
 import 'package:haegisa2/models/User.dart';
 import 'package:device_info/device_info.dart';
 import 'package:package_info/package_info.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:io' show Directory, Platform;

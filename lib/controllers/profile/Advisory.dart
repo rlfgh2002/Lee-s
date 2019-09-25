@@ -39,7 +39,8 @@ class _AdvisoryState extends State<Advisory> {
         title: Text("해기자문센터",
             style: TextStyle(
                 color: Statics.shared.colors.titleTextColor,
-                fontSize: Statics.shared.fontSizes.title)),
+                fontSize: Statics.shared.fontSizes.subTitle,
+                fontWeight: FontWeight.bold)),
         titleSpacing: 16.0,
         backgroundColor: Colors.white,
         brightness: Brightness.light,

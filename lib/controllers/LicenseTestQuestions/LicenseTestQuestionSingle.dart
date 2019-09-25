@@ -182,7 +182,8 @@ class _LicenseTestQuestionSingleState extends State<LicenseTestQuestionSingle> {
             child: Text("",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.subTitle)),
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
             margin: const EdgeInsets.only(left: 8)),
         centerTitle: false,
         elevation: 0,

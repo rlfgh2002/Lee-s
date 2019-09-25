@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -14,9 +13,7 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/Chat/BlockReportChatWidget.dart';
 import 'package:haegisa2/views/Chat/BlockAlertWidget.dart';
 import 'package:haegisa2/views/Chat/ProfileAlertWidget.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
-import 'package:haegisa2/models/Chat/chatObject.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -470,8 +467,7 @@ class ChatState extends State<Chat> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
+        backgroundColor: Statics.shared.colors.mainColor,
         title: MiddleWare.shared.topBarWidget,
         centerTitle: false,
         elevation: 0,

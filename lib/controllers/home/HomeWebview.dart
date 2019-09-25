@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/main.dart';
 import 'dart:async';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 const kAndroidUserAgent =
@@ -34,7 +32,6 @@ class _HomeWebviewState extends State<HomeWebview> {
   String currentURL = '';
 
   final _urlCtrl = TextEditingController(text: selectedUrl);
-  final _codeCtrl = TextEditingController(text: 'window.navigator.userAgent');
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _history = [];
 
@@ -56,7 +53,8 @@ class _HomeWebviewState extends State<HomeWebview> {
         title: Text(title,
             style: TextStyle(
                 color: Statics.shared.colors.titleTextColor,
-                fontSize: Statics.shared.fontSizes.title)),
+                fontSize: Statics.shared.fontSizes.subTitle,
+                fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         centerTitle: false,

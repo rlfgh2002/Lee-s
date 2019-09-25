@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/main.dart';
 import 'dart:async';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -60,7 +59,8 @@ class _TermsView extends State<TermsView> {
         title: Text(title,
             style: TextStyle(
                 color: Statics.shared.colors.titleTextColor,
-                fontSize: Statics.shared.fontSizes.title)),
+                fontSize: Statics.shared.fontSizes.subTitle,
+                fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         centerTitle: false,

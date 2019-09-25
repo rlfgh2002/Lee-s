@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'MiddleWare.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
-import 'package:http/http.dart' as http;
 
 class Agree extends StatefulWidget {
   @override

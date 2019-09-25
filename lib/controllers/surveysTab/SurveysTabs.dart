@@ -127,7 +127,8 @@ class _SurveysTabsState extends State<SurveysTabs>
         child: Text(Strings.shared.controllers.notices.pageTitle,
             style: TextStyle(
                 color: Statics.shared.colors.titleTextColor,
-                fontSize: Statics.shared.fontSizes.title)),
+                fontSize: Statics.shared.fontSizes.subTitle,
+                fontWeight: FontWeight.bold)),
         margin: const EdgeInsets.only(left: 8));
   }
 
@@ -285,8 +286,8 @@ class _SurveysTabsState extends State<SurveysTabs>
               child: Text(Strings.shared.controllers.SurveysTabs.pageTitle,
                   style: TextStyle(
                       color: Statics.shared.colors.titleTextColor,
-                      fontSize: Statics.shared.fontSizes.titleInContent,
-                      fontWeight: FontWeight.w100)),
+                      fontSize: Statics.shared.fontSizes.subTitle,
+                      fontWeight: FontWeight.bold)),
               margin: const EdgeInsets.only(left: 0)),
         ),
         body: TabBarView(

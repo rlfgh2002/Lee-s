@@ -103,7 +103,8 @@ class _ChatsState extends State<Chats> {
             child: Text(Strings.shared.controllers.chats.pageTitle,
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.title)),
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
             margin: const EdgeInsets.only(left: 8)),
         Row(
           children: <Widget>[

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:haegisa2/models/Vote/VoteObject.dart';
 import 'package:sqflite/sqflite.dart';
