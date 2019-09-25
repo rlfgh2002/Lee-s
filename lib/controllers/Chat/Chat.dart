@@ -468,6 +468,7 @@ class ChatState extends State<Chat> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Statics.shared.colors.mainColor,
+        brightness: Brightness.light,
         title: MiddleWare.shared.topBarWidget,
         centerTitle: false,
         elevation: 0,
