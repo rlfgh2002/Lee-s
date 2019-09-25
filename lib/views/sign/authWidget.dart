@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/auth.dart';
 import 'package:haegisa2/main.dart';
@@ -27,6 +28,12 @@ class _AuthWidgetState extends State<AuthWidget> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     showDialog(
         context: context,
         barrierDismissible: false,

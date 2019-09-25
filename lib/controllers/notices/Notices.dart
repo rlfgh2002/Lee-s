@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -327,8 +328,8 @@ class NoticesState extends State<Notices> {
   void openNotice(String noticeId) {
     Future.delayed(Duration(seconds: 1)).then((val) {
       int i = 0;
-      widget.notices.forEach((item){
-        if(item.idx == noticeId){
+      widget.notices.forEach((item) {
+        if (item.idx == noticeId) {
           widget.notices[i].onTapped();
           print("Clicked On Notice(${noticeId.toString()}) ....");
         }
@@ -339,6 +340,12 @@ class NoticesState extends State<Notices> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     this.widget.myChild = this;
     MiddleWare.shared.screenWidth = MediaQuery.of(context).size.width;
     MiddleWare.shared.topBarWidget = this.showTopBarTitle();

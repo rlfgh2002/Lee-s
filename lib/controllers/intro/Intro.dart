@@ -40,6 +40,8 @@ class _IntroState extends State<Intro> {
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          brightness: Brightness.light,
           title: Text("협회소개",
               style: TextStyle(
                   color: Statics.shared.colors.titleTextColor,
@@ -57,8 +59,6 @@ class _IntroState extends State<Intro> {
               Tab(text: "조직도"),
             ],
           ),
-          backgroundColor: Colors.white,
-          brightness: Brightness.light,
           centerTitle: false,
           elevation: 0,
           iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
@@ -175,7 +175,7 @@ class _IntroState extends State<Intro> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 1000),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

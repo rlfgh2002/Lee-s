@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
@@ -147,6 +148,12 @@ class _MagazinesState extends State<Magazines> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     if (widget.isFirstInit) {
       download5MoreMagazines(page: 1);
       widget.isFirstInit = false;
@@ -156,6 +163,7 @@ class _MagazinesState extends State<Magazines> {
         key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.white,
+          brightness: Brightness.light,
           title: Container(
               child: Text(Strings.shared.controllers.magazines.pageTitle,
                   style: TextStyle(
@@ -251,7 +259,7 @@ class _MagazinesState extends State<Magazines> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 1000),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

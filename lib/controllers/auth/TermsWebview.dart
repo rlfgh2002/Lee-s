@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/main.dart';
 import 'dart:async';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -39,6 +40,12 @@ class _TermsView extends State<TermsView> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     if (userInformation.mode == "Terms") {
       selectedUrl = Strings.shared.controllers.jsonURL.terms;
       title = Strings.shared.controllers.term.terms_terms_title;
@@ -55,6 +62,7 @@ class _TermsView extends State<TermsView> {
                 color: Statics.shared.colors.titleTextColor,
                 fontSize: Statics.shared.fontSizes.title)),
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
         centerTitle: false,
         elevation: 0,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),

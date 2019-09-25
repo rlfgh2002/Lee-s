@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 
 class VoteWidget extends StatefulWidget {
-
   double width = 0;
   String vote = "";
   bool isChecked = false;
@@ -13,7 +13,13 @@ class VoteWidget extends StatefulWidget {
 
   VoidCallback onTapped;
 
-  VoteWidget({bool isChecked = false,double width = 0,String vote = "", String groupName = "", int itemIndex = 1,VoidCallback onTapped}){
+  VoteWidget(
+      {bool isChecked = false,
+      double width = 0,
+      String vote = "",
+      String groupName = "",
+      int itemIndex = 1,
+      VoidCallback onTapped}) {
     this.width = width;
     this.vote = vote;
     this.groupName = groupName;
@@ -27,13 +33,18 @@ class VoteWidget extends StatefulWidget {
 }
 
 class _VoteWidgetState extends State<VoteWidget> {
-
   @override
   Widget build(BuildContext context) {
-    if(this.widget.isChecked){
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
+    if (this.widget.isChecked) {
       return Container(
         child: FlatButton(
-          onPressed: (){
+          onPressed: () {
             setState(() {
               //this.widget.isChecked = false;
             });
@@ -43,7 +54,13 @@ class _VoteWidgetState extends State<VoteWidget> {
             width: this.widget.width,
             child: Row(
               children: [
-                Text(this.widget.vote,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.content, fontWeight: FontWeight.bold),),
+                Text(
+                  this.widget.vote,
+                  style: TextStyle(
+                      color: Statics.shared.colors.mainColor,
+                      fontSize: Statics.shared.fontSizes.content,
+                      fontWeight: FontWeight.bold),
+                ),
                 Icon(Icons.check, color: Statics.shared.colors.mainColor)
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,17 +70,17 @@ class _VoteWidgetState extends State<VoteWidget> {
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            border: Border.all(color: Statics.shared.colors.mainColor,width: 1)
-        ),
+            border:
+                Border.all(color: Statics.shared.colors.mainColor, width: 1)),
         width: this.widget.width,
-        padding: const EdgeInsets.only(left: 16,right: 16),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         margin: const EdgeInsets.only(bottom: 10),
       );
-    }// checked
-    else{
+    } // checked
+    else {
       return Container(
         child: FlatButton(
-          onPressed: (){
+          onPressed: () {
             setState(() {
               //this.widget.isChecked = true;
               this.widget.onTapped();
@@ -74,8 +91,15 @@ class _VoteWidgetState extends State<VoteWidget> {
             width: this.widget.width,
             child: Row(
               children: [
-                Text(this.widget.vote,style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content, fontWeight: FontWeight.bold),),
-                Icon(Icons.check, color: Statics.shared.colors.subTitleTextColor)
+                Text(
+                  this.widget.vote,
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.content,
+                      fontWeight: FontWeight.bold),
+                ),
+                Icon(Icons.check,
+                    color: Statics.shared.colors.subTitleTextColor)
               ],
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,12 +108,12 @@ class _VoteWidgetState extends State<VoteWidget> {
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            border: Border.all(color: Statics.shared.colors.subTitleTextColor,width: 1)
-        ),
+            border: Border.all(
+                color: Statics.shared.colors.subTitleTextColor, width: 1)),
         width: this.widget.width,
-        padding: const EdgeInsets.only(left: 16,right: 16),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         margin: const EdgeInsets.only(bottom: 10),
       );
-    }// not checked
+    } // not checked
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/Auth/nullpage.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/sign/SignError.dart';
@@ -52,10 +53,16 @@ class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     //MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
     return WebviewScaffold(
       url: selectedUrl,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
         centerTitle: false,
         elevation: 0,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),

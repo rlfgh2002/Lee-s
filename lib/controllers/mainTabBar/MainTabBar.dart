@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/Chat/Chat.dart';
 import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
@@ -18,7 +19,6 @@ import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
 import 'package:haegisa2/views/MainTabBar/NoInternetPopUp.dart';
 import 'package:geolocator/geolocator.dart';
-
 
 class MainTabBar extends StatefulWidget {
   final MyDataBase db = MyDataBase();
@@ -42,7 +42,8 @@ class MainTabBar extends StatefulWidget {
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static BottomNavigationBar navBar;
   Geolocator geolocator = Geolocator();
-  final GlobalKey<MainTabBarState> _scaffoldKey = new GlobalKey<MainTabBarState>();
+  final GlobalKey<MainTabBarState> _scaffoldKey =
+      new GlobalKey<MainTabBarState>();
 
   Future<Position> _getLocation() async {
     var currentLocation;
@@ -245,15 +246,15 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('MSGX=> on messageX Main $message');
-        analiseMessage(message,true);
+        analiseMessage(message, true);
       },
       onResume: (Map<String, dynamic> message) async {
         print('MSGX=> on resumeX $message');
-        analiseMessage(message,false);
+        analiseMessage(message, false);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('MSGX=> on launchX $message');
-        analiseMessage(message,false);
+        analiseMessage(message, false);
       },
     );
   }
@@ -267,7 +268,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
-  void analiseMessage(Map<String, dynamic> message,bool isOnMessage) {
+  void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
     ChatObject chatItem = ChatObject.fromJson(message);
 
     String seen = "0";
@@ -296,7 +297,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     Chats.staticChatsPage.refresh();
                   }
 
-                  if(seen == "1"){
+                  if (seen == "1") {
                     Chat.staticChatPage.myChild.addMessageToList(
                         msg: chatItem.notificationContent,
                         isYours: false,
@@ -304,9 +305,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                         senderName: chatItem.notificationFromName);
                   }
 
-                  Future.delayed(Duration(seconds: 2)).then((val){
-                    print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                    if(isOnMessage != true){
+                  Future.delayed(Duration(seconds: 2)).then((val) {
+                    print(
+                        ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                    if (isOnMessage != true) {
                       /* GOTO CHAT PAGE */
                       setState(() {
                         MiddleWare.shared.tabc.animateTo(2);
@@ -318,9 +320,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                       });
                       /* GOTO CHAT PAGE */
                     }
-                    print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                    print(
+                        ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
                   });
-
                 });
           },
           onNoResult: () {
@@ -344,7 +346,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                           Chats.staticChatsPage.refresh();
                         }
 
-                        if(seen == "1"){
+                        if (seen == "1") {
                           Chat.staticChatPage.myChild.addMessageToList(
                               msg: chatItem.notificationContent,
                               isYours: false,
@@ -352,9 +354,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                               senderName: chatItem.notificationFromName);
                         }
 
-                        Future.delayed(Duration(seconds: 2)).then((val){
-                          print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                          if(isOnMessage != true){
+                        Future.delayed(Duration(seconds: 2)).then((val) {
+                          print(
+                              ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                          if (isOnMessage != true) {
                             /* GOTO CHAT PAGE */
                             setState(() {
                               MiddleWare.shared.tabc.animateTo(2);
@@ -366,9 +369,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                             });
                             /* GOTO CHAT PAGE */
                           }
-                          print(":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                          print(
+                              ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
                         });
-
                       });
                 },
                 onNoInerted: () {
@@ -396,7 +399,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                           widget.db.insertAnswer(
                             onAdded: () {
                               if (Notices.staticNoticesPage != null) {
-                                Notices.staticNoticesPage.myChild.refreshNotices();
+                                Notices.staticNoticesPage.myChild
+                                    .refreshNotices();
                               }
                             },
                             idx: voteItem.idx,
@@ -413,10 +417,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     /* GOTO VOTE PAGE */
                     setState(() {
                       MiddleWare.shared.tabc.animateTo(3);
-                      Notices.staticNoticesPage.myChild.openNotice(message['data']['idx']);
+                      Notices.staticNoticesPage.myChild
+                          .openNotice(message['data']['idx']);
                     });
                     /* GOTO VOTE PAGE */
-
                   });
             });
       } // Vote Notification
@@ -486,18 +490,18 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               }).catchError((error) {
                 print(
                     "...::: updating user location was failed => ${error.toString()} :::...");
-                    showLocationPopUp(_scaffoldKey.currentContext);
+                showLocationPopUp(_scaffoldKey.currentContext);
               });
             } else {
               print(
                   "...::: updating user location was failed => (access to GPS failed) :::...");
-                  showLocationPopUp(_scaffoldKey.currentContext);
+              showLocationPopUp(_scaffoldKey.currentContext);
             }
           });
         } else {
           print(
               "...::: updating user location was failed => (GPS Service was disabled) :::...");
-              showLocationPopUp(_scaffoldKey.currentContext);
+          showLocationPopUp(_scaffoldKey.currentContext);
         }
       });
     }
@@ -531,6 +535,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           ).dialog();
         });
   }
+
   void showLocationPopUp(BuildContext ctx) {
     showDialog(
         context: ctx,
@@ -546,6 +551,11 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
     MainTabBarState.navBar = BottomNavigationBar(
       items: [
         BottomNavigationBarItem(

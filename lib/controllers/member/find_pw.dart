@@ -26,6 +26,12 @@ class _FindInState extends State<FindPW> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -33,6 +39,7 @@ class _FindInState extends State<FindPW> {
       appBar: AppBar(
         title: Text(Strings.shared.controllers.signIn.forgetPasswordTitle),
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
         centerTitle: false,
         elevation: 0,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
@@ -145,7 +152,7 @@ class _FindInState extends State<FindPW> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 1000),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -19,6 +20,12 @@ class SignUp extends StatefulWidget {
 class _SignInState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
 
     String idValue = "";
@@ -27,6 +34,7 @@ class _SignInState extends State<SignUp> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
         centerTitle: false,
         elevation: 0,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),

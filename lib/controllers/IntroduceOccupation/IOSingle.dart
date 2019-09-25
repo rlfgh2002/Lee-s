@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/models/iO/IOObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -23,6 +24,12 @@ class _IOSingle extends State<IOSingle> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     double screenWidth = MediaQuery.of(context).size.width;
     Widget blueSplitter = Container(
         color: Statics.shared.colors.blueLineColor,
@@ -79,6 +86,7 @@ class _IOSingle extends State<IOSingle> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
         title: Container(
             child: Text("",
                 style: TextStyle(

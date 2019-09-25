@@ -167,7 +167,8 @@ flutter:
     # map
     - Resources/Images/map.png
     - Resources/Icons/mapDownload.png
-
+    - Resources/Icons/icon_location.png
+    
     # Profile
     - Resources/Images/feeHistory.png
     - Resources/Images/occasion.png

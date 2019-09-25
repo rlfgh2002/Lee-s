@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/auth.dart';
 import 'package:haegisa2/main.dart';
@@ -45,6 +46,12 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
 
     _firebaseMessaging.getToken().then((token) {
@@ -59,6 +66,7 @@ class _SignInState extends State<SignIn> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
         centerTitle: false,
         elevation: 0,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
@@ -295,7 +303,7 @@ class _SignInState extends State<SignIn> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 1000),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

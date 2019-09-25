@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/findUser/FindUserSearch.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -21,6 +22,12 @@ class _FindUserState extends State<FindUser> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     double screenWidth = MediaQuery.of(context).size.width;
     double paddingRightLeft = (screenWidth * (30 / 100)) / 2;
     double paddingRightLeftSearchBox = (screenWidth * (20 / 100)) / 2;

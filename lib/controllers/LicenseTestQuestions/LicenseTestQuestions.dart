@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestionSingle.dart';
 import 'package:haegisa2/models/LicenseTestQuestions/LicenseTestQuestionObject.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -8,9 +9,8 @@ import 'package:haegisa2/views/LicenseTestQuestionWidget/LicenseTestQuestionWidg
 import 'package:http/http.dart' as http;
 
 class LicenseTestQuestions extends StatefulWidget {
-
   bool isFirstInit = true;
-  LicenseTestQuestions({ Key key }) : super(key: key);
+  LicenseTestQuestions({Key key}) : super(key: key);
   List<Widget> myList = [];
   List<Widget> licenseTestQuestionsList = [];
 
@@ -19,38 +19,59 @@ class LicenseTestQuestions extends StatefulWidget {
 }
 
 class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
-
   final _scaffold = GlobalKey<ScaffoldState>();
 
-  void refreshList(int pCurrent,pTotal){
+  void refreshList(int pCurrent, pTotal) {
     widget.myList = [];
     double screenWidth = MediaQuery.of(context).size.width;
-    Widget topView = Container(child: Stack(
-      children: [
-        Image.asset("Resources/Images/bgLicense.png",width: screenWidth, height: 100,),
-        Container(child: Image.asset("Resources/Icons/archive.png", width: 45),alignment: Alignment.centerRight,margin: const EdgeInsets.only(right: 16),)
-      ],
-    ), alignment: Alignment.center, height: 100,);
-    Widget blueSplitter = Container(color: Colors.blue,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10));
+    Widget topView = Container(
+      child: Stack(
+        children: [
+          Image.asset(
+            "Resources/Images/bgLicense.png",
+            width: screenWidth,
+            height: 100,
+          ),
+          Container(
+            child: Image.asset("Resources/Icons/archive.png", width: 45),
+            alignment: Alignment.centerRight,
+            margin: const EdgeInsets.only(right: 16),
+          )
+        ],
+      ),
+      alignment: Alignment.center,
+      height: 100,
+    );
+    Widget blueSplitter = Container(
+        color: Colors.blue,
+        height: 3,
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
-    widget.myList.addAll(this.widget.licenseTestQuestionsList); // fetch from server
+    widget.myList
+        .addAll(this.widget.licenseTestQuestionsList); // fetch from server
 
-    if(pTotal > pCurrent){
+    if (pTotal > pCurrent) {
       Widget downloadMoreView = Container(
         child: FlatButton(
           child: Container(
-            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.subTitle, fontWeight: FontWeight.w600)),
+            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,
+                style: TextStyle(
+                    color: Statics.shared.colors.mainColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.w600)),
             alignment: Alignment.center,
           ),
-          onPressed: (){
+          onPressed: () {
             // download 5 more magazines ...
             this.download5MoreLicense(page: pCurrent + 1);
           },
           padding: const EdgeInsets.all(0),
         ),
-        decoration: BoxDecoration(border: Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+        decoration: BoxDecoration(
+            border:
+                Border.all(width: 2, color: Statics.shared.colors.mainColor)),
         width: screenWidth,
         height: 60,
         alignment: Alignment.center,
@@ -58,29 +79,26 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
       );
       widget.myList.add(downloadMoreView);
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
-  void download5MoreLicense({int page = 1}) async {
 
-    http.get(Statics.shared.urls.licenseTestQuestions(page: page)
-    ).then((val){
-      if(val.statusCode == 200){
-        print("::::::::::::::::::::: [ Getting License Test Qs Start ] :::::::::::::::::::::");
+  void download5MoreLicense({int page = 1}) async {
+    http.get(Statics.shared.urls.licenseTestQuestions(page: page)).then((val) {
+      if (val.statusCode == 200) {
+        print(
+            "::::::::::::::::::::: [ Getting License Test Qs Start ] :::::::::::::::::::::");
         print("BODY: ${val.body.toString()}");
         var myJson = json.decode(utf8.decode(val.bodyBytes));
 
         int code = myJson["code"];
-        if(code == 200){
+        if (code == 200) {
           List<LicenseTestQuestionObject> myReturnList = [];
           int pTotal = myJson["totalPageNum"];
           int pCurrent = myJson["nowPageNum"];
           List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
-          rows.forEach((item){
-
+          rows.forEach((item) {
             LicenseTestQuestionObject object = LicenseTestQuestionObject(
               subject: item["subject"].toString(),
               no: item["no"],
@@ -100,31 +118,45 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
               serverFileName_3: item["serverFileName_3"].toString(),
               serverFileName_4: item["serverFileName_4"].toString(),
             );
-            newList.add(LicenseTestQuestionWidget(title: item["subject"].toString(),obj: object,onTap: (){
-              Navigator.push(context, new MaterialPageRoute(builder: (context) => new LicenseTestQuestionSingle(obj: object)));
-            }));
+            newList.add(LicenseTestQuestionWidget(
+                title: item["subject"].toString(),
+                obj: object,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) =>
+                              new LicenseTestQuestionSingle(obj: object)));
+                }));
           });
-          if(page == 1){
+          if (page == 1) {
             this.widget.licenseTestQuestionsList = newList;
-          }else{
+          } else {
             this.widget.licenseTestQuestionsList.addAll(newList);
           }
           this.refreshList(pCurrent, pTotal);
-
         }
-        print("::::::::::::::::::::: [ Getting License Test Qs End ] :::::::::::::::::::::");
-      }else{
-        print(":::::::::::::::::: on Getting License Test Qs error :: Server Error ::::::::::::::::::");
+        print(
+            "::::::::::::::::::::: [ Getting License Test Qs End ] :::::::::::::::::::::");
+      } else {
+        print(
+            ":::::::::::::::::: on Getting License Test Qs error :: Server Error ::::::::::::::::::");
       }
-    }).catchError((error){
-      print(":::::::::::::::::: on Getting License Test Qs error : ${error.toString()} ::::::::::::::::::");
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on Getting License Test Qs error : ${error.toString()} ::::::::::::::::::");
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
 
-    if(widget.isFirstInit){
+    if (widget.isFirstInit) {
       download5MoreLicense(page: 1);
       widget.isFirstInit = false;
     }
@@ -132,12 +164,16 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Container(child: Text("", style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.subTitle)),margin: const EdgeInsets.only(left: 8)),
+        brightness: Brightness.light,
+        title: Container(
+            child: Text("",
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle)),
+            margin: const EdgeInsets.only(left: 8)),
         centerTitle: false,
         elevation: 0,
-        iconTheme: IconThemeData(
-            color: Color.fromRGBO(0, 0, 0, 1)
-        ),
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
       body: Container(
         child: ListView(

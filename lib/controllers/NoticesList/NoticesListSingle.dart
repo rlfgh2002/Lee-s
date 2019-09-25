@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -25,6 +26,12 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     double screenWidth = MediaQuery.of(context).size.width;
     Widget blueSplitter = Container(
         color: Statics.shared.colors.blueLineColor,
@@ -63,6 +70,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        brightness: Brightness.light,
         title: Container(
             child: Text("",
                 style: TextStyle(

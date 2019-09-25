@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
 import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -8,9 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class NoticesList extends StatefulWidget {
-
   bool isFirstInit = true;
-  NoticesList({ Key key }) : super(key: key);
+  NoticesList({Key key}) : super(key: key);
   List<Widget> myList = [];
   List<Widget> noticesList = [];
 
@@ -19,37 +19,54 @@ class NoticesList extends StatefulWidget {
 }
 
 class _NoticesListState extends State<NoticesList> {
-
   final _scaffold = GlobalKey<ScaffoldState>();
 
-  void refreshList(int pCurrent,pTotal){
+  void refreshList(int pCurrent, pTotal) {
     widget.myList = [];
     double screenWidth = MediaQuery.of(context).size.width;
-    Widget topView = Container(child: Stack(
-      children: [
-        Image.asset("Resources/Images/noticeListHeader.png",width: screenWidth, height: 100,),
-      ],
-    ), alignment: Alignment.center, height: 100,);
-    Widget blueSplitter = Container(color: Statics.shared.colors.blueLineColor,height: 3,margin: const EdgeInsets.only(left: 16,right: 16, bottom: 10, top: 10));
+    Widget topView = Container(
+      child: Stack(
+        children: [
+          Image.asset(
+            "Resources/Images/noticeListHeader.png",
+            width: screenWidth,
+            height: 100,
+          ),
+        ],
+      ),
+      alignment: Alignment.center,
+      height: 100,
+    );
+    Widget blueSplitter = Container(
+        color: Statics.shared.colors.blueLineColor,
+        height: 3,
+        margin:
+            const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 10));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
     widget.myList.addAll(this.widget.noticesList); // fetch from server
 
-    if(pTotal > pCurrent){
+    if (pTotal > pCurrent) {
       Widget downloadMoreView = Container(
         child: FlatButton(
           child: Container(
-            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.w200)),
+            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,
+                style: TextStyle(
+                    color: Statics.shared.colors.mainColor,
+                    fontSize: Statics.shared.fontSizes.supplementary,
+                    fontWeight: FontWeight.w200)),
             alignment: Alignment.center,
           ),
-          onPressed: (){
+          onPressed: () {
             // download 5 more magazines ...
             this.download5MoreNotices(page: pCurrent + 1);
           },
           padding: const EdgeInsets.all(0),
         ),
-        decoration: BoxDecoration(border: Border.all(width: 1, color: Statics.shared.colors.mainColor)),
+        decoration: BoxDecoration(
+            border:
+                Border.all(width: 1, color: Statics.shared.colors.mainColor)),
         width: screenWidth,
         height: 60,
         alignment: Alignment.center,
@@ -57,29 +74,26 @@ class _NoticesListState extends State<NoticesList> {
       );
       widget.myList.add(downloadMoreView);
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
-  void download5MoreNotices({int page = 1}) async {
 
-    http.get(Statics.shared.urls.noticesList(page: page)
-    ).then((val){
-      if(val.statusCode == 200){
-        print("::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
+  void download5MoreNotices({int page = 1}) async {
+    http.get(Statics.shared.urls.noticesList(page: page)).then((val) {
+      if (val.statusCode == 200) {
+        print(
+            "::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
         print("BODY: ${val.body.toString()}");
         var myJson = json.decode(utf8.decode(val.bodyBytes));
 
         int code = myJson["code"];
-        if(code == 200){
+        if (code == 200) {
           List<NoticesListObject> myReturnList = [];
           int pTotal = myJson["totalPageNum"];
           int pCurrent = myJson["nowPageNum"];
           List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
-          rows.forEach((item){
-
+          rows.forEach((item) {
             NoticesListObject object = NoticesListObject(
               subject: item["subject"].toString(),
               no: item["no"],
@@ -99,31 +113,44 @@ class _NoticesListState extends State<NoticesList> {
               serverFileName_3: item["serverFileName_3"].toString(),
               serverFileName_4: item["serverFileName_4"].toString(),
             );
-            newList.add(NoticesListWidget(title: item["subject"].toString(),obj: object,onTap: (){
-              Navigator.push(context, new MaterialPageRoute(builder: (context) => new NoticesListSingle(obj: object)));
-            }));
+            newList.add(NoticesListWidget(
+                title: item["subject"].toString(),
+                obj: object,
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) =>
+                              new NoticesListSingle(obj: object)));
+                }));
           });
-          if(page == 1){
+          if (page == 1) {
             this.widget.noticesList = newList;
-          }else{
+          } else {
             this.widget.noticesList.addAll(newList);
           }
           this.refreshList(pCurrent, pTotal);
-
         }
-        print("::::::::::::::::::::: [ Getting NoticesList End ] :::::::::::::::::::::");
-      }else{
-        print(":::::::::::::::::: on Getting NoticesList error :: Server Error ::::::::::::::::::");
+        print(
+            "::::::::::::::::::::: [ Getting NoticesList End ] :::::::::::::::::::::");
+      } else {
+        print(
+            ":::::::::::::::::: on Getting NoticesList error :: Server Error ::::::::::::::::::");
       }
-    }).catchError((error){
-      print(":::::::::::::::::: on Getting NoticesList error : ${error.toString()} ::::::::::::::::::");
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on Getting NoticesList error : ${error.toString()} ::::::::::::::::::");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(widget.isFirstInit){
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+    if (widget.isFirstInit) {
       download5MoreNotices(page: 1);
       widget.isFirstInit = false;
     }
@@ -131,12 +158,16 @@ class _NoticesListState extends State<NoticesList> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Container(child: Text(Strings.shared.controllers.noticesList.pageTitle, style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.subTitle)),margin: const EdgeInsets.only(left: 8)),
+        brightness: Brightness.light,
+        title: Container(
+            child: Text(Strings.shared.controllers.noticesList.pageTitle,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle)),
+            margin: const EdgeInsets.only(left: 8)),
         centerTitle: false,
         elevation: 0,
-        iconTheme: IconThemeData(
-            color: Color.fromRGBO(0, 0, 0, 1)
-        ),
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
       body: Container(
         child: ListView(

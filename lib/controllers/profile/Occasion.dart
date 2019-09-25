@@ -28,6 +28,7 @@ class _OccasionState extends State<Occasion> {
   TextEditingController _companyController;
   TextEditingController _phoneController;
   TextEditingController _dateController;
+  TextEditingController _positionController;
 
   String _moneySelectedValue;
   String _weddingSelectedValue;
@@ -36,6 +37,7 @@ class _OccasionState extends State<Occasion> {
   bool _nameChecked = false;
   bool _birthChecked = false;
   bool _companyChecked = false;
+  bool _positionChecked = false;
   bool _phoneChecked = false;
   bool _bankUserChecked = false;
   bool _bankNameChecked = false;
@@ -47,6 +49,7 @@ class _OccasionState extends State<Occasion> {
   String name;
   String birth;
   String company;
+  String position;
   String phone;
   String bankUser;
   String bankName;
@@ -76,6 +79,12 @@ class _OccasionState extends State<Occasion> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     setSelectedRadio(int val) {
@@ -174,6 +183,19 @@ class _OccasionState extends State<Occasion> {
                             "회사명",
                             company,
                             _companyChecked)),
+                    Container(
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, bottom: 2.5, top: 2.5),
+                        alignment: Alignment.center,
+                        height: MediaQuery.of(context).size.height / 12,
+                        child: txtField(
+                            "책",
+                            _positionController,
+                            TextInputType.text,
+                            20,
+                            "직책",
+                            position,
+                            _positionChecked)),
                     Container(
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 2.5, top: 2.5),
@@ -302,8 +324,6 @@ class _OccasionState extends State<Occasion> {
                                     return;
                                   }
                                 }
-                                _displaySnackBar(context, "경조사 구분을 선택하세요.");
-                                return;
                               }
 
                               var postMap = new Map<String, dynamic>();
@@ -361,7 +381,7 @@ class _OccasionState extends State<Occasion> {
                                               style: TextStyle(
                                                   fontSize: Statics.shared
                                                       .fontSizes.supplementary,
-                                                  color: Colors.red),
+                                                  color: Colors.black),
                                             ),
                                             onPressed: () {
                                               Navigator.of(context).pop();
@@ -381,7 +401,7 @@ class _OccasionState extends State<Occasion> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 1000),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

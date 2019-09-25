@@ -15,19 +15,23 @@ class URLS {
     return "http://mariners.or.kr/app_middle/survey/survey_json.php";
   }
 
-  String magazines({int page = 0}){
+  String magazines({int page = 0}) {
     return "http://mariners.or.kr/app_middle/etc/magazine_json.php?mode=list&pageNum=${page.toString()}";
   }
 
-  String noticesList({int page = 0}){
+  String map({int page = 0}) {
+    return "http://mariners.or.kr/app_middle/owner/owner_json.php?mode=list&pageNum=${page.toString()}";
+  }
+
+  String noticesList({int page = 0}) {
     return "http://mariners.or.kr/app_middle/etc/notice_json.php?mode=list&pageNum=${page.toString()}";
   }
 
-  String iO({int page = 0}){
+  String iO({int page = 0}) {
     return "http://mariners.or.kr/app_middle/etc/introduction_json.php?mode=list&pageNum=${page.toString()}";
   }
 
-  String licenseTestQuestions({int page = 0}){
+  String licenseTestQuestions({int page = 0}) {
     return "http://mariners.or.kr/app_middle/etc/exam_json.php?mode=list&pageNum=${page.toString()}";
   }
 }

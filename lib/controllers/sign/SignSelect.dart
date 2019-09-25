@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haegisa2/main.dart';
 import 'package:haegisa2/controllers/sign/SignAuth.dart';
 import 'package:haegisa2/controllers/member/find_id.dart';
@@ -30,19 +31,22 @@ class _SignInState extends State<SignSelect> {
   String agree = userInformation.agree;
   @override
   Widget build(BuildContext context) {
-    
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.white, // Color for Android
+        systemNavigationBarColor:
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
+
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     int deviceWidth = MediaQuery.of(context).size.width.round().toInt();
     return new WillPopScope(
-      
       onWillPop: () async => false,
       // onWillPop: () async {
       //   Future.value(
       //       false); //return a `Future` with false value so this route cant be popped or closed.
       // },
       child: new Scaffold(
-        
         body: Container(
           color: Colors.white,
           child: Column(
