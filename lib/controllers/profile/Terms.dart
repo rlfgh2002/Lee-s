@@ -56,74 +56,69 @@ class _TermsState extends State<Terms> {
               color: Statics.shared.colors.lineColor,
               padding: const EdgeInsets.only(top: 20),
             ),
-            Container(
-                padding: const EdgeInsets.only(left: 20),
-                height: deviceWidth / 5,
-                child: Row(children: <Widget>[
-                  Text(
-                    Strings.shared.controllers.term.terms_terms_title,
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitleInContent),
-                    textAlign: TextAlign.left,
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    width: 50,
-                    child: FlatButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      child: Image.asset('Resources/Icons/Vector 3.2.png',
-                          width: 10, scale: 2.5),
-                      onPressed: () {
-                        userInformation.mode = "Terms";
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TermsView()));
-                      },
-                    ),
-                  )
-                ])),
+            FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                child: Container(
+                    padding: const EdgeInsets.only(left: 20),
+                    height: deviceWidth / 5,
+                    child: Row(children: <Widget>[
+                      Text(
+                        Strings.shared.controllers.term.terms_terms_title,
+                        style: TextStyle(
+                            color: Statics.shared.colors.titleTextColor,
+                            fontSize:
+                                Statics.shared.fontSizes.subTitleInContent),
+                        textAlign: TextAlign.left,
+                      ),
+                      Spacer(),
+                      SizedBox(
+                        width: 50,
+                        child: Image.asset('Resources/Icons/Vector 3.2.png',
+                            width: 10, scale: 4.0),
+                      )
+                    ])),
+                onPressed: () {
+                  userInformation.mode = "Terms";
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TermsView()));
+                }),
             Row(children: <Widget>[
               Expanded(child: Divider(height: 0)),
             ]),
-            Container(
-                padding: const EdgeInsets.only(left: 20),
-                height: deviceWidth / 5,
-                child: Row(children: <Widget>[
-                  Text(
-                    Strings.shared.controllers.term.terms_policy_title,
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitleInContent),
-                    textAlign: TextAlign.left,
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    width: 50,
-                    child: FlatButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      child: Image.asset('Resources/Icons/Vector 3.2.png',
-                          width: 10, scale: 2.5),
-                      onPressed: () {
-                        userInformation.mode = "Privacy";
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TermsView()));
-                      },
-                    ),
-                  )
-                ])),
+            FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                child: Container(
+                    padding: const EdgeInsets.only(left: 20),
+                    height: deviceWidth / 5,
+                    child: Row(children: <Widget>[
+                      Text(
+                        Strings.shared.controllers.term.terms_policy_title,
+                        style: TextStyle(
+                            color: Statics.shared.colors.titleTextColor,
+                            fontSize:
+                                Statics.shared.fontSizes.subTitleInContent),
+                        textAlign: TextAlign.left,
+                      ),
+                      Spacer(),
+                      SizedBox(
+                        width: 50,
+                        child: Image.asset('Resources/Icons/Vector 3.2.png',
+                            width: 10, scale: 4.0),
+                      )
+                    ])),
+                onPressed: () {
+                  userInformation.mode = "Privacy";
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TermsView()));
+                }),
             Container(
               height: deviceHeight,
               color: Statics.shared.colors.lineColor,
               padding: const EdgeInsets.only(top: 20),
             ),
           ],
-
           // Container
         ));
   }

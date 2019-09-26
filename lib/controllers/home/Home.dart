@@ -6,13 +6,12 @@ import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dar
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
+import 'package:haegisa2/controllers/barcode/barcode.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/controllers/profile/UserInfo.dart';
-import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 
@@ -26,10 +25,10 @@ double deviceWidth;
 
 class Home extends StatefulWidget {
   @override
-  _ProfileState createState() => _ProfileState();
+  _HomeState createState() => _HomeState();
 }
 
-class _ProfileState extends State<Home> {
+class _HomeState extends State<Home> {
   List noticeList;
   List introList = List();
   bool _isLoading = false;
@@ -92,33 +91,44 @@ class _ProfileState extends State<Home> {
             children: [
               Container(
                 alignment: Alignment.centerLeft,
-                child: Column(children: [
-                  Row(
-                    children: <Widget>[
-                      Text(userInformation.fullName + "님, 안녕하세요",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Statics.shared.fontSizes.titleInContent,
-                              fontWeight: FontWeight.bold)),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(userInformation.fullName + "님, 안녕하세요",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:
+                                      Statics.shared.fontSizes.titleInContent,
+                                  fontWeight: FontWeight.bold)),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            child: Text("오늘도 안전운항 하세요 ^^",
+                                style: TextStyle(
+                                    color: Color(0xffb2ccf5),
+                                    fontSize: Statics
+                                        .shared.fontSizes.subTitleInContent)),
+                          )
+                        ],
+                      ),
                       Spacer(),
                       FlatButton(
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         child: Image.asset("Resources/Icons/icon_barcode.png",
                             scale: 2.0),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new Barcode()));
+                        },
                       )
-                    ],
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text("오늘도 안전운항 하세요 ^^",
-                        style: TextStyle(
-                            color: Color(0xffb2ccf5),
-                            fontSize:
-                                Statics.shared.fontSizes.subTitleInContent)),
-                  )
-                ]), // Row
+                    ]), // Row
 
                 padding: const EdgeInsets.only(left: 20, bottom: 30, top: 30),
 

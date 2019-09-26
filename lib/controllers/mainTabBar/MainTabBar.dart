@@ -40,6 +40,7 @@ class MainTabBar extends StatefulWidget {
 }
 
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
+  DateTime backButtonPressTime;
   static BottomNavigationBar navBar;
   Geolocator geolocator = Geolocator();
   final GlobalKey<MainTabBarState> _scaffoldKey =
@@ -598,7 +599,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     checkInternet(context);
 
     return new WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () => onWillPop(context),
       key: _scaffoldKey,
       child: new Scaffold(
         backgroundColor: Colors.white,
@@ -610,5 +611,28 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         bottomNavigationBar: MainTabBarState.navBar,
       ),
     );
+  }
+
+  Future<bool> onWillPop(BuildContext context) async {
+    const snackBarDuration = Duration(seconds: 3);
+
+    final snackBar = SnackBar(
+      content: Text('Press back again to leave'),
+      duration: snackBarDuration,
+    );
+
+    DateTime currentTime = DateTime.now();
+
+    bool backButtonHasNotBeenPressedOrSnackBarHasBeenClosed =
+        backButtonPressTime == null ||
+            currentTime.difference(backButtonPressTime) > snackBarDuration;
+
+    if (backButtonHasNotBeenPressedOrSnackBarHasBeenClosed) {
+      backButtonPressTime = currentTime;
+      Scaffold.of(context).showSnackBar(snackBar);
+      return false;
+    }
+
+    return true;
   }
 }

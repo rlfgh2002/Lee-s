@@ -78,6 +78,7 @@ class _SignInState extends State<SignIn> {
                   style: TextStyle(
                     fontSize: Statics.shared.fontSizes.title,
                     color: Statics.shared.colors.titleTextColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 alignment: Alignment.centerLeft),
@@ -85,9 +86,9 @@ class _SignInState extends State<SignIn> {
                 child: Text(
                   Strings.shared.controllers.signIn.title2,
                   style: TextStyle(
-                    fontSize: Statics.shared.fontSizes.title,
-                    color: Statics.shared.colors.mainColor,
-                  ),
+                      fontSize: Statics.shared.fontSizes.title,
+                      color: Statics.shared.colors.mainColor,
+                      fontWeight: FontWeight.bold),
                 ),
                 alignment: Alignment.centerLeft),
             Container(
@@ -95,12 +96,12 @@ class _SignInState extends State<SignIn> {
                   Strings.shared.controllers.signIn.subTitle,
                   style: TextStyle(
                     fontSize: Statics.shared.fontSizes.subTitle,
-                    color: Statics.shared.colors.subTitleTextColor,
+                    color: Color(0xFF333364B),
                   ),
                 ),
                 alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(right: 64, top: 20)),
-            SizedBox(height: 40),
+                padding: const EdgeInsets.only(top: 20)),
+            SizedBox(height: 25),
 
             //아이디 입력
             Container(
@@ -124,7 +125,7 @@ class _SignInState extends State<SignIn> {
                   },
                 ),
                 alignment: Alignment.centerLeft),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
 
             //패스워드 입력
             Container(
@@ -258,8 +259,7 @@ class _SignInState extends State<SignIn> {
                               Strings.shared.controllers.signIn.loginBtnTitle,
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize:
-                                      Statics.shared.fontSizes.titleInContent),
+                                  fontSize: Statics.shared.fontSizes.subTitle),
                             ), // Text
                             SizedBox(width: 10),
                             Image.asset(
@@ -287,7 +287,7 @@ class _SignInState extends State<SignIn> {
                 ],
                 mainAxisAlignment: MainAxisAlignment.end,
               ),
-              padding: const EdgeInsets.only(top: 100),
+              padding: const EdgeInsets.only(top: 40),
             ),
           ], //Children
         ), // Column
@@ -300,7 +300,7 @@ class _SignInState extends State<SignIn> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 1500),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

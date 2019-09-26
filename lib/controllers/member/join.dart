@@ -236,7 +236,7 @@ class _JoinInState extends State<Join> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 1500),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

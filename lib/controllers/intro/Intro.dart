@@ -17,11 +17,8 @@ class Intro extends StatefulWidget {
 class _IntroState extends State<Intro> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String pushState = "";
-  bool _aTeamVisible = false;
-  bool _bTeamVisible = false;
-  bool _cTeamVisible = false;
   var orgTable = new List();
-  int _activeMeterIndex;
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
@@ -51,6 +48,7 @@ class _IntroState extends State<Intro> {
             labelStyle: (TextStyle(
               fontSize: Statics.shared.fontSizes.subTitle,
             )),
+            indicatorColor: Statics.shared.colors.tabColor,
             tabs: [
               Tab(
                 text: "협회정보",
@@ -74,10 +72,12 @@ class _IntroState extends State<Intro> {
                       Column(
                         children: <Widget>[
                           Image.asset("Resources/Images/intro.png"),
+                          SizedBox(height: 30),
                           Container(
                             padding:
                                 const EdgeInsets.only(left: 5.0, right: 10.0),
-                            child: Image.asset("Resources/Images/intro2.png"),
+                            child: Image.asset("Resources/Images/intro2.png",
+                                scale: 3.0),
                           ),
                           SizedBox(height: 30),
                           Container(
@@ -119,12 +119,16 @@ class _IntroState extends State<Intro> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Image.asset("Resources/Images/organization.png"),
+                        Image.asset(
+                          "Resources/Images/organization.png",
+                        ),
+                        SizedBox(height: 30),
                         Container(
                           padding:
                               const EdgeInsets.only(left: 5.0, right: 10.0),
-                          child:
-                              Image.asset("Resources/Images/organization2.png"),
+                          child: Image.asset(
+                              "Resources/Images/organization2.png",
+                              scale: 3.0),
                         ),
                         FutureBuilder(
                           future: getOrganization(), // a Future<String> or null
@@ -174,7 +178,7 @@ class _IntroState extends State<Intro> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 1500),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

@@ -42,6 +42,7 @@ class _FeeHistoryState extends State<FeeHistory> {
       ),
       body: Column(children: <Widget>[
         Container(
+          color: Colors.white,
           child: Column(
             children: <Widget>[
               Container(
@@ -141,6 +142,7 @@ class _FeeHistoryState extends State<FeeHistory> {
           children: <Widget>[
             for (var item in values)
               Container(
+                  color: Colors.white,
                   padding: const EdgeInsets.only(
                     left: 10,
                     right: 10,
@@ -192,6 +194,7 @@ class _FeeHistoryState extends State<FeeHistory> {
       ]);
     } else {
       return Container(
+          color: Colors.white,
           padding:
               const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 20),
           alignment: Alignment.center,

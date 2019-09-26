@@ -45,6 +45,7 @@ dependencies:
   flutter_downloader: ^1.2.1
   path_provider: ^0.5.0+1 #파일 경로를 얻기 위해
   open_file: ^2.0.3 #파일 오픈(경로)
+  barcode_flutter: ^1.0.2 #generate barcode
 
   flutter_localizations:
     sdk: flutter
@@ -135,6 +136,7 @@ flutter:
     - Resources/Icons/login_sign.png
     - Resources/Icons/arrow_up.png
     - Resources/Icons/arrow_down.png
+    - Resources/Icons/Vector.png
     # Images
     - Resources/Images/ill_survey.png
     - Resources/Images/ill_vote.png
@@ -164,6 +166,11 @@ flutter:
     - Resources/Icons/btn_occasion.png
     - Resources/Icons/btn_inquiry.png
 
+    # barcode
+    - Resources/Images/barcodeType1.png
+    - Resources/Images/barcodeType2.png    
+    - Resources/Images/bgBarcode.png 
+    
     # map
     - Resources/Images/map.png
     - Resources/Icons/mapDownload.png

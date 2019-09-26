@@ -9,6 +9,7 @@ class SpecifiedColors {
   Color blueLineColor = Color.fromRGBO(62, 127, 231, 1);
   Color lineColorLighter = Color.fromRGBO(241, 244, 250, 0.4);
   Color cautionColor = Color.fromRGBO(237, 85, 65, 1);
-  Color captionColor = Color.fromRGBO(160,169,188, 1);
-  Color mainBackgroundVeryLightSilverBlue = Color.fromRGBO(246,249,255,1);
+  Color captionColor = Color.fromRGBO(160, 169, 188, 1);
+  Color mainBackgroundVeryLightSilverBlue = Color.fromRGBO(246, 249, 255, 1);
+  Color tabColor = Color(0xFF3E7FE7);
 }

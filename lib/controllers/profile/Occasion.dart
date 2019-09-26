@@ -190,7 +190,7 @@ class _OccasionState extends State<Occasion> {
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height / 12,
                         child: txtField(
-                            "책",
+                            "position",
                             _positionController,
                             TextInputType.text,
                             20,
@@ -338,6 +338,7 @@ class _OccasionState extends State<Occasion> {
                               postMap["member_name"] = name;
                               postMap["birth"] = birth;
                               postMap["company"] = company;
+                              postMap["position"] = position;
                               postMap["phone"] = phone;
                               postMap["holiday_type"] = holidayType.toString();
                               if (holidayType == 1) {
@@ -402,7 +403,7 @@ class _OccasionState extends State<Occasion> {
   _displaySnackBar(BuildContext context, String str) {
     final snackBar = SnackBar(
       content: Text(str),
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 1500),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
@@ -465,6 +466,9 @@ class _OccasionState extends State<Occasion> {
             break;
           case "company":
             company = str;
+            break;
+          case "position":
+            position = str;
             break;
           case "phone":
             phone = str;
