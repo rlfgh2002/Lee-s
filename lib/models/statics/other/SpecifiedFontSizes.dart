@@ -1,5 +1,4 @@
-class SpecifiedFontSizes
-{
+class SpecifiedFontSizes {
   double title = 30;
   double subTitle = 20;
 

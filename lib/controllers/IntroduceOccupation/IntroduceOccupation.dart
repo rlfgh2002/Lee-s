@@ -76,7 +76,7 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
       ),
       alignment: Alignment.center,
       height: 100,
-      color: Colors.red,
+
     );
     Widget blueSplitter = Container(
         color: Statics.shared.colors.blueLineColor,

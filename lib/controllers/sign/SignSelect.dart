@@ -20,6 +20,7 @@ class SignSelect extends StatefulWidget {
 }
 
 class _SignInState extends State<SignSelect> {
+  DateTime backButtonPressTime;
   String agree = userInformation.agree;
   @override
   Widget build(BuildContext context) {
@@ -32,113 +33,129 @@ class _SignInState extends State<SignSelect> {
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     int deviceWidth = MediaQuery.of(context).size.width.round().toInt();
-    return new WillPopScope(
-      onWillPop: () async => false,
-      // onWillPop: () async {
-      //   Future.value(
-      //       false); //return a `Future` with false value so this route cant be popped or closed.
-      // },
-      child: new Scaffold(
-        body: Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              Container(
-                child: Image.asset('Resources/Icons/login_sign.png',
-                    width: 72, height: 72),
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+              child: Image.asset('Resources/Icons/login_sign.png',
+                  width: 72, height: 72),
+            ),
+            Container(
+              child: Text(Strings.shared.controllers.signSelect.title1,
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.title)), // Text
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 20, bottom: 10),
+            ),
+            Container(
+                child: Row(
+                  children: [
+                    FlatButton(
+                      child: Row(children: [
+                        Text(Strings.shared.controllers.signSelect.button1,
+                            style: TextStyle(
+                                color: Statics.shared.colors.titleTextColor,
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary)),
+                        Image.asset('Resources/Icons/btn_next_blue.png',
+                            width: 28, height: 28),
+                      ]),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => new SignIn()));
+                      },
+                    ),
+                  ], // Row Children
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ), // Row
+                alignment: Alignment.center),
+            Container(
+              child: Image.asset(
+                'Resources/Icons/Line2.png',
               ),
-              Container(
-                child: Text(Strings.shared.controllers.signSelect.title1,
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.title)), // Text
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 20, bottom: 10),
+              padding: EdgeInsets.only(
+                top: deviceHeight / 20,
+                bottom: deviceHeight / 20,
               ),
-              Container(
-                  child: Row(
-                    children: [
-                      FlatButton(
-                        child: Row(children: [
-                          Text(Strings.shared.controllers.signSelect.button1,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary)),
-                          Image.asset('Resources/Icons/btn_next_blue.png',
-                              width: 28, height: 28),
-                        ]),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new SignIn()));
-                        },
-                      ),
-                    ], // Row Children
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  ), // Row
-                  alignment: Alignment.center),
-              Container(
-                child: Image.asset(
-                  'Resources/Icons/Line2.png',
-                ),
-                padding: EdgeInsets.only(
-                  top: deviceHeight / 20,
-                  bottom: deviceHeight / 20,
-                ),
-              ),
-              Container(
-                child: Image.asset('Resources/Icons/login_join.png',
-                    width: 72, height: 72),
-              ),
-              Container(
-                child: Text(Strings.shared.controllers.signSelect.title2,
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.title)), // Text
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 20, bottom: 10),
-              ),
-              Container(
-                  child: Row(
-                    children: [
-                      FlatButton(
-                        child: Row(children: [
-                          Text(Strings.shared.controllers.signSelect.button2,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary)),
-                          Image.asset('Resources/Icons/btn_next_green.png',
-                              width: 28, height: 28),
-                        ]),
-                        onPressed: () {
-                          // Navigator.push(
-                          //     context,
-                          //     new MaterialPageRoute(
-                          //         builder: (context) => new Join()));
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new SignAuth()));
-                        },
-                      ),
-                    ], // Row Children
-                    mainAxisAlignment: MainAxisAlignment.center,
-                  ), // Row
-                  alignment: Alignment.center),
-            ], // Row Children
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-          ), // Row
+            ),
+            Container(
+              child: Image.asset('Resources/Icons/login_join.png',
+                  width: 72, height: 72),
+            ),
+            Container(
+              child: Text(Strings.shared.controllers.signSelect.title2,
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.title)), // Text
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 20, bottom: 10),
+            ),
+            Container(
+                child: Row(
+                  children: [
+                    FlatButton(
+                      child: Row(children: [
+                        Text(Strings.shared.controllers.signSelect.button2,
+                            style: TextStyle(
+                                color: Statics.shared.colors.titleTextColor,
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary)),
+                        Image.asset('Resources/Icons/btn_next_green.png',
+                            width: 28, height: 28),
+                      ]),
+                      onPressed: () {
+                        // Navigator.push(
+                        //     context,
+                        //     new MaterialPageRoute(
+                        //         builder: (context) => new Join()));
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => new SignAuth()));
+                      },
+                    ),
+                  ], // Row Children
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ), // Row
+                alignment: Alignment.center),
+          ], // Row Children
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+        ), // Row
 
-          padding: const EdgeInsets.only(left: 32, right: 32),
-          width: MiddleWare.shared.screenSize,
-          alignment: Alignment(0.0, 0.0),
-        ), // Container
-      ),
+        padding: const EdgeInsets.only(left: 32, right: 32),
+        width: MiddleWare.shared.screenSize,
+        alignment: Alignment(0.0, 0.0),
+      ), // Container
     );
+  }
+
+  Future<bool> onWillPop(BuildContext context) async {
+    const snackBarDuration = Duration(seconds: 3);
+
+    final snackBar = SnackBar(
+      content: Text('Press back again to leave'),
+      duration: snackBarDuration,
+    );
+
+    DateTime currentTime = DateTime.now();
+
+    bool backButtonHasNotBeenPressedOrSnackBarHasBeenClosed =
+        backButtonPressTime == null ||
+            currentTime.difference(backButtonPressTime) > snackBarDuration;
+
+    if (backButtonHasNotBeenPressedOrSnackBarHasBeenClosed) {
+      backButtonPressTime = currentTime;
+      Scaffold.of(context).showSnackBar(snackBar);
+      return false;
+    }
+
+    return true;
   }
 }
 

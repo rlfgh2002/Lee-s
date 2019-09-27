@@ -381,11 +381,19 @@ class _UserInfoState extends State<UserInfo> {
                                         ),
                                         onPressed: () {
                                           userInformation.logout();
-                                          Navigator.push(
-                                              context,
-                                              new MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      new SplashScreen()));
+                                          Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                            // the new route
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  SplashScreen(),
+                                            ),
+
+                                            // this function should return true when we're done removing routes
+                                            // but because we want to remove all other screens, we make it
+                                            // always return false
+                                            (Route route) => false,
+                                          );
                                         },
                                       ),
                                     ],

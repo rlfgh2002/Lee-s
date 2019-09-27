@@ -50,365 +50,368 @@ class _ProfileState extends State<Profile> {
       _isMember = true;
     }
 
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(Strings.shared.controllers.profile.appTitle,
-              style: TextStyle(
-                  color: Statics.shared.colors.titleTextColor,
-                  fontSize: Statics.shared.fontSizes.subTitle,
-                  fontWeight: FontWeight.bold)),
-          titleSpacing: 16.0,
-          backgroundColor: Colors.white,
-          brightness: Brightness.light,
-          centerTitle: false,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
-        ),
+    return new WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text(Strings.shared.controllers.profile.appTitle,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
+            titleSpacing: 16.0,
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            centerTitle: false,
+            elevation: 0,
+            iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+          ),
 
-        body: Container(
-          color: Colors.white,
-          child: ListView(
-            children: [
-              Container(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(typeAsset, scale: 3),
-                      Container(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                      userInformation.fullName +
-                                          typeTitle.substring(0, 3),
-                                      style: TextStyle(
-                                          color: Statics
-                                              .shared.colors.titleTextColor,
-                                          fontSize: Statics.shared.fontSizes
-                                              .titleInContent)),
-                                  Text(typeTitle.substring(3, 6),
-                                      style: TextStyle(
-                                          color: typeColor,
-                                          fontSize: Statics.shared.fontSizes
-                                              .titleInContent)),
-                                  Text(typeTitle.substring(6, 10),
-                                      style: TextStyle(
-                                          color: Statics
-                                              .shared.colors.titleTextColor,
-                                          fontSize: Statics.shared.fontSizes
-                                              .titleInContent)),
-                                ],
-                              ),
-                              Visibility(
-                                visible: _isMember,
-                                child: new InkWell(
-                                  onTap: () {
-                                    showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (_) => authAlert());
-                                  },
-                                  child: Text(Strings
-                                      .shared.controllers.profile.submitType),
+          body: Container(
+            color: Colors.white,
+            child: ListView(
+              children: [
+                Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(typeAsset, scale: 3),
+                        Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                        userInformation.fullName +
+                                            typeTitle.substring(0, 3),
+                                        style: TextStyle(
+                                            color: Statics
+                                                .shared.colors.titleTextColor,
+                                            fontSize: Statics.shared.fontSizes
+                                                .titleInContent)),
+                                    Text(typeTitle.substring(3, 6),
+                                        style: TextStyle(
+                                            color: typeColor,
+                                            fontSize: Statics.shared.fontSizes
+                                                .titleInContent)),
+                                    Text(typeTitle.substring(6, 10),
+                                        style: TextStyle(
+                                            color: Statics
+                                                .shared.colors.titleTextColor,
+                                            fontSize: Statics.shared.fontSizes
+                                                .titleInContent)),
+                                  ],
                                 ),
+                                Visibility(
+                                  visible: _isMember,
+                                  child: new InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          barrierDismissible: false,
+                                          context: context,
+                                          builder: (_) => authAlert());
+                                    },
+                                    child: Text(Strings
+                                        .shared.controllers.profile.submitType),
+                                  ),
+                                )
+                              ],
+                            ))
+                      ]), //Row
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 20, bottom: 15, top: 15),
+                ),
+                Image.asset('Resources/Icons/Line3.png'),
+                Container(
+                  child: Column(children: [
+                    Container(
+                        child: IntrinsicHeight(
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          SizedBox(
+                              child: FlatButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                child: Row(children: [
+                                  Image.asset(
+                                      'Resources/Icons/btn_feehistory.png',
+                                      scale: 2.5),
+                                  Text(
+                                      " " +
+                                          Strings.shared.controllers.profile
+                                              .feehistory,
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary)),
+                                ]),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new FeeHistory()));
+                                },
+                              ),
+                              width: deviceWidth / 2,
+                              height: deviceWidth / 5),
+                          VerticalDivider(width: 0),
+                          SizedBox(
+                              child: FlatButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                child: Row(children: [
+                                  Image.asset('Resources/Icons/btn_inquiry.png',
+                                      scale: 2.5),
+                                  Text(
+                                      " " +
+                                          Strings.shared.controllers.profile
+                                              .inquiry,
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary)),
+                                ]),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => new Inquiry()));
+                                },
+                              ),
+                              width: deviceWidth / 2,
+                              height: deviceWidth / 5)
+                        ],
+                      ), // Row Children
+                    )),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                        child: IntrinsicHeight(
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          SizedBox(
+                              child: FlatButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                child: Row(children: [
+                                  Image.asset(
+                                      'Resources/Icons/btn_occasion.png',
+                                      scale: 2.5),
+                                  Text(
+                                      " " +
+                                          Strings.shared.controllers.profile
+                                              .occasion,
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary)),
+                                ]),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new Occasion()));
+                                },
+                              ),
+                              width: deviceWidth / 2,
+                              height: deviceWidth / 5),
+                          VerticalDivider(width: 0),
+                          SizedBox(
+                              child: FlatButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                child: Row(children: [
+                                  Image.asset(
+                                      'Resources/Icons/btn_advisory.png',
+                                      scale: 2.5),
+                                  Text(
+                                      " " +
+                                          Strings.shared.controllers.profile
+                                              .advisory,
+                                      style: TextStyle(
+                                          color: Statics
+                                              .shared.colors.titleTextColor,
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary)),
+                                ]),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new Advisory()));
+                                },
+                              ),
+                              width: deviceWidth / 2,
+                              height: deviceWidth / 5)
+                        ],
+                      ), // Row Children
+                    )),
+                  ]), // Row
+                ),
+                Image.asset('Resources/Icons/Line3.png', width: 34),
+                Container(
+                  child: Column(children: [
+                    Container(
+                        height: deviceWidth / 5,
+                        padding: const EdgeInsets.only(left: 20, right: 5),
+                        child: FlatButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          child: new Row(
+                            children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.infoModify,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary),
+                                textAlign: TextAlign.left,
+                              ),
+                              Spacer(),
+                              SizedBox(
+                                width: 50,
+                                child: Image.asset(
+                                    'Resources/Icons/Vector 3.2.png',
+                                    width: 10,
+                                    scale: 4),
                               )
                             ],
-                          ))
-                    ]), //Row
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 20, bottom: 15, top: 15),
-              ),
-              Image.asset('Resources/Icons/Line3.png'),
-              Container(
-                child: Column(children: [
-                  Container(
-                      child: IntrinsicHeight(
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        SizedBox(
-                            child: FlatButton(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Row(children: [
-                                Image.asset(
-                                    'Resources/Icons/btn_feehistory.png',
-                                    scale: 2.5),
-                                Text(
-                                    " " +
-                                        Strings.shared.controllers.profile
-                                            .feehistory,
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: Statics
-                                            .shared.fontSizes.supplementary)),
-                              ]),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            new FeeHistory()));
-                              },
-                            ),
-                            width: deviceWidth / 2,
-                            height: deviceWidth / 5),
-                        VerticalDivider(width: 0),
-                        SizedBox(
-                            child: FlatButton(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Row(children: [
-                                Image.asset('Resources/Icons/btn_inquiry.png',
-                                    scale: 2.5),
-                                Text(
-                                    " " +
-                                        Strings
-                                            .shared.controllers.profile.inquiry,
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: Statics
-                                            .shared.fontSizes.supplementary)),
-                              ]),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => new Inquiry()));
-                              },
-                            ),
-                            width: deviceWidth / 2,
-                            height: deviceWidth / 5)
-                      ],
-                    ), // Row Children
-                  )),
-                  Row(children: <Widget>[
-                    Expanded(child: Divider(height: 0)),
-                  ]),
-                  Container(
-                      child: IntrinsicHeight(
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        SizedBox(
-                            child: FlatButton(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Row(children: [
-                                Image.asset('Resources/Icons/btn_occasion.png',
-                                    scale: 2.5),
-                                Text(
-                                    " " +
-                                        Strings.shared.controllers.profile
-                                            .occasion,
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: Statics
-                                            .shared.fontSizes.supplementary)),
-                              ]),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => new Occasion()));
-                              },
-                            ),
-                            width: deviceWidth / 2,
-                            height: deviceWidth / 5),
-                        VerticalDivider(width: 0),
-                        SizedBox(
-                            child: FlatButton(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Row(children: [
-                                Image.asset('Resources/Icons/btn_advisory.png',
-                                    scale: 2.5),
-                                Text(
-                                    " " +
-                                        Strings.shared.controllers.profile
-                                            .advisory,
-                                    style: TextStyle(
-                                        color: Statics
-                                            .shared.colors.titleTextColor,
-                                        fontSize: Statics
-                                            .shared.fontSizes.supplementary)),
-                              ]),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => new Advisory()));
-                              },
-                            ),
-                            width: deviceWidth / 2,
-                            height: deviceWidth / 5)
-                      ],
-                    ), // Row Children
-                  )),
-                ]), // Row
-              ),
-              Image.asset('Resources/Icons/Line3.png', width: 34),
-              Container(
-                child: Column(children: [
-                  Container(
-                      height: deviceWidth / 5,
-                      padding: const EdgeInsets.only(left: 20, right: 5),
-                      child: FlatButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        child: new Row(
-                          children: <Widget>[
-                            Text(
-                              Strings.shared.controllers.profile.infoModify,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary),
-                              textAlign: TextAlign.left,
-                            ),
-                            Spacer(),
-                            SizedBox(
-                              width: 50,
-                              child: Image.asset(
-                                  'Resources/Icons/Vector 3.2.png',
-                                  width: 10,
-                                  scale: 4),
-                            )
-                          ],
-                        ), // Row Children
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new UserInfo()));
-                        },
-                      )),
-                  Row(children: <Widget>[
-                    Expanded(child: Divider(height: 0)),
-                  ]),
-                  Container(
-                      height: deviceWidth / 5,
-                      padding: const EdgeInsets.only(left: 20, right: 5),
-                      child: new FlatButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              Strings.shared.controllers.profile.alarm,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary),
-                              textAlign: TextAlign.left,
-                            ),
-                            Spacer(),
-                            SizedBox(
-                              width: 50,
-                              child: Image.asset(
-                                  'Resources/Icons/Vector 3.2.png',
-                                  width: 10,
-                                  scale: 4),
-                            )
-                          ],
-                        ), // Row Children
+                          ), // Row Children
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new UserInfo()));
+                          },
+                        )),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                        height: deviceWidth / 5,
+                        padding: const EdgeInsets.only(left: 20, right: 5),
+                        child: new FlatButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.alarm,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary),
+                                textAlign: TextAlign.left,
+                              ),
+                              Spacer(),
+                              SizedBox(
+                                width: 50,
+                                child: Image.asset(
+                                    'Resources/Icons/Vector 3.2.png',
+                                    width: 10,
+                                    scale: 4),
+                              )
+                            ],
+                          ), // Row Children
 
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new AlarmAgree()));
-                        },
-                      )),
-                  Row(children: <Widget>[
-                    Expanded(child: Divider(height: 0)),
-                  ]),
-                  Container(
-                      height: deviceWidth / 5,
-                      padding: const EdgeInsets.only(left: 20, right: 5),
-                      child: new FlatButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              Strings.shared.controllers.profile.terms,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary),
-                              textAlign: TextAlign.left,
-                            ),
-                            Spacer(),
-                            SizedBox(
-                              width: 50,
-                              child: Image.asset(
-                                  'Resources/Icons/Vector 3.2.png',
-                                  width: 10,
-                                  scale: 4),
-                            )
-                          ],
-                        ), // Row Children
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new Terms()));
-                        },
-                      )),
-                  Row(children: <Widget>[
-                    Expanded(child: Divider(height: 0)),
-                  ]),
-                  Container(
-                      height: deviceWidth / 5,
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: new FlatButton(
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              Strings.shared.controllers.profile.appVersion,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary),
-                              textAlign: TextAlign.left,
-                            ),
-                            Spacer(),
-                            Text(
-                              "1.0.0 (최신)",
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary),
-                              textAlign: TextAlign.right,
-                            ),
-                          ],
-                        ), // Row Children
-                        onPressed: () {},
-                      )),
-                  Row(children: <Widget>[
-                    Expanded(child: Divider(height: 0)),
-                  ]),
-                ]), // Row
-              ),
-            ], // Row Children
-          ), // Row
-          alignment: Alignment(0.0, 0.0),
-        ), // Container
-      ),
-    );
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new AlarmAgree()));
+                          },
+                        )),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                        height: deviceWidth / 5,
+                        padding: const EdgeInsets.only(left: 20, right: 5),
+                        child: new FlatButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.terms,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary),
+                                textAlign: TextAlign.left,
+                              ),
+                              Spacer(),
+                              SizedBox(
+                                width: 50,
+                                child: Image.asset(
+                                    'Resources/Icons/Vector 3.2.png',
+                                    width: 10,
+                                    scale: 4),
+                              )
+                            ],
+                          ), // Row Children
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new Terms()));
+                          },
+                        )),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                        height: deviceWidth / 5,
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: new FlatButton(
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.appVersion,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary),
+                                textAlign: TextAlign.left,
+                              ),
+                              Spacer(),
+                              Text(
+                                "1.0.0 (최신)",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary),
+                                textAlign: TextAlign.right,
+                              ),
+                            ],
+                          ), // Row Children
+                          onPressed: () {},
+                        )),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                  ]), // Row
+                ),
+              ], // Row Children
+            ), // Row
+            alignment: Alignment(0.0, 0.0),
+          ), // Container
+        ));
   }
 
   Widget authAlert() {
@@ -496,7 +499,7 @@ class _ProfileState extends State<Profile> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습니다.",
+                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습��다.",
                         style: TextStyle(
                           color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,

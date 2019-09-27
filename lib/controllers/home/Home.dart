@@ -31,6 +31,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  DateTime backButtonPressTime;
   List noticeList;
   List introList = List();
   bool _isLoading = false;
@@ -81,7 +82,7 @@ class _HomeState extends State<Home> {
 
     return new WillPopScope(
       onWillPop: () async => false,
-
+      //onWillPop: () async => false,
       // onWillPop: () async {
       //   Future.value(
       //       false); //return a `Future` with false value so this route cant be popped or closed.
@@ -520,6 +521,7 @@ class _HomeState extends State<Home> {
           Column(
             children: <Widget>[
               Container(
+                alignment: Alignment.centerLeft,
                 child: FlatButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,

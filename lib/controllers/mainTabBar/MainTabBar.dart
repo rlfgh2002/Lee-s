@@ -629,18 +629,17 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     checkInternet(context);
 
     return new WillPopScope(
-      onWillPop: () => onWillPop(context),
-      key: _scaffoldKey,
-      child: new Scaffold(
-        backgroundColor: Colors.white,
-        body: TabBarView(
-          children: MiddleWare.shared.myTabBarList,
-          controller: MiddleWare.shared.tabc,
-          physics: NeverScrollableScrollPhysics(),
-        ),
-        bottomNavigationBar: MainTabBarState.navBar,
-      ),
-    );
+        onWillPop: () async => _onBackPressed(),
+        child: new Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Colors.white,
+          body: TabBarView(
+            children: MiddleWare.shared.myTabBarList,
+            controller: MiddleWare.shared.tabc,
+            physics: NeverScrollableScrollPhysics(),
+          ),
+          bottomNavigationBar: MainTabBarState.navBar,
+        ));
   }
 
   Future<bool> onWillPop(BuildContext context) async {
@@ -664,5 +663,63 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     }
 
     return true;
+  }
+
+  Future<bool> _onBackPressed() {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (_) => AlertDialog(
+              title: new Text("앱 종료"),
+              content: new Text("앱을 종료하시겠습니까?",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text("취소",
+                      style: TextStyle(
+                          fontSize: Statics.shared.fontSizes.supplementary,
+                          color: Colors.black)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text(
+                    "종료",
+                    style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.supplementary,
+                        color: Colors.red),
+                  ),
+                  onPressed: () {
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  },
+                ),
+              ],
+            ));
+  }
+
+  Widget roundedButton(String buttonLabel, Color bgColor, Color textColor) {
+    var loginBtn = new Container(
+      padding: EdgeInsets.all(5.0),
+      alignment: FractionalOffset.center,
+      decoration: new BoxDecoration(
+        color: bgColor,
+        borderRadius: new BorderRadius.all(const Radius.circular(10.0)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: const Color(0xFF696969),
+            offset: Offset(1.0, 6.0),
+            blurRadius: 0.001,
+          ),
+        ],
+      ),
+      child: Text(
+        buttonLabel,
+        style: new TextStyle(
+            color: textColor, fontSize: 20.0, fontWeight: FontWeight.bold),
+      ),
+    );
+    return loginBtn;
   }
 }

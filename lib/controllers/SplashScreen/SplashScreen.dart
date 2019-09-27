@@ -19,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  DateTime backButtonPressTime;
   void checkUserAgree(onComplete(bool res)) async {
     await SharedPreferences.getInstance().then((val) {
       bool status = val.getBool("user_agree");
@@ -145,11 +146,32 @@ class _SplashScreenState extends State<SplashScreen> {
       } // user is Not logged in
     });
 
-    return new WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-          body: Container(color: Colors.white),
-        ));
+    return new Scaffold(
+      body: Container(color: Colors.white),
+    );
+  }
+
+  Future<bool> onWillPop(BuildContext context) async {
+    const snackBarDuration = Duration(seconds: 3);
+
+    final snackBar = SnackBar(
+      content: Text('Press back again to leave'),
+      duration: snackBarDuration,
+    );
+
+    DateTime currentTime = DateTime.now();
+
+    bool backButtonHasNotBeenPressedOrSnackBarHasBeenClosed =
+        backButtonPressTime == null ||
+            currentTime.difference(backButtonPressTime) > snackBarDuration;
+
+    if (backButtonHasNotBeenPressedOrSnackBarHasBeenClosed) {
+      backButtonPressTime = currentTime;
+      Scaffold.of(context).showSnackBar(snackBar);
+      return false;
+    }
+
+    return true;
   }
 }
 

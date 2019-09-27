@@ -24,36 +24,28 @@ class _BarcodeState extends State<Barcode> {
 
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-    return new WillPopScope(
-        onWillPop: () async => false,
-
-        // onWillPop: () async {
-        //   Future.value(
-        //       false); //return a `Future` with false value so this route cant be popped or closed.
-        // },
-
-        child: new Scaffold(
-            body: Container(
-                color: Statics.shared.colors.mainBackgroundVeryLightSilverBlue,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      margin: const EdgeInsets.only(top: 20.0, bottom: 20),
-                      alignment: Alignment.topRight,
-                      child: FlatButton(
-                        child: Image.asset("Resources/Icons/Vector.png",
-                            scale: 3.0),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new MainTabBar()));
-                        },
-                      ),
-                    ),
-                    userInformation.memberType == "51001" ? type1() : type2()
-                  ],
-                ))));
+    return new Scaffold(
+        body: Container(
+            color: Statics.shared.colors.mainBackgroundVeryLightSilverBlue,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.only(top: 20.0, bottom: 20),
+                  alignment: Alignment.topRight,
+                  child: FlatButton(
+                    child:
+                        Image.asset("Resources/Icons/Vector.png", scale: 3.0),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new MainTabBar()));
+                    },
+                  ),
+                ),
+                userInformation.memberType == "51001" ? type1() : type2()
+              ],
+            )));
   }
 
   Widget type1() {
@@ -91,6 +83,7 @@ class _BarcodeState extends State<Barcode> {
                           fontWeight: FontWeight.bold)),
                 ),
                 Container(
+                    alignment: Alignment.center,
                     height: deviceHeight / 8,
                     child: new BarCodeImage(
                       data: userInformation.userIdx, // Code string. (required)
@@ -158,6 +151,7 @@ class _BarcodeState extends State<Barcode> {
                           fontWeight: FontWeight.bold)),
                 ),
                 Container(
+                    alignment: Alignment.center,
                     height: deviceHeight / 8,
                     child: new BarCodeImage(
                       data: "51002", // Code string. (required)

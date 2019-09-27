@@ -27,76 +27,74 @@ class FindID extends StatelessWidget {
         ));
 
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
-    return WillPopScope(
-        onWillPop: () async => false,
-        child: new Scaffold(
-          body: Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                Container(
-                    child: Text(
-                      Strings.shared.controllers.signIn.findID1,
-                      style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                        color: Statics.shared.colors.titleTextColor,
-                      ),
+    return new Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+                child: Text(
+                  Strings.shared.controllers.signIn.findID1,
+                  style: TextStyle(
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    color: Statics.shared.colors.titleTextColor,
+                  ),
+                ),
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(top: 70)),
+            Container(
+                child: Text(
+                  userInformation.userID,
+                  style: TextStyle(
+                    fontSize: Statics.shared.fontSizes.title,
+                    fontWeight: FontWeight.bold,
+                    color: Statics.shared.colors.mainColor,
+                  ),
+                ),
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(right: 64, top: 20)),
+            Container(
+                child: Text(
+                  Strings.shared.controllers.signIn.findID2,
+                  style: TextStyle(
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    color: Statics.shared.colors.titleTextColor,
+                  ),
+                ),
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(right: 64, top: 20)),
+            Container(
+                child: Row(
+                  children: [
+                    FlatButton(
+                      child: Row(children: [
+                        Text(Strings.shared.controllers.signSelect.button1,
+                            style: TextStyle(
+                                color: Statics.shared.colors.titleTextColor,
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary)),
+                        Image.asset('Resources/Icons/btn_next_blue.png',
+                            width: 28, height: 28),
+                      ]),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => new SignIn()));
+                      },
                     ),
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(top: 70)),
-                Container(
-                    child: Text(
-                      userInformation.userID,
-                      style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.title,
-                        fontWeight: FontWeight.bold,
-                        color: Statics.shared.colors.mainColor,
-                      ),
-                    ),
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(right: 64, top: 20)),
-                Container(
-                    child: Text(
-                      Strings.shared.controllers.signIn.findID2,
-                      style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                        color: Statics.shared.colors.titleTextColor,
-                      ),
-                    ),
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(right: 64, top: 20)),
-                Container(
-                    child: Row(
-                      children: [
-                        FlatButton(
-                          child: Row(children: [
-                            Text(Strings.shared.controllers.signSelect.button1,
-                                style: TextStyle(
-                                    color: Statics.shared.colors.titleTextColor,
-                                    fontSize: Statics
-                                        .shared.fontSizes.supplementary)),
-                            Image.asset('Resources/Icons/btn_next_blue.png',
-                                width: 28, height: 28),
-                          ]),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => new SignIn()));
-                          },
-                        ),
-                      ], // Row Children
-                      mainAxisAlignment: MainAxisAlignment.center,
-                    ), // Row
-                    alignment: Alignment.center),
-                SizedBox(height: 40),
-              ], //Children
-            ), // Column
-            padding: const EdgeInsets.only(left: 32, right: 32),
+                  ], // Row Children
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ), // Row
+                alignment: Alignment.center),
+            SizedBox(height: 40),
+          ], //Children
+        ), // Column
+        padding: const EdgeInsets.only(left: 32, right: 32),
 
-            width: MiddleWare.shared.screenSize,
-          ), // Container
-        ));
+        width: MiddleWare.shared.screenSize,
+      ), // Container
+    );
   } // user is logged in
 
 }

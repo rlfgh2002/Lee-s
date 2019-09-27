@@ -88,7 +88,8 @@ class _IOSingle extends State<IOSingle> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text("",
+            alignment: Alignment.centerLeft,
+            child: Text("직역소개",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontSize: Statics.shared.fontSizes.subTitle,

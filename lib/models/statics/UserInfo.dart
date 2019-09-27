@@ -1,5 +1,6 @@
 import 'package:haegisa2/models/User.dart';
 import 'package:device_info/device_info.dart';
+import 'package:haegisa2/models/statics/statics.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -76,6 +77,22 @@ Future<Null> deviceinfo() async {
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     userInformation.userDeviceID = androidInfo.androidId;
     userInformation.userDeviceOS = "a";
+
+    Statics.shared.fontSizes.title = 26;
+    Statics.shared.fontSizes.subTitle = 16;
+    Statics.shared.fontSizes.titleInContent = 20;
+    Statics.shared.fontSizes.subTitleInContent = 16;
+
+    Statics.shared.fontSizes.contentBig = 20;
+    Statics.shared.fontSizes.supplementaryBig = 17;
+
+    Statics.shared.fontSizes.content = 16;
+    Statics.shared.fontSizes.supplementary = 14;
+
+    Statics.shared.fontSizes.medium = 14;
+    Statics.shared.fontSizes.small = 13;
+
+    Statics.shared.fontSizes.verySmall = 11;
   } else if (Platform.isIOS) {
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
     userInformation.userDeviceID = iosInfo.identifierForVendor;
