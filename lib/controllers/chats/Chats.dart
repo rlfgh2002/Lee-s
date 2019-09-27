@@ -34,6 +34,7 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
+
   BuildContext myCurrentContext;
 
   bool isSearched = false;
@@ -97,6 +98,7 @@ class _ChatsState extends State<Chats> {
   }
 
   Row showTopBarTitle() {
+    this.txtSearchCtrl.text = "";
     return Row(
       children: [
         Container(
@@ -215,7 +217,7 @@ class _ChatsState extends State<Chats> {
       if (val.get("HAD_FIRST_WELCOME_MSG") != true) {
         // welcome message
         widget.db.firstWelcomeMessage(whenComplete: () {
-          val.setBool("HAD_FIRST_WELCOME_MSG", true).then((val) {
+          val.setBool("HAD_FIRST_WELCOME_MSG", true).then((val){
             this.refreshList();
           });
         });
@@ -234,7 +236,7 @@ class _ChatsState extends State<Chats> {
                           bool hasBadge = false;
                           String contentX = "";
                           DateTime lastChatDate = DateTime.now();
-                          String chosenTime = "오전 9:30";
+                          String chosenTime = "오전 ${DateTime.now().hour}:${DateTime.now().minute}";
 
                           if (itemContent != null) {
                             if (itemContent["chatDate2"].contains("-")) {
@@ -247,6 +249,23 @@ class _ChatsState extends State<Chats> {
                                   int.parse(dateSpt[2]),
                                   int.parse(timeSpt[0]),
                                   int.parse(timeSpt[1]));
+
+
+                              if (itemContent['chatDate2'].toString() != ""){
+                                if(DateTime.now().year == int.parse(dateSpt[0]) && DateTime.now().month == int.parse(dateSpt[1]) && DateTime.now().day == int.parse(dateSpt[2])){
+                                  chosenTime = "오전 ${timeSpt[0]}:${timeSpt[1]}";
+                                }
+                                else if(DateTime.now().year == int.parse(dateSpt[0]) && DateTime.now().month == int.parse(dateSpt[1]) && DateTime.now().day == int.parse(dateSpt[2]) + 1){
+                                  chosenTime = "어제";
+                                }
+                                else if(DateTime.now().year == int.parse(dateSpt[0]) && DateTime.now().month == int.parse(dateSpt[1]) && DateTime.now().day > int.parse(dateSpt[2]) + 1){
+                                  chosenTime = "${dateSpt[2]}월 ${dateSpt[1]}일";
+                                }
+                                else {
+                                  chosenTime = "${dateSpt[0]}.${dateSpt[1]}.${dateSpt[2]}";
+                                }
+                              }
+
                             }
 
                             hasBadge = false;
@@ -350,66 +369,64 @@ class _ChatsState extends State<Chats> {
           setState(() {
             MiddleWare.shared.searchedConversations = [];
             for (int i = 0; i < searchedItems.length; i++) {
-              this.widget.db.checkConversationExistByUser(
-                  userId: searchedItems[i].userId,
-                  onResult: (res) {
-                    String chosenTime = "오전 9:30";
+              this.widget.db.checkConversationExistByUser(userId: searchedItems[i].userId,onResult: (res){
 
-                    ConversationWidget obj = ConversationWidget(
-                      title: searchedItems[i].userName,
-                      convId: res["convId"],
-                      avatarName: "협회",
-                      badges: 0,
-                      avatarLink: "",
-                      shortDescription: searchedItems[i].userName,
-                      time: chosenTime,
-                      onTapped: () {
-                        String cID = res['convId']; // Conversation ID
-                        User usr = User(
-                            UID: "${searchedItems[i].userId}",
-                            fullName: "${searchedItems[i].userName}",
-                            avatar: "",
-                            caption: "${searchedItems[i].schoolName}");
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new Chat(
-                                      title: "${searchedItems[i].userName}",
-                                      conversationId: cID,
-                                      user: usr,
-                                    )));
-                      },
-                    );
-                    MiddleWare.shared.searchedConversations.add(obj);
+                String chosenTime = "오전 9:30";
+
+                ConversationWidget obj = ConversationWidget(
+                  title: searchedItems[i].userName,
+                  convId: res["convId"],
+                  avatarName: "협회",
+                  badges: 0,
+                  avatarLink: "",
+                  shortDescription: searchedItems[i].userName,
+                  time: chosenTime,
+                  onTapped: () {
+                    String cID = res['convId']; // Conversation ID
+                    User usr = User(
+                        UID: "${searchedItems[i].userId}",
+                        fullName: "${searchedItems[i].userName}",
+                        avatar: "",
+                        caption: "${searchedItems[i].schoolName}");
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new Chat(
+                              title: "${searchedItems[i].userName}",
+                              conversationId: cID,
+                              user: usr,
+                            )));
                   },
-                  onNoResult: () {
-                    ConversationWidget obj = ConversationWidget(
-                      title: searchedItems[i].userName,
-                      convId: 'xxx',
-                      avatarName: "협회",
-                      badges: 0,
-                      avatarLink: "",
-                      shortDescription: searchedItems[i].userName,
-                      time: "오전 9:30",
-                      onTapped: () {
-                        String cID = 'xxx'; // Conversation ID
-                        User usr = User(
-                            UID: "${searchedItems[i].userId}",
-                            fullName: "${searchedItems[i].userName}",
-                            avatar: "",
-                            caption: "${searchedItems[i].schoolName}");
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new Chat(
-                                      title: "${searchedItems[i].userName}",
-                                      conversationId: cID,
-                                      user: usr,
-                                    )));
-                      },
-                    );
-                    MiddleWare.shared.searchedConversations.add(obj);
-                  });
+                );
+                MiddleWare.shared.searchedConversations.add(obj);
+              },onNoResult: (){
+                ConversationWidget obj = ConversationWidget(
+                  title: searchedItems[i].userName,
+                  convId: 'xxx',
+                  avatarName: "협회",
+                  badges: 0,
+                  avatarLink: "",
+                  shortDescription: searchedItems[i].userName,
+                  time: "오전 9:30",
+                  onTapped: () {
+                    String cID = 'xxx'; // Conversation ID
+                    User usr = User(
+                        UID: "${searchedItems[i].userId}",
+                        fullName: "${searchedItems[i].userName}",
+                        avatar: "",
+                        caption: "${searchedItems[i].schoolName}");
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => new Chat(
+                              title: "${searchedItems[i].userName}",
+                              conversationId: cID,
+                              user: usr,
+                            )));
+                  },
+                );
+                MiddleWare.shared.searchedConversations.add(obj);
+              });
             } // for loop
           });
         } else {
@@ -430,8 +447,7 @@ class _ChatsState extends State<Chats> {
     super.initState();
   }
 
-  void openChat(
-      {String convId, String uId, String uName, bool withDuration = false}) {
+  void openChat({String convId, String uId, String uName, bool withDuration = false}) {
     if (withDuration == true) {
       Future.delayed(Duration(seconds: 1)).then((val) {
         String cID = convId; // Conversation ID
@@ -487,20 +503,14 @@ class _ChatsState extends State<Chats> {
     MiddleWare.shared.searchedConversations
         .sort((a, b) => b.lastChatDate.compareTo(a.lastChatDate));
 
-    Widget notFoundView = Container(
-      child: Column(
-        children: <Widget>[
-          Image.asset("Resources/Icons/wondeIconr.png", width: 60),
-          SizedBox(height: 20),
-          Text(Strings.shared.controllers.findUser.notFound,
-              style: TextStyle(
-                  fontSize: Statics.shared.fontSizes.content,
-                  color: Statics.shared.colors.captionColor)),
-        ],
-      ),
-      alignment: Alignment.center,
-      padding: const EdgeInsets.only(top: 120),
-    );
+
+    Widget notFoundView = Container(child: Column(
+      children: <Widget>[
+        Image.asset("Resources/Icons/wondeIconr.png", width: 60),
+        SizedBox(height: 20),
+        Text(Strings.shared.controllers.findUser.notFound, style: TextStyle(fontSize: Statics.shared.fontSizes.content, color: Statics.shared.colors.captionColor)),
+      ],
+    ), alignment: Alignment.center,padding: const EdgeInsets.only(top: 120),);
 
     Widget dataShow = ListView.builder(
       padding: const EdgeInsets.all(0),
@@ -509,11 +519,7 @@ class _ChatsState extends State<Chats> {
         var result = MiddleWare.shared.searchedConversations[index];
         return Dismissible(
           key: Key(index.toString()),
-          child: ListTile(
-            key: Key(index.toString()),
-            title: result,
-            contentPadding: const EdgeInsets.all(0),
-          ),
+          child: ListTile(key: Key(index.toString()), title: result, contentPadding: const EdgeInsets.all(0),),
           onDismissed: (direction) {},
           confirmDismiss: (bl) {
             setState(() {
@@ -525,7 +531,7 @@ class _ChatsState extends State<Chats> {
         );
       },
     );
-    if (MiddleWare.shared.searchedConversations.length <= 0) {
+    if(MiddleWare.shared.searchedConversations.length <= 0){
       dataShow = notFoundView;
     }
 
@@ -543,7 +549,7 @@ class _ChatsState extends State<Chats> {
         ),
         body: Container(
           color: Colors.white,
-          padding: const EdgeInsets.only(top: 20, right: 0, left: 0),
+          padding: const EdgeInsets.only(top: 20,right: 0, left: 0),
           margin: const EdgeInsets.all(0),
           child: dataShow,
         ),

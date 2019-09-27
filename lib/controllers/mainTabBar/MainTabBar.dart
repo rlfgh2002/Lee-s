@@ -538,16 +538,46 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void showLocationPopUp(BuildContext ctx) {
-    showDialog(
-        context: ctx,
-        builder: (BuildContext context) {
-          return LocationPopUpWidget(
-            popUpWidth: MiddleWare.shared.screenWidth - 32,
-            onPressClose: () {
-              Navigator.pop(context);
-            },
-          ).dialog();
-        });
+    SharedPreferences.getInstance().then((val) {
+      String strDate = val.getString("__LOCATION_POPUP_7_DAYS");
+      if (strDate != null && strDate != "") {
+        DateTime c1 = DateTime.parse(strDate);
+        if (DateTime.now().difference(c1).inDays > 7) {
+          showDialog(
+              context: ctx,
+              builder: (BuildContext context) {
+                return LocationPopUpWidget(
+                    popUpWidth: MiddleWare.shared.screenWidth - 32,
+                    onPressClose: () {
+                      Navigator.pop(context);
+                    },
+                    onPress7DaysNoSee: () {
+                      SharedPreferences.getInstance().then((val) {
+                        val.setString(
+                            "__LOCATION_POPUP_7_DAYS", "${DateTime.now()}");
+                      });
+                    }).dialog();
+              });
+        }
+      } else {
+        showDialog(
+            context: ctx,
+            builder: (BuildContext context) {
+              return LocationPopUpWidget(
+                  popUpWidth: MiddleWare.shared.screenWidth - 32,
+                  onPressClose: () {
+                    Navigator.pop(context);
+                  },
+                  onPress7DaysNoSee: () {
+                    SharedPreferences.getInstance().then((val) {
+                      val.setString(
+                          "__LOCATION_POPUP_7_DAYS", "${DateTime.now()}");
+                      Navigator.pop(context);
+                    });
+                  }).dialog();
+            });
+      }
+    });
   }
 
   @override

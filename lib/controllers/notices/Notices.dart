@@ -277,7 +277,7 @@ class NoticesState extends State<Notices> {
                                   noticeType: NoticeType.Vote);
                             });
                       } else {
-                        showSnackBar("You have Already voted this item!");
+                        showSnackBar("이미 투표에 참여하셨습니다");
                       }
                     } else {
                       MainTabBar.myChild.getUserId(onGetUserId: (uid) {

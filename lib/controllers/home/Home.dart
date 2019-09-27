@@ -6,12 +6,14 @@ import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dar
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
-import 'package:haegisa2/controllers/barcode/barcode.dart';
+import 'package:haegisa2/controllers/barcode/Barcode.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
+import 'package:haegisa2/controllers/profile/UserInfo.dart';
+import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 

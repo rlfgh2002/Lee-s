@@ -66,6 +66,7 @@ class _FindUserSearchState extends State<FindUserSearch> {
 
           setState(() {
             MiddleWare.shared.membersList = [];
+            MiddleWare.shared.ctrlTxtSearch.text = "";
             for (int i = 0; i < searchedItems.length; i++) {
               String convIdFromDb = 'xxx';
               this.widget.db.checkConversationExistByUser(
