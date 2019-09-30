@@ -76,6 +76,6 @@
 	<key>FDAllFilesDownloadedMessage</key>
 	<string>All files have been downloaded</string>
 	<key>io.flutter.embedded_views_preview</key>
-	<true/>
+    <true/>
 </dict>
 </plist>

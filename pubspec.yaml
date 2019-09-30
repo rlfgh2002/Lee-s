@@ -21,7 +21,7 @@ dependencies:
     sdk: flutter
   shared_preferences: ^0.5.2
   flutter_webview_plugin: ^0.3.5
-  firebase_messaging: ^5.1.0
+  firebase_messaging: ^5.1.6
   firebase_core: ^0.4.0+6
   firebase_auth: ^0.11.1+8
   # The following adds the Cupertino Icons font to your application.
@@ -169,14 +169,14 @@ flutter:
 
     # barcode
     - Resources/Images/barcodeType1.png
-    - Resources/Images/barcodeType2.png    
-    - Resources/Images/bgBarcode.png 
-    
+    - Resources/Images/barcodeType2.png
+    - Resources/Images/bgBarcode.png
+
     # map
     - Resources/Images/map.png
     - Resources/Icons/mapDownload.png
     - Resources/Icons/icon_location.png
-    
+
     # Profile
     - Resources/Images/feeHistory.png
     - Resources/Images/occasion.png
@@ -190,7 +190,7 @@ flutter:
     - Resources/Images/intro2.png
     - Resources/Images/organization.png
     - Resources/Images/organization2.png
-    
+
     # Find User
     - Resources/Images/findUserImageBottom.png
     - Resources/Icons/chatIcon.png
@@ -208,7 +208,7 @@ flutter:
     - Resources/Icons/proceedingBackground.png
     # Conversations
     - Resources/Icons/userChatAvatar.png
-    
+
     - Resources/Images/noticeListHeader.png
     - Resources/Icons/icon_file.png
 

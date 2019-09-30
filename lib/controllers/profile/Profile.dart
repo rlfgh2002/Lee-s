@@ -434,7 +434,7 @@ class _ProfileState extends State<Profile> {
             Container(
               padding: const EdgeInsets.only(top: 20, bottom: 10),
               child: Text(
-                "워원으로 전환 신청하기",
+                "정회원으로 전환 신청하기",
                 style: TextStyle(
                     color: Statics.shared.colors.mainColor,
                     fontSize: Statics.shared.fontSizes.titleInContent,
