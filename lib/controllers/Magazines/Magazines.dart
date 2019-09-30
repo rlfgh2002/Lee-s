@@ -360,6 +360,7 @@ class _MagazinesState extends State<Magazines> {
                     title, fileURL, serverFileName, magazineNum, false, obj);
 
                 _displaySnackBar(context, "다운로드 완료");
+                OpenFile.open(_localPath + "/" + serverFileName);
                 return;
               });
             } else if (status == DownloadTaskStatus.failed) {

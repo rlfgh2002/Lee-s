@@ -283,7 +283,7 @@ class _IntroState extends State<Intro> {
           child: Text(member["position"],
               style: TextStyle(
                 color: Statics.shared.colors.mainColor,
-                fontSize: Statics.shared.fontSizes.subTitle,
+                fontSize: Statics.shared.fontSizes.content,
               )),
         ),
         Container(
@@ -299,7 +299,7 @@ class _IntroState extends State<Intro> {
           child: Text(member["name"],
               style: TextStyle(
                 color: Colors.black,
-                fontSize: Statics.shared.fontSizes.subTitle,
+                fontSize: Statics.shared.fontSizes.content,
                 fontWeight: FontWeight.normal,
               )),
         ),
@@ -307,7 +307,7 @@ class _IntroState extends State<Intro> {
         FlatButton(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          child: Image.asset("Resources/Icons/icon_call.png", scale: 2.0),
+          child: Image.asset("Resources/Icons/icon_call.png", scale: 3.0),
           onPressed: () {
             launch("tel://" + member["tel"]);
           },

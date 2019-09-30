@@ -12,8 +12,6 @@ import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/controllers/profile/UserInfo.dart';
-import 'package:haegisa2/controllers/profile/MiddleWare.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 
@@ -478,29 +476,29 @@ class _HomeState extends State<Home> {
                         ]),
                   ),
                   height: deviceWidth / 4),
-              Image.asset('Resources/Icons/Line3.png'),
-              Container(
-                decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                      color: Color.fromRGBO(235, 239, 245, 1),
-                    ),
-                    boxShadow: [
-                      new BoxShadow(
-                          color: Color.fromRGBO(235, 239, 245, 1),
-                          offset: new Offset(3.0, 3.0),
-                          blurRadius: 0.5,
-                          spreadRadius: 0)
-                    ]),
-                margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
-                child: FlatButton(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  child: Image.asset('Resources/Images/gichul.png',
-                      width: deviceWidth / 1.2),
-                  onPressed: () {},
-                ),
-              ),
+              // Image.asset('Resources/Icons/Line3.png'),
+              // Container(
+              //   decoration: new BoxDecoration(
+              //       color: Colors.white,
+              //       border: new Border.all(
+              //         color: Color.fromRGBO(235, 239, 245, 1),
+              //       ),
+              //       boxShadow: [
+              //         new BoxShadow(
+              //             color: Color.fromRGBO(235, 239, 245, 1),
+              //             offset: new Offset(3.0, 3.0),
+              //             blurRadius: 0.5,
+              //             spreadRadius: 0)
+              //       ]),
+              //   margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
+              //   child: FlatButton(
+              //     splashColor: Colors.transparent,
+              //     highlightColor: Colors.transparent,
+              //     child: Image.asset('Resources/Images/gichul.png',
+              //         width: deviceWidth / 1.2),
+              //     onPressed: () {},
+              //   ),
+              // ),
             ], // Row Children
           ), // Row
 

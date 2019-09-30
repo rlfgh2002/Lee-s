@@ -1,200 +1,45 @@
 import 'dart:convert';
 
-import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/home/Home.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
+import 'package:haegisa2/models/statics/strings.dart';
 import 'package:http/http.dart' as http;
-import 'package:barcode_flutter/barcode_flutter.dart';
 
-int requestCode;
-
-class Barcode extends StatefulWidget {
-  @override
-  _BarcodeState createState() => _BarcodeState();
-}
-
-class _BarcodeState extends State<Barcode> {
+class RequestMember extends StatelessWidget {
+  double avatarRadius = 30;
+  int requestCode;
+  String title = "";
+  String avatarLink = "";
+  String shortDescription = "";
+  VoidCallback onTapped;
+  bool hasBlueBadge = true;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  RequestMember(
+      {String title = "",
+      String avatarLink = "",
+      String shortDescription = "",
+      VoidCallback onTapped,
+      bool hasBlueBadge = true}) {
+    this.title = title;
+    this.avatarLink = avatarLink;
+    this.shortDescription = shortDescription;
+    this.onTapped = onTapped;
+    this.hasBlueBadge = hasBlueBadge;
+  }
+
   @override
   Widget build(BuildContext context) {
+    ;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.white, // Color for Android
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
 
-    double deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-        key: _scaffoldKey,
-        body: Container(
-            color: Statics.shared.colors.mainBackgroundVeryLightSilverBlue,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0, bottom: 20),
-                  alignment: Alignment.topRight,
-                  child: FlatButton(
-                    child:
-                        Image.asset("Resources/Icons/Vector.png", scale: 3.0),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => new MainTabBar()));
-                    },
-                  ),
-                ),
-                memberType(userInformation.memberType)
-              ],
-            )));
-  }
-
-  Widget memberType(String code) {
-    double deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
-
-    if (code == "51001") {
-      return Column(
-        children: <Widget>[
-          Image.asset(
-            "Resources/Images/barcodeType1.png",
-            width: deviceWidth / 1.12,
-          ),
-          Container(
-              padding: new EdgeInsets.only(left: 20.0, right: 20.0),
-              constraints: new BoxConstraints.expand(
-                  height: deviceHeight / 1.5, width: deviceWidth / 1.1),
-              alignment: Alignment.center,
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: new AssetImage('Resources/Images/bgBarcode.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: new EdgeInsets.only(
-                        top: deviceHeight / 10, bottom: deviceHeight / 20),
-                    child: Text("출 입 증",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.title,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Container(
-                      alignment: Alignment.center,
-                      height: deviceHeight / 8,
-                      child: new BarCodeImage(
-                        data:
-                            userInformation.userIdx, // Code string. (required)
-                        codeType: BarCodeType.Code39, // Code type (required)
-                        lineWidth:
-                            1.8, // width for a single black/white bar (default: 2.0)
-                        barHeight: deviceHeight /
-                            8, // height for the entire widget (default: 100.0)
-                        hasText:
-                            false, // Render with text label or not (default: false)
-                        onError: (error) {
-                          // Error handler
-                          print('error = $error');
-                        },
-                      )),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: new EdgeInsets.only(
-                        top: deviceHeight / 10, bottom: deviceHeight / 20),
-                    child: Text(
-                        "회원님은 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        )),
-                  ),
-                ],
-              ))
-        ],
-      );
-    } else {
-      return Column(
-        children: <Widget>[
-          Image.asset(
-            "Resources/Images/barcodeType2.png",
-            width: deviceWidth / 1.12,
-          ),
-          Container(
-              padding: new EdgeInsets.only(left: 20.0, right: 20.0),
-              constraints: new BoxConstraints.expand(
-                  height: deviceHeight / 1.5, width: deviceWidth / 1.1),
-              alignment: Alignment.center,
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: new AssetImage('Resources/Images/bgBarcode.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: new EdgeInsets.only(
-                        top: deviceHeight / 10, bottom: deviceHeight / 20),
-                    child: Text("출 입 증",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.title,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: new EdgeInsets.only(
-                      top: deviceHeight / 20,
-                    ),
-                    child: Text(
-                        "원이 되시면 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다.",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        )),
-                  ),
-                  Container(
-                      alignment: Alignment.center,
-                      padding: new EdgeInsets.only(
-                        top: deviceHeight / 20,
-                      ),
-                      child: FlatButton(
-                          child: Text("정회원으로 전환하기 >",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.mainColor,
-                                  fontSize: Statics
-                                      .shared.fontSizes.subTitleInContent,
-                                  fontWeight: FontWeight.bold)),
-                          onPressed: () {
-                            showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (_) => authAlert());
-                          })),
-                ],
-              )),
-        ],
-      );
-    }
-  }
-
-  Widget authAlert() {
     return AlertDialog(
+      key: _scaffoldKey,
       contentPadding: EdgeInsets.all(0.0),
       content: Container(
         color: Colors.white,
@@ -278,7 +123,7 @@ class _BarcodeState extends State<Barcode> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습니다.",
+                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습��다.",
                         style: TextStyle(
                           color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,

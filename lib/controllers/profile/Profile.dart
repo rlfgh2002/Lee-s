@@ -434,7 +434,7 @@ class _ProfileState extends State<Profile> {
             Container(
               padding: const EdgeInsets.only(top: 20, bottom: 10),
               child: Text(
-                "정회원으로 전환 신청하기",
+                "워원으로 전환 신청하기",
                 style: TextStyle(
                     color: Statics.shared.colors.mainColor,
                     fontSize: Statics.shared.fontSizes.titleInContent,
@@ -499,7 +499,7 @@ class _ProfileState extends State<Profile> {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습��다.",
+                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습니다.",
                         style: TextStyle(
                           color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,

@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/Map/Map.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/Magazines/Magazines.dart';
+import 'package:haegisa2/views/pdf/pdfVier.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import 'dart:convert';
@@ -168,7 +172,78 @@ class _MapPageState extends State<MapPage> {
                             "Resources/Icons/mapDownload.png",
                             scale: 3.0,
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            final myFile =
+                                File(_localPath + "/haegisa_map.pdf");
+                            var fileURL =
+                                "https://mariners.or.kr/uploads/haegisa_map.pdf";
+
+                            if (myFile.existsSync()) {
+                              isDownload = false;
+                            } else {
+                              isDownload = true;
+                            }
+
+                            if (isDownload == true) {
+                              print(fileURL);
+                              var changeURL;
+                              if (userInformation.userDeviceOS != "i") {
+                                changeURL = fileURL.replaceAll(
+                                    new RegExp("https://"), "http://");
+                              } else {
+                                changeURL = fileURL;
+                              }
+
+                              final taskId = await FlutterDownloader.enqueue(
+                                url: changeURL,
+                                savedDir: _localPath,
+                                showNotification:
+                                    true, // show download progress in status bar (for Android)
+                                openFileFromNotification:
+                                    true, // click on notification to open downloaded file (for Android)
+                              );
+
+                              FlutterDownloader.registerCallback(
+                                  (id, status, progress) {
+                                // code to update your UI
+                                if (status == DownloadTaskStatus.complete) {
+                                  FlutterDownloader.open(taskId: taskId);
+                                  print("다운완료");
+                                  _displaySnackBar(context, "다운로드 완료");
+                                  OpenFile.open(
+                                      _localPath + "/haegisa_map.pdf");
+                                  return;
+                                } else if (status ==
+                                    DownloadTaskStatus.failed) {
+                                  print("다운실패");
+                                  _displaySnackBar(context, "다운로드 실패");
+                                  return;
+                                }
+                              });
+
+                              var file = Directory(_localPath).listSync();
+                              print(file);
+                            } else {
+                              print("파일 오픈");
+                              //launch(fileURL);
+
+                              OpenFile.open(_localPath + "/haegisa_map.pdf");
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => FullPdfViewerScreen(
+                              //           _localPath + "/haegisa_map.pdf")),
+                              // );
+
+                              // final ByteData bytes = await DefaultAssetBundle.of(context)
+                              //     .load(_localPath + "/" + serverFileName);
+                              // final Uint8List list = bytes.buffer.asUint8List();
+
+                              // final file = await File(_localPath + "/" + serverFileName)
+                              //     .create(recursive: true);
+                              // file.writeAsBytesSync(list);
+                            }
+                          },
                         ))
                   ],
                 )
