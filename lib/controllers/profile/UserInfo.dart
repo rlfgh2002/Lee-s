@@ -92,7 +92,7 @@ class _UserInfoState extends State<UserInfo> {
                   color: Colors.white,
                   child: Column(children: [
                     Container(
-                      height: deviceWidth / 5,
+                      height: deviceWidth / 6,
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: new Row(
                         children: <Widget>[
@@ -125,7 +125,7 @@ class _UserInfoState extends State<UserInfo> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                      height: deviceWidth / 5,
+                      height: deviceWidth / 6,
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: new Row(
                         children: <Widget>[
@@ -157,7 +157,7 @@ class _UserInfoState extends State<UserInfo> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                      height: deviceWidth / 5,
+                      height: deviceWidth / 6,
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: new Row(
                         children: <Widget>[
@@ -196,7 +196,7 @@ class _UserInfoState extends State<UserInfo> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                      height: deviceWidth / 5,
+                      height: deviceWidth / 6,
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: new Row(
                         children: <Widget>[
@@ -237,7 +237,7 @@ class _UserInfoState extends State<UserInfo> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                      height: deviceWidth / 5,
+                      height: deviceWidth / 6,
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: new Row(
                         children: <Widget>[
@@ -296,7 +296,7 @@ class _UserInfoState extends State<UserInfo> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                      height: deviceWidth / 5,
+                      height: deviceWidth / 6,
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: new Row(
                         children: <Widget>[

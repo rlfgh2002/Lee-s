@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
+import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/NoticesListWidget/NoticesListWidget.dart';
@@ -159,6 +161,13 @@ class _NoticesListState extends State<NoticesList> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
+        leading: new IconButton(
+          icon: userInformation.userDeviceOS == "i"
+              ? new Icon(Icons.arrow_back_ios, color: Colors.black)
+              : new Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SplashScreen())),
+        ),
         title: Container(
             child: Text(Strings.shared.controllers.noticesList.pageTitle,
                 style: TextStyle(

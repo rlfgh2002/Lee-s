@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/IntroduceOccupation/IOSingle.dart';
+import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 //import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
 import 'package:haegisa2/models/iO/IOObject.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/iO/IOWidget.dart';
@@ -76,7 +78,6 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
       ),
       alignment: Alignment.center,
       height: 100,
-
     );
     Widget blueSplitter = Container(
         color: Statics.shared.colors.blueLineColor,
@@ -188,6 +189,13 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
+        leading: new IconButton(
+          icon: userInformation.userDeviceOS == "i"
+              ? new Icon(Icons.arrow_back_ios, color: Colors.black)
+              : new Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SplashScreen())),
+        ),
         title: Container(
             child: Text(Strings.shared.controllers.iO.pageTitle,
                 style: TextStyle(

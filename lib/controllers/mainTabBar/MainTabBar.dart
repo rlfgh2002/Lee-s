@@ -44,7 +44,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static BottomNavigationBar navBar;
   Geolocator geolocator = Geolocator();
   final GlobalKey<MainTabBarState> _scaffoldKey =
-  new GlobalKey<MainTabBarState>();
+      new GlobalKey<MainTabBarState>();
 
   Future<Position> _getLocation() async {
     var currentLocation;
@@ -86,9 +86,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                             onSent: (response) {
                               if (response['code'].toString() == "200") {
                                 Map<String, dynamic> dataAnswers =
-                                response['table'][0]['q_title'];
+                                    response['table'][0]['q_title'];
                                 int qCnt =
-                                int.parse(myList[i]['q_cnt'].toString());
+                                    int.parse(myList[i]['q_cnt'].toString());
 
                                 for (int j = 0; j < qCnt; j++) {
                                   String qStr = "q${(j + 1).toString()}";
@@ -107,35 +107,35 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                                   for (int z = 0; z < qItemsCount; z++) {
                                     if (z == 0) {
                                       ans1 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                     if (z == 1) {
                                       ans2 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                     if (z == 2) {
                                       ans3 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                     if (z == 3) {
                                       ans4 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                     if (z == 4) {
                                       ans5 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                     if (z == 5) {
                                       ans6 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                     if (z == 6) {
                                       ans7 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                     if (z == 7) {
                                       ans8 = qItems[
-                                      "${qStr.toString()}_${(z + 1).toString()}"];
+                                          "${qStr.toString()}_${(z + 1).toString()}"];
                                     }
                                   } // for loop 2
 
@@ -158,8 +158,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                                   widget.db.insertSurveyAnswer(
                                       idx: myList[i]['bd_idx'].toString(),
                                       qTitle:
-                                      dataAnswers['q${(j + 1).toString()}']
-                                          .toString(),
+                                          dataAnswers['q${(j + 1).toString()}']
+                                              .toString(),
                                       qN: (j + 1).toString(),
                                       answer1: ans1,
                                       answer2: ans2,
@@ -278,10 +278,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       }
     }
 
-    if (message['data']['notificationType'].toString() == null){
-    }// notificationType is null
-    else
-    {
+    if (message['data']['notificationType'].toString() == null) {
+    } // notificationType is null
+    else {
       if (message['data']['notificationType'].toString() == "chat") {
         myDb.checkConversationExist(
             userId: chatItem.notificationFromId,
@@ -355,8 +354,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               });
         } // Vote Notification
       }
-    }// notificationType is NOT null
-
+    } // notificationType is NOT null
 
     if (message.containsKey('data')) {
       // Handle data message
@@ -393,10 +391,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       }
     }
 
-    if (message['data']['notificationType'].toString() == null){
-    }// notificationType is null
-    else
-    {
+    if (message['data']['notificationType'].toString() == null) {
+    } // notificationType is null
+    else {
       if (message['data']['notificationType'].toString() == "chat") {
         widget.db.checkConversationExist(
             userId: chatItem.notificationFromId,
@@ -542,9 +539,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               });
         } // Vote Notification
       }
-    }// notificationType is NOT null
+    } // notificationType is NOT null
   }
-
 
   void getUserId({onGetUserId(String userId)}) async {
     await SharedPreferences.getInstance().then((val) {
@@ -556,7 +552,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   @override
   void initState() {
-
     MainTabBar.myChild = this;
     MiddleWare.shared.tabc = TabController(
         length: MiddleWare.shared.myTabBarList.length, vsync: this);
@@ -600,7 +595,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   .then((val) {
                 this.widget.userLocation = val;
                 if ((val.longitude >= 125.758758 &&
-                    val.longitude <= 129.691407) &&
+                        val.longitude <= 129.691407) &&
                     (val.latitude >= 34.385830 && val.latitude <= 38.627163)) {
                   print("...::: the user is inside of korea. :-) :::...");
                 } else {
@@ -704,35 +699,35 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.white, // Color for Android
         systemNavigationBarColor:
-        Colors.black // Dark == white status bar -- for IOS.
-    ));
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
     MainTabBarState.navBar = BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
             icon: new Image.asset("Resources/Icons/btn_main.png", width: 25),
             activeIcon:
-            new Image.asset("Resources/Icons/btn_main_ac.png", width: 25),
+                new Image.asset("Resources/Icons/btn_main_ac.png", width: 25),
             title: Text("")),
         BottomNavigationBarItem(
             icon:
-            new Image.asset("Resources/Icons/btn_finduser.png", width: 50),
+                new Image.asset("Resources/Icons/btn_finduser.png", width: 50),
             activeIcon: new Image.asset("Resources/Icons/btn_finduser_ac.png",
                 width: 50),
             title: Text("")),
         BottomNavigationBarItem(
             icon: new Image.asset("Resources/Icons/btn_chat.png", width: 25),
             activeIcon:
-            new Image.asset("Resources/Icons/btn_chat_ac.png", width: 25),
+                new Image.asset("Resources/Icons/btn_chat_ac.png", width: 25),
             title: Text("")),
         BottomNavigationBarItem(
             icon: new Image.asset("Resources/Icons/btn_notice.png", width: 25),
             activeIcon:
-            new Image.asset("Resources/Icons/btn_notice_ac.png", width: 25),
+                new Image.asset("Resources/Icons/btn_notice_ac.png", width: 25),
             title: Text("")),
         BottomNavigationBarItem(
             icon: new Image.asset("Resources/Icons/btn_mymenu.png", width: 40),
             activeIcon:
-            new Image.asset("Resources/Icons/btn_mymenu_ac.png", width: 40),
+                new Image.asset("Resources/Icons/btn_mymenu_ac.png", width: 40),
             title: Text("")),
       ],
       backgroundColor: Colors.white30,
@@ -789,33 +784,33 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         barrierDismissible: true,
         context: context,
         builder: (_) => AlertDialog(
-          title: new Text("앱 종료"),
-          content: new Text("앱을 종료하시겠습니까?",
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("취소",
-                  style: TextStyle(
-                      fontSize: Statics.shared.fontSizes.supplementary,
-                      color: Colors.black)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text(
-                "종료",
-                style: TextStyle(
-                    fontSize: Statics.shared.fontSizes.supplementary,
-                    color: Colors.red),
-              ),
-              onPressed: () {
-                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-              },
-            ),
-          ],
-        ));
+              title: new Text("앱 종료"),
+              content: new Text("앱을 종료하시겠습니까?",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text("취소",
+                      style: TextStyle(
+                          fontSize: Statics.shared.fontSizes.supplementary,
+                          color: Colors.black)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text(
+                    "종료",
+                    style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.supplementary,
+                        color: Colors.red),
+                  ),
+                  onPressed: () {
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  },
+                ),
+              ],
+            ));
   }
 
   Widget roundedButton(String buttonLabel, Color bgColor, Color textColor) {

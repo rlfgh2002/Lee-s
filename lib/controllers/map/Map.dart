@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:haegisa2/controllers/home/Home.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/Map/Map.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -36,6 +37,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int magazineNum = 0;
+  String keyword = "";
 
   void refreshList(int pCurrent, pTotal) {
     widget.myList = [];
@@ -55,7 +57,7 @@ class _MapPageState extends State<MapPage> {
           ),
           onPressed: () {
             // download 5 more magazines ...
-            this.download5MoreMagazines(page: pCurrent + 1);
+            this.download5MoreMagazines(page: pCurrent + 1, keyword: keyword);
           },
           padding: const EdgeInsets.all(0),
         ),
@@ -72,8 +74,43 @@ class _MapPageState extends State<MapPage> {
     setState(() {});
   }
 
-  void download5MoreMagazines({int page = 1}) async {
-    http.get(Statics.shared.urls.map(page: page)).then((val) {
+  void searchList(int pCurrent, pTotal) {
+    widget.myList = [];
+    double screenWidth = MediaQuery.of(context).size.width;
+    widget.myList.addAll(this.widget.magazinesList); // fetch from server
+
+    if (pTotal > pCurrent) {
+      Widget downloadMoreView = Container(
+        child: FlatButton(
+          child: Container(
+            child: Text(Strings.shared.controllers.magazines.downloadMoreKey,
+                style: TextStyle(
+                    color: Statics.shared.colors.mainColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.w600)),
+            alignment: Alignment.center,
+          ),
+          onPressed: () {
+            // download 5 more magazines ...
+            this.download5MoreMagazines(page: pCurrent + 1, keyword: keyword);
+          },
+          padding: const EdgeInsets.all(0),
+        ),
+        decoration: BoxDecoration(
+            border:
+                Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+        width: screenWidth,
+        height: 60,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
+      );
+      widget.myList.add(downloadMoreView);
+    }
+    setState(() {});
+  }
+
+  void download5MoreMagazines({int page = 1, String keyword}) async {
+    http.get(Statics.shared.urls.map(page: page, keyword: keyword)).then((val) {
       if (val.statusCode == 200) {
         print(
             "::::::::::::::::::::: [ Getting Map Start ] :::::::::::::::::::::");
@@ -131,7 +168,7 @@ class _MapPageState extends State<MapPage> {
         ));
 
     if (widget.isFirstInit) {
-      download5MoreMagazines(page: 1);
+      download5MoreMagazines(page: 1, keyword: keyword);
       widget.isFirstInit = false;
     }
 
@@ -248,9 +285,51 @@ class _MapPageState extends State<MapPage> {
                 //color: Colors.red,
                 ),
             Container(
-              color: Colors.blue,
-              height: 3,
-              //margin: const EdgeInsets.only(left: 16, right: 16)
+              margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Statics.shared.colors.mainColor,
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(left: 5.0, right: 5.0),
+                    width: deviceWidth / 1.5,
+                    child: TextField(
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(
+                            fontSize: Statics.shared.fontSizes.subTitle,
+                            color: Statics.shared.colors.subTitleTextColor,
+                          ),
+                          hintText: "검색어를 입력하세요."), // decoration
+                      onChanged: (String str) {
+                        keyword = str.replaceAll(new RegExp(r"\s+\b|\b\s"), "");
+                      },
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                      width: 70,
+                      color: Statics.shared.colors.mainColor,
+                      child: FlatButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        child: Text("검색",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            )),
+                        onPressed: () {
+                          widget.isFirstInit = true;
+                          download5MoreMagazines(page: 1, keyword: keyword);
+                          widget.isFirstInit = false;
+                        },
+                      ))
+                ],
+              ),
             ),
             Expanded(
               child: new ListView.builder(
@@ -295,7 +374,7 @@ class _MapPageState extends State<MapPage> {
                       maxLines: 2,
                       style: TextStyle(
                           color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.contentBig,
+                          fontSize: Statics.shared.fontSizes.supplementaryBig,
                           fontWeight: FontWeight.bold)),
                   width: screenWidth / 1.6),
               Container(
@@ -306,7 +385,7 @@ class _MapPageState extends State<MapPage> {
                       maxLines: 2,
                       style: TextStyle(
                           color: Statics.shared.colors.subTitleTextColor,
-                          fontSize: Statics.shared.fontSizes.content)),
+                          fontSize: Statics.shared.fontSizes.supplementary)),
                   width: screenWidth / 1.6),
             ],
           ),

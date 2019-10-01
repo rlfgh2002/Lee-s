@@ -209,7 +209,7 @@ class _BarcodeState extends State<Barcode> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.only(top: 20, bottom: 10),
+              padding: const EdgeInsets.only(top: 20, bottom: 30),
               child: Text(
                 "정회원으로 전환 신청하기",
                 style: TextStyle(
@@ -220,45 +220,44 @@ class _BarcodeState extends State<Barcode> {
               ),
             ),
             Container(
-                width: MediaQuery.of(context).size.width / 1.5,
-                color: Statics.shared.colors.lineColor,
                 child: Container(
-                  padding: const EdgeInsets.only(
-                      top: 8, left: 8, right: 8, bottom: 8),
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "MERIT",
-                        style: TextStyle(
-                            color: Statics.shared.colors.mainColor,
-                            fontSize:
-                                Statics.shared.fontSizes.subTitleInContent,
-                            fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 6),
-                      Text(
-                        "- 협회내 참여권 및 투표권 행사가능",
-                        style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                      Text(
-                        "- 한국해기사협회지1층  휴게 라운지 무료 이용가능",
-                        style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
+              width: MediaQuery.of(context).size.width / 1.5,
+              color: Statics.shared.colors.lineColor,
+              padding:
+                  const EdgeInsets.only(top: 8, left: 8, right: 8, bottom: 28),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "MERIT",
+                    style: TextStyle(
+                        color: Statics.shared.colors.mainColor,
+                        fontSize: Statics.shared.fontSizes.subTitleInContent,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                )),
+                  SizedBox(height: 6),
+                  Text(
+                    "- 협회내 참여권 및 투표권 행사가능",
+                    style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.supplementary,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  Text(
+                    "- 한국해기사협회지1층  휴게 라운지 무료 이용가능",
+                    style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.supplementary,
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                ],
+              ),
+            )),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 child: Container(
@@ -292,7 +291,7 @@ class _BarcodeState extends State<Barcode> {
                 children: <Widget>[
                   Expanded(
                       child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 14,
                     child: FlatButton(
                       color: Statics.shared.colors.captionColor,
                       child: Text(
@@ -309,7 +308,7 @@ class _BarcodeState extends State<Barcode> {
                   )),
                   Expanded(
                       child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 10,
+                    height: MediaQuery.of(context).size.height / 14,
                     child: FlatButton(
                       color: Statics.shared.colors.mainColor,
                       child: Text(
