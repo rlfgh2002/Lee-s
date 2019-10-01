@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/TermsView.dart';
 import 'package:haegisa2/controllers/auth/TermsWebView.dart';
-import 'package:haegisa2/main.dart';
 import 'package:haegisa2/controllers/auth/shared.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';

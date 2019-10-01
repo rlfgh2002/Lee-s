@@ -9,8 +9,6 @@ import 'package:haegisa2/models/Map/Map.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:haegisa2/views/Magazines/Magazines.dart';
-import 'package:haegisa2/views/pdf/pdfVier.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import 'dart:convert';

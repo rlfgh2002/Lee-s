@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'MiddleWare.dart';
-import 'dart:async';
-import 'dart:convert';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/controllers/sign/SignSelect.dart';
-import 'package:http/http.dart' as http;
-import 'package:sqflite/sqflite.dart';
 
 class Nullpage extends StatefulWidget {
   String alertMessage;
@@ -16,7 +11,6 @@ class Nullpage extends StatefulWidget {
 }
 
 class _NullInState extends State<Nullpage> {
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(

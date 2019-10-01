@@ -32,7 +32,6 @@ class _HomeState extends State<Home> {
   DateTime backButtonPressTime;
   List noticeList;
   List introList = List();
-  bool _isLoading = false;
 
   String url = Strings.shared.controllers.jsonURL.homeJson + "?mode=main";
 

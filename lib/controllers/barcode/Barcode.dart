@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/home/Home.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -19,6 +18,7 @@ class Barcode extends StatefulWidget {
 
 class _BarcodeState extends State<Barcode> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -27,8 +27,6 @@ class _BarcodeState extends State<Barcode> {
             Colors.black // Dark == white status bar -- for IOS.
         ));
 
-    double deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         key: _scaffoldKey,
         body: Container(

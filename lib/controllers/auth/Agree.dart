@@ -11,7 +11,6 @@ class Agree extends StatefulWidget {
 
 class _AgreeInState extends State<Agree> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _formKey = GlobalKey<FormState>();
 
   bool _termsChecked = true;
 
