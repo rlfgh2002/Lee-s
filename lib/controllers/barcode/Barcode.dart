@@ -29,23 +29,27 @@ class _BarcodeState extends State<Barcode> {
 
     return Scaffold(
         key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          brightness: Brightness.light,
+          title: Container(
+              child: Text("출입증",
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.subTitle,
+                      fontWeight: FontWeight.bold)),
+              margin: const EdgeInsets.only(left: 8)),
+          centerTitle: false,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+        ),
         body: Container(
+            alignment: Alignment.center,
             color: Statics.shared.colors.mainBackgroundVeryLightSilverBlue,
             child: Column(
               children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(top: 20.0, bottom: 20),
-                  alignment: Alignment.topRight,
-                  child: FlatButton(
-                    child:
-                        Image.asset("Resources/Icons/Vector.png", scale: 3.0),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => new MainTabBar()));
-                    },
-                  ),
+                SizedBox(
+                  height: 20,
                 ),
                 memberType(userInformation.memberType)
               ],

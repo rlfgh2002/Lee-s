@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -19,6 +20,7 @@ class _UserInfoState extends State<UserInfo> {
   List<School> _schoolList = new List();
   TextEditingController _emailController;
   TextEditingController _hpController;
+  TextEditingController _adressController;
   TextEditingController _gisuController;
   String _selectedValue;
 
@@ -26,12 +28,15 @@ class _UserInfoState extends State<UserInfo> {
   String email = userInformation.email;
   String school = userInformation.school;
   String gisu = userInformation.gisu;
+  String address2;
+  String addressKeyword;
 
   @override
   void initState() {
     super.initState();
     _hpController = new TextEditingController(text: hp);
     _emailController = new TextEditingController(text: email);
+    _adressController = new TextEditingController(text: address2);
     _gisuController = new TextEditingController(text: gisu);
   }
 
@@ -188,6 +193,129 @@ class _UserInfoState extends State<UserInfo> {
                                 ),
                                 hintText: Strings
                                     .shared.controllers.profile.userPhone),
+                          )),
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 6,
+                      padding: const EdgeInsets.only(left: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              "편번호",
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Container(
+                              width: deviceWidth / 1.7,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                      color: Statics
+                                          .shared.colors.subTitleTextColor,
+                                    ),
+                                    hintText: "우편번호"),
+                              )),
+                          Spacer(),
+                          Container(
+                              width: deviceWidth / 6.5,
+                              child: FlatButton(
+                                child: Text("변경"),
+                                onPressed: () {
+                                  showDialog(
+                                      //barrierDismissible: false,
+                                      context: context,
+                                      builder: (_) => addressAlert());
+                                },
+                              ))
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 6,
+                      padding: const EdgeInsets.only(left: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              "주소",
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Container(
+                              width: deviceWidth / 1.5,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                      color: Statics
+                                          .shared.colors.subTitleTextColor,
+                                    ),
+                                    hintText: "주소"),
+                              )),
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 6,
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              "상세주소",
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.left,
+                            ),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Expanded(
+                              child: TextField(
+                            controller: _adressController,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintStyle: TextStyle(
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  color:
+                                      Statics.shared.colors.subTitleTextColor,
+                                ),
+                                hintText: "상세주소"),
                           )),
                         ],
                       ), // Row Children
@@ -356,7 +484,7 @@ class _UserInfoState extends State<UserInfo> {
                               context: context,
                               builder: (_) => AlertDialog(
                                     title: new Text("로그아웃"),
-                                    content: new Text("로그아웃 하시겠어요?",
+                                    content: new Text("���그아웃 하시겠어요?",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     actions: <Widget>[
@@ -520,13 +648,79 @@ class _UserInfoState extends State<UserInfo> {
   infoModify(String url, {Map body}) async {
     return http.post(url, body: body).then((http.Response response) {
       final int statusCode = response.statusCode;
-      //final String responseBody = response.body; //한글 깨짐
+      //final String responseBody = response.body; //한글 깨��
       final String responseBody = utf8.decode(response.bodyBytes);
       var responseJSON = json.decode(responseBody);
       var code = responseJSON["code"];
 
       if (code == 200) {
         // If the call to the server was successful, parse the JSON
+      } else {
+        // If that call was not successful, throw an error.
+        throw Exception('Failed to load post');
+      }
+    });
+  }
+
+  Widget addressAlert() {
+    return AlertDialog(
+      content: Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: Image.asset(
+                "Resources/Images/requestMember.png",
+                scale: 3.0,
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  hintStyle: TextStyle(
+                    fontSize: Statics.shared.fontSizes.supplementary,
+                    color: Statics.shared.colors.subTitleTextColor,
+                  ),
+                  hintText: "주소 입력"),
+              onChanged: (String str) {
+                addressKeyword = str;
+              },
+            ),
+            FlatButton(
+                child: Text("검색"),
+                onPressed: () async {
+                  var map = new Map<String, dynamic>();
+
+                  map["confmKey"] = "U01TX0FVVEgyMDE5MTAwMjE3MDEyMDEwOTA2ODY=";
+                  map["resultType"] = "json";
+                  map["countPerPage"] = "99";
+                  map["keyword"] = addressKeyword;
+
+                  await searchAddress(
+                      "http://www.juso.go.kr/addrlink/addrLinkApi.do",
+                      body: map);
+                })
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<Result> searchAddress(String url, {Map body}) async {
+    return http.post(url, body: body).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      //final String responseBody = response.body; //한글 깨짐
+      final String responseBody = utf8.decode(response.bodyBytes);
+      var responseJSON = json.decode(responseBody);
+      var juso = responseJSON["result"]["juso"];
+
+      if (statusCode == 200) {
+        // If the call to the server was successful, parse the JSON
+        var juso = responseJSON["juso"];
+
+        for (var result in juso) {}
       } else {
         // If that call was not successful, throw an error.
         throw Exception('Failed to load post');

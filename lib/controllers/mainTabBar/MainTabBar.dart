@@ -559,7 +559,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     getUserId(onGetUserId: (uid) {
       getAllSurveys(uid: uid);
     });
-    firebaseCloudMessaging_Listeners();
+    //firebaseCloudMessaging_Listeners();
     print("Main TabBar New...");
 
     widget.subscription = Connectivity()
