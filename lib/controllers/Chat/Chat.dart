@@ -311,6 +311,7 @@ class ChatState extends State<Chat> {
                   createDate: DateTime.now().toString(),
                   fromName: MiddleWare.shared.user.fullName,
                   schoolName: MiddleWare.shared.user.caption,
+                  schoolGisu: MiddleWare.shared.user.gisu,
                   onInserted: () {
                     print(
                         ":::::::::: NEW Conversation GENERATED Succesfully ${chatCurrentConvId.toString()} ::::::::::");

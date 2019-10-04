@@ -87,7 +87,7 @@ class NoticeWidget extends StatelessWidget {
                                   color: Statics.shared.colors.titleTextColor),
                               overflow: TextOverflow.fade,
                             ),
-                            width: screenSize - 100 - 100,
+                            width: screenSize - 100,
                           ),
 //                      Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),overflow: TextOverflow.fade,),
 //                        width: 100,),
@@ -102,7 +102,8 @@ class NoticeWidget extends StatelessWidget {
                       this.time,
                       style: TextStyle(
                           fontSize: Statics.shared.fontSizes.content,
-                          color: Statics.shared.colors.subTitleTextColor),
+                          color: Statics.shared.colors.subTitleTextColor,
+                          fontWeight: FontWeight.normal),
                       overflow: TextOverflow.fade,
                     ),
                     width: screenSize - 100,

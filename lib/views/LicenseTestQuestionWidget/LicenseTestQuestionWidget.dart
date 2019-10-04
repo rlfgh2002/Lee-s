@@ -33,15 +33,15 @@ class LicenseTestQuestionWidget extends StatelessWidget {
       child: Container(
         child: Row(
           children: [
-            Container(
-              width: buttonSize,
-              child: Text("공지",
-                  style: TextStyle(
-                      color: Statics.shared.colors.mainColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: Statics.shared.fontSizes.content)),
-              alignment: Alignment.center,
-            ),
+            // Container(
+            //   width: buttonSize,
+            //   child: Text("공지",
+            //       style: TextStyle(
+            //           color: Statics.shared.colors.mainColor,
+            //           fontWeight: FontWeight.w700,
+            //           fontSize: Statics.shared.fontSizes.content)),
+            //   alignment: Alignment.center,
+            // ),
             Column(
               children: <Widget>[
                 Container(
@@ -49,14 +49,14 @@ class LicenseTestQuestionWidget extends StatelessWidget {
                         style: TextStyle(
                             color: Statics.shared.colors.titleTextColor,
                             fontSize: Statics.shared.fontSizes.content)),
-                    width: (screenWidth - (paddingSize * 2)) - buttonSize,
+                    width: (screenWidth - (paddingSize * 2)),
                     constraints: BoxConstraints(maxHeight: 45)),
                 Container(
                     child: Text(this.obj.writer,
                         style: TextStyle(
                             color: Statics.shared.colors.captionColor,
                             fontSize: Statics.shared.fontSizes.small)),
-                    width: (screenWidth - (paddingSize * 2)) - buttonSize,
+                    width: (screenWidth - (paddingSize * 2)),
                     padding: const EdgeInsets.only(top: 5)),
               ],
               mainAxisAlignment: MainAxisAlignment.center,

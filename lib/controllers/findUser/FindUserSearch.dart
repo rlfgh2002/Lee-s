@@ -80,7 +80,10 @@ class _FindUserSearchState extends State<FindUserSearch> {
 
               MemberObject obj = MemberObject(
                 title: searchedItems[i].userName,
-                shortDescription: searchedItems[i].schoolName,
+                shortDescription: searchedItems[i].schoolName +
+                    " " +
+                    searchedItems[i].schoolGisu +
+                    "기",
                 hasBlueBadge: true,
                 onTapped: () {
                   String cID = convIdFromDb; // Conversation ID
@@ -88,7 +91,8 @@ class _FindUserSearchState extends State<FindUserSearch> {
                       UID: "${searchedItems[i].userId}",
                       fullName: "${searchedItems[i].userName}",
                       avatar: "",
-                      caption: "${searchedItems[i].schoolName}");
+                      caption: "${searchedItems[i].schoolName}",
+                      gisu: "${searchedItems[i].schoolGisu}");
 
                   Navigator.push(
                       _scaffold.currentContext,

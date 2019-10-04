@@ -143,7 +143,7 @@ class _ChatsState extends State<Chats> {
             width: MiddleWare.shared.screenWidth - 32 - 32 - 25,
             child: TextField(
               decoration: InputDecoration.collapsed(
-                hintText: "채팅방, 대화내용 검색",
+                hintText: "채팅사용자 검색",
                 hintStyle: TextStyle(
                     color: Statics.shared.colors.subTitleTextColor,
                     fontSize: Statics.shared.fontSizes.content),
@@ -399,7 +399,8 @@ class _ChatsState extends State<Chats> {
                             UID: "${searchedItems[i].userId}",
                             fullName: "${searchedItems[i].userName}",
                             avatar: "",
-                            caption: "${searchedItems[i].schoolName}");
+                            caption: "${searchedItems[i].schoolName}",
+                            gisu: "${searchedItems[i].schoolGisu}");
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
@@ -427,7 +428,8 @@ class _ChatsState extends State<Chats> {
                             UID: "${searchedItems[i].userId}",
                             fullName: "${searchedItems[i].userName}",
                             avatar: "",
-                            caption: "${searchedItems[i].schoolName}");
+                            caption: "${searchedItems[i].schoolName}",
+                            gisu: "${searchedItems[i].schoolGisu}");
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
@@ -465,8 +467,7 @@ class _ChatsState extends State<Chats> {
     if (withDuration == true) {
       Future.delayed(Duration(seconds: 1)).then((val) {
         String cID = convId; // Conversation ID
-        User usr =
-            User(UID: uId, fullName: uName, avatar: "", caption: "해양대학교 . 60기");
+        User usr = User(UID: uId, fullName: uName, avatar: "", caption: '');
         Navigator.push(
             _scaffoldKey.currentContext,
             new MaterialPageRoute(
@@ -478,8 +479,7 @@ class _ChatsState extends State<Chats> {
       });
     } else {
       String cID = convId; // Conversation ID
-      User usr =
-          User(UID: uId, fullName: uName, avatar: "", caption: "해양대학교 . 60기");
+      User usr = User(UID: uId, fullName: uName, avatar: "", caption: '');
       Navigator.push(
           _scaffoldKey.currentContext,
           new MaterialPageRoute(

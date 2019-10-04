@@ -73,6 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
     userInformation.email = resultPost.email;
     userInformation.school = resultPost.school;
     userInformation.gisu = resultPost.gisu;
+    getSchool();
     _firebaseMessaging.getToken().then((token) {
       print(token);
       userInformation.userToken = token;
@@ -107,6 +108,30 @@ class _SplashScreenState extends State<SplashScreen> {
             .then((Directory directory) {
           print('Path of New Dir: ' + directory.path);
         });
+      }
+    });
+  }
+
+  Future<List> getSchool() {
+    //한번도 실행되지 않았을때(최초실행)
+
+    return http.post(Strings.shared.controllers.jsonURL.schoolJson, body: {
+      'mode': 'search',
+      'CHCODE': userInformation.school,
+    }).then((http.Response response) {
+      final int statusCode = response.statusCode;
+      //final String responseBody = response.body; //한글 깨짐
+      final String responseBody = utf8.decode(response.bodyBytes);
+      var responseJSON = json.decode(responseBody);
+      var code = responseJSON["code"];
+
+      if (statusCode == 200) {
+        if (code == 200) {
+          userInformation.schoolName = responseJSON["table"][0]["CCNAME"];
+        }
+      } else {
+        // If that call was not successful, throw an error.
+        throw Exception('Failed to load post');
       }
     });
   }

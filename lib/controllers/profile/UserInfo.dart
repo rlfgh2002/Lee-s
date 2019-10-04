@@ -622,9 +622,9 @@ class _UserInfoState extends State<UserInfo> {
   Future<List> getSchool() async {
     //한번도 실행되지 않았을때(최초실행)
     if (schoolTable.length == 0) {
-      return http
-          .post(Strings.shared.controllers.jsonURL.schoolJson)
-          .then((http.Response response) {
+      return http.post(Strings.shared.controllers.jsonURL.schoolJson, body: {
+        'mode': 'list',
+      }).then((http.Response response) {
         final int statusCode = response.statusCode;
         //final String responseBody = response.body; //한글 깨짐
         final String responseBody = utf8.decode(response.bodyBytes);

@@ -157,7 +157,11 @@ class _NoticesListState extends State<NoticesList> {
       widget.isFirstInit = false;
     }
 
-    return Scaffold(
+      return WillPopScope(
+        onWillPop: () async {
+          _moveBack(context);
+        },
+        child:  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
@@ -186,6 +190,11 @@ class _NoticesListState extends State<NoticesList> {
         color: Colors.white,
       ), // end Body
       key: _scaffold,
-    );
+    ));
   }
+
+    void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"
+      ? true
+      : Navigator.push(context,
+          new MaterialPageRoute(builder: (context) => new SplashScreen()));
 }

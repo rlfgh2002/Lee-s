@@ -25,6 +25,7 @@ class _UserInfo {
   String memberType = ""; // 1:정회원 2:준회원
   String email; //이메일
   String school; //학교코드
+  String schoolName; //학교이름
   String gisu; //기수
   Directory dirPath; //첨부파일 다운로드 기본경로
 
@@ -52,6 +53,7 @@ class _UserInfo {
     userInformation.school = "";
     userInformation.gisu = "";
     userInformation.dirPath;
+    userInformation.schoolName = "";
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool("app_user_login_info_islogin", false);

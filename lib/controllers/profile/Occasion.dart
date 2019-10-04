@@ -513,7 +513,7 @@ class _OccasionState extends State<Occasion> {
     ];
 
     List<KeyValueModel> _wedding = [
-      KeyValueModel(key: "선택", value: "0"),
+      KeyValueModel(key: "대상자 선택", value: "0"),
       KeyValueModel(key: "본인결혼", value: "1"),
       KeyValueModel(key: "자녀결혼", value: "2")
     ];
@@ -667,7 +667,7 @@ class _OccasionState extends State<Occasion> {
     ];
 
     List<KeyValueModel> _deathType = [
-      KeyValueModel(key: "선택", value: "0"),
+      KeyValueModel(key: "대상자 선택", value: "0"),
       KeyValueModel(key: "본인사망", value: "1"),
       KeyValueModel(key: "배우자상", value: "2"),
       KeyValueModel(key: "부친상", value: "3"),

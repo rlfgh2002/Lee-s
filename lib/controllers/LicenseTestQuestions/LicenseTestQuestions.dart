@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestionSingle.dart';
+import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/LicenseTestQuestions/LicenseTestQuestionObject.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/views/LicenseTestQuestionWidget/LicenseTestQuestionWidget.dart';
@@ -45,7 +47,8 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
     Widget blueSplitter = Container(
         color: Colors.blue,
         height: 3,
-        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10));
+        margin:
+            const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
@@ -161,28 +164,44 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
       widget.isFirstInit = false;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        title: Container(
-            child: Text("",
-                style: TextStyle(
-                    color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.subTitle,
-                    fontWeight: FontWeight.bold)),
-            margin: const EdgeInsets.only(left: 8)),
-        centerTitle: false,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
-      ),
-      body: Container(
-        child: ListView(
-          children: this.widget.myList,
-        ),
-        color: Colors.white,
-      ), // end Body
-      key: _scaffold,
-    );
+    return WillPopScope(
+        onWillPop: () async {
+          _moveBack(context);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            leading: new IconButton(
+              icon: userInformation.userDeviceOS == "i"
+                  ? new Icon(Icons.arrow_back_ios, color: Colors.black)
+                  : new Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SplashScreen())),
+            ),
+            title: Container(
+                child: Text("해기사기출문제",
+                    style: TextStyle(
+                        color: Statics.shared.colors.titleTextColor,
+                        fontSize: Statics.shared.fontSizes.subTitle,
+                        fontWeight: FontWeight.bold)),
+                margin: const EdgeInsets.only(left: 8)),
+            centerTitle: false,
+            elevation: 0,
+            iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+          ),
+          body: Container(
+            child: ListView(
+              children: this.widget.myList,
+            ),
+            color: Colors.white,
+          ), // end Body
+          key: _scaffold,
+        ));
   }
+
+  void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"
+      ? true
+      : Navigator.push(context,
+          new MaterialPageRoute(builder: (context) => new SplashScreen()));
 }
