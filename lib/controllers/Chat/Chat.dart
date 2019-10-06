@@ -80,7 +80,7 @@ class ChatState extends State<Chat> {
     });
   }
 
-  void sendChat({String message, onSent(), onNotSent()}) async {
+  void sendChat({String message,String toId = "", onSent(), onNotSent()}) async {
     MainTabBar.myChild.getUserId(onGetUserId: (uid) {
       String y = DateTime.now().year.toString();
       String m = DateTime.now().month.toString();
@@ -93,6 +93,11 @@ class ChatState extends State<Chat> {
       String date =
           "${y.toString()}/${m.toString()}/${d.toString()} ${h.toString()}:${i.toString()}:${s.toString()}";
       String msg = MiddleWare.shared.txtChat.text;
+
+      String usId = MiddleWare.shared.user.UID;
+      if(toId != ""){
+        usId = toId;
+      }
       this.widget.db.insertChat(
           convId: chatCurrentConvId,
           userId: MiddleWare.shared.user.UID,
@@ -112,7 +117,7 @@ class ChatState extends State<Chat> {
           .post(Statics.shared.urls.sendChatServer, body: {
             'conversationId': chatCurrentConvId,
             'fromId': uid,
-            'toId': MiddleWare.shared.user.UID,
+            'toId': usId,
             'message': message,
           })
           .then((val) {})
@@ -124,7 +129,7 @@ class ChatState extends State<Chat> {
             print("::::::::::::::::::::: [ SEND DATA ] :::::::::::::::::::::");
             print("userId: ${uid}");
             print("convId: ${chatCurrentConvId}");
-            print("toId: ${MiddleWare.shared.user.UID}");
+            print("toId: ${usId}");
             print("message: ${message}");
             print("::::::::::::::::::::: [ SEND DATA ] :::::::::::::::::::::");
           });
@@ -140,79 +145,84 @@ class ChatState extends State<Chat> {
   }
 
   Container bottomChat() {
+
+    String toId = "";
     if (chatCurrentConvId != 'x0x0' && MiddleWare.shared.user.UID != '0') {
-      return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.1), blurRadius: 3)
-          ],
-        ),
-        child: TextField(
-          autofocus: false,
-          maxLines: 4,
-          minLines: 1,
-          controller: MiddleWare.shared.txtChat,
-          keyboardType: TextInputType.multiline,
-          decoration: InputDecoration(
-            hintText: Strings.shared.controllers.chat.hintChatTextField,
-            fillColor: Color.fromRGBO(244, 248, 255, 1),
-            contentPadding:
-                const EdgeInsets.only(left: 32, right: 32, top: 15, bottom: 15),
-            suffixIcon: IconButton(
-              icon: Image.asset(
-                "Resources/Icons/icon_send.png",
-                height: 20,
-                alignment: Alignment.bottomRight,
-              ),
-              onPressed: () {
-                // Send Message ...
-                if (MiddleWare.shared.txtChat.text.isNotEmpty) {
-                  sendChat(
-                      message: MiddleWare.shared.txtChat.text,
-                      onSent: () {
-                        setState(() {
-                          MiddleWare.shared.messages.add(ChatWidget(
-                            content: MiddleWare.shared.txtChat.text,
-                            time: "오후 11:30",
-                            senderName: "",
-                            isYours: true,
-                          ));
-                          MiddleWare.shared.txtChat.text = "";
-                        });
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                      },
-                      onNotSent: () {
-                        _displaySnackBar(
-                            mainContext,
-                            Strings.shared.controllers.chat
-                                .errorWhileSendingChatMessage);
-                      }); // send chat Restful API
-                } // is Not Empty
-              },
-            ),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1, color: Color.fromRGBO(241, 244, 250, 1)),
-                borderRadius: BorderRadius.all(Radius.circular(100))),
-            hintStyle: TextStyle(
-                fontSize: Statics.shared.fontSizes.content,
-                color: Statics.shared.colors.subTitleTextColor),
-            filled: true,
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(100))),
-          ),
-          style: TextStyle(
-            fontSize: Statics.shared.fontSizes.content,
-            color: Statics.shared.colors.titleTextColor,
-          ),
-        ), // chat textfield
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-        alignment: Alignment.bottomCenter,
-      );
+      toId = "";
     } else {
-      return Container();
+      toId = "mariners123";
     }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.1), blurRadius: 3)
+        ],
+      ),
+      child: TextField(
+        autofocus: false,
+        maxLines: 4,
+        minLines: 1,
+        controller: MiddleWare.shared.txtChat,
+        keyboardType: TextInputType.multiline,
+        decoration: InputDecoration(
+          hintText: Strings.shared.controllers.chat.hintChatTextField,
+          fillColor: Color.fromRGBO(244, 248, 255, 1),
+          contentPadding:
+          const EdgeInsets.only(left: 32, right: 32, top: 15, bottom: 15),
+          suffixIcon: IconButton(
+            icon: Image.asset(
+              "Resources/Icons/icon_send.png",
+              height: 20,
+              alignment: Alignment.bottomRight,
+            ),
+            onPressed: () {
+              // Send Message ...
+              if (MiddleWare.shared.txtChat.text.isNotEmpty) {
+                sendChat(
+                    message: MiddleWare.shared.txtChat.text,
+                    toId:toId,
+                    onSent: () {
+                      setState(() {
+                        MiddleWare.shared.messages.add(ChatWidget(
+                          content: MiddleWare.shared.txtChat.text,
+                          time: "오후 11:30",
+                          senderName: "",
+                          isYours: true,
+                        ));
+                        MiddleWare.shared.txtChat.text = "";
+                      });
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                    },
+                    onNotSent: () {
+                      _displaySnackBar(
+                          mainContext,
+                          Strings.shared.controllers.chat
+                              .errorWhileSendingChatMessage);
+                    }); // send chat Restful API
+              } // is Not Empty
+            },
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  width: 1, color: Color.fromRGBO(241, 244, 250, 1)),
+              borderRadius: BorderRadius.all(Radius.circular(100))),
+          hintStyle: TextStyle(
+              fontSize: Statics.shared.fontSizes.content,
+              color: Statics.shared.colors.subTitleTextColor),
+          filled: true,
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(100))),
+        ),
+        style: TextStyle(
+          fontSize: Statics.shared.fontSizes.content,
+          color: Statics.shared.colors.titleTextColor,
+        ),
+      ), // chat textfield
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      alignment: Alignment.bottomCenter,
+    );
   }
 
   Container showTopBarTitle() {

@@ -76,17 +76,17 @@ class _ChatsState extends State<Chats> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Dismiss Conversation'),
-            content: Text("Are you sure to dismiss this conversation ?"),
+            title: Text('대화내용 삭제'),
+            content: Text("대화내용을 정말 삭제하시겠습니까?"),
             actions: <Widget>[
               new FlatButton(
-                child: new Text('CANCEL'),
+                child: new Text('취소'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               new FlatButton(
-                child: new Text('Yes'),
+                child: new Text('예'),
                 onPressed: () {
                   removeConversation(context, convId, onDeleted);
                 },
