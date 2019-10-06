@@ -293,6 +293,8 @@ class _ProfileState extends State<Profile> {
                             ],
                           ), // Row Children
                           onPressed: () {
+                            UserInfo.shared.g_address1 = "";
+                            UserInfo.shared.g_postNo = "";
                             Navigator.push(
                                 context,
                                 new MaterialPageRoute(

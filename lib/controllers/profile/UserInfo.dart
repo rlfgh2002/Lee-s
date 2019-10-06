@@ -2,42 +2,61 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/models/profile/SearchAddress.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+
+List<Widget> myList = [];
+String addressKeyword;
 
 class UserInfo extends StatefulWidget {
+  String g_postNo = "";
+  String g_address1 = "";
+  static UserInfo shared = UserInfo();
+  UserInfo() {}
   @override
-  _UserInfoState createState() => _UserInfoState();
+  UserInfoState createState() => UserInfoState();
 }
 
-class _UserInfoState extends State<UserInfo> {
+class UserInfoState extends State<UserInfo> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var schoolTable = new List();
   List<School> _schoolList = new List();
+
   TextEditingController _emailController;
   TextEditingController _hpController;
-  TextEditingController _adressController;
+  TextEditingController _addressController;
   TextEditingController _gisuController;
   String _selectedValue;
+
+  UserInfoState userinfo;
+
+  bool addrState = false; //주소 변경 했는지 안했는지 체크.
 
   String hp = userInformation.hp.replaceAll("-", "");
   String email = userInformation.email;
   String school = userInformation.school;
   String gisu = userInformation.gisu;
-  String address2;
-  String addressKeyword;
+  String address2 = userInformation.address2;
+
+  String postNo = userInformation.postNo;
+  String address1 = userInformation.address1;
 
   @override
   void initState() {
     super.initState();
     _hpController = new TextEditingController(text: hp);
     _emailController = new TextEditingController(text: email);
-    _adressController = new TextEditingController(text: address2);
+    _addressController = new TextEditingController(text: address2);
     _gisuController = new TextEditingController(text: gisu);
+  }
+
+  void callback() {
+    setState(() {});
   }
 
   @override
@@ -68,6 +87,11 @@ class _UserInfoState extends State<UserInfo> {
     //학교 미등록시 초기값
     if (school == "") {
       school = "14000";
+    }
+
+    if (UserInfo.shared.g_address1 != "" && UserInfo.shared.g_postNo != "") {
+      postNo = UserInfo.shared.g_address1;
+      address1 = UserInfo.shared.g_postNo;
     }
 
     return Scaffold(
@@ -106,8 +130,7 @@ class _UserInfoState extends State<UserInfo> {
                               Strings.shared.controllers.profile.userName,
                               style: TextStyle(
                                   color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
+                                  fontSize: Statics.shared.fontSizes.content,
                                   fontWeight: FontWeight.bold),
                               textAlign: TextAlign.left,
                             ),
@@ -151,7 +174,7 @@ class _UserInfoState extends State<UserInfo> {
                             userType,
                             style: TextStyle(
                               color: Statics.shared.colors.subTitleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontSize: Statics.shared.fontSizes.content,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -207,7 +230,7 @@ class _UserInfoState extends State<UserInfo> {
                         children: <Widget>[
                           Container(
                             child: Text(
-                              "편번호",
+                              "우편번호",
                               style: TextStyle(
                                   color: Statics.shared.colors.titleTextColor,
                                   fontSize:
@@ -220,27 +243,37 @@ class _UserInfoState extends State<UserInfo> {
                           ),
                           Container(
                               width: deviceWidth / 1.7,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                      fontSize: Statics
-                                          .shared.fontSizes.supplementary,
-                                      color: Statics
-                                          .shared.colors.subTitleTextColor,
-                                    ),
-                                    hintText: "우편번호"),
-                              )),
+                              child: postNo == ""
+                                  ? Text(
+                                      "우편번호",
+                                      style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Statics
+                                            .shared.colors.subTitleTextColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      postNo,
+                                      style: TextStyle(
+                                        fontSize:
+                                            Statics.shared.fontSizes.content,
+                                        color: Statics
+                                            .shared.colors.titleTextColor,
+                                      ),
+                                    )),
                           Spacer(),
                           Container(
                               width: deviceWidth / 6.5,
                               child: FlatButton(
                                 child: Text("변경"),
                                 onPressed: () {
+                                  myList = [];
+                                  addressKeyword = "";
                                   showDialog(
-                                      //barrierDismissible: false,
-                                      context: context,
-                                      builder: (_) => addressAlert());
+                                          context: context,
+                                          builder: (_) => MyDialog())
+                                      .then((_) => setState(() {}));
                                 },
                               ))
                         ],
@@ -269,17 +302,25 @@ class _UserInfoState extends State<UserInfo> {
                           ),
                           Container(
                               width: deviceWidth / 1.5,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                      fontSize: Statics
-                                          .shared.fontSizes.supplementary,
-                                      color: Statics
-                                          .shared.colors.subTitleTextColor,
-                                    ),
-                                    hintText: "주소"),
-                              )),
+                              child: postNo == ""
+                                  ? Text(
+                                      "주소",
+                                      style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Statics
+                                            .shared.colors.subTitleTextColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      address1,
+                                      style: TextStyle(
+                                        fontSize:
+                                            Statics.shared.fontSizes.content,
+                                        color: Statics
+                                            .shared.colors.titleTextColor,
+                                      ),
+                                    )),
                         ],
                       ), // Row Children
                     ),
@@ -306,7 +347,7 @@ class _UserInfoState extends State<UserInfo> {
                           ),
                           Expanded(
                               child: TextField(
-                            controller: _adressController,
+                            controller: _addressController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(
@@ -484,7 +525,7 @@ class _UserInfoState extends State<UserInfo> {
                               context: context,
                               builder: (_) => AlertDialog(
                                     title: new Text("로그아웃"),
-                                    content: new Text("���그아웃 하시겠어요?",
+                                    content: new Text("로그아웃 하시겠어요?",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     actions: <Widget>[
@@ -554,15 +595,25 @@ class _UserInfoState extends State<UserInfo> {
                           infomap["email"] = _emailController.text;
                           infomap["school"] = school;
                           infomap["gisu"] = _gisuController.text;
+                          infomap["address1"] = address1;
+                          infomap["address2"] = _addressController.text;
+                          infomap["postNo"] = postNo;
                           await infoModify(
                               Strings.shared.controllers.jsonURL
                                   .userinfoModifyJson,
                               body: infomap);
 
+                          //변경된 정보로 userInformation 수정
                           userInformation.hp = _hpController.text;
                           userInformation.email = _emailController.text;
                           userInformation.school = school;
                           userInformation.gisu = _gisuController.text;
+                          userInformation.address1 = address1;
+                          userInformation.address2 = _addressController.text;
+                          userInformation.postNo = postNo;
+
+                          UserInfo.shared.g_address1 = "";
+                          UserInfo.shared.g_postNo = "";
 
                           _displaySnackBar(context, "수정되었습니다.");
                           return;
@@ -587,6 +638,7 @@ class _UserInfoState extends State<UserInfo> {
   Widget schoolDropbox(BuildContext context, AsyncSnapshot snapshot) {
     var values = snapshot.data;
     print("SCHOOL LENGTH : ${_schoolList.length}");
+
     if (_schoolList.length == 0) {
       for (var i = 0; i < values.length; i++) {
         // here we are creating the drop down menu items, you can customize the item right here
@@ -655,14 +707,24 @@ class _UserInfoState extends State<UserInfo> {
 
       if (code == 200) {
         // If the call to the server was successful, parse the JSON
+
       } else {
         // If that call was not successful, throw an error.
         throw Exception('Failed to load post');
       }
     });
   }
+}
 
-  Widget addressAlert() {
+class MyDialog extends StatefulWidget {
+  @override
+  _MyDialogState createState() => new _MyDialogState();
+}
+
+class _MyDialogState extends State<MyDialog> {
+  Color _c = Colors.redAccent;
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
         color: Colors.white,
@@ -677,55 +739,183 @@ class _UserInfoState extends State<UserInfo> {
                 scale: 3.0,
               ),
             ),
-            TextField(
-              decoration: InputDecoration(
-                  hintStyle: TextStyle(
-                    fontSize: Statics.shared.fontSizes.supplementary,
-                    color: Statics.shared.colors.subTitleTextColor,
-                  ),
-                  hintText: "주소 입력"),
-              onChanged: (String str) {
-                addressKeyword = str;
-              },
+            SizedBox(
+              height: 20,
             ),
-            FlatButton(
-                child: Text("검색"),
-                onPressed: () async {
-                  var map = new Map<String, dynamic>();
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Statics.shared.colors.mainColor,
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                      width: MediaQuery.of(context).size.width / 1.9,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              fontSize: Statics.shared.fontSizes.subTitle,
+                              color: Statics.shared.colors.subTitleTextColor,
+                            ),
+                            hintText: "주소를 입력하세요."), // decoration
+                        onChanged: (String str) {
+                          addressKeyword = str;
+                        },
+                      )),
+                  Spacer(),
+                  Container(
+                      width: MediaQuery.of(context).size.width / 6.8,
+                      alignment: Alignment.centerRight,
+                      color: Statics.shared.colors.mainColor,
+                      child: FlatButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          child: Text("검색",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary,
+                              )),
+                          onPressed: () async {
+                            myList = [];
+                            var map = new Map<String, dynamic>();
 
-                  map["confmKey"] = "U01TX0FVVEgyMDE5MTAwMjE3MDEyMDEwOTA2ODY=";
-                  map["resultType"] = "json";
-                  map["countPerPage"] = "99";
-                  map["keyword"] = addressKeyword;
+                            map["confmKey"] =
+                                "U01TX0FVVEgyMDE5MTAwMjE3MDEyMDEwOTA2ODY=";
+                            map["resultType"] = "json";
+                            map["countPerPage"] = "99";
+                            map["keyword"] = addressKeyword;
 
-                  await searchAddress(
-                      "http://www.juso.go.kr/addrlink/addrLinkApi.do",
-                      body: map);
-                })
+                            await searchAddress(
+                                "http://www.juso.go.kr/addrlink/addrLinkApi.do",
+                                body: map);
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode());
+                          })),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: new ListView.builder(
+                  key: new Key(DateFormat("yyyyMMddHHmmss")
+                      .format(DateTime.now())), //리스트당 고유된 키를 부여
+                  itemCount: myList.length, // number of items in your list
+                  //here the implementation of itemBuilder. take a look at flutter docs to see details
+                  itemBuilder: (BuildContext context, int itemIndex) {
+                    return myList[itemIndex]; // return your widget
+                  }),
+            )
           ],
         ),
       ),
     );
   }
 
-  Future<Result> searchAddress(String url, {Map body}) async {
+  Future searchAddress(String url, {Map body}) async {
     return http.post(url, body: body).then((http.Response response) {
       final int statusCode = response.statusCode;
       //final String responseBody = response.body; //한글 깨짐
       final String responseBody = utf8.decode(response.bodyBytes);
       var responseJSON = json.decode(responseBody);
-      var juso = responseJSON["result"]["juso"];
+      var errorMessage = responseJSON["results"]["common"]["errorMessage"];
+      var juso = responseJSON["results"]["juso"];
 
       if (statusCode == 200) {
-        // If the call to the server was successful, parse the JSON
-        var juso = responseJSON["juso"];
-
-        for (var result in juso) {}
+        if (errorMessage == "정상") {
+          if (juso.length != 0) {
+            for (var result in juso) {
+              myList.add(addrList(result["roadAddr"], result["zipNo"]));
+            }
+            setState(() {});
+          } else {
+            return showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: new Text("오류"),
+                      content: new Text("검색결과가 없습니다.",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        new FlatButton(
+                          child: new Text("확인",
+                              style: TextStyle(
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  color: Colors.black)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ));
+          }
+        } else {
+          return showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (_) => AlertDialog(
+                    title: new Text("오류"),
+                    content: new Text(errorMessage,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    actions: <Widget>[
+                      // usually buttons at the bottom of the dialog
+                      new FlatButton(
+                        child: new Text("확인",
+                            style: TextStyle(
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary,
+                                color: Colors.black)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ));
+        }
       } else {
         // If that call was not successful, throw an error.
         throw Exception('Failed to load post');
       }
     });
+  }
+
+  addrList(
+    String addr,
+    String post,
+  ) {
+    return Container(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: GestureDetector(
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width / 1.9,
+                child: Text(addr,
+                    style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.supplementary,
+                        color: Colors.black)),
+              ),
+              Spacer(),
+              Text(post,
+                  style: TextStyle(
+                      fontSize: Statics.shared.fontSizes.supplementary,
+                      color: Statics.shared.colors.subTitleTextColor))
+            ],
+          ),
+          onTap: () {
+            UserInfo.shared.g_address1 = addr;
+            UserInfo.shared.g_postNo = post;
+
+            Navigator.of(context).pop();
+          },
+        ));
   }
 }
 

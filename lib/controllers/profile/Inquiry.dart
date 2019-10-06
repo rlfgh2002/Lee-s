@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -146,7 +145,29 @@ class _InquiryState extends State<Inquiry> {
                             Strings.shared.controllers.jsonURL.inquiryJson,
                             body: infomap);
 
-                        _displaySnackBar(context, "1:1문의가 전송되었습니다.");
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: new Text("접수 완료"),
+                                  content: new Text(
+                                      "문의가 접수되었습니다. \n문의답변은 등록된 메일로 보내드리겠습니다.",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  actions: <Widget>[
+                                    // usually buttons at the bottom of the dialog
+                                    new FlatButton(
+                                      child: new Text("확인",
+                                          style: TextStyle(
+                                              fontSize: Statics.shared.fontSizes
+                                                  .supplementary,
+                                              color: Colors.black)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ));
 
                         setState(() {
                           _subjectController =
@@ -159,11 +180,6 @@ class _InquiryState extends State<Inquiry> {
 
                           subject = "";
                           content = "";
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MainTabBar()));
                         });
                       }
                     }),

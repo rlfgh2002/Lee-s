@@ -27,6 +27,9 @@ class _UserInfo {
   String school; //학교코드
   String schoolName; //학교이름
   String gisu; //기수
+  String address1 = ""; //주소
+  String address2 = ""; //상세주소
+  String postNo = ""; //우편번호
   Directory dirPath; //첨부파일 다운로드 기본경로
 
   User userData;
@@ -52,6 +55,10 @@ class _UserInfo {
     userInformation.email = "";
     userInformation.school = "";
     userInformation.gisu = "";
+    userInformation.address1 = "";
+    userInformation.address2 = "";
+    userInformation.postNo = "";
+
     userInformation.dirPath;
     userInformation.schoolName = "";
 
@@ -67,7 +74,6 @@ final _UserInfo userInformation = _UserInfo.shared;
 
 Future<Null> deviceinfo() async {
   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
   PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     //String appName = packageInfo.appName;
     //String packageName = packageInfo.packageName;
