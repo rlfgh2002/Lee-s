@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
 import 'package:haegisa2/models/SearchMembers/SearchMemberObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';

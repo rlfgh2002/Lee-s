@@ -559,7 +559,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     getUserId(onGetUserId: (uid) {
       getAllSurveys(uid: uid);
     });
-    //firebaseCloudMessaging_Listeners();
+    firebaseCloudMessaging_Listeners();
     print("Main TabBar New...");
 
     widget.subscription = Connectivity()
@@ -652,6 +652,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void showLocationPopUp(BuildContext ctx) {
+    return;
     SharedPreferences.getInstance().then((val) {
       String strDate = val.getString("__LOCATION_POPUP_7_DAYS");
       if (strDate != null && strDate != "") {
