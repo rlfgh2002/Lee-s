@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/IntroduceOccupation/IOSingle.dart';
-import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/controllers/findUser/FindUser.dart';
+import 'package:haegisa2/controllers/home/Home.dart';
+import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
+import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
 //import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
 import 'package:haegisa2/models/iO/IOObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -193,12 +196,18 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
             backgroundColor: Colors.white,
             brightness: Brightness.light,
             leading: new IconButton(
-              icon: userInformation.userDeviceOS == "i"
-                  ? new Icon(Icons.arrow_back_ios, color: Colors.black)
-                  : new Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SplashScreen())),
-            ),
+                icon: userInformation.userDeviceOS == "i"
+                    ? new Icon(Icons.arrow_back_ios, color: Colors.black)
+                    : new Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  MiddleWare.shared.currentIndex = 1;
+   
+                  Navigator.pushReplacement(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new MainTabBar()))
+                    ..then((_) => setState(() {}));
+                }),
             title: Container(
                 child: Text(Strings.shared.controllers.iO.pageTitle,
                     style: TextStyle(
@@ -220,8 +229,13 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
         ));
   }
 
-  void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"
-      ? true
-      : Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new SplashScreen()));
+  void _moveBack(BuildContext context) {
+    if (userInformation.userDeviceOS == "i") {
+      true;
+    } else {
+      MiddleWare.shared.currentIndex = 0;
+      Navigator.pushReplacement(context,
+          new MaterialPageRoute(builder: (context) => new MainTabBar()));
+    }
+  }
 }

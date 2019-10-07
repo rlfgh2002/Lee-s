@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestionSingle.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
+import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
 import 'package:haegisa2/models/LicenseTestQuestions/LicenseTestQuestionObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -176,8 +178,13 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
               icon: userInformation.userDeviceOS == "i"
                   ? new Icon(Icons.arrow_back_ios, color: Colors.black)
                   : new Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SplashScreen())),
+              onPressed: () {
+                MiddleWare.shared.currentIndex = 0;
+                Navigator.pushReplacement(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new MainTabBar()));
+              },
             ),
             title: Container(
                 child: Text("해기사기출문제",
@@ -200,8 +207,13 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
         ));
   }
 
-  void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"
-      ? true
-      : Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new SplashScreen()));
+  void _moveBack(BuildContext context) {
+    if (userInformation.userDeviceOS == "i") {
+      true;
+    } else {
+      MiddleWare.shared.currentIndex = 0;
+      Navigator.pushReplacement(context,
+          new MaterialPageRoute(builder: (context) => new MainTabBar()));
+    }
+  }
 }

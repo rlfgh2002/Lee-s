@@ -142,7 +142,7 @@ class _ProfileState extends State<Profile> {
                                 child: Row(children: [
                                   Image.asset(
                                       'Resources/Icons/btn_feehistory.png',
-                                      scale: 2.5),
+                                      scale: 2.8),
                                   Text(
                                       " " +
                                           Strings.shared.controllers.profile
@@ -162,7 +162,7 @@ class _ProfileState extends State<Profile> {
                                 },
                               ),
                               width: deviceWidth / 2,
-                              height: deviceWidth / 5),
+                              height: deviceWidth / 6.5),
                           VerticalDivider(width: 0),
                           SizedBox(
                               child: FlatButton(
@@ -170,7 +170,7 @@ class _ProfileState extends State<Profile> {
                                 highlightColor: Colors.transparent,
                                 child: Row(children: [
                                   Image.asset('Resources/Icons/btn_inquiry.png',
-                                      scale: 2.5),
+                                      scale: 2.8),
                                   Text(
                                       " " +
                                           Strings.shared.controllers.profile
@@ -189,7 +189,7 @@ class _ProfileState extends State<Profile> {
                                 },
                               ),
                               width: deviceWidth / 2,
-                              height: deviceWidth / 5)
+                              height: deviceWidth / 6.5)
                         ],
                       ), // Row Children
                     )),
@@ -208,7 +208,7 @@ class _ProfileState extends State<Profile> {
                                 child: Row(children: [
                                   Image.asset(
                                       'Resources/Icons/btn_occasion.png',
-                                      scale: 2.5),
+                                      scale: 2.8),
                                   Text(
                                       " " +
                                           Strings.shared.controllers.profile
@@ -228,7 +228,7 @@ class _ProfileState extends State<Profile> {
                                 },
                               ),
                               width: deviceWidth / 2,
-                              height: deviceWidth / 5),
+                              height: deviceWidth / 6.5),
                           VerticalDivider(width: 0),
                           SizedBox(
                               child: FlatButton(
@@ -237,7 +237,7 @@ class _ProfileState extends State<Profile> {
                                 child: Row(children: [
                                   Image.asset(
                                       'Resources/Icons/btn_advisory.png',
-                                      scale: 2.5),
+                                      scale: 2.8),
                                   Text(
                                       " " +
                                           Strings.shared.controllers.profile
@@ -257,7 +257,7 @@ class _ProfileState extends State<Profile> {
                                 },
                               ),
                               width: deviceWidth / 2,
-                              height: deviceWidth / 5)
+                              height: deviceWidth / 6.5)
                         ],
                       ), // Row Children
                     )),
@@ -267,7 +267,7 @@ class _ProfileState extends State<Profile> {
                 Container(
                   child: Column(children: [
                     Container(
-                        height: deviceWidth / 5,
+                        height: deviceWidth / 6.5,
                         padding: const EdgeInsets.only(left: 20, right: 5),
                         child: FlatButton(
                           splashColor: Colors.transparent,
@@ -305,7 +305,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                        height: deviceWidth / 5,
+                        height: deviceWidth / 6.5,
                         padding: const EdgeInsets.only(left: 20, right: 5),
                         child: new FlatButton(
                           splashColor: Colors.transparent,
@@ -342,7 +342,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                        height: deviceWidth / 5,
+                        height: deviceWidth / 6.5,
                         padding: const EdgeInsets.only(left: 20, right: 5),
                         child: new FlatButton(
                           splashColor: Colors.transparent,
@@ -378,7 +378,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                        height: deviceWidth / 5,
+                        height: deviceWidth / 6.5,
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: new FlatButton(
                           child: Row(

@@ -9,6 +9,10 @@ import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
 import 'package:haegisa2/controllers/barcode/Barcode.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
+import 'package:haegisa2/controllers/profile/Advisory.dart';
+import 'package:haegisa2/controllers/profile/FeeHistory.dart';
+import 'package:haegisa2/controllers/profile/Inquiry.dart';
+import 'package:haegisa2/controllers/profile/Occasion.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -313,31 +317,6 @@ class _HomeState extends State<Home> {
                 ]), // Row
               ),
               Container(
-                decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                      color: Color.fromRGBO(235, 239, 245, 1),
-                    ),
-                    boxShadow: [
-                      new BoxShadow(
-                          color: Color.fromRGBO(235, 239, 245, 1),
-                          offset: new Offset(3.0, 3.0),
-                          blurRadius: 0.5,
-                          spreadRadius: 0)
-                    ]),
-                margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
-                child: FlatButton(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  child: Image.asset('Resources/Images/totalWork.png',
-                      width: deviceWidth / 1.2),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeWebview()));
-                  },
-                ),
-              ),
-              Container(
                   alignment: Alignment.center,
                   decoration: new BoxDecoration(
                       color: Colors.white,
@@ -352,129 +331,317 @@ class _HomeState extends State<Home> {
                             spreadRadius: 0)
                       ]),
                   margin: EdgeInsets.only(left: 10, right: 10),
-                  child: Container(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                              alignment: Alignment.center,
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      child: Image.asset(
-                                        'Resources/Icons/icon_intro.png',
-                                        scale: 4.0,
-                                        alignment: Alignment.center,
-                                      ),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) =>
-                                                    new Intro()));
-                                      },
-                                    ),
-                                    Text("협회소개",
-                                        style: TextStyle(
-                                            color: Statics
-                                                .shared.colors.titleTextColor,
-                                            fontSize: 13),
-                                        textAlign: TextAlign.center),
-                                  ]),
-                              height: deviceWidth / 5,
-                              width: deviceWidth / 4.5),
-                          Container(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      child: Image.asset(
-                                          'Resources/Icons/icon_webzine.png',
-                                          scale: 4.0),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) =>
-                                                    new Magazines()));
-                                      },
-                                    ),
-                                    Text("해바라기",
-                                        style: TextStyle(
-                                            color: Statics
-                                                .shared.colors.titleTextColor,
-                                            fontSize: 13),
-                                        textAlign: TextAlign.left),
-                                  ]),
-                              height: deviceWidth / 5,
-                              width: deviceWidth / 4.5),
-                          Container(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      child: Image.asset(
-                                          'Resources/Icons/icon_survey.png',
-                                          scale: 4.0),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) =>
-                                                    new SurveysTabs()));
-                                      },
-                                    ),
-                                    Text("설문조사",
-                                        style: TextStyle(
-                                            color: Statics
-                                                .shared.colors.titleTextColor,
-                                            fontSize: 13),
-                                        textAlign: TextAlign.left),
-                                  ]),
-                              height: deviceWidth / 5,
-                              width: deviceWidth / 4.5),
-                          Container(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      child: Image.asset(
-                                          'Resources/Icons/icon_map.png',
-                                          scale: 4.0),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) =>
-                                                    new MapPage()));
-                                      },
-                                    ),
-                                    Text("선사지도",
-                                        style: TextStyle(
-                                            color: Statics
-                                                .shared.colors.titleTextColor,
-                                            fontSize: 13),
-                                        textAlign: TextAlign.left),
-                                  ]),
-                              height: deviceWidth / 5,
-                              width: deviceWidth / 4.5),
-                        ]),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          width: deviceWidth / 1.1,
+                          child: FlatButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            child: Row(children: [
+                              Text("바로가기",
+                                  style: TextStyle(
+                                      color:
+                                          Statics.shared.colors.titleTextColor,
+                                      fontSize:
+                                          Statics.shared.fontSizes.subTitle,
+                                      fontWeight: FontWeight.bold)),
+                              Spacer(),
+                            ]),
+                            onPressed: () {},
+                          ),
+                          height: deviceWidth / 8),
+                      Container(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                            'Resources/Icons/icon_intro.png',
+                                            scale: 4.0,
+                                            alignment: Alignment.center,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new Intro()));
+                                          },
+                                        ),
+                                        Text("협회소개",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.center),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                              Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/icon_webzine.png',
+                                              scale: 4.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new Magazines()));
+                                          },
+                                        ),
+                                        Text("해바라기",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                              Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/icon_survey.png',
+                                              scale: 4.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new SurveysTabs()));
+                                          },
+                                        ),
+                                        Text("설문조사",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                              Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/icon_map.png',
+                                              scale: 4.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new MapPage()));
+                                          },
+                                        ),
+                                        Text("선사지도",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                            ]),
+                      ),
+                      Container(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                            'Resources/Icons/btn_feehistory.png',
+                                            scale: 4.0,
+                                            alignment: Alignment.center,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new FeeHistory()));
+                                          },
+                                        ),
+                                        Text("회비내역",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.center),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                              Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/btn_occasion.png',
+                                              scale: 4.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new Occasion()));
+                                          },
+                                        ),
+                                        Text("경조사통보",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                              Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/btn_inquiry.png',
+                                              scale: 4.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new Inquiry()));
+                                          },
+                                        ),
+                                        Text("1:1문의",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                              Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/btn_advisory.png',
+                                              scale: 4.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new Advisory()));
+                                          },
+                                        ),
+                                        Text("해기자문",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
+                            ]),
+                      ),
+                    ],
                   ),
-                  height: deviceWidth / 4),
+                  height: deviceWidth / 1.8),
+              Image.asset('Resources/Icons/Line3.png'),
+              Container(
+                decoration: new BoxDecoration(
+                    color: Colors.white,
+                    border: new Border.all(
+                      color: Color.fromRGBO(235, 239, 245, 1),
+                    ),
+                    boxShadow: [
+                      new BoxShadow(
+                          color: Color.fromRGBO(235, 239, 245, 1),
+                          offset: new Offset(3.0, 3.0),
+                          blurRadius: 0.5,
+                          spreadRadius: 0)
+                    ]),
+                margin: EdgeInsets.only(left: 10, right: 10),
+                child: FlatButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  child: Image.asset('Resources/Images/totalWork.png',
+                      width: deviceWidth / 1.2),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeWebview()));
+                  },
+                ),
+              ),
               Image.asset('Resources/Icons/Line3.png'),
               Container(
                 decoration: new BoxDecoration(
@@ -630,6 +797,7 @@ class _HomeState extends State<Home> {
               viewImgUrl_1: values[0]["viewImgUrl_1"].toString(),
               viewImgUrl_2: values[0]["viewImgUrl_2"].toString(),
             );
+
             Navigator.push(
                 context,
                 new MaterialPageRoute(

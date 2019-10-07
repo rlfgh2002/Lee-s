@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
+import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
 import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -157,44 +159,53 @@ class _NoticesListState extends State<NoticesList> {
       widget.isFirstInit = false;
     }
 
-      return WillPopScope(
+    return WillPopScope(
         onWillPop: () async {
           _moveBack(context);
         },
-        child:  Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        leading: new IconButton(
-          icon: userInformation.userDeviceOS == "i"
-              ? new Icon(Icons.arrow_back_ios, color: Colors.black)
-              : new Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SplashScreen())),
-        ),
-        title: Container(
-            child: Text(Strings.shared.controllers.noticesList.pageTitle,
-                style: TextStyle(
-                    color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.subTitle,
-                    fontWeight: FontWeight.bold)),
-            margin: const EdgeInsets.only(left: 8)),
-        centerTitle: false,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
-      ),
-      body: Container(
-        child: ListView(
-          children: this.widget.myList,
-        ),
-        color: Colors.white,
-      ), // end Body
-      key: _scaffold,
-    ));
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            leading: new IconButton(
+                icon: userInformation.userDeviceOS == "i"
+                    ? new Icon(Icons.arrow_back_ios, color: Colors.black)
+                    : new Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  MiddleWare.shared.currentIndex = 0;
+                  Navigator.pushReplacement(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new MainTabBar()));
+                }),
+            title: Container(
+                child: Text(Strings.shared.controllers.noticesList.pageTitle,
+                    style: TextStyle(
+                        color: Statics.shared.colors.titleTextColor,
+                        fontSize: Statics.shared.fontSizes.subTitle,
+                        fontWeight: FontWeight.bold)),
+                margin: const EdgeInsets.only(left: 8)),
+            centerTitle: false,
+            elevation: 0,
+            iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+          ),
+          body: Container(
+            child: ListView(
+              children: this.widget.myList,
+            ),
+            color: Colors.white,
+          ), // end Body
+          key: _scaffold,
+        ));
   }
 
-    void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"
-      ? true
-      : Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new SplashScreen()));
+  void _moveBack(BuildContext context) {
+    if (userInformation.userDeviceOS == "i") {
+      true;
+    } else {
+      MiddleWare.shared.currentIndex = 0;
+      Navigator.pushReplacement(context,
+          new MaterialPageRoute(builder: (context) => new MainTabBar()));
+    }
+  }
 }

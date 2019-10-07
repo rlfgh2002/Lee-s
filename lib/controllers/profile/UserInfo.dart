@@ -66,7 +66,6 @@ class UserInfoState extends State<UserInfo> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-
     String typeAsset = "";
     String userType = "";
     Color typeColor;
@@ -90,8 +89,8 @@ class UserInfoState extends State<UserInfo> {
     }
 
     if (UserInfo.shared.g_address1 != "" && UserInfo.shared.g_postNo != "") {
-      postNo = UserInfo.shared.g_address1;
-      address1 = UserInfo.shared.g_postNo;
+      postNo = UserInfo.shared.g_postNo;
+      address1 = UserInfo.shared.g_address1;
     }
 
     return Scaffold(
@@ -242,7 +241,7 @@ class UserInfoState extends State<UserInfo> {
                             padding: const EdgeInsets.only(right: 10),
                           ),
                           Container(
-                              width: deviceWidth / 1.7,
+                              width: deviceWidth / 2.2,
                               child: postNo == ""
                                   ? Text(
                                       "우편번호",
@@ -302,7 +301,7 @@ class UserInfoState extends State<UserInfo> {
                           ),
                           Container(
                               width: deviceWidth / 1.5,
-                              child: postNo == ""
+                              child: address1 == ""
                                   ? Text(
                                       "주소",
                                       style: TextStyle(
@@ -752,7 +751,7 @@ class _MyDialogState extends State<MyDialog> {
               child: Row(
                 children: <Widget>[
                   Container(
-                      width: MediaQuery.of(context).size.width / 1.9,
+                      width: MediaQuery.of(context).size.width / 2.1,
                       child: TextField(
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -767,7 +766,7 @@ class _MyDialogState extends State<MyDialog> {
                       )),
                   Spacer(),
                   Container(
-                      width: MediaQuery.of(context).size.width / 6.8,
+                      width: MediaQuery.of(context).size.width / 6.0,
                       alignment: Alignment.centerRight,
                       color: Statics.shared.colors.mainColor,
                       child: FlatButton(
