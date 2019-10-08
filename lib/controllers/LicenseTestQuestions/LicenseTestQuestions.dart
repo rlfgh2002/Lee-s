@@ -180,6 +180,7 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
                   : new Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () {
                 MiddleWare.shared.currentIndex = 0;
+                MiddleWare.shared.loadStatus = false;
                 Navigator.pushReplacement(
                     context,
                     new MaterialPageRoute(
@@ -212,6 +213,7 @@ class _LicenseTestQuestionsState extends State<LicenseTestQuestions> {
       true;
     } else {
       MiddleWare.shared.currentIndex = 0;
+      MiddleWare.shared.loadStatus = false;
       Navigator.pushReplacement(context,
           new MaterialPageRoute(builder: (context) => new MainTabBar()));
     }

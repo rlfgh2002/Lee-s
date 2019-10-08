@@ -23,7 +23,6 @@ import 'package:geolocator/geolocator.dart';
 class MainTabBar extends StatefulWidget {
   final MyDataBase db = MyDataBase();
   FirebaseMessaging mainFirebaseMessaging = FirebaseMessaging();
-
   Position userLocation;
 
   StreamSubscription subscription;
@@ -31,7 +30,6 @@ class MainTabBar extends StatefulWidget {
   static MainTabBar mainTabBar;
   static MainTabBarState myChild;
   MiddleWare mdw = MiddleWare.shared;
-
   @override
   MainTabBarState createState() {
     MainTabBar.mainTabBar = this;
@@ -40,6 +38,9 @@ class MainTabBar extends StatefulWidget {
 }
 
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
+  static bool loadStatus = true;
+  static MainTabBarState shared = MainTabBarState();
+  MainTabBarState() {}
   DateTime backButtonPressTime;
   static BottomNavigationBar navBar;
   Geolocator geolocator = Geolocator();
@@ -58,6 +59,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void getAllSurveys({String uid}) async {
+    print(MiddleWare.shared.loadStatus);
+    print("Tlqkfshadk");
     String url = Statics.shared.urls.searchSurveys(uid);
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
@@ -367,7 +370,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     }
 
     return null;
-    // Or do other work.
+    // Or do other work.}
   }
 
   void iOS_Permission() {
@@ -552,27 +555,37 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    print(MiddleWare.shared.loadStatus);
     MainTabBar.myChild = this;
     MiddleWare.shared.tabc = TabController(
         length: MiddleWare.shared.myTabBarList.length, vsync: this);
 
-    getUserId(onGetUserId: (uid) {
-      getAllSurveys(uid: uid);
-    });
-    firebaseCloudMessaging_Listeners();
-    print("Main TabBar New...");
+    if (MiddleWare.shared.loadStatus == true) {
+      getUserId(onGetUserId: (uid) {
+        getAllSurveys(uid: uid);
+      });
+      firebaseCloudMessaging_Listeners();
+      print("Main TabBar New...");
 
-    widget.subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      if (result.index != 0) {
-        // no internet connected
-        showNoInternet(context);
-      }
-    });
+      widget.subscription = Connectivity()
+          .onConnectivityChanged
+          .listen((ConnectivityResult result) {
+        if (result.index != 0) {
+          // no internet connected
+          showNoInternet(context);
+        }
+      });
 
-    this.updateUserLocation();
-    super.initState();
+      this.updateUserLocation();
+
+      super.initState();
+    } else {
+      MiddleWare.shared.loadStatus = true;
+    }
+  }
+
+  void backStatus() async {
+    MiddleWare.shared.loadStatus = true;
   }
 
   @override
@@ -693,6 +706,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             });
       }
     });
+  }
+
+  void statusBackup() {
+    MiddleWare.shared.loadStatus = true;
   }
 
   @override

@@ -9,16 +9,21 @@ import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/chats/ConversationWidget.dart';
 
-class MiddleWare
-{
+class MiddleWare {
   static MiddleWare shared = MiddleWare();
-  _MiddleWare(){}
+  _MiddleWare() {}
 
   double screenWidth = 0;
   int currentIndex = 0;
   TabController tabc;
-  List<Widget> myTabBarList = [Home(),FindUser(),Chats(),Notices(),Profile()];
-
+  bool loadStatus = false; //true면 void들 로드하고 false일땐 작업안함
+  List<Widget> myTabBarList = [
+    Home(),
+    FindUser(),
+    Chats(),
+    Notices(),
+    Profile()
+  ];
 
   Widget topBarWidget = Container();
   List<ConversationWidget> conversations = [];

@@ -187,52 +187,48 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
       download5MoreIO(page: 1);
       widget.isFirstInit = false;
     }
-    return WillPopScope(
-        onWillPop: () async {
-          _moveBack(context);
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            brightness: Brightness.light,
-            leading: new IconButton(
-                icon: userInformation.userDeviceOS == "i"
-                    ? new Icon(Icons.arrow_back_ios, color: Colors.black)
-                    : new Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () {
-                  MiddleWare.shared.currentIndex = 1;
-   
-                  Navigator.pushReplacement(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new MainTabBar()))
-                    ..then((_) => setState(() {}));
-                }),
-            title: Container(
-                child: Text(Strings.shared.controllers.iO.pageTitle,
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                        fontWeight: FontWeight.bold)),
-                margin: const EdgeInsets.only(left: 8)),
-            centerTitle: false,
-            elevation: 0,
-            iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
-          ),
-          body: Container(
-            child: ListView(
-              children: this.widget.myList,
-            ),
-            color: Colors.white,
-          ), // end Body
-          key: _scaffold,
-        ));
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        leading: new IconButton(
+            icon: userInformation.userDeviceOS == "i"
+                ? new Icon(Icons.arrow_back_ios, color: Colors.black)
+                : new Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              MiddleWare.shared.currentIndex = 0;
+              MiddleWare.shared.loadStatus = false;
+              Navigator.push(context,
+                  MaterialPageRoute<void>(builder: (BuildContext context) {
+                return MainTabBar();
+              }));
+            }),
+        title: Container(
+            child: Text(Strings.shared.controllers.iO.pageTitle,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
+            margin: const EdgeInsets.only(left: 8)),
+        centerTitle: false,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+      ),
+      body: Container(
+        child: ListView(
+          children: this.widget.myList,
+        ),
+        color: Colors.white,
+      ), // end Body
+      key: _scaffold,
+    );
   }
 
   void _moveBack(BuildContext context) {
     if (userInformation.userDeviceOS == "i") {
       true;
     } else {
+      MiddleWare.shared.loadStatus = false;
       MiddleWare.shared.currentIndex = 0;
       Navigator.pushReplacement(context,
           new MaterialPageRoute(builder: (context) => new MainTabBar()));

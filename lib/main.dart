@@ -44,8 +44,8 @@ class _MyAppState extends State<MyApp> {
 
     FirebaseMessaging()
         .getToken()
-        .then((val) => (print("FCM Token: ${val.toString()}")))
-        .catchError((error) => print("FCM Token Error: ${error.toString()}"));
+        .then((val) => (print("FCM Token2: ${val.toString()}")))
+        .catchError((error) => print("FCM Token3 Error: ${error.toString()}"));
 
     FirebaseMessaging().getToken().then((token) {
       userInformation.userToken = token;
