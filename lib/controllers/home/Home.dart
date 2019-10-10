@@ -336,24 +336,6 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                          width: deviceWidth / 1.1,
-                          child: FlatButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Row(children: [
-                              Text("바로가기",
-                                  style: TextStyle(
-                                      color:
-                                          Statics.shared.colors.titleTextColor,
-                                      fontSize:
-                                          Statics.shared.fontSizes.subTitle,
-                                      fontWeight: FontWeight.bold)),
-                              Spacer(),
-                            ]),
-                            onPressed: () {},
-                          ),
-                          height: deviceWidth / 8),
-                      Container(
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -489,39 +471,6 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Container(
-                                  alignment: Alignment.center,
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        FlatButton(
-                                          splashColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          child: Image.asset(
-                                            'Resources/Icons/btn_feehistory.png',
-                                            scale: 4.0,
-                                            alignment: Alignment.center,
-                                          ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                new MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        new FeeHistory()));
-                                          },
-                                        ),
-                                        Text("회비내역",
-                                            style: TextStyle(
-                                                color: Statics.shared.colors
-                                                    .titleTextColor,
-                                                fontSize: 13),
-                                            textAlign: TextAlign.center),
-                                      ]),
-                                  height: deviceWidth / 5,
-                                  width: deviceWidth / 4.5),
-                              Container(
                                   child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -533,7 +482,7 @@ class _HomeState extends State<Home> {
                                           highlightColor: Colors.transparent,
                                           child: Image.asset(
                                               'Resources/Icons/btn_occasion.png',
-                                              scale: 4.0),
+                                              scale: 3.0),
                                           onPressed: () {
                                             Navigator.push(
                                                 context,
@@ -563,7 +512,7 @@ class _HomeState extends State<Home> {
                                           highlightColor: Colors.transparent,
                                           child: Image.asset(
                                               'Resources/Icons/btn_inquiry.png',
-                                              scale: 4.0),
+                                              scale: 3.0),
                                           onPressed: () {
                                             Navigator.push(
                                                 context,
@@ -593,7 +542,7 @@ class _HomeState extends State<Home> {
                                           highlightColor: Colors.transparent,
                                           child: Image.asset(
                                               'Resources/Icons/btn_advisory.png',
-                                              scale: 4.0),
+                                              scale: 3.0),
                                           onPressed: () {
                                             Navigator.push(
                                                 context,
@@ -611,11 +560,14 @@ class _HomeState extends State<Home> {
                                       ]),
                                   height: deviceWidth / 5,
                                   width: deviceWidth / 4.5),
+                              Container(
+                                  height: deviceWidth / 5,
+                                  width: deviceWidth / 4.5),
                             ]),
                       ),
                     ],
                   ),
-                  height: deviceWidth / 1.8),
+                  height: deviceWidth / 2.2),
               Image.asset('Resources/Icons/Line3.png'),
               Container(
                 decoration: new BoxDecoration(

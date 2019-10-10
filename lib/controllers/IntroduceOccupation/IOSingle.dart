@@ -54,7 +54,7 @@ class _IOSingle extends State<IOSingle> {
           alignment: Alignment.center,
         ),
         onPressed: () {
-          Navigator.push(
+          Navigator.pop(
               context,
               new MaterialPageRoute(
                   builder: (context) => new IntroduceOccupation()));
@@ -85,95 +85,81 @@ class _IOSingle extends State<IOSingle> {
       ));
     }
 
-    return WillPopScope(
-        onWillPop: () async {
-          _moveBack(context);
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            brightness: Brightness.light,
-            leading: new IconButton(
-              icon: userInformation.userDeviceOS == "i"
-                  ? new Icon(Icons.arrow_back_ios, color: Colors.black)
-                  : new Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => IntroduceOccupation())),
-            ),
-            title: Container(
-                alignment: Alignment.centerLeft,
-                child: Text("직역소개",
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                        fontWeight: FontWeight.bold)),
-                margin: const EdgeInsets.only(left: 8)),
-            centerTitle: false,
-            elevation: 0,
-            iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
-          ),
-          body: Container(
-            child: ListView(
-              children: [
-                blueSplitter,
-                Padding(
-                    child: Text(
-                      this.widget.object.name,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        title: Container(
+            alignment: Alignment.centerLeft,
+            child: Text("직역소개",
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
+            margin: const EdgeInsets.only(left: 8)),
+        centerTitle: false,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+      ),
+      body: Container(
+        child: ListView(
+          children: [
+            blueSplitter,
+            Padding(
+                child: Text(
+                  this.widget.object.name,
+                  style: TextStyle(
+                    fontSize: Statics.shared.fontSizes.subTitleInContent,
+                    color: Statics.shared.colors.titleTextColor,
+                    fontWeight: FontWeight.w600,
+                  ), // TextStyle
+                ),
+                padding: const EdgeInsets.only(left: 32, right: 32)),
+            SizedBox(height: 10),
+            Padding(
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      this.widget.object.company,
                       style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.subTitleInContent,
-                        color: Statics.shared.colors.titleTextColor,
-                        fontWeight: FontWeight.w600,
+                        fontSize: Statics.shared.fontSizes.medium,
+                        color: Statics.shared.colors.captionColor,
+                        fontWeight: FontWeight.w300,
                       ), // TextStyle
                     ),
-                    padding: const EdgeInsets.only(left: 32, right: 32)),
-                SizedBox(height: 10),
-                Padding(
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          this.widget.object.company,
-                          style: TextStyle(
-                            fontSize: Statics.shared.fontSizes.medium,
-                            color: Statics.shared.colors.captionColor,
-                            fontWeight: FontWeight.w300,
-                          ), // TextStyle
-                        ),
-                      ], // Children
-                    ),
-                    padding: const EdgeInsets.only(left: 32, right: 32)),
-                greySplitter,
-                Container(
-                  height: 300,
-                  margin:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: Image.network(
-                    this
-                        .widget
-                        .object
-                        .viewImgUrl_1
-                        .replaceAll("https://", "http://"),
-                  ),
+                  ], // Children
+                ),
+                padding: const EdgeInsets.only(left: 32, right: 32)),
+            greySplitter,
+            Container(
+              height: 300,
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Image.network(
+                this
+                    .widget
+                    .object
+                    .viewImgUrl_1
+                    .replaceAll("https://", "http://"),
+              ),
 
-                  // CarouselSlider(
-                  //   items: myImages,
-                  //   height: 300,
-                  // ),
-                ),
-                HtmlView(
-                  data: this.widget.object.content,
-                  scrollable: false,
-                  padding: const EdgeInsets.only(left: 32, right: 32),
-                ),
-                greySplitter,
-                listBtn
-              ], // Children
+              // CarouselSlider(
+              //   items: myImages,
+              //   height: 300,
+              // ),
             ),
-            color: Colors.white,
-          ), // end Body
-          key: _scaffold,
-        ));
+            HtmlView(
+              data: this.widget.object.content,
+              scrollable: false,
+              padding: const EdgeInsets.only(left: 32, right: 32),
+            ),
+            greySplitter,
+            listBtn
+          ], // Children
+        ),
+        color: Colors.white,
+      ), // end Body
+      key: _scaffold,
+    );
   }
 
   void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"

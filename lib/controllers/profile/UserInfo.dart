@@ -140,7 +140,7 @@ class UserInfoState extends State<UserInfo> {
                             userInformation.fullName,
                             style: TextStyle(
                               color: Statics.shared.colors.subTitleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
+                              fontSize: Statics.shared.fontSizes.content,
                             ),
                             textAlign: TextAlign.left,
                           ),

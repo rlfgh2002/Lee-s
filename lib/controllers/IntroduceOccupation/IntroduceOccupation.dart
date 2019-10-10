@@ -191,18 +191,6 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
-        leading: new IconButton(
-            icon: userInformation.userDeviceOS == "i"
-                ? new Icon(Icons.arrow_back_ios, color: Colors.black)
-                : new Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              MiddleWare.shared.currentIndex = 0;
-              MiddleWare.shared.loadStatus = false;
-              Navigator.push(context,
-                  MaterialPageRoute<void>(builder: (BuildContext context) {
-                return MainTabBar();
-              }));
-            }),
         title: Container(
             child: Text(Strings.shared.controllers.iO.pageTitle,
                 style: TextStyle(
