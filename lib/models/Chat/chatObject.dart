@@ -8,6 +8,7 @@ class ChatObject {
   final String notificationFromName;
   final String notificationConversationId;
   final String notificationType;
+  final String chatId;
 
   ChatObject(
       {
@@ -17,7 +18,8 @@ class ChatObject {
         this.notificationContent,
         this.notificationConversationId,
         this.notificationFromName,
-        this.notificationType
+        this.notificationType,
+        this.chatId
       }
       );
 
@@ -31,6 +33,7 @@ class ChatObject {
       notificationFromName: json['data']['fromName'],
       notificationConversationId: json['data']['conversationId'],
       notificationType: json['data']['notificationType'],
+      chatId: json['data']['chatId'],
     );
   }
 }

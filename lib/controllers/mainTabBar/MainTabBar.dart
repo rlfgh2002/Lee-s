@@ -249,8 +249,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print('MSGX=> on messageX Main $message');
-        analiseMessage(message, true);
+        if(message['notification']['title'] == null){
+          print('MSGX=> on messageX Main $message');
+          analiseMessage(message, true);
+        }
       },
       onResume: (Map<String, dynamic> message) async {
         print('MSGX=> on resumeX $message');
@@ -305,14 +307,17 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   createDate: chatItem.notificationRegDate,
                   fromName: chatItem.notificationFromName,
                   onInserted: () {
-                    myDb.insertChat(
-                        convId: chatItem.notificationConversationId,
-                        userId: chatItem.notificationFromId,
-                        content: chatItem.notificationContent,
-                        date: chatItem.notificationRegDate,
-                        seen: seen,
-                        isYours: "FALSE",
-                        onAdded: () {});
+                    myDb.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
+                      myDb.insertChat(
+                          convId: chatItem.notificationConversationId,
+                          userId: chatItem.notificationFromId,
+                          content: chatItem.notificationContent,
+                          date: chatItem.notificationRegDate,
+                          seen: seen,
+                          isYours: "FALSE",
+                          chatId: chatItem.chatId,
+                          onAdded: () {});
+                    });
                   },
                   onNoInerted: () {});
             });
@@ -382,7 +387,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
-  void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
+void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
     ChatObject chatItem = ChatObject.fromJson(message);
 
     String seen = "0";
@@ -402,45 +407,52 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             userId: chatItem.notificationFromId,
             convId: chatItem.notificationConversationId,
             onResult: (res) {
-              widget.db.insertChat(
-                  convId: chatItem.notificationConversationId,
-                  userId: chatItem.notificationFromId,
-                  content: chatItem.notificationContent,
-                  date: chatItem.notificationRegDate,
-                  seen: seen,
-                  isYours: "FALSE",
-                  onAdded: () {
-                    if (Chats.staticChatsPage != null) {
-                      Chats.staticChatsPage.refresh();
-                    }
 
-                    if (seen == "1") {
-                      Chat.staticChatPage.myChild.addMessageToList(
-                          msg: chatItem.notificationContent,
-                          isYours: false,
-                          date: chatItem.notificationRegDate,
-                          senderName: chatItem.notificationFromName);
-                    }
-
-                    Future.delayed(Duration(seconds: 2)).then((val) {
-                      print(
-                          ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                      if (isOnMessage != true) {
-                        /* GOTO CHAT PAGE */
-                        setState(() {
-                          MiddleWare.shared.tabc.animateTo(2);
-                          Chats.staticChatsPage.myChild.openChat(
-                              convId: message['data']['conversationId'],
-                              uId: message['data']['fromId'],
-                              uName: message['data']['fromName'],
-                              withDuration: true);
-                        });
-                        /* GOTO CHAT PAGE */
+              widget.db.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
+                widget.db.insertChat(
+                    convId: chatItem.notificationConversationId,
+                    userId: chatItem.notificationFromId,
+                    content: chatItem.notificationContent,
+                    date: chatItem.notificationRegDate,
+                    chatId: chatItem.chatId,
+                    seen: seen,
+                    isYours: "FALSE",
+                    onAdded: () {
+                      if (Chats.staticChatsPage != null) {
+                        Chats.staticChatsPage.refresh();
                       }
-                      print(
-                          ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+
+                      if (seen == "1") {
+                        Chat.staticChatPage.myChild.addMessageToList(
+                            msg: chatItem.notificationContent,
+                            isYours: false,
+                            date: chatItem.notificationRegDate,
+                            senderName: chatItem.notificationFromName);
+                      }
+
+                      Future.delayed(Duration(seconds: 2)).then((val) {
+                        print(
+                            ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                        if (isOnMessage != true) {
+                          /* GOTO CHAT PAGE */
+                          setState(() {
+                            MiddleWare.shared.tabc.animateTo(2);
+                            Chats.staticChatsPage.myChild.openChat(
+                                convId: message['data']['conversationId'],
+                                uId: message['data']['fromId'],
+                                uName: message['data']['fromName'],
+                                withDuration: true);
+                          });
+                          /* GOTO CHAT PAGE */
+                        }
+                        print(
+                            ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                      });
                     });
-                  });
+              }, onResult: (res){
+                print("::::::: CHAT FINDER: ${res.length} :::::::");
+              });
+
             },
             onNoResult: () {
               widget.db.insertConversation(
@@ -451,45 +463,52 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   onInserted: () {
                     print(
                         ":::::::::::::::::: [new conversation added] ::::::::::::::::::");
-                    widget.db.insertChat(
-                        convId: chatItem.notificationConversationId,
-                        userId: chatItem.notificationFromId,
-                        content: chatItem.notificationContent,
-                        date: chatItem.notificationRegDate,
-                        seen: seen,
-                        isYours: "FALSE",
-                        onAdded: () {
-                          if (Chats.staticChatsPage != null) {
-                            Chats.staticChatsPage.refresh();
-                          }
 
-                          if (seen == "1") {
-                            Chat.staticChatPage.myChild.addMessageToList(
-                                msg: chatItem.notificationContent,
-                                isYours: false,
-                                date: chatItem.notificationRegDate,
-                                senderName: chatItem.notificationFromName);
-                          }
-
-                          Future.delayed(Duration(seconds: 2)).then((val) {
-                            print(
-                                ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                            if (isOnMessage != true) {
-                              /* GOTO CHAT PAGE */
-                              setState(() {
-                                MiddleWare.shared.tabc.animateTo(2);
-                                Chats.staticChatsPage.myChild.openChat(
-                                    convId: message['data']['conversationId'],
-                                    uId: message['data']['fromId'],
-                                    uName: message['data']['fromName'],
-                                    withDuration: true);
-                              });
-                              /* GOTO CHAT PAGE */
+                    widget.db.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
+                      widget.db.insertChat(
+                          convId: chatItem.notificationConversationId,
+                          userId: chatItem.notificationFromId,
+                          content: chatItem.notificationContent,
+                          date: chatItem.notificationRegDate,
+                          chatId: chatItem.chatId,
+                          seen: seen,
+                          isYours: "FALSE",
+                          onAdded: () {
+                            if (Chats.staticChatsPage != null) {
+                              Chats.staticChatsPage.refresh();
                             }
-                            print(
-                                ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+
+                            if (seen == "1") {
+                              Chat.staticChatPage.myChild.addMessageToList(
+                                  msg: chatItem.notificationContent,
+                                  isYours: false,
+                                  date: chatItem.notificationRegDate,
+                                  senderName: chatItem.notificationFromName);
+                            }
+
+                            Future.delayed(Duration(seconds: 2)).then((val) {
+                              print(
+                                  ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                              if (isOnMessage != true) {
+                                /* GOTO CHAT PAGE */
+                                setState(() {
+                                  MiddleWare.shared.tabc.animateTo(2);
+                                  Chats.staticChatsPage.myChild.openChat(
+                                      convId: message['data']['conversationId'],
+                                      uId: message['data']['fromId'],
+                                      uName: message['data']['fromName'],
+                                      withDuration: true);
+                                });
+                                /* GOTO CHAT PAGE */
+                              }
+                              print(
+                                  ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                            });
                           });
-                        });
+                    },onResult: (res){
+                      print("::::::: CHAT FINDER: ${res.length} :::::::");
+                    });
+
                   },
                   onNoInerted: () {
                     print(

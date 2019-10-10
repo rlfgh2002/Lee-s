@@ -471,9 +471,38 @@ class MyDataBase {
     });
   }
 
+  void checkChatExistByUser(
+      {onResult(Map<String, dynamic> result),
+        String chatId = "",
+        onNoResult()}) async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      Map<String, dynamic> obj;
+      db
+          .rawQuery(
+          "SELECT * FROM ${_StaticDbInformation.tblChats} WHERE ${_StaticDbInformation.tblChatsChatId} = '${chatId.toString()}'")
+          .then((lists) {
+        if (lists.length > 0) {
+          obj = lists.first;
+          print(
+              ":::::::::: DB SELECT(chats) ROW (${0}) => [${lists.first.toString()}] ::::::::::");
+          //db.close();
+          onResult(obj);
+        } else {
+          print(
+              ":::::::::: DB SELECT(chats) ROW (${0}) => Not Found Any Items ::::::::::");
+          //db.close();
+          onNoResult();
+        }
+      });
+    });
+  }
   void insertChat(
       {String convId,
       String seen = "1",
+      String chatId = "",
       String userId,
       String date,
       String content,
@@ -489,7 +518,7 @@ class MyDataBase {
 
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'INSERT INTO ${_StaticDbInformation.tblChats} (${_StaticDbInformation.tblChatsConvId},${_StaticDbInformation.tblChatsSeen},${_StaticDbInformation.tblChatsContent},${_StaticDbInformation.tblChatsChatDate},${_StaticDbInformation.tblChatsChatDate2}, ${_StaticDbInformation.tblChatsIsYours}) VALUES ("${convId.toString()}","${seen.toString()}","${content.toString()}","${date.toString()}","${dt.toString()}","${isYours.toString()}")');
+            'INSERT INTO ${_StaticDbInformation.tblChats} (${_StaticDbInformation.tblChatsChatId},${_StaticDbInformation.tblChatsConvId},${_StaticDbInformation.tblChatsSeen},${_StaticDbInformation.tblChatsContent},${_StaticDbInformation.tblChatsChatDate},${_StaticDbInformation.tblChatsChatDate2}, ${_StaticDbInformation.tblChatsIsYours}) VALUES ("${chatId.toString()}","${convId.toString()}","${seen.toString()}","${content.toString()}","${date.toString()}","${dt.toString()}","${isYours.toString()}")');
         print(
             ":::::::::: DB INSERT(chat) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
@@ -507,7 +536,7 @@ class MyDataBase {
       List<Map<String, dynamic>> myList = [];
       db
           .rawQuery(
-              "SELECT * FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id ASC")
+              "SELECT * FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}' GROUP BY chatId ORDER BY id ASC")
           .then((lists) {
         for (int i = 0; i < lists.length; i++) {
           myList.add(lists[i]);
@@ -528,7 +557,7 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db
           .rawQuery(
-              "SELECT content,seen,chatDate,chatDate2 FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC LIMIT 1")
+              "SELECT content,seen,chatDate,chatDate2,chatId FROM ${_StaticDbInformation.tblChats} WHERE convId = '${convId}'  ORDER BY id DESC LIMIT 1")
           .then((lists) {
         print(
             ":::::::::: DB SELECT ROW LIMIT 1(${lists.length}) => [${lists.first.toString()}] ::::::::::");
