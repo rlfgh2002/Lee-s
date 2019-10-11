@@ -211,15 +211,4 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
       key: _scaffold,
     );
   }
-
-  void _moveBack(BuildContext context) {
-    if (userInformation.userDeviceOS == "i") {
-      true;
-    } else {
-      MiddleWare.shared.loadStatus = false;
-      MiddleWare.shared.currentIndex = 0;
-      Navigator.pushReplacement(context,
-          new MaterialPageRoute(builder: (context) => new MainTabBar()));
-    }
-  }
 }

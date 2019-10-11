@@ -145,7 +145,29 @@ class _AdvisoryState extends State<Advisory> {
                             Strings.shared.controllers.jsonURL.advisoryJson,
                             body: infomap);
 
-                        _displaySnackBar(context, "해기자문이 전송되었습니다.");
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: new Text("접수 완료"),
+                                  content: new Text(
+                                      "작성하신 내용은 전송되었습니다 \n빠른시간내 회원님의 이메일로 답변을 보내드리겠습니다.",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  actions: <Widget>[
+                                    // usually buttons at the bottom of the dialog
+                                    new FlatButton(
+                                      child: new Text("확인",
+                                          style: TextStyle(
+                                              fontSize: Statics.shared.fontSizes
+                                                  .supplementary,
+                                              color: Colors.black)),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ));
 
                         setState(() {
                           _subjectController =

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/controllers/MaintabBar/MiddleWare.dart';
 import 'package:haegisa2/models/profile/SearchAddress.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -549,6 +550,7 @@ class UserInfoState extends State<UserInfo> {
                                         ),
                                         onPressed: () {
                                           userInformation.logout();
+                                          MiddleWare.shared.currentIndex = 0;
                                           Navigator.of(context)
                                               .pushAndRemoveUntil(
                                             // the new route

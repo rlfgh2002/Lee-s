@@ -171,6 +171,7 @@ flutter:
     - Resources/Images/barcodeType1.png
     - Resources/Images/barcodeType2.png
     - Resources/Images/bgBarcode.png
+    - Resources/Images/barcodeLounge.png
 
     # map
     - Resources/Images/map.png

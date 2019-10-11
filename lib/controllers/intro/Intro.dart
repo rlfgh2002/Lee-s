@@ -222,6 +222,24 @@ class _IntroState extends State<Intro> {
             border:
                 new Border.all(color: Statics.shared.colors.subTitleTextColor)),
         child: AppExpansionTile(
+            title: Text(values[1]["department_name"]),
+            backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
+            children: <Widget>[
+              new ListTile(
+                title: const Text(
+                    "- 해기사 관련 대외 정책 및 전략수립\n- 유관기관 및 단체, 업체와의 유대관리\n- 대의원 및 회장선거와 관련된 제반 업무\n- 정관, 제 규정의 제정, 개정 및 폐지\n- 각종 행사 및 세미나 주관\n- 홍보편집"),
+              ),
+              for (var i = 0; i < values[1]["department_member"].length; i++)
+                memberList(values[1]["department_member"][i])
+            ]),
+      ),
+      SizedBox(height: 10),
+      Container(
+        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+        decoration: new BoxDecoration(
+            border:
+                new Border.all(color: Statics.shared.colors.subTitleTextColor)),
+        child: AppExpansionTile(
             title: Text(values[0]["department_name"]),
             backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
             children: <Widget>[
@@ -240,24 +258,6 @@ class _IntroState extends State<Intro> {
             border:
                 new Border.all(color: Statics.shared.colors.subTitleTextColor)),
         child: AppExpansionTile(
-            title: Text(values[1]["department_name"]),
-            backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
-            children: <Widget>[
-              new ListTile(
-                title: const Text(
-                    "- 해기사 관련 대외 정책 및 전략수립\n- 유관기관 및 단체, 업체와의 유대관리\n- 대의원 및 회장선거와 관련된 제반 업무\n- 정관, 제 규정의 제정, 개정 및 폐지\n- 각종 행사 및 세미나 주관\n- 홍보편집"),
-              ),
-              for (var i = 0; i < values[0]["department_member"].length; i++)
-                memberList(values[1]["department_member"][i])
-            ]),
-      ),
-      SizedBox(height: 10),
-      Container(
-        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-        decoration: new BoxDecoration(
-            border:
-                new Border.all(color: Statics.shared.colors.subTitleTextColor)),
-        child: AppExpansionTile(
             title: Text(values[2]["department_name"]),
             backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
             children: <Widget>[
@@ -265,7 +265,7 @@ class _IntroState extends State<Intro> {
                 title: const Text(
                     "- 회원조직 관리업무\n- 해기사시험보도 접수 및 관련업무\n- 한국면허갱신접수 대행업무\n- 외국면허 수첩 및 특별 자격증 발급에 관련된 제반업무\n- 회원고충상담 및 처리업무\n- 회원복지 및 친목에 관련된 제반업무\n- 해기 기술의 검토 및 자문"),
               ),
-              for (var i = 0; i < values[0]["department_member"].length; i++)
+              for (var i = 0; i < values[2]["department_member"].length; i++)
                 memberList(values[2]["department_member"][i])
             ]),
       ),
@@ -273,8 +273,6 @@ class _IntroState extends State<Intro> {
   }
 
   memberList(Map<String, dynamic> member) {
-    var a = member;
-
     return ListTile(
         title: Row(
       children: <Widget>[

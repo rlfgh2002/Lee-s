@@ -83,14 +83,10 @@ class _BarcodeState extends State<Barcode> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    padding: new EdgeInsets.only(
-                        top: deviceHeight / 10, bottom: deviceHeight / 20),
-                    child: Text("출 입 증",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.title,
-                            fontWeight: FontWeight.bold)),
-                  ),
+                      padding: new EdgeInsets.only(
+                          top: deviceHeight / 10, bottom: deviceHeight / 20),
+                      child: Image.asset("Resources/Images/barcodeLounge.png",
+                          scale: 3.0)),
                   Container(
                       alignment: Alignment.center,
                       height: deviceHeight / 8,
@@ -150,11 +146,8 @@ class _BarcodeState extends State<Barcode> {
                   Container(
                     padding: new EdgeInsets.only(
                         top: deviceHeight / 10, bottom: deviceHeight / 20),
-                    child: Text("출 입 증",
-                        style: TextStyle(
-                            color: Statics.shared.colors.titleTextColor,
-                            fontSize: Statics.shared.fontSizes.title,
-                            fontWeight: FontWeight.bold)),
+                    child: Image.asset("Resources/Images/barcodeLounge.png",
+                        scale: 3.0),
                   ),
                   Container(
                     alignment: Alignment.center,

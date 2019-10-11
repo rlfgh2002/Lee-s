@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/Chat/chatObject.dart';
 import 'controllers/mainTabBar/MainTabBar.dart';
@@ -13,6 +14,15 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   runApp(new MaterialApp(
+    localizationsDelegates: [
+      // ... app-specific localization delegate[s] here
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: [
+      const Locale('ko'),
+    ],
     home: new MyApp(),
   ));
 }
@@ -41,6 +51,12 @@ class _MyAppState extends State<MyApp> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
+
+    //세로 고정
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
     FirebaseMessaging()
         .getToken()

@@ -38,7 +38,6 @@ class MainTabBar extends StatefulWidget {
 }
 
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
-  static bool loadStatus = true;
   static MainTabBarState shared = MainTabBarState();
   MainTabBarState() {}
   DateTime backButtonPressTime;
@@ -59,8 +58,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void getAllSurveys({String uid}) async {
-    print(MiddleWare.shared.loadStatus);
-    print("Tlqkfshadk");
     String url = Statics.shared.urls.searchSurveys(uid);
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
@@ -249,7 +246,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        if(message['notification']['title'] == null){
+        if (message['notification']['title'] == null) {
           print('MSGX=> on messageX Main $message');
           analiseMessage(message, true);
         }
@@ -307,17 +304,19 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   createDate: chatItem.notificationRegDate,
                   fromName: chatItem.notificationFromName,
                   onInserted: () {
-                    myDb.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
-                      myDb.insertChat(
-                          convId: chatItem.notificationConversationId,
-                          userId: chatItem.notificationFromId,
-                          content: chatItem.notificationContent,
-                          date: chatItem.notificationRegDate,
-                          seen: seen,
-                          isYours: "FALSE",
-                          chatId: chatItem.chatId,
-                          onAdded: () {});
-                    });
+                    myDb.checkChatExistByUser(
+                        chatId: chatItem.chatId,
+                        onNoResult: () {
+                          myDb.insertChat(
+                              convId: chatItem.notificationConversationId,
+                              userId: chatItem.notificationFromId,
+                              content: chatItem.notificationContent,
+                              date: chatItem.notificationRegDate,
+                              seen: seen,
+                              isYours: "FALSE",
+                              chatId: chatItem.chatId,
+                              onAdded: () {});
+                        });
                   },
                   onNoInerted: () {});
             });
@@ -387,7 +386,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
-void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
+  void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
     ChatObject chatItem = ChatObject.fromJson(message);
 
     String seen = "0";
@@ -407,52 +406,53 @@ void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
             userId: chatItem.notificationFromId,
             convId: chatItem.notificationConversationId,
             onResult: (res) {
+              widget.db.checkChatExistByUser(
+                  chatId: chatItem.chatId,
+                  onNoResult: () {
+                    widget.db.insertChat(
+                        convId: chatItem.notificationConversationId,
+                        userId: chatItem.notificationFromId,
+                        content: chatItem.notificationContent,
+                        date: chatItem.notificationRegDate,
+                        chatId: chatItem.chatId,
+                        seen: seen,
+                        isYours: "FALSE",
+                        onAdded: () {
+                          if (Chats.staticChatsPage != null) {
+                            Chats.staticChatsPage.refresh();
+                          }
 
-              widget.db.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
-                widget.db.insertChat(
-                    convId: chatItem.notificationConversationId,
-                    userId: chatItem.notificationFromId,
-                    content: chatItem.notificationContent,
-                    date: chatItem.notificationRegDate,
-                    chatId: chatItem.chatId,
-                    seen: seen,
-                    isYours: "FALSE",
-                    onAdded: () {
-                      if (Chats.staticChatsPage != null) {
-                        Chats.staticChatsPage.refresh();
-                      }
+                          if (seen == "1") {
+                            Chat.staticChatPage.myChild.addMessageToList(
+                                msg: chatItem.notificationContent,
+                                isYours: false,
+                                date: chatItem.notificationRegDate,
+                                senderName: chatItem.notificationFromName);
+                          }
 
-                      if (seen == "1") {
-                        Chat.staticChatPage.myChild.addMessageToList(
-                            msg: chatItem.notificationContent,
-                            isYours: false,
-                            date: chatItem.notificationRegDate,
-                            senderName: chatItem.notificationFromName);
-                      }
-
-                      Future.delayed(Duration(seconds: 2)).then((val) {
-                        print(
-                            ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                        if (isOnMessage != true) {
-                          /* GOTO CHAT PAGE */
-                          setState(() {
-                            MiddleWare.shared.tabc.animateTo(2);
-                            Chats.staticChatsPage.myChild.openChat(
-                                convId: message['data']['conversationId'],
-                                uId: message['data']['fromId'],
-                                uName: message['data']['fromName'],
-                                withDuration: true);
+                          Future.delayed(Duration(seconds: 2)).then((val) {
+                            print(
+                                ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                            if (isOnMessage != true) {
+                              /* GOTO CHAT PAGE */
+                              setState(() {
+                                MiddleWare.shared.tabc.animateTo(2);
+                                Chats.staticChatsPage.myChild.openChat(
+                                    convId: message['data']['conversationId'],
+                                    uId: message['data']['fromId'],
+                                    uName: message['data']['fromName'],
+                                    withDuration: true);
+                              });
+                              /* GOTO CHAT PAGE */
+                            }
+                            print(
+                                ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
                           });
-                          /* GOTO CHAT PAGE */
-                        }
-                        print(
-                            ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                      });
-                    });
-              }, onResult: (res){
-                print("::::::: CHAT FINDER: ${res.length} :::::::");
-              });
-
+                        });
+                  },
+                  onResult: (res) {
+                    print("::::::: CHAT FINDER: ${res.length} :::::::");
+                  });
             },
             onNoResult: () {
               widget.db.insertConversation(
@@ -464,51 +464,56 @@ void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
                     print(
                         ":::::::::::::::::: [new conversation added] ::::::::::::::::::");
 
-                    widget.db.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
-                      widget.db.insertChat(
-                          convId: chatItem.notificationConversationId,
-                          userId: chatItem.notificationFromId,
-                          content: chatItem.notificationContent,
-                          date: chatItem.notificationRegDate,
-                          chatId: chatItem.chatId,
-                          seen: seen,
-                          isYours: "FALSE",
-                          onAdded: () {
-                            if (Chats.staticChatsPage != null) {
-                              Chats.staticChatsPage.refresh();
-                            }
+                    widget.db.checkChatExistByUser(
+                        chatId: chatItem.chatId,
+                        onNoResult: () {
+                          widget.db.insertChat(
+                              convId: chatItem.notificationConversationId,
+                              userId: chatItem.notificationFromId,
+                              content: chatItem.notificationContent,
+                              date: chatItem.notificationRegDate,
+                              chatId: chatItem.chatId,
+                              seen: seen,
+                              isYours: "FALSE",
+                              onAdded: () {
+                                if (Chats.staticChatsPage != null) {
+                                  Chats.staticChatsPage.refresh();
+                                }
 
-                            if (seen == "1") {
-                              Chat.staticChatPage.myChild.addMessageToList(
-                                  msg: chatItem.notificationContent,
-                                  isYours: false,
-                                  date: chatItem.notificationRegDate,
-                                  senderName: chatItem.notificationFromName);
-                            }
+                                if (seen == "1") {
+                                  Chat.staticChatPage.myChild.addMessageToList(
+                                      msg: chatItem.notificationContent,
+                                      isYours: false,
+                                      date: chatItem.notificationRegDate,
+                                      senderName:
+                                          chatItem.notificationFromName);
+                                }
 
-                            Future.delayed(Duration(seconds: 2)).then((val) {
-                              print(
-                                  ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                              if (isOnMessage != true) {
-                                /* GOTO CHAT PAGE */
-                                setState(() {
-                                  MiddleWare.shared.tabc.animateTo(2);
-                                  Chats.staticChatsPage.myChild.openChat(
-                                      convId: message['data']['conversationId'],
-                                      uId: message['data']['fromId'],
-                                      uName: message['data']['fromName'],
-                                      withDuration: true);
+                                Future.delayed(Duration(seconds: 2))
+                                    .then((val) {
+                                  print(
+                                      ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                                  if (isOnMessage != true) {
+                                    /* GOTO CHAT PAGE */
+                                    setState(() {
+                                      MiddleWare.shared.tabc.animateTo(2);
+                                      Chats.staticChatsPage.myChild.openChat(
+                                          convId: message['data']
+                                              ['conversationId'],
+                                          uId: message['data']['fromId'],
+                                          uName: message['data']['fromName'],
+                                          withDuration: true);
+                                    });
+                                    /* GOTO CHAT PAGE */
+                                  }
+                                  print(
+                                      ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
                                 });
-                                /* GOTO CHAT PAGE */
-                              }
-                              print(
-                                  ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                            });
-                          });
-                    },onResult: (res){
-                      print("::::::: CHAT FINDER: ${res.length} :::::::");
-                    });
-
+                              });
+                        },
+                        onResult: (res) {
+                          print("::::::: CHAT FINDER: ${res.length} :::::::");
+                        });
                   },
                   onNoInerted: () {
                     print(
@@ -574,37 +579,28 @@ void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
 
   @override
   void initState() {
-    print(MiddleWare.shared.loadStatus);
     MainTabBar.myChild = this;
     MiddleWare.shared.tabc = TabController(
         length: MiddleWare.shared.myTabBarList.length, vsync: this);
 
-    if (MiddleWare.shared.loadStatus == true) {
-      getUserId(onGetUserId: (uid) {
-        getAllSurveys(uid: uid);
-      });
-      firebaseCloudMessaging_Listeners();
-      print("Main TabBar New...");
+    getUserId(onGetUserId: (uid) {
+      getAllSurveys(uid: uid);
+    });
+    //firebaseCloudMessaging_Listeners();
+    print("Main TabBar New...");
 
-      widget.subscription = Connectivity()
-          .onConnectivityChanged
-          .listen((ConnectivityResult result) {
-        if (result.index != 0) {
-          // no internet connected
-          showNoInternet(context);
-        }
-      });
+    widget.subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result.index != 0) {
+        // no internet connected
+        showNoInternet(context);
+      }
+    });
 
-      this.updateUserLocation();
+    this.updateUserLocation();
 
-      super.initState();
-    } else {
-      MiddleWare.shared.loadStatus = true;
-    }
-  }
-
-  void backStatus() async {
-    MiddleWare.shared.loadStatus = true;
+    super.initState();
   }
 
   @override
@@ -725,10 +721,6 @@ void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
             });
       }
     });
-  }
-
-  void statusBackup() {
-    MiddleWare.shared.loadStatus = true;
   }
 
   @override

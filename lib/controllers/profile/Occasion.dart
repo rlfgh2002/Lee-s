@@ -513,7 +513,7 @@ class _OccasionState extends State<Occasion> {
     ];
 
     List<KeyValueModel> _wedding = [
-      KeyValueModel(key: "대상자 선택", value: "0"),
+      KeyValueModel(key: "본인/자녀 대상자 선택", value: "0"),
       KeyValueModel(key: "본인결혼", value: "1"),
       KeyValueModel(key: "자녀결혼", value: "2")
     ];
@@ -582,7 +582,7 @@ class _OccasionState extends State<Occasion> {
             border:
                 new Border.all(color: Statics.shared.colors.subTitleTextColor)),
         child: DropdownButton<String>(
-          hint: Text('선택'),
+          hint: Text('본인/자녀 대상자 선택'),
           style: TextStyle(
             fontSize: Statics.shared.fontSizes.subTitle,
             color: Statics.shared.colors.titleTextColor,
@@ -667,7 +667,7 @@ class _OccasionState extends State<Occasion> {
     ];
 
     List<KeyValueModel> _deathType = [
-      KeyValueModel(key: "대상자 선택", value: "0"),
+      KeyValueModel(key: "경조 대상자 선택", value: "0"),
       KeyValueModel(key: "본인사망", value: "1"),
       KeyValueModel(key: "배우자상", value: "2"),
       KeyValueModel(key: "부친상", value: "3"),
@@ -740,7 +740,7 @@ class _OccasionState extends State<Occasion> {
             border:
                 new Border.all(color: Statics.shared.colors.subTitleTextColor)),
         child: DropdownButton<String>(
-          hint: Text('선택'),
+          hint: Text('경조 대상자 선택'),
           style: TextStyle(
             fontSize: Statics.shared.fontSizes.subTitle,
             color: Statics.shared.colors.titleTextColor,

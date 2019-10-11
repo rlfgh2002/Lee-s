@@ -151,7 +151,7 @@ class _InquiryState extends State<Inquiry> {
                             builder: (_) => AlertDialog(
                                   title: new Text("접수 완료"),
                                   content: new Text(
-                                      "문의가 접수되었습니다. \n문의답변은 등록된 메일로 보내드리겠습니다.",
+                                      "작성하신 내용은 전송되었습니다 \n빠른시간내 회원님의 이메일로 답변을 보내드리겠습니다.",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold)),
                                   actions: <Widget>[

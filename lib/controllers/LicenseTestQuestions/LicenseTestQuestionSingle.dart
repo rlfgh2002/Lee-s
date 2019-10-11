@@ -56,7 +56,7 @@ class _LicenseTestQuestionSingleState extends State<LicenseTestQuestionSingle> {
           alignment: Alignment.center,
         ),
         onPressed: () {
-          Navigator.push(
+          Navigator.pop(
               context,
               new MaterialPageRoute(
                   builder: (context) => new LicenseTestQuestions()));
@@ -196,96 +196,83 @@ class _LicenseTestQuestionSingleState extends State<LicenseTestQuestionSingle> {
       );
     }
 
-    return WillPopScope(
-        onWillPop: () async {
-          _moveBack(context);
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            brightness: Brightness.light,
-            leading: new IconButton(
-              icon: userInformation.userDeviceOS == "i"
-                  ? new Icon(Icons.arrow_back_ios, color: Colors.black)
-                  : new Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LicenseTestQuestions())),
-            ),
-            title: Container(
-                child: Text("해기사기출문제",
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                        fontWeight: FontWeight.bold)),
-                margin: const EdgeInsets.only(left: 8)),
-            centerTitle: false,
-            elevation: 0,
-            iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
-          ),
-          body: Container(
-            child: ListView(
-              children: [
-                blueSplitter,
-                Padding(
-                    child: Text(
-                      this.widget.object.subject,
+    Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        title: Container(
+            child: Text("해기사기출문제",
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
+            margin: const EdgeInsets.only(left: 8)),
+        centerTitle: false,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+      ),
+      body: Container(
+        child: ListView(
+          children: [
+            blueSplitter,
+            Padding(
+                child: Text(
+                  this.widget.object.subject,
+                  style: TextStyle(
+                    fontSize: Statics.shared.fontSizes.subTitleInContent,
+                    color: Statics.shared.colors.titleTextColor,
+                    fontWeight: FontWeight.w600,
+                  ), // TextStyle
+                ),
+                padding: const EdgeInsets.only(left: 32, right: 32)),
+            SizedBox(height: 5),
+            Padding(
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      this.widget.object.writer,
                       style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.subTitleInContent,
-                        color: Statics.shared.colors.titleTextColor,
-                        fontWeight: FontWeight.w600,
+                        fontSize: Statics.shared.fontSizes.medium,
+                        color: Statics.shared.colors.captionColor,
+                        fontWeight: FontWeight.w300,
                       ), // TextStyle
                     ),
-                    padding: const EdgeInsets.only(left: 32, right: 32)),
-                SizedBox(height: 5),
-                Padding(
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          this.widget.object.writer,
-                          style: TextStyle(
-                            fontSize: Statics.shared.fontSizes.medium,
-                            color: Statics.shared.colors.captionColor,
-                            fontWeight: FontWeight.w300,
-                          ), // TextStyle
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          "|",
-                          style: TextStyle(
-                            fontSize: Statics.shared.fontSizes.medium,
-                            color: Statics.shared.colors.captionColor,
-                            fontWeight: FontWeight.w300,
-                          ), // TextStyle
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          this.widget.object.regDate,
-                          style: TextStyle(
-                            fontSize: Statics.shared.fontSizes.medium,
-                            color: Statics.shared.colors.captionColor,
-                            fontWeight: FontWeight.w300,
-                          ), // TextStyle
-                        )
-                      ], // Children
+                    SizedBox(width: 10),
+                    Text(
+                      "|",
+                      style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.medium,
+                        color: Statics.shared.colors.captionColor,
+                        fontWeight: FontWeight.w300,
+                      ), // TextStyle
                     ),
-                    padding: const EdgeInsets.only(left: 32, right: 32)),
-                greySplitter,
-                files,
-                HtmlView(
-                  data: this.widget.object.content,
-                  scrollable: false,
-                  padding: const EdgeInsets.only(left: 32, right: 32),
+                    SizedBox(width: 10),
+                    Text(
+                      this.widget.object.regDate,
+                      style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.medium,
+                        color: Statics.shared.colors.captionColor,
+                        fontWeight: FontWeight.w300,
+                      ), // TextStyle
+                    )
+                  ], // Children
                 ),
-                greySplitter,
-                listBtn
-              ], // Children
+                padding: const EdgeInsets.only(left: 32, right: 32)),
+            greySplitter,
+            files,
+            HtmlView(
+              data: this.widget.object.content,
+              scrollable: false,
+              padding: const EdgeInsets.only(left: 32, right: 32),
             ),
-            color: Colors.white,
-          ), // end Body
-          key: _scaffold,
-        ));
+            greySplitter,
+            listBtn
+          ], // Children
+        ),
+        color: Colors.white,
+      ), // end Body
+      key: _scaffold,
+    );
   }
 
   void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"

@@ -163,18 +163,6 @@ class _NoticesListState extends State<NoticesList> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
-        leading: new IconButton(
-            icon: userInformation.userDeviceOS == "i"
-                ? new Icon(Icons.arrow_back_ios, color: Colors.black)
-                : new Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              MiddleWare.shared.currentIndex = 0;
-              MiddleWare.shared.loadStatus = false;
-              Navigator.pushReplacement(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new MainTabBar()));
-            }),
         title: Container(
             child: Text(Strings.shared.controllers.noticesList.pageTitle,
                 style: TextStyle(
@@ -194,16 +182,5 @@ class _NoticesListState extends State<NoticesList> {
       ), // end Body
       key: _scaffold,
     );
-  }
-
-  void _moveBack(BuildContext context) {
-    if (userInformation.userDeviceOS == "i") {
-      true;
-    } else {
-      MiddleWare.shared.currentIndex = 0;
-      MiddleWare.shared.loadStatus = false;
-      Navigator.pushReplacement(context,
-          new MaterialPageRoute(builder: (context) => new MainTabBar()));
-    }
   }
 }

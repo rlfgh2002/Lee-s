@@ -16,7 +16,6 @@ class MiddleWare {
   double screenWidth = 0;
   int currentIndex = 0;
   TabController tabc;
-  bool loadStatus = false; //true면 void들 로드하고 false일땐 작업안함
   List<Widget> myTabBarList = [
     Home(),
     FindUser(),

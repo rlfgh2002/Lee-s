@@ -582,7 +582,7 @@ class _HomeState extends State<Home> {
                           blurRadius: 0.5,
                           spreadRadius: 0)
                     ]),
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
                 child: FlatButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,

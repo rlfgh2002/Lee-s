@@ -125,7 +125,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<List> getSchool() {
     //한번도 실행되지 않았을때(최초실행)
-
     return http.post(Strings.shared.controllers.jsonURL.schoolJson, body: {
       'mode': 'search',
       'CHCODE': userInformation.school,
