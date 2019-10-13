@@ -809,37 +809,44 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   Future<bool> _onBackPressed() {
-    showDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (_) => AlertDialog(
-              title: new Text("앱 종료"),
-              content: new Text("앱을 종료하시겠습니까?",
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              actions: <Widget>[
-                // usually buttons at the bottom of the dialog
-                new FlatButton(
-                  child: new Text("취소",
+    if (MiddleWare.shared.currentIndex != 0) {
+      clickToChangeMenu(0);
+    } else {
+      showDialog(
+          barrierDismissible: true,
+          context: context,
+          builder: (_) => AlertDialog(
+                title: new Text("앱 종료"),
+                content: new Text("앱을 종료하시겠습니까?",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: Statics.shared.fontSizes.supplementary)),
+                actions: <Widget>[
+                  // usually buttons at the bottom of the dialog
+                  new FlatButton(
+                    child: new Text("취소",
+                        style: TextStyle(
+                            fontSize: Statics.shared.fontSizes.supplementary,
+                            color: Colors.black)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  new FlatButton(
+                    child: new Text(
+                      "종료",
                       style: TextStyle(
                           fontSize: Statics.shared.fontSizes.supplementary,
-                          color: Colors.black)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new FlatButton(
-                  child: new Text(
-                    "종료",
-                    style: TextStyle(
-                        fontSize: Statics.shared.fontSizes.supplementary,
-                        color: Colors.red),
+                          color: Colors.red),
+                    ),
+                    onPressed: () {
+                      SystemChannels.platform
+                          .invokeMethod('SystemNavigator.pop');
+                    },
                   ),
-                  onPressed: () {
-                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                  },
-                ),
-              ],
-            ));
+                ],
+              ));
+    }
   }
 
   Widget roundedButton(String buttonLabel, Color bgColor, Color textColor) {

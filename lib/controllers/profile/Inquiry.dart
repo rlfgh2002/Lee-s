@@ -153,7 +153,9 @@ class _InquiryState extends State<Inquiry> {
                                   content: new Text(
                                       "작성하신 내용은 전송되었습니다 \n빠른시간내 회원님의 이메일로 답변을 보내드리겠습니다.",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                          color: Colors.black,
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary)),
                                   actions: <Widget>[
                                     // usually buttons at the bottom of the dialog
                                     new FlatButton(
@@ -163,7 +165,8 @@ class _InquiryState extends State<Inquiry> {
                                                   .supplementary,
                                               color: Colors.black)),
                                       onPressed: () {
-                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop(); //팝업닫고
+                                        Navigator.of(context).pop(); //이전페이지로
                                       },
                                     ),
                                   ],

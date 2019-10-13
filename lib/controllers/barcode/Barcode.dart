@@ -216,6 +216,9 @@ class _BarcodeState extends State<Barcode> {
                 textAlign: TextAlign.center,
               ),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
                 child: Container(
               width: MediaQuery.of(context).size.width / 1.5,
@@ -255,6 +258,9 @@ class _BarcodeState extends State<Barcode> {
                 ],
               ),
             )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 child: Container(
@@ -282,6 +288,9 @@ class _BarcodeState extends State<Barcode> {
                     ],
                   ),
                 )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
               padding: const EdgeInsets.only(top: 20),
               child: Row(

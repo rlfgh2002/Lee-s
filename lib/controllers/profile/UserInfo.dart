@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/MaintabBar/MiddleWare.dart';
+import 'package:haegisa2/controllers/profile/Profile.dart';
 import 'package:haegisa2/models/profile/SearchAddress.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -616,7 +617,8 @@ class UserInfoState extends State<UserInfo> {
                           UserInfo.shared.g_address1 = "";
                           UserInfo.shared.g_postNo = "";
 
-                          _displaySnackBar(context, "수정되었습니다.");
+                          Navigator.pop(context, '수정되었습니다.');
+
                           return;
                         }))
               ],

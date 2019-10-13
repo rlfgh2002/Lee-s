@@ -65,6 +65,9 @@ class RequestMember extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 color: Statics.shared.colors.lineColor,
@@ -105,6 +108,9 @@ class RequestMember extends StatelessWidget {
                     ],
                   ),
                 )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 child: Container(
@@ -132,6 +138,9 @@ class RequestMember extends StatelessWidget {
                     ],
                   ),
                 )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
               padding: const EdgeInsets.only(top: 20),
               child: Row(

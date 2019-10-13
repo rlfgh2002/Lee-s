@@ -163,7 +163,8 @@ class _AdvisoryState extends State<Advisory> {
                                                   .supplementary,
                                               color: Colors.black)),
                                       onPressed: () {
-                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop(); //팝업닫고
+                                        Navigator.of(context).pop(); //이전페이지로
                                       },
                                     ),
                                   ],

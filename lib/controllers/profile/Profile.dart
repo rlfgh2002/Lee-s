@@ -182,10 +182,14 @@ class _ProfileState extends State<Profile> {
                                               .shared.fontSizes.supplementary)),
                                 ]),
                                 onPressed: () {
+                                  UserInfo.shared.g_address1 = "";
+                                  UserInfo.shared.g_postNo = "";
+
                                   Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) => new Inquiry()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Inquiry()),
+                                  );
                                 },
                               ),
                               width: deviceWidth / 2,
@@ -220,11 +224,14 @@ class _ProfileState extends State<Profile> {
                                               .shared.fontSizes.supplementary)),
                                 ]),
                                 onPressed: () {
+                                  UserInfo.shared.g_address1 = "";
+                                  UserInfo.shared.g_postNo = "";
+
                                   Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new Occasion()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Occasion()),
+                                  );
                                 },
                               ),
                               width: deviceWidth / 2,
@@ -292,13 +299,21 @@ class _ProfileState extends State<Profile> {
                               )
                             ],
                           ), // Row Children
-                          onPressed: () {
+                          onPressed: () async {
                             UserInfo.shared.g_address1 = "";
                             UserInfo.shared.g_postNo = "";
-                            Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => new UserInfo()));
+
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UserInfo()),
+                            );
+
+                            // After the Selection Screen returns a result, hide any previous snackbars
+                            // and show the new result.
+                            if (result != null && result != "") {
+                              _displaySnackBar(context, "$result");
+                            }
                           },
                         )),
                     Row(children: <Widget>[
@@ -444,6 +459,9 @@ class _ProfileState extends State<Profile> {
                 textAlign: TextAlign.center,
               ),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
                 child: Container(
               width: MediaQuery.of(context).size.width / 1.5,
@@ -483,6 +501,9 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 child: Container(
@@ -510,6 +531,9 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 40,
+            ),
             Container(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
@@ -555,7 +579,7 @@ class _ProfileState extends State<Profile> {
                         }
                       },
                     ),
-                  ))
+                  )),
                 ],
               ),
             )
