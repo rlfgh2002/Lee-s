@@ -13,6 +13,13 @@ class MiddleWare {
   static MiddleWare shared = MiddleWare();
   _MiddleWare() {}
 
+
+  String shouldMoveToThisConvId = "";
+  String shouldMoveToThisFromId = "";
+  String shouldMoveToThisFromName = "";
+
+  String shouldMoveToThisVoteId = "";
+
   double screenWidth = 0;
   int currentIndex = 0;
   TabController tabc;

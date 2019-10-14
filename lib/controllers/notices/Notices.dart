@@ -366,6 +366,15 @@ class NoticesState extends State<Notices> {
       );
     }
 
+    if(MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId != ""){
+      String vId = MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId;
+      MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId = "";
+
+      Future.delayed(Duration(milliseconds: 500)).whenComplete((){
+        this.openNotice(vId);
+      });
+    }
+
     return new WillPopScope(
         onWillPop: () async => false,
         child: new Scaffold(

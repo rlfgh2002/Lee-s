@@ -40,12 +40,48 @@ class ConversationWidget extends StatelessWidget {
       topPadding = 0;
     }
 
+    Color badgeColor = Statics.shared.colors.mainColor;
+    badgeColor = Colors.grey;
+
+    var widgetBadge = Container(
+      child: Stack(
+        children: [
+          Container(
+              alignment: Alignment(0.9, 0.9),
+              child: CircleAvatar(
+                child: Container(),
+                radius: 7,
+                backgroundColor: Colors.white,
+              )),
+          Container(
+              alignment: Alignment(0.85, 0.85),
+              child: CircleAvatar(
+                child: Container(),
+                radius: 5.5,
+                backgroundColor: badgeColor,
+              )),
+        ],
+      ),
+    );
+
     //NetworkImage avatar;
     AssetImage avatar;
     if(this.avatarLink != ""){
       //avatar = NetworkImage(this.avatarLink);
       avatar = AssetImage(this.avatarLink);
+      this.avatarName = "";
+    }else{
+      if(convId != 'x0x0'){
+        avatar = AssetImage("Resources/Icons/userChatAvatar.png");
+        this.avatarName = "";
+      }else{
+        badgeColor = Colors.transparent;
+        widgetBadge = Container();
+      }
     }
+//    if (this.hasBlueBadge == false) {
+//      badgeColor = Colors.grey;
+//    }
 
     return Container(
       constraints: BoxConstraints(minHeight: 70),
@@ -59,11 +95,16 @@ class ConversationWidget extends StatelessWidget {
             child: Stack(
             children: <Widget>[
               Row(children: [
-                Container(child: CircleAvatar(
-                  child: Center(child: Text(this.avatarName, style: TextStyle(color: Colors.white, fontSize: Statics.shared.fontSizes.subTitleInContent))),
-                  radius: this.avatarRadius,
-                  backgroundImage: avatar,
-                  backgroundColor: Statics.shared.colors.mainColor,
+                Container(child: Stack(
+                  children: <Widget>[
+                    CircleAvatar(
+                      child: Center(child: Text(this.avatarName, style: TextStyle(color: Colors.white, fontSize: Statics.shared.fontSizes.subTitleInContent))),
+                      radius: this.avatarRadius,
+                      backgroundImage: avatar,
+                      backgroundColor: Statics.shared.colors.mainColor,
+                    ),
+                    widgetBadge,
+                  ],
                 ),width: 55,height: 55),
                 SizedBox(width: 10),
                 Column(

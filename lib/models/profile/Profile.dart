@@ -37,12 +37,19 @@ class RequestMember extends StatelessWidget {
             Colors.black // Dark == white status bar -- for IOS.
         ));
 
+    var height;
+    if (userInformation.userDeviceOS == "i") {
+      height = MediaQuery.of(context).size.height / 1.2;
+    } else {
+      height = MediaQuery.of(context).size.height / 1.4;
+    }
+
     return AlertDialog(
       key: _scaffoldKey,
       contentPadding: EdgeInsets.all(0.0),
       content: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height / 1.2,
+        height: height,
         width: MediaQuery.of(context).size.width / 1.1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

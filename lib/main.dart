@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/Chat/chatObject.dart';
+import 'package:haegisa2/models/myFuncs.dart';
 import 'controllers/mainTabBar/MainTabBar.dart';
 import 'controllers/sign/SignSelect.dart';
 import 'models/statics/UserInfo.dart';

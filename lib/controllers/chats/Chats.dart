@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
 import 'package:haegisa2/models/SearchMembers/SearchMemberObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -530,6 +531,23 @@ class _ChatsState extends State<Chats> {
       alignment: Alignment.center,
       padding: const EdgeInsets.only(top: 120),
     );
+
+    if(MainTabBar.mainTabBar.mdw.shouldMoveToThisConvId != ""){
+      String cId = MainTabBar.mainTabBar.mdw.shouldMoveToThisConvId;
+      String uId = MainTabBar.mainTabBar.mdw.shouldMoveToThisFromId;
+      String uName = MainTabBar.mainTabBar.mdw.shouldMoveToThisFromName;
+      MainTabBar.mainTabBar.mdw.shouldMoveToThisConvId = "";
+      MainTabBar.mainTabBar.mdw.shouldMoveToThisFromId = "";
+      MainTabBar.mainTabBar.mdw.shouldMoveToThisFromName = "";
+
+      Future.delayed(Duration(milliseconds: 500)).whenComplete((){
+      this.openChat(
+      convId: cId.toString(),
+      uId: uId.toString(),
+      uName: uName.toString(),
+      withDuration: false);
+      });
+    }
 
     Widget dataShow = ListView.builder(
       padding: const EdgeInsets.all(0),

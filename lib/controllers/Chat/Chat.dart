@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/User.dart';
+import 'package:haegisa2/models/myFuncs.dart';
 import 'package:haegisa2/views/Chat/ChatWidget.dart';
 import 'MiddleWare.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -98,9 +99,11 @@ class ChatState extends State<Chat> {
       if(toId != ""){
         usId = toId;
       }
+      String chatIdRandom = randomChatId();
       this.widget.db.insertChat(
           convId: chatCurrentConvId,
           userId: MiddleWare.shared.user.UID,
+          chatId: chatIdRandom,
           content: msg,
           isYours: "TRUE",
           date: date,

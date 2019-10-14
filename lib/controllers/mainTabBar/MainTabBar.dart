@@ -233,6 +233,23 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       print("::::::::::::::::::::: [ SEND URL VOTE ] :::::::::::::::::::::");
     });
   }
+  static void staticGetVoteAnswers({String url, onSent(Map<String, dynamic> jj)}) async {
+    await http.get(url).then((val) {
+      if (val.statusCode == 200) {
+        print("OUTPUT: ${val.body.toString()}");
+        var j = json.decode(utf8.decode(val.bodyBytes));
+        print("OUTPUT JSON: ${j.toString()}");
+        onSent(j);
+      }
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on getting Vote Answers error : ${error.toString()} ::::::::::::::::::");
+    }).whenComplete(() {
+      print("::::::::::::::::::::: [ SEND URL VOTE ] :::::::::::::::::::::");
+      print("URL: ${url.toString()}");
+      print("::::::::::::::::::::: [ SEND URL VOTE ] :::::::::::::::::::::");
+    });
+  }
 
   void firebaseCloudMessaging_Listeners() async {
     print(
@@ -246,18 +263,18 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        if (message['notification']['title'] == null) {
+        if(message['notification']['title'] == null){
           print('MSGX=> on messageX Main $message');
-          analiseMessage(message, true);
+          analiseMessage(message, true,false);
         }
       },
       onResume: (Map<String, dynamic> message) async {
         print('MSGX=> on resumeX $message');
-        analiseMessage(message, false);
+        analiseMessage(message, false,true);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('MSGX=> on launchX $message');
-        analiseMessage(message, false);
+        analiseMessage(message, false,true);
       },
       onBackgroundMessage: fcmBackgroundMessageHandler,
     );
@@ -304,19 +321,17 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   createDate: chatItem.notificationRegDate,
                   fromName: chatItem.notificationFromName,
                   onInserted: () {
-                    myDb.checkChatExistByUser(
-                        chatId: chatItem.chatId,
-                        onNoResult: () {
-                          myDb.insertChat(
-                              convId: chatItem.notificationConversationId,
-                              userId: chatItem.notificationFromId,
-                              content: chatItem.notificationContent,
-                              date: chatItem.notificationRegDate,
-                              seen: seen,
-                              isYours: "FALSE",
-                              chatId: chatItem.chatId,
-                              onAdded: () {});
-                        });
+                    myDb.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
+                      myDb.insertChat(
+                          convId: chatItem.notificationConversationId,
+                          userId: chatItem.notificationFromId,
+                          content: chatItem.notificationContent,
+                          date: chatItem.notificationRegDate,
+                          seen: seen,
+                          isYours: "FALSE",
+                          chatId: chatItem.chatId,
+                          onAdded: () {});
+                    });
                   },
                   onNoInerted: () {});
             });
@@ -331,29 +346,27 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                 myDb.insertVote(
                     voteItem: voteItem,
                     onAdded: () {
-                      String url =
-                          "${voteItem.httpPath.toString()}&userId=${MainTabBar.myChild.widget.myUserId}&mode=view";
-                      url = url.replaceAll("https://", "http://");
-                      MainTabBar.myChild.getVoteAnswers(
-                          url: url,
-                          onSent: (response) {
-                            myDb.insertAnswer(
-                              onAdded: () {
-                                if (Notices.staticNoticesPage != null) {
-                                  Notices.staticNoticesPage.myChild
-                                      .refreshNotices();
-                                }
-                              },
-                              idx: voteItem.idx,
-                              status: response['data']['status'].toString(),
-                              answer1: response['data']['a1'].toString(),
-                              answer2: response['data']['a2'].toString(),
-                              answer3: response['data']['a3'].toString(),
-                              answer4: response['data']['a4'].toString(),
-                              answer5: response['data']['a5'].toString(),
-                              answer6: response['data']['a6'].toString(),
-                            );
-                          });
+                      staticGetUserId(onGetUserId: (uid){
+                        String url =
+                            "${voteItem.httpPath.toString()}&userId=${uid}&mode=view";
+                        url = url.replaceAll("https://", "http://");
+                        staticGetVoteAnswers(
+                            url: url,
+                            onSent: (response) {
+                              myDb.insertAnswer(
+                                onAdded: () {},
+                                idx: voteItem.idx,
+                                status: response['data']['status'].toString(),
+                                answer1: response['data']['a1'].toString(),
+                                answer2: response['data']['a2'].toString(),
+                                answer3: response['data']['a3'].toString(),
+                                answer4: response['data']['a4'].toString(),
+                                answer5: response['data']['a5'].toString(),
+                                answer6: response['data']['a6'].toString(),
+                              );
+                            });
+
+                      });
 
                       /* GOTO VOTE PAGE */
                       /* GOTO VOTE PAGE */
@@ -374,7 +387,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     }
 
     return null;
-    // Or do other work.}
+    // Or do other work.
   }
 
   void iOS_Permission() {
@@ -386,7 +399,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
-  void analiseMessage(Map<String, dynamic> message, bool isOnMessage) {
+  void analiseMessage(Map<String, dynamic> message, bool isOnMessage, bool isOnResume) {
     ChatObject chatItem = ChatObject.fromJson(message);
 
     String seen = "0";
@@ -402,57 +415,48 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     } // notificationType is null
     else {
       if (message['data']['notificationType'].toString() == "chat") {
+
+        if(isOnResume){
+          this.widget.mdw.shouldMoveToThisConvId = message['data']['conversationId'].toString();
+          this.widget.mdw.shouldMoveToThisFromName = message['data']['fromName'].toString();
+          this.widget.mdw.shouldMoveToThisFromId = message['data']['fromId'].toString();
+          setState(() {
+            MiddleWare.shared.currentIndex = 2;
+            MiddleWare.shared.tabc.animateTo(2,duration: Duration(seconds: 0));
+          });
+          return;
+        }
         widget.db.checkConversationExist(
             userId: chatItem.notificationFromId,
             convId: chatItem.notificationConversationId,
             onResult: (res) {
-              widget.db.checkChatExistByUser(
-                  chatId: chatItem.chatId,
-                  onNoResult: () {
-                    widget.db.insertChat(
-                        convId: chatItem.notificationConversationId,
-                        userId: chatItem.notificationFromId,
-                        content: chatItem.notificationContent,
-                        date: chatItem.notificationRegDate,
-                        chatId: chatItem.chatId,
-                        seen: seen,
-                        isYours: "FALSE",
-                        onAdded: () {
-                          if (Chats.staticChatsPage != null) {
-                            Chats.staticChatsPage.refresh();
-                          }
 
-                          if (seen == "1") {
-                            Chat.staticChatPage.myChild.addMessageToList(
-                                msg: chatItem.notificationContent,
-                                isYours: false,
-                                date: chatItem.notificationRegDate,
-                                senderName: chatItem.notificationFromName);
-                          }
+              widget.db.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
+                widget.db.insertChat(
+                    convId: chatItem.notificationConversationId,
+                    userId: chatItem.notificationFromId,
+                    content: chatItem.notificationContent,
+                    date: chatItem.notificationRegDate,
+                    chatId: chatItem.chatId,
+                    seen: seen,
+                    isYours: "FALSE",
+                    onAdded: () {
+                      if (Chats.staticChatsPage != null) {
+                        Chats.staticChatsPage.refresh();
+                      }
 
-                          Future.delayed(Duration(seconds: 2)).then((val) {
-                            print(
-                                ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                            if (isOnMessage != true) {
-                              /* GOTO CHAT PAGE */
-                              setState(() {
-                                MiddleWare.shared.tabc.animateTo(2);
-                                Chats.staticChatsPage.myChild.openChat(
-                                    convId: message['data']['conversationId'],
-                                    uId: message['data']['fromId'],
-                                    uName: message['data']['fromName'],
-                                    withDuration: true);
-                              });
-                              /* GOTO CHAT PAGE */
-                            }
-                            print(
-                                ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                          });
-                        });
-                  },
-                  onResult: (res) {
-                    print("::::::: CHAT FINDER: ${res.length} :::::::");
-                  });
+                      if (seen == "1") {
+                        Chat.staticChatPage.myChild.addMessageToList(
+                            msg: chatItem.notificationContent,
+                            isYours: false,
+                            date: chatItem.notificationRegDate,
+                            senderName: chatItem.notificationFromName);
+                      }
+                    });
+              }, onResult: (res){
+                print("::::::: CHAT FINDER: ${res.length} :::::::");
+              });
+
             },
             onNoResult: () {
               widget.db.insertConversation(
@@ -464,56 +468,51 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     print(
                         ":::::::::::::::::: [new conversation added] ::::::::::::::::::");
 
-                    widget.db.checkChatExistByUser(
-                        chatId: chatItem.chatId,
-                        onNoResult: () {
-                          widget.db.insertChat(
-                              convId: chatItem.notificationConversationId,
-                              userId: chatItem.notificationFromId,
-                              content: chatItem.notificationContent,
-                              date: chatItem.notificationRegDate,
-                              chatId: chatItem.chatId,
-                              seen: seen,
-                              isYours: "FALSE",
-                              onAdded: () {
-                                if (Chats.staticChatsPage != null) {
-                                  Chats.staticChatsPage.refresh();
-                                }
+                    widget.db.checkChatExistByUser(chatId: chatItem.chatId,onNoResult: (){
+                      widget.db.insertChat(
+                          convId: chatItem.notificationConversationId,
+                          userId: chatItem.notificationFromId,
+                          content: chatItem.notificationContent,
+                          date: chatItem.notificationRegDate,
+                          chatId: chatItem.chatId,
+                          seen: seen,
+                          isYours: "FALSE",
+                          onAdded: () {
+                            if (Chats.staticChatsPage != null) {
+                              Chats.staticChatsPage.refresh();
+                            }
 
-                                if (seen == "1") {
-                                  Chat.staticChatPage.myChild.addMessageToList(
-                                      msg: chatItem.notificationContent,
-                                      isYours: false,
-                                      date: chatItem.notificationRegDate,
-                                      senderName:
-                                          chatItem.notificationFromName);
-                                }
+                            if (seen == "1") {
+                              Chat.staticChatPage.myChild.addMessageToList(
+                                  msg: chatItem.notificationContent,
+                                  isYours: false,
+                                  date: chatItem.notificationRegDate,
+                                  senderName: chatItem.notificationFromName);
+                            }
 
-                                Future.delayed(Duration(seconds: 2))
-                                    .then((val) {
-                                  print(
-                                      ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
-                                  if (isOnMessage != true) {
-                                    /* GOTO CHAT PAGE */
-                                    setState(() {
-                                      MiddleWare.shared.tabc.animateTo(2);
-                                      Chats.staticChatsPage.myChild.openChat(
-                                          convId: message['data']
-                                              ['conversationId'],
-                                          uId: message['data']['fromId'],
-                                          uName: message['data']['fromName'],
-                                          withDuration: true);
-                                    });
-                                    /* GOTO CHAT PAGE */
-                                  }
-                                  print(
-                                      ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                            Future.delayed(Duration(seconds: 2)).then((val) {
+                              print(
+                                  ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                              if (isOnMessage != true) {
+                                /* GOTO CHAT PAGE */
+                                setState(() {
+                                  MiddleWare.shared.tabc.animateTo(2);
+                                  Chats.staticChatsPage.myChild.openChat(
+                                      convId: message['data']['conversationId'],
+                                      uId: message['data']['fromId'],
+                                      uName: message['data']['fromName'],
+                                      withDuration: true);
                                 });
-                              });
-                        },
-                        onResult: (res) {
-                          print("::::::: CHAT FINDER: ${res.length} :::::::");
-                        });
+                                /* GOTO CHAT PAGE */
+                              }
+                              print(
+                                  ":::::::::::::::::: [GOING TO CHAT PAGE] ::::::::::::::::::");
+                            });
+                          });
+                    },onResult: (res){
+                      print("::::::: CHAT FINDER: ${res.length} :::::::");
+                    });
+
                   },
                   onNoInerted: () {
                     print(
@@ -524,6 +523,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       } else {
         if (message['data']['notificationType'].toString() == "vote") {
           // vote notification
+
+          if(isOnResume){
+            this.widget.mdw.shouldMoveToThisVoteId = message['data']['idx'].toString();
+            setState(() {
+              MiddleWare.shared.currentIndex = 3;
+              MiddleWare.shared.tabc.animateTo(3,duration: Duration(seconds: 0));
+            });
+            return;
+          }
+
           VoteObject voteItem = VoteObject.fromJson(message);
           widget.db.checkVoteExist(
               bd_idx: voteItem.idx.toString(),
@@ -554,14 +563,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                               answer6: response['data']['a6'].toString(),
                             );
                           });
-
-                      /* GOTO VOTE PAGE */
-                      setState(() {
-                        MiddleWare.shared.tabc.animateTo(3);
-                        Notices.staticNoticesPage.myChild
-                            .openNotice(message['data']['idx']);
-                      });
-                      /* GOTO VOTE PAGE */
                     });
               });
         } // Vote Notification
@@ -577,6 +578,13 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
+  static void staticGetUserId({onGetUserId(String userId)}) async {
+    await SharedPreferences.getInstance().then((val) {
+      String uid = val.getString("app_user_login_info_userid");
+      onGetUserId(uid);
+    });
+  }
+
   @override
   void initState() {
     MainTabBar.myChild = this;
@@ -586,7 +594,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     getUserId(onGetUserId: (uid) {
       getAllSurveys(uid: uid);
     });
-    //firebaseCloudMessaging_Listeners();
+    firebaseCloudMessaging_Listeners();
     print("Main TabBar New...");
 
     widget.subscription = Connectivity()
@@ -599,7 +607,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
 
     this.updateUserLocation();
-
     super.initState();
   }
 
@@ -622,9 +629,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
                   .then((val) {
                 this.widget.userLocation = val;
-                if ((val.longitude >= 125.758758 &&
-                        val.longitude <= 129.691407) &&
-                    (val.latitude >= 34.385830 && val.latitude <= 38.627163)) {
+                if ((val.longitude >= 125.385888 &&
+                        val.longitude <= 130.164875) &&
+                    (val.latitude >= 34.076705 && val.latitude <= 38.991721)) {
                   print("...::: the user is inside of korea. :-) :::...");
                 } else {
                   print("... ::: the user is not inside of korea! :-( :::...");
@@ -633,18 +640,18 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               }).catchError((error) {
                 print(
                     "...::: updating user location was failed => ${error.toString()} :::...");
-                showLocationPopUp(_scaffoldKey.currentContext);
+                //showLocationPopUp(_scaffoldKey.currentContext);
               });
             } else {
               print(
                   "...::: updating user location was failed => (access to GPS failed) :::...");
-              showLocationPopUp(_scaffoldKey.currentContext);
+              //showLocationPopUp(_scaffoldKey.currentContext);
             }
           });
         } else {
           print(
               "...::: updating user location was failed => (GPS Service was disabled) :::...");
-          showLocationPopUp(_scaffoldKey.currentContext);
+          //showLocationPopUp(_scaffoldKey.currentContext);
         }
       });
     }
@@ -680,7 +687,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void showLocationPopUp(BuildContext ctx) {
-    return;
     SharedPreferences.getInstance().then((val) {
       String strDate = val.getString("__LOCATION_POPUP_7_DAYS");
       if (strDate != null && strDate != "") {
