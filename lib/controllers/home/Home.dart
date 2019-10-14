@@ -675,6 +675,11 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                         context,
                         new MaterialPageRoute(
+                            builder: (context) => new NoticesList()));
+
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
                             builder: (context) =>
                                 new NoticesListSingle(obj: object)));
                   },
@@ -749,6 +754,11 @@ class _HomeState extends State<Home> {
               viewImgUrl_1: values[0]["viewImgUrl_1"].toString(),
               viewImgUrl_2: values[0]["viewImgUrl_2"].toString(),
             );
+
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new IntroduceOccupation()));
 
             Navigator.push(
                 context,

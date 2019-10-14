@@ -239,10 +239,10 @@ class _MagazinesState extends State<Magazines> {
               //color: Colors.red,
             ),
             Container(
-              color: Colors.blue,
-              height: 3,
-              //margin: const EdgeInsets.only(left: 16, right: 16)
-            ),
+                color: Colors.blue,
+                height: 3,
+                margin: const EdgeInsets.only(
+                    left: 16, right: 16, bottom: 10, top: 10)),
             Expanded(
               child: new ListView.builder(
                   itemCount:

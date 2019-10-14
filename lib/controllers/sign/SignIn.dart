@@ -306,10 +306,16 @@ class _SignInState extends State<SignIn> {
   }
 
   Widget authAlert() {
+    var height;
+    if (userInformation.userDeviceOS == "i") {
+      height = MediaQuery.of(context).size.height / 1.2;
+    } else {
+      height = MediaQuery.of(context).size.height / 1.4;
+    }
     return AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
       content: Container(
-        height: MediaQuery.of(context).size.height / 1.4,
+        height: height,
         child: Column(
           children: <Widget>[
             Container(

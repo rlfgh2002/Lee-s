@@ -432,11 +432,17 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget authAlert() {
+    var height;
+    if (userInformation.userDeviceOS == "i") {
+      height = MediaQuery.of(context).size.height / 1.2;
+    } else {
+      height = MediaQuery.of(context).size.height / 1.4;
+    }
     return AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
       content: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height / 1.4,
+        height: height,
         width: MediaQuery.of(context).size.width / 1.1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

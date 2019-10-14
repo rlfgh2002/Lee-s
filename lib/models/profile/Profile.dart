@@ -42,7 +42,7 @@ class RequestMember extends StatelessWidget {
       contentPadding: EdgeInsets.all(0.0),
       content: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height / 1.4,
+        height: MediaQuery.of(context).size.height / 1.2,
         width: MediaQuery.of(context).size.width / 1.1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,

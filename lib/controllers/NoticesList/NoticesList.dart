@@ -159,7 +159,7 @@ class _NoticesListState extends State<NoticesList> {
       widget.isFirstInit = false;
     }
 
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,

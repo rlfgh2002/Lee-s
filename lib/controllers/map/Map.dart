@@ -209,13 +209,11 @@ class _MapPageState extends State<MapPage> {
                           ),
                           onPressed: () async {
                             final myFile =
-                                File(_localPath + "/haegisa_map.hgs");
-                            final myFile2 = File(_localPath +
-                                "/haegisa_map.pdf"); //앱 종료 하지않고 지도 다운로드 2번 눌렀을대는 pdf파일이 남아있으므로, pdf탐색
+                                File(_localPath + "/haegisa_map.mpo");
                             var fileURL =
-                                "https://mariners.or.kr/uploads/haegisa_map.pdf";
+                                "https://mariners.or.kr/uploads/haegisa_map.mpo";
 
-                            if (myFile.existsSync() || myFile2.existsSync()) {
+                            if (myFile.existsSync()) {
                               isDownload = false;
                             } else {
                               isDownload = true;
@@ -248,7 +246,7 @@ class _MapPageState extends State<MapPage> {
                                   print("다운완료");
                                   _displaySnackBar(context, "다운로드 완료");
                                   OpenFile.open(_localPath +
-                                      "/haegisa_map.pdf"); //열때는 확장자명 pdf로, 그외는 hgs
+                                      "/haegisa_map.mpo"); //열때는 확장자명 pdf로, 그외는 hgs
                                   return;
                                 } else if (status ==
                                     DownloadTaskStatus.failed) {
@@ -267,15 +265,8 @@ class _MapPageState extends State<MapPage> {
                               //해운선사 지도 확장자명 변경
                               //처음 선택시는 hgs를 pdf로 변경해서 써야함.
                               //그이후에는 계속적 pdf로 실행됨(재시작 전까지)
-                              if (File(_localPath + "/haegisa_map.hgs")
-                                  .existsSync()) {
-                                File(_localPath + "/haegisa_map.hgs")
-                                    .rename(_localPath + "/haegisa_map.pdf");
-                                OpenFile.open(_localPath + "/haegisa_map.pdf");
-                              } else if (File(_localPath + "/haegisa_map.pdf")
-                                  .existsSync()) {
-                                OpenFile.open(_localPath + "/haegisa_map.pdf");
-                              }
+
+                              OpenFile.open(_localPath + "/hhaegisa_map.mpo");
 
                               // Navigator.push(
                               //   context,

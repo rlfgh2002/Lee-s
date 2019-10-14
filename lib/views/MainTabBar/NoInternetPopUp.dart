@@ -28,26 +28,33 @@ class NoInternetAlertWidget {
         child: Column(
           children: [
             Container(
-              child: Text(title, style: TextStyle(
-                  color: Statics.shared.colors.titleTextColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Statics.shared.fontSizes.titleInContent)),
+              child: Text(title,
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Statics.shared.fontSizes.titleInContent)),
               margin: const EdgeInsets.only(top: 30),
               padding: const EdgeInsets.only(left: 50, right: 50),
               width: popUpWidth,
             ),
             Container(
-              child: Text(content, style: TextStyle(
-                  color: Statics.shared.colors.subTitleTextColor,
-                  fontWeight: FontWeight.normal,
-                  fontSize: Statics.shared.fontSizes.subTitleInContent),
-                textAlign: TextAlign.left,),
+              child: Text(
+                content,
+                style: TextStyle(
+                    color: Statics.shared.colors.subTitleTextColor,
+                    fontWeight: FontWeight.normal,
+                    fontSize: Statics.shared.fontSizes.subTitleInContent),
+                textAlign: TextAlign.left,
+              ),
               margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.only(left: 50, right: 50),
               width: popUpWidth,
             ),
             Container(
-              child: Image.asset("Resources/Icons/wifi.png", height: 50,),
+              child: Image.asset(
+                "Resources/Icons/wifi.png",
+                height: 50,
+              ),
               margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.only(left: 50, right: 50, top: 20),
               width: popUpWidth,
@@ -61,28 +68,32 @@ class NoInternetAlertWidget {
               margin: const EdgeInsets.only(top: 15),
               child: Row(
                 children: [
-                  Container(color: Colors.white,
+                  Container(
+                    color: Colors.white,
+                    alignment: Alignment.center,
                     child: FlatButton(
-                      child: Text(Strings.shared.dialogs.closeBtnTitle,
+                      child: Text(
+                        Strings.shared.dialogs.closeBtnTitle,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: Statics
-                            .shared.fontSizes.subTitleInContent,
-                            color: Statics.shared.colors.titleTextColor
-                        ),
+                            fontWeight: FontWeight.bold,
+                            fontSize:
+                                Statics.shared.fontSizes.subTitleInContent,
+                            color: Statics.shared.colors.titleTextColor),
                       ),
                       onPressed: () {
                         this.onPressClose();
-                      },),
-                    width: ((popUpWidth - 16)) - 32,
+                      },
+                    ),
+                    //width: ((popUpWidth - 16)) - 32,
                   ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
               ),
               decoration: BoxDecoration(
-                  border: Border(top: BorderSide(
-                      color: Statics.shared.colors.lineColor, width: 1))
-              ),
+                  border: Border(
+                      top: BorderSide(
+                          color: Statics.shared.colors.lineColor, width: 1))),
             ),
           ], // Column Children
           crossAxisAlignment: CrossAxisAlignment.center,

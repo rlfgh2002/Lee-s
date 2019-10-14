@@ -243,7 +243,7 @@ class UserInfoState extends State<UserInfo> {
                             padding: const EdgeInsets.only(right: 10),
                           ),
                           Container(
-                              width: deviceWidth / 2.2,
+                              width: deviceWidth / 2.0,
                               child: postNo == ""
                                   ? Text(
                                       "우편번호",
@@ -267,7 +267,12 @@ class UserInfoState extends State<UserInfo> {
                           Container(
                               width: deviceWidth / 6.5,
                               child: FlatButton(
-                                child: Text("변경"),
+                                child: Text("변경",
+                                    style: TextStyle(
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                      color: Statics.shared.colors.mainColor,
+                                    )),
                                 onPressed: () {
                                   myList = [];
                                   addressKeyword = "";

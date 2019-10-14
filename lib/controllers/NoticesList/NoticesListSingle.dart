@@ -8,6 +8,7 @@ import 'package:haegisa2/views/NoticesListWidget/NoticesListWidget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_html_view/flutter_html_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'NoticesList.dart';
 
@@ -24,6 +25,15 @@ class NoticesListSingle extends StatefulWidget {
 
 class _NoticesListSingleState extends State<NoticesListSingle> {
   final _scaffold = GlobalKey<ScaffoldState>();
+
+  _launchURL(String url) async {
+    var url2 = Uri.encodeFull(url).toString();
+    if (await canLaunch(url2)) {
+      await launch(url2);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +78,133 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
       margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
     );
 
-    Scaffold(
+    Widget files = Container();
+    bool isThereAnyFiles = false;
+    List<FlatButton> myFilesList = [];
+
+    if (this.widget.object.fileUrl_1.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
+                ),
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(
+                      this.widget.object.realFileName1.toString(),
+                      maxLines: 1,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+              ],
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_1);
+          },
+        ),
+      );
+    }
+    if (this.widget.object.fileUrl_2.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
+                ),
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(this.widget.object.realFileName2.toString(),
+                        maxLines: 1,
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_2);
+          },
+        ),
+      );
+    }
+    if (this.widget.object.fileUrl_3.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
+                ),
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(this.widget.object.realFileName3.toString(),
+                        maxLines: 1,
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_3);
+          },
+        ),
+      );
+    }
+    if (this.widget.object.fileUrl_4.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
+                ),
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(this.widget.object.realFileName4.toString(),
+                        maxLines: 1,
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_4);
+          },
+        ),
+      );
+    }
+
+    if (isThereAnyFiles) {
+      files = Container(
+        color: Color.fromRGBO(244, 248, 255, 1),
+        padding: const EdgeInsets.only(bottom: 16, top: 16, left: 8, right: 8),
+        margin: const EdgeInsets.only(left: 32, right: 32, top: 20, bottom: 32),
+        child: Column(
+          children: myFilesList,
+        ),
+      );
+    }
+
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
@@ -130,6 +266,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
                 ),
                 padding: const EdgeInsets.only(left: 32, right: 32)),
             greySplitter,
+            files,
             HtmlView(
               data: this.widget.object.content,
               scrollable: false,

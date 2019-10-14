@@ -103,14 +103,6 @@ class _SplashScreenState extends State<SplashScreen> {
     myDir.exists().then((dirExist) {
       if (dirExist) {
         print('exists');
-
-        final myFile = File(_localPath + "/haegisa_map.pdf");
-
-        //해운선사 지도 확장자명 변경
-        if (myFile.existsSync()) {
-          File(_localPath + "/haegisa_map.pdf")
-              .rename(_localPath + "/haegisa_map.hgs");
-        }
       } else {
         print('non-existent');
 

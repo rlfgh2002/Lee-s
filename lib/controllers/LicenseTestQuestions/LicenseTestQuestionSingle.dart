@@ -196,7 +196,7 @@ class _LicenseTestQuestionSingleState extends State<LicenseTestQuestionSingle> {
       );
     }
 
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
