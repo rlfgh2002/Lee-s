@@ -26,6 +26,8 @@ import '../NoticesList/NoticesListSingle.dart';
 import 'HomeWebview.dart';
 
 double deviceWidth;
+var noticeList = [];
+var introList = [];
 
 class Home extends StatefulWidget {
   @override
@@ -34,8 +36,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   DateTime backButtonPressTime;
-  List noticeList;
-  List introList = List();
 
   String url = Strings.shared.controllers.jsonURL.homeJson + "?mode=main";
 
@@ -44,11 +44,12 @@ class _HomeState extends State<Home> {
     final String responseBody = utf8.decode(response.bodyBytes);
     var responseJSON = json.decode(responseBody);
     var code = responseJSON["code"];
-    noticeList = responseJSON["notice"];
 
     if (type == "notice") {
+      noticeList = responseJSON["notice"];
       return responseJSON["notice"];
     } else if (type == "introduction") {
+      introList = responseJSON["introduction"];
       return responseJSON["introduction"];
     }
     // if (code == 200) {
@@ -196,39 +197,42 @@ class _HomeState extends State<Home> {
                       Row(children: <Widget>[
                         Expanded(child: Divider(height: 0)),
                       ]),
-                      new FutureBuilder(
-                        future:
-                            getMainJson("notice"), // a Future<String> or null
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          //print('project snapshot data is: ${snapshot.data}');
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.none:
-                              return new Text('Press button to start');
-                            case ConnectionState.waiting:
-                              return new Container(
-                                child: FlatButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  child: Text("",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Statics
-                                              .shared.colors.titleTextColor,
-                                          fontSize: Statics
-                                              .shared.fontSizes.subTitle)),
-                                  onPressed: () {},
-                                ),
-                                height: deviceWidth / 6,
-                              );
-                            default:
-                              if (snapshot.hasError)
-                                return new Text('Error: ${snapshot.error}');
-                              else
-                                return noticeText(context, snapshot);
-                          }
-                        },
-                      ),
+                      noticeList.length != 0
+                          ? noticeText(context, noticeList)
+                          : new FutureBuilder(
+                              future: getMainJson(
+                                  "notice"), // a Future<String> or null
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                //print('project snapshot data is: ${snapshot.data}');
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.none:
+                                    return new Text('Press button to start');
+                                  case ConnectionState.waiting:
+                                    return new Container(
+                                      child: FlatButton(
+                                        splashColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        child: Text("",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: Statics.shared
+                                                    .fontSizes.subTitle)),
+                                        onPressed: () {},
+                                      ),
+                                      height: deviceWidth / 6,
+                                    );
+                                  default:
+                                    if (snapshot.hasError)
+                                      return new Text(
+                                          'Error: ${snapshot.error}');
+                                    else
+                                      return noticeText(context, snapshot.data);
+                                }
+                              },
+                            ),
                     ]),
                   ),
                 ]), // Row
@@ -279,39 +283,42 @@ class _HomeState extends State<Home> {
                       Row(children: <Widget>[
                         Expanded(child: Divider(height: 0)),
                       ]),
-                      new FutureBuilder(
-                        future: getMainJson(
-                            "introduction"), // a Future<String> or null
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          //print('project snapshot data is: ${snapshot.data}');
-                          switch (snapshot.connectionState) {
-                            case ConnectionState.none:
-                              return new Text('Press button to start');
-                            case ConnectionState.waiting:
-                              return new Container(
-                                child: FlatButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  child: Text("",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          color: Statics
-                                              .shared.colors.titleTextColor,
-                                          fontSize: Statics
-                                              .shared.fontSizes.subTitle)),
-                                  onPressed: () {},
-                                ),
-                                height: deviceWidth / 6,
-                              );
-                            default:
-                              if (snapshot.hasError)
-                                return new Text('Error: ${snapshot.error}');
-                              else
-                                return introText(context, snapshot);
-                          }
-                        },
-                      ),
+                      introList.length != 0
+                          ? introText(context, introList)
+                          : new FutureBuilder(
+                              future: getMainJson(
+                                  "introduction"), // a Future<String> or null
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                //print('project snapshot data is: ${snapshot.data}');
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.none:
+                                    return new Text('Press button to start');
+                                  case ConnectionState.waiting:
+                                    return new Container(
+                                      child: FlatButton(
+                                        splashColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        child: Text("",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: Statics.shared
+                                                    .fontSizes.subTitle)),
+                                        onPressed: () {},
+                                      ),
+                                      height: deviceWidth / 6,
+                                    );
+                                  default:
+                                    if (snapshot.hasError)
+                                      return new Text(
+                                          'Error: ${snapshot.error}');
+                                    else
+                                      return introText(context, snapshot.data);
+                                }
+                              },
+                            ),
                     ]),
                   )
                 ]), // Row
@@ -582,7 +589,7 @@ class _HomeState extends State<Home> {
                           blurRadius: 0.5,
                           spreadRadius: 0)
                     ]),
-                margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
+                margin: EdgeInsets.only(left: 10, right: 10),
                 child: FlatButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -631,8 +638,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget noticeText(BuildContext context, AsyncSnapshot snapshot) {
-    var values = snapshot.data;
+  Widget noticeText(BuildContext context, List snapshot) {
+    var values = snapshot;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -695,8 +702,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget introText(BuildContext context, AsyncSnapshot snapshot) {
-    var values = snapshot.data;
+  Widget introText(BuildContext context, List snapshot) {
+    var values = snapshot;
 
     return Container(
         child: FlatButton(

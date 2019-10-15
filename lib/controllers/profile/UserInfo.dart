@@ -30,7 +30,6 @@ class UserInfoState extends State<UserInfo> {
   List<School> _schoolList = new List();
 
   TextEditingController _emailController;
-  TextEditingController _hpController;
   TextEditingController _addressController;
   TextEditingController _gisuController;
   String _selectedValue;
@@ -51,7 +50,6 @@ class UserInfoState extends State<UserInfo> {
   @override
   void initState() {
     super.initState();
-    _hpController = new TextEditingController(text: hp);
     _emailController = new TextEditingController(text: email);
     _addressController = new TextEditingController(text: address2);
     _gisuController = new TextEditingController(text: gisu);
@@ -131,7 +129,8 @@ class UserInfoState extends State<UserInfo> {
                               Strings.shared.controllers.profile.userName,
                               style: TextStyle(
                                   color: Statics.shared.colors.titleTextColor,
-                                  fontSize: Statics.shared.fontSizes.content,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
                                   fontWeight: FontWeight.bold),
                               textAlign: TextAlign.left,
                             ),
@@ -203,21 +202,14 @@ class UserInfoState extends State<UserInfo> {
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
-                          Expanded(
-                              child: TextField(
-                            controller: _hpController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  color:
-                                      Statics.shared.colors.subTitleTextColor,
-                                ),
-                                hintText: Strings
-                                    .shared.controllers.profile.userPhone),
-                          )),
+                          Text(
+                            hp,
+                            style: TextStyle(
+                              color: Statics.shared.colors.subTitleTextColor,
+                              fontSize: Statics.shared.fontSizes.content,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
                         ],
                       ), // Row Children
                     ),
@@ -265,14 +257,14 @@ class UserInfoState extends State<UserInfo> {
                                     )),
                           Spacer(),
                           Container(
-                              width: deviceWidth / 6.5,
+                              width: deviceWidth / 6.2,
                               child: FlatButton(
                                 child: Text("변경",
                                     style: TextStyle(
-                                      fontSize: Statics
-                                          .shared.fontSizes.supplementary,
-                                      color: Statics.shared.colors.mainColor,
-                                    )),
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Statics.shared.colors.mainColor,
+                                        fontWeight: FontWeight.bold)),
                                 onPressed: () {
                                   myList = [];
                                   addressKeyword = "";
@@ -382,7 +374,8 @@ class UserInfoState extends State<UserInfo> {
                                   color: Statics.shared.colors.titleTextColor,
                                   fontSize:
                                       Statics.shared.fontSizes.supplementary,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                  textBaseline: TextBaseline.alphabetic),
                               textAlign: TextAlign.left,
                             ),
                             width: deviceWidth / 5,
@@ -588,7 +581,6 @@ class UserInfoState extends State<UserInfo> {
                                     Statics.shared.fontSizes.titleInContent,
                                 color: Colors.white)),
                         onPressed: () async {
-                          print("전화번호 : ${_hpController.text}");
                           print("이메일 : ${_emailController.text}");
                           print("출신학교 : ${school.toString()}");
                           print("기수 : ${userInformation.memberType}");
@@ -598,7 +590,7 @@ class UserInfoState extends State<UserInfo> {
                           infomap["memberIdx"] = userInformation.userIdx;
                           infomap["name"] = userInformation.fullName;
                           infomap["memberType"] = userInformation.memberType;
-                          infomap["hp"] = _hpController.text;
+                          infomap["hp"] = hp;
                           infomap["email"] = _emailController.text;
                           infomap["school"] = school;
                           infomap["gisu"] = _gisuController.text;
@@ -611,7 +603,7 @@ class UserInfoState extends State<UserInfo> {
                               body: infomap);
 
                           //변경된 정보로 userInformation 수정
-                          userInformation.hp = _hpController.text;
+                          userInformation.hp = hp;
                           userInformation.email = _emailController.text;
                           userInformation.school = school;
                           userInformation.gisu = _gisuController.text;
@@ -731,8 +723,19 @@ class MyDialog extends StatefulWidget {
 
 class _MyDialogState extends State<MyDialog> {
   Color _c = Colors.redAccent;
+  bool isLoading = false;
+  bool isVisible = false;
+  var searchList = [];
+
   @override
   Widget build(BuildContext context) {
+    var map = new Map<String, dynamic>();
+
+    map["confmKey"] = "U01TX0FVVEgyMDE5MTAwMjE3MDEyMDEwOTA2ODY=";
+    map["resultType"] = "json";
+    map["countPerPage"] = "99";
+    map["keyword"] = addressKeyword;
+
     return AlertDialog(
       content: Container(
         color: Colors.white,
@@ -760,6 +763,7 @@ class _MyDialogState extends State<MyDialog> {
               child: Row(
                 children: <Widget>[
                   Container(
+                      margin: const EdgeInsets.only(left: 3),
                       width: MediaQuery.of(context).size.width / 2.1,
                       child: TextField(
                         decoration: InputDecoration(
@@ -775,7 +779,7 @@ class _MyDialogState extends State<MyDialog> {
                       )),
                   Spacer(),
                   Container(
-                      width: MediaQuery.of(context).size.width / 6.0,
+                      width: MediaQuery.of(context).size.width / 6.2,
                       alignment: Alignment.centerRight,
                       color: Statics.shared.colors.mainColor,
                       child: FlatButton(
@@ -789,19 +793,11 @@ class _MyDialogState extends State<MyDialog> {
                               )),
                           onPressed: () async {
                             myList = [];
-                            var map = new Map<String, dynamic>();
-
-                            map["confmKey"] =
-                                "U01TX0FVVEgyMDE5MTAwMjE3MDEyMDEwOTA2ODY=";
-                            map["resultType"] = "json";
-                            map["countPerPage"] = "99";
-                            map["keyword"] = addressKeyword;
-
-                            await searchAddress(
-                                "http://www.juso.go.kr/addrlink/addrLinkApi.do",
-                                body: map);
-                            FocusScope.of(context)
-                                .requestFocus(new FocusNode());
+                            setState(() {
+                              isVisible = true;
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                            });
                           })),
                 ],
               ),
@@ -810,15 +806,51 @@ class _MyDialogState extends State<MyDialog> {
               height: 20,
             ),
             Expanded(
-              child: new ListView.builder(
-                  key: new Key(DateFormat("yyyyMMddHHmmss")
-                      .format(DateTime.now())), //리스트당 고유된 키를 부여
-                  itemCount: myList.length, // number of items in your list
-                  //here the implementation of itemBuilder. take a look at flutter docs to see details
-                  itemBuilder: (BuildContext context, int itemIndex) {
-                    return myList[itemIndex]; // return your widget
-                  }),
-            )
+                child: isVisible
+                    ? myList.length != 0
+                        ? new ListView.builder(
+                            key: new Key(DateFormat("yyyyMMddHHmmss")
+                                .format(DateTime.now())), //리스트당 고유된 키를 부여
+                            itemCount:
+                                myList.length, // number of items in your list
+                            //here the implementation of itemBuilder. take a look at flutter docs to see details
+                            itemBuilder: (BuildContext context, int itemIndex) {
+                              return myList[itemIndex];
+                              // return your widget
+                            })
+                        : new FutureBuilder(
+                            future: searchAddress(
+                                "http://www.juso.go.kr/addrlink/addrLinkApi.do",
+                                body: map),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              //print('project snapshot data is: ${snapshot.data}');
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.none:
+                                  return new Text('Press button to start');
+                                case ConnectionState.waiting:
+                                  return new Center(
+                                      child: CircularProgressIndicator());
+                                case ConnectionState.done:
+                                  return new ListView.builder(
+                                      key: new Key(DateFormat("yyyyMMddHHmmss")
+                                          .format(
+                                              DateTime.now())), //리스트당 고유된 키를 부여
+                                      itemCount: myList
+                                          .length, // number of items in your list
+                                      //here the implementation of itemBuilder. take a look at flutter docs to see details
+                                      itemBuilder: (BuildContext context,
+                                          int itemIndex) {
+                                        return myList[itemIndex];
+                                        // return your widget
+                                      });
+                                default:
+                                  if (snapshot.hasError)
+                                    return new Text('Error: ${snapshot.error}');
+                              }
+                            },
+                          )
+                    : Container())
           ],
         ),
       ),
@@ -833,6 +865,7 @@ class _MyDialogState extends State<MyDialog> {
       var responseJSON = json.decode(responseBody);
       var errorMessage = responseJSON["results"]["common"]["errorMessage"];
       var juso = responseJSON["results"]["juso"];
+      searchList = juso;
 
       if (statusCode == 200) {
         if (errorMessage == "정상") {
@@ -840,8 +873,8 @@ class _MyDialogState extends State<MyDialog> {
             for (var result in juso) {
               myList.add(addrList(result["roadAddr"], result["zipNo"]));
             }
-            setState(() {});
           } else {
+            isVisible = false;
             return showDialog(
                 barrierDismissible: false,
                 context: context,
@@ -865,6 +898,7 @@ class _MyDialogState extends State<MyDialog> {
                     ));
           }
         } else {
+          isVisible = false;
           return showDialog(
               barrierDismissible: false,
               context: context,

@@ -136,64 +136,66 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           SizedBox(
-                              child: FlatButton(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                child: Row(children: [
-                                  Image.asset(
-                                      'Resources/Icons/btn_feehistory.png',
-                                      scale: 2.8),
-                                  Text(
-                                      " " +
-                                          Strings.shared.controllers.profile
-                                              .feehistory,
-                                      style: TextStyle(
-                                          color: Statics
-                                              .shared.colors.titleTextColor,
-                                          fontSize: Statics
-                                              .shared.fontSizes.supplementary)),
-                                ]),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                          builder: (context) =>
-                                              new FeeHistory()));
-                                },
-                              ),
-                              width: deviceWidth / 2,
-                              height: deviceWidth / 6.5),
+                            child: FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Row(children: [
+                                Image.asset(
+                                    'Resources/Icons/btn_feehistory.png',
+                                    scale: 2.8),
+                                Text(
+                                    " " +
+                                        Strings.shared.controllers.profile
+                                            .feehistory,
+                                    style: TextStyle(
+                                        color: Statics
+                                            .shared.colors.titleTextColor,
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary)),
+                              ]),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new FeeHistory()));
+                              },
+                            ),
+                            width: deviceWidth / 2,
+                            height: deviceWidth / 5.5,
+                          ),
                           VerticalDivider(width: 0),
                           SizedBox(
-                              child: FlatButton(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                child: Row(children: [
-                                  Image.asset('Resources/Icons/btn_inquiry.png',
-                                      scale: 2.8),
-                                  Text(
-                                      " " +
-                                          Strings.shared.controllers.profile
-                                              .inquiry,
-                                      style: TextStyle(
-                                          color: Statics
-                                              .shared.colors.titleTextColor,
-                                          fontSize: Statics
-                                              .shared.fontSizes.supplementary)),
-                                ]),
-                                onPressed: () {
-                                  UserInfo.shared.g_address1 = "";
-                                  UserInfo.shared.g_postNo = "";
+                            child: FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Row(children: [
+                                Image.asset('Resources/Icons/btn_inquiry.png',
+                                    scale: 2.8),
+                                Text(
+                                    " " +
+                                        Strings
+                                            .shared.controllers.profile.inquiry,
+                                    style: TextStyle(
+                                        color: Statics
+                                            .shared.colors.titleTextColor,
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary)),
+                              ]),
+                              onPressed: () {
+                                UserInfo.shared.g_address1 = "";
+                                UserInfo.shared.g_postNo = "";
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Inquiry()),
-                                  );
-                                },
-                              ),
-                              width: deviceWidth / 2,
-                              height: deviceWidth / 6.5)
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Inquiry()),
+                                );
+                              },
+                            ),
+                            width: deviceWidth / 2,
+                            height: deviceWidth / 5.5,
+                          )
                         ],
                       ), // Row Children
                     )),
@@ -206,36 +208,36 @@ class _ProfileState extends State<Profile> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           SizedBox(
-                              child: FlatButton(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                child: Row(children: [
-                                  Image.asset(
-                                      'Resources/Icons/btn_occasion.png',
-                                      scale: 2.8),
-                                  Text(
-                                      " " +
-                                          Strings.shared.controllers.profile
-                                              .occasion,
-                                      style: TextStyle(
-                                          color: Statics
-                                              .shared.colors.titleTextColor,
-                                          fontSize: Statics
-                                              .shared.fontSizes.supplementary)),
-                                ]),
-                                onPressed: () {
-                                  UserInfo.shared.g_address1 = "";
-                                  UserInfo.shared.g_postNo = "";
+                            child: FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Row(children: [
+                                Image.asset('Resources/Icons/btn_occasion.png',
+                                    scale: 2.8),
+                                Text(
+                                    " " +
+                                        Strings.shared.controllers.profile
+                                            .occasion,
+                                    style: TextStyle(
+                                        color: Statics
+                                            .shared.colors.titleTextColor,
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary)),
+                              ]),
+                              onPressed: () {
+                                UserInfo.shared.g_address1 = "";
+                                UserInfo.shared.g_postNo = "";
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Occasion()),
-                                  );
-                                },
-                              ),
-                              width: deviceWidth / 2,
-                              height: deviceWidth / 6.5),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Occasion()),
+                                );
+                              },
+                            ),
+                            width: deviceWidth / 2,
+                            height: deviceWidth / 5.5,
+                          ),
                           VerticalDivider(width: 0),
                           SizedBox(
                               child: FlatButton(
@@ -274,7 +276,7 @@ class _ProfileState extends State<Profile> {
                 Container(
                   child: Column(children: [
                     Container(
-                        height: deviceWidth / 6.5,
+                        height: deviceWidth / 5.5,
                         padding: const EdgeInsets.only(left: 20, right: 5),
                         child: FlatButton(
                           splashColor: Colors.transparent,
@@ -320,7 +322,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                        height: deviceWidth / 6.5,
+                        height: deviceWidth / 5.5,
                         padding: const EdgeInsets.only(left: 20, right: 5),
                         child: new FlatButton(
                           splashColor: Colors.transparent,
@@ -357,7 +359,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                        height: deviceWidth / 6.5,
+                        height: deviceWidth / 5.5,
                         padding: const EdgeInsets.only(left: 20, right: 5),
                         child: new FlatButton(
                           splashColor: Colors.transparent,
@@ -393,7 +395,7 @@ class _ProfileState extends State<Profile> {
                       Expanded(child: Divider(height: 0)),
                     ]),
                     Container(
-                        height: deviceWidth / 6.5,
+                        height: deviceWidth / 5.5,
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: new FlatButton(
                           child: Row(
@@ -466,7 +468,7 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 40,
+              height: MediaQuery.of(context).size.height / 60,
             ),
             Container(
                 child: Container(
@@ -508,7 +510,7 @@ class _ProfileState extends State<Profile> {
               ),
             )),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 40,
+              height: MediaQuery.of(context).size.height / 60,
             ),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
@@ -538,7 +540,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 )),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 40,
+              height: MediaQuery.of(context).size.height / 60,
             ),
             Container(
               padding: const EdgeInsets.only(top: 20),

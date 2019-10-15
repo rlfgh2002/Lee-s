@@ -22,9 +22,10 @@ void main() {
       GlobalWidgetsLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
     ],
-    supportedLocales: [
-      const Locale('ko'),
-    ],
+    // supportedLocales: [
+    //   const Locale('ko', 'KR'),
+    // ],
+    // locale: Locale('ko', 'KR'),
     home: new MyApp(),
   ));
 }

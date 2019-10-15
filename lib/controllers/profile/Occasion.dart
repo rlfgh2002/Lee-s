@@ -133,17 +133,17 @@ class _OccasionState extends State<Occasion> {
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 2.5, top: 2.5),
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField("name", _nameController,
                             TextInputType.text, 10, "이름", name, _nameChecked)),
                     Container(
                       padding: const EdgeInsets.only(
                           left: 10, right: 10, bottom: 2.5, top: 2.5),
                       alignment: Alignment.center,
-                      height: MediaQuery.of(context).size.height / 12,
+                      height: MediaQuery.of(context).size.height / 11,
                       child: Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: DateTimeField(
                           readOnly: true,
                           decoration: InputDecoration(
@@ -166,7 +166,8 @@ class _OccasionState extends State<Occasion> {
                                 context: context,
                                 firstDate: DateTime(1900),
                                 initialDate: currentValue ?? DateTime.now(),
-                                lastDate: DateTime(2100));
+                                lastDate: DateTime(2100),
+                                locale: const Locale('ko', 'KR'));
                           },
                         ),
                       ),
@@ -175,7 +176,7 @@ class _OccasionState extends State<Occasion> {
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 2.5, top: 2.5),
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField(
                             "company",
                             _companyController,
@@ -188,7 +189,7 @@ class _OccasionState extends State<Occasion> {
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 2.5, top: 2.5),
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField(
                             "position",
                             _positionController,
@@ -201,7 +202,7 @@ class _OccasionState extends State<Occasion> {
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 2.5, top: 2.5),
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField(
                             "phone",
                             _phoneController,
@@ -557,19 +558,19 @@ class _OccasionState extends State<Occasion> {
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankUser", null, TextInputType.text,
                             20, "예금주명", bankUser, _bankUserChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankName", null, TextInputType.text,
                             20, "은행명", bankName, _bankNameChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankNumber", null, TextInputType.text,
                             24, "계좌번호", bankNumber, _bankNumberChecked)),
                   ],
@@ -607,13 +608,13 @@ class _OccasionState extends State<Occasion> {
       SizedBox(height: 5),
       Container(
           alignment: Alignment.center,
-          height: MediaQuery.of(context).size.height / 12,
+          height: MediaQuery.of(context).size.height / 11,
           child: txtField("address", null, TextInputType.text, null,
               "결혼식장명 및 주소", address, _addressChecked)),
       SizedBox(height: 5),
       Container(
         alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height / 12,
+        height: MediaQuery.of(context).size.height / 11,
         child: DateTimeField(
           readOnly: true,
           controller: _dateController,
@@ -637,7 +638,8 @@ class _OccasionState extends State<Occasion> {
                 context: context,
                 firstDate: DateTime(1900),
                 initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2100));
+                lastDate: DateTime(2100),
+                locale: const Locale('ko', 'KR'));
           },
         ),
       ),
@@ -715,19 +717,19 @@ class _OccasionState extends State<Occasion> {
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankUser", null, TextInputType.text,
                             20, "예금주명", bankUser, _bankUserChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankName", null, TextInputType.text,
                             20, "은행명", bankName, _bankNameChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 12,
+                        height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankNumber", null, TextInputType.text,
                             24, "계좌번호", bankNumber, _bankNumberChecked)),
                   ],
@@ -765,13 +767,13 @@ class _OccasionState extends State<Occasion> {
       SizedBox(height: 5),
       Container(
           alignment: Alignment.center,
-          height: MediaQuery.of(context).size.height / 12,
+          height: MediaQuery.of(context).size.height / 11,
           child: txtField("address", null, TextInputType.text, null,
               "장례식장명 및 주소", address, _addressChecked)),
       SizedBox(height: 5),
       Container(
         alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height / 12,
+        height: MediaQuery.of(context).size.height / 11,
         child: DateTimeField(
           readOnly: true,
           decoration: InputDecoration(
@@ -794,7 +796,8 @@ class _OccasionState extends State<Occasion> {
                 context: context,
                 firstDate: DateTime(1900),
                 initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2100));
+                lastDate: DateTime(2100),
+                locale: const Locale('ko', 'KR'));
           },
         ),
       ),
