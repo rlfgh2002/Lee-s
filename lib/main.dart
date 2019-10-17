@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/Chat/chatObject.dart';
 import 'package:haegisa2/models/myFuncs.dart';
+import 'package:haegisa2/views/MainTabBar/NoInternetPopUp.dart';
 import 'controllers/mainTabBar/MainTabBar.dart';
+import 'controllers/mainTabBar/MiddleWare.dart';
 import 'controllers/sign/SignSelect.dart';
 import 'models/statics/UserInfo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -36,15 +40,49 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  StreamSubscription subscription;
   @override
   void initState() {
     super.initState();
+
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result.index == 2) {
+        // no internet connected
+        print("showNoInternet");
+        showNoInternet(context);
+      }
+    });
+
     new Future.delayed(
         const Duration(seconds: 3),
         () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => SplashScreen()),
             ));
+  }
+
+  void checkInternet(BuildContext ctx) async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.mobile &&
+        connectivityResult != ConnectivityResult.wifi) {
+      print("showNoInternet2");
+      showNoInternet(ctx);
+    }
+  }
+
+  void showNoInternet(BuildContext ctx) {
+    showDialog(
+        context: ctx,
+        builder: (BuildContext context) {
+          return NoInternetAlertWidget(
+            popUpWidth: MediaQuery.of(context).size.width,
+            onPressClose: () {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            },
+          ).dialog();
+        });
   }
 
   @override
@@ -54,7 +92,6 @@ class _MyAppState extends State<MyApp> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-
     //세로 고정
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,

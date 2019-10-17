@@ -9,6 +9,7 @@ import 'package:haegisa2/models/profile/SearchAddress.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
+import 'package:haegisa2/views/buttons/AppExpansionTile.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -727,6 +728,10 @@ class _MyDialogState extends State<MyDialog> {
   bool isVisible = false;
   var searchList = [];
 
+  static final _formKey1 = new GlobalKey<FormState>();
+  static final _formKey2 = new GlobalKey<FormState>();
+  final _emailController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var map = new Map<String, dynamic>();
@@ -766,6 +771,7 @@ class _MyDialogState extends State<MyDialog> {
                       margin: const EdgeInsets.only(left: 3),
                       width: MediaQuery.of(context).size.width / 2.1,
                       child: TextField(
+                        key: _formKey1,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintStyle: TextStyle(
@@ -932,6 +938,40 @@ class _MyDialogState extends State<MyDialog> {
     String addr,
     String post,
   ) {
+    FocusNode textSecondFocusNode = new FocusNode();
+    // return AppExpansionTile(
+    //     title: Row(
+    //       children: <Widget>[
+    //         Container(
+    //           width: MediaQuery.of(context).size.width / 1.9,
+    //           child: Text(addr,
+    //               style: TextStyle(
+    //                   fontSize: Statics.shared.fontSizes.supplementary,
+    //                   color: Colors.black)),
+    //         ),
+    //         Spacer(),
+    //         Text(post,
+    //             style: TextStyle(
+    //                 fontSize: Statics.shared.fontSizes.supplementary,
+    //                 color: Statics.shared.colors.subTitleTextColor))
+    //       ],
+    //     ),
+    //     backgroundColor: Theme.of(context).accentColor.withOpacity(0.025),
+    //     children: <Widget>[
+    //       TextField(
+    //         key: _formKey2,
+    //         decoration: InputDecoration(
+    //             border: InputBorder.none,
+    //             hintStyle: TextStyle(
+    //               fontSize: Statics.shared.fontSizes.subTitle,
+    //               color: Statics.shared.colors.subTitleTextColor,
+    //             ),
+    //             hintText: "주소를 입력하세요."), // decoration
+    //         onChanged: (String str) {
+    //           addressKeyword = str;
+    //         },
+    //       )
+    //     ]);
     return Container(
         padding: const EdgeInsets.only(bottom: 20),
         child: GestureDetector(
@@ -970,4 +1010,103 @@ class School {
 
   final String chcode;
   final String ccname;
+}
+
+class MyTextField extends StatefulWidget {
+  MyTextField({
+    this.text,
+    this.hintText = "",
+    this.onChanged,
+    this.onSubmitted,
+    this.textAlign = TextAlign.left,
+    this.focusNode,
+    this.autofocus = false,
+    this.obscureText = false,
+    this.padding = const EdgeInsets.all(0.0),
+    this.keyboardType = TextInputType.text,
+    this.canEdit = true,
+    this.isDarkMode = false,
+    this.textCapitalization = TextCapitalization.sentences,
+    this.key,
+  });
+
+  final String text;
+  final String hintText;
+  final ValueChanged<String> onChanged;
+  final ValueChanged<String> onSubmitted;
+  final TextAlign textAlign;
+  final FocusNode focusNode;
+  final bool autofocus;
+  final bool obscureText;
+  final EdgeInsets padding;
+  final TextInputType keyboardType;
+  final TextCapitalization textCapitalization;
+  final Key key;
+
+  final bool canEdit;
+
+  final isDarkMode;
+
+  @override
+  _MyTextFieldState createState() => _MyTextFieldState();
+}
+
+class _MyTextFieldState extends State<MyTextField> {
+  static const double textFieldPadding = 12.0;
+  TextEditingController editingController;
+
+  @override
+  void initState() {
+    super.initState();
+    editingController = TextEditingController(text: widget.text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      ignoring: !widget.canEdit,
+      child: Column(
+        children: <Widget>[
+          new Padding(
+            padding: EdgeInsets.only(
+                top: textFieldPadding + widget.padding.top,
+                bottom: textFieldPadding + widget.padding.bottom,
+                left: widget.padding.left,
+                right: widget.padding.right),
+            child: new TextField(
+              key: widget.key,
+              maxLines: null,
+              textCapitalization: widget.textCapitalization,
+              keyboardType: widget.keyboardType,
+              keyboardAppearance:
+                  widget.isDarkMode ? Brightness.dark : Brightness.light,
+              controller: editingController,
+              onSubmitted: widget.onSubmitted,
+              onChanged: widget.onChanged,
+              style: new TextStyle(
+                  color: widget.isDarkMode ? Colors.white : Colors.blue,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500),
+              autofocus: widget.autofocus,
+              focusNode: widget.focusNode,
+              textAlign: widget.textAlign,
+              obscureText: widget.obscureText,
+              decoration: new InputDecoration(
+                hintText: widget.hintText,
+                hintStyle: new TextStyle(
+                    color: widget.isDarkMode ? Colors.black : Colors.grey,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          Divider(
+            color: widget.isDarkMode ? Colors.black : Colors.grey[150],
+            height: 1.0,
+          ),
+        ],
+      ),
+    );
+  }
 }

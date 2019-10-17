@@ -28,6 +28,7 @@ import 'HomeWebview.dart';
 double deviceWidth;
 var noticeList = [];
 var introList = [];
+var memberTotal = "";
 
 class Home extends StatefulWidget {
   @override
@@ -59,6 +60,19 @@ class _HomeState extends State<Home> {
     // }
   }
 
+  totalMember() async {
+    var response = await http
+        .get(Uri.encodeFull(Strings.shared.controllers.jsonURL.totalMember));
+    final String responseBody = utf8.decode(response.bodyBytes);
+    var responseJSON = json.decode(responseBody);
+    var code = responseJSON["code"];
+
+    if (code == 200) {
+      memberTotal = responseJSON["table"][0]["total"];
+      return responseJSON["table"][0]["total"];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -66,6 +80,7 @@ class _HomeState extends State<Home> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
+
     String typeAsset = "";
     String typeTitle = "";
     Color typeColor;
@@ -149,6 +164,108 @@ class _HomeState extends State<Home> {
                               (deviceWidth / 6) * (1 / 3)),
                           spreadRadius: (deviceWidth / 6) * (1 / 3))
                     ]),
+              ),
+              Container(
+                decoration: new BoxDecoration(
+                    color: Colors.white,
+                    border: new Border.all(
+                      color: Color.fromRGBO(235, 239, 245, 1),
+                    ),
+                    boxShadow: [
+                      new BoxShadow(
+                          color: Color.fromRGBO(235, 239, 245, 1),
+                          offset: new Offset(0.0, 0.0),
+                          spreadRadius: 2.0)
+                    ]),
+                margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                child: Column(children: [
+                  Container(
+                    width: deviceWidth / 1.1,
+                    child: Column(children: <Widget>[
+                      Container(
+                          child: FlatButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            child: Row(children: [
+                              Text("협회 회원수",
+                                  style: TextStyle(
+                                      color:
+                                          Statics.shared.colors.titleTextColor,
+                                      fontSize:
+                                          Statics.shared.fontSizes.subTitle,
+                                      fontWeight: FontWeight.bold)),
+                              Spacer(),
+                              memberTotal != ""
+                                  ? Text(memberTotal,
+                                      style: TextStyle(
+                                        color: Statics.shared.colors.mainColor,
+                                        fontSize:
+                                            Statics.shared.fontSizes.subTitle,
+                                      ))
+                                  : FutureBuilder(
+                                      future:
+                                          totalMember(), // a Future<String> or null
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        //print('project snapshot data is: ${snapshot.data}');
+                                        switch (snapshot.connectionState) {
+                                          case ConnectionState.none:
+                                            return new Text(
+                                                'Press button to start');
+                                          case ConnectionState.waiting:
+                                            return new Container(
+                                              child: FlatButton(
+                                                splashColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                child: Text("",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: Statics
+                                                            .shared
+                                                            .colors
+                                                            .titleTextColor,
+                                                        fontSize: Statics
+                                                            .shared
+                                                            .fontSizes
+                                                            .subTitle)),
+                                                onPressed: () {},
+                                              ),
+                                              height: deviceWidth / 6,
+                                            );
+                                          default:
+                                            if (snapshot.hasError)
+                                              return new Text(
+                                                  'Error: ${snapshot.error}');
+                                            else
+                                              return Text(snapshot.data,
+                                                  style: TextStyle(
+                                                    color: Statics.shared.colors
+                                                        .mainColor,
+                                                    fontSize: Statics.shared
+                                                        .fontSizes.subTitle,
+                                                  ));
+                                        }
+                                      },
+                                    ),
+                              Text("명",
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                    color: Statics.shared.colors.mainColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                  )),
+                            ]),
+                            onPressed: () {},
+                          ),
+                          height: deviceWidth / 8),
+                      Row(children: <Widget>[
+                        Expanded(child: Divider(height: 0)),
+                      ]),
+                    ]),
+                  ),
+                ]), // Row
               ),
               Container(
                 decoration: new BoxDecoration(

@@ -209,9 +209,9 @@ class _MapPageState extends State<MapPage> {
                           ),
                           onPressed: () async {
                             final myFile =
-                                File(_localPath + "/haegisa_map.mpo");
+                                File(_localPath + "/haegisa_map.jpg");
                             var fileURL =
-                                "https://mariners.or.kr/uploads/haegisa_map.mpo";
+                                "https://mariners.or.kr/uploads/haegisa_map.jpg";
 
                             if (myFile.existsSync()) {
                               isDownload = false;
@@ -246,7 +246,7 @@ class _MapPageState extends State<MapPage> {
                                   print("다운완료");
                                   _displaySnackBar(context, "다운로드 완료");
                                   OpenFile.open(_localPath +
-                                      "/haegisa_map.mpo"); //열때는 확장자명 pdf로, 그외는 hgs
+                                      "/haegisa_map.jpg"); //열때는 확장자명 pdf로, 그외는 hgs
                                   return;
                                 } else if (status ==
                                     DownloadTaskStatus.failed) {
@@ -266,7 +266,7 @@ class _MapPageState extends State<MapPage> {
                               //처음 선택시는 hgs를 pdf로 변경해서 써야함.
                               //그이후에는 계속적 pdf로 실행됨(재시작 전까지)
 
-                              OpenFile.open(_localPath + "/hhaegisa_map.mpo");
+                              OpenFile.open(_localPath + "/haegisa_map.jpg");
 
                               // Navigator.push(
                               //   context,

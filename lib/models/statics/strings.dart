@@ -239,6 +239,8 @@ class _StringJsonURL {
   String userinfoModifyJson =
       "http://www.mariners.or.kr/app_middle/member/user_info_modify_json.php";
   String homeJson = "http://www.mariners.or.kr/app_middle/etc/main_json.php";
+  String totalMember =
+      "http://www.mariners.or.kr/app_middle/etc/totalMember.php";
   String schoolJson =
       "http://www.mariners.or.kr/app_middle/etc/school_json.php";
   String feeHistoryJson =
