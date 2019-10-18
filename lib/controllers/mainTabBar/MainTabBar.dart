@@ -257,8 +257,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     print(
         "::::::::::::::::::::::::: [ Firebase Listening ] :::::::::::::::::::::::::");
 
-    if (Platform.isIOS) iOS_Permission();
-
     widget.mainFirebaseMessaging.getToken().then((token) {
       print("FCM TOKEN : ${token.toString()}");
     });
@@ -278,7 +276,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         print('MSGX=> on launchX $message');
         analiseMessage(message, false, true);
       },
-      onBackgroundMessage: fcmBackgroundMessageHandler,
+      //onBackgroundMessage: fcmBackgroundMessageHandler,
+      onBackgroundMessage:
+          (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
     );
   }
 
@@ -391,15 +391,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     return null;
     // Or do other work.
-  }
-
-  void iOS_Permission() {
-    widget.mainFirebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    widget.mainFirebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
   }
 
   void analiseMessage(

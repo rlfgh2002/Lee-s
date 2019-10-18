@@ -141,8 +141,8 @@ class UserInfoState extends State<UserInfo> {
                           Text(
                             userInformation.fullName,
                             style: TextStyle(
-                              color: Statics.shared.colors.subTitleTextColor,
-                              fontSize: Statics.shared.fontSizes.content,
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -174,8 +174,8 @@ class UserInfoState extends State<UserInfo> {
                           Text(
                             userType,
                             style: TextStyle(
-                              color: Statics.shared.colors.subTitleTextColor,
-                              fontSize: Statics.shared.fontSizes.content,
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -206,8 +206,8 @@ class UserInfoState extends State<UserInfo> {
                           Text(
                             hp,
                             style: TextStyle(
-                              color: Statics.shared.colors.subTitleTextColor,
-                              fontSize: Statics.shared.fontSizes.content,
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -223,15 +223,26 @@ class UserInfoState extends State<UserInfo> {
                       child: new Row(
                         children: <Widget>[
                           Container(
-                            child: Text(
-                              "우편번호",
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left,
-                            ),
+                            child: Row(children: <Widget>[
+                              Text(
+                                "우편번호",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.tabColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                            ]),
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
@@ -250,10 +261,10 @@ class UserInfoState extends State<UserInfo> {
                                   : Text(
                                       postNo,
                                       style: TextStyle(
-                                        fontSize:
-                                            Statics.shared.fontSizes.content,
                                         color: Statics
-                                            .shared.colors.titleTextColor,
+                                            .shared.colors.subTitleTextColor,
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
                                       ),
                                     )),
                           Spacer(),
@@ -287,15 +298,26 @@ class UserInfoState extends State<UserInfo> {
                       child: new Row(
                         children: <Widget>[
                           Container(
-                            child: Text(
-                              "주소",
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left,
-                            ),
+                            child: Row(children: <Widget>[
+                              Text(
+                                "주소",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.tabColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                            ]),
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
@@ -314,10 +336,10 @@ class UserInfoState extends State<UserInfo> {
                                   : Text(
                                       address1,
                                       style: TextStyle(
-                                        fontSize:
-                                            Statics.shared.fontSizes.content,
                                         color: Statics
-                                            .shared.colors.titleTextColor,
+                                            .shared.colors.subTitleTextColor,
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
                                       ),
                                     )),
                         ],
@@ -332,15 +354,26 @@ class UserInfoState extends State<UserInfo> {
                       child: new Row(
                         children: <Widget>[
                           Container(
-                            child: Text(
-                              "상세주소",
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left,
-                            ),
+                            child: Row(children: <Widget>[
+                              Text(
+                                "상세주소",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.tabColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                            ]),
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
@@ -350,10 +383,10 @@ class UserInfoState extends State<UserInfo> {
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
                                   color:
                                       Statics.shared.colors.subTitleTextColor,
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
                                 ),
                                 hintText: "상세주소"),
                           )),
@@ -369,22 +402,36 @@ class UserInfoState extends State<UserInfo> {
                       child: new Row(
                         children: <Widget>[
                           Container(
-                            child: Text(
-                              Strings.shared.controllers.profile.userMail,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  fontWeight: FontWeight.bold,
-                                  textBaseline: TextBaseline.alphabetic),
-                              textAlign: TextAlign.left,
-                            ),
+                            child: Row(children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.userMail,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.tabColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                            ]),
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
                           Expanded(
                               child: TextField(
                             controller: _emailController,
+                            style: TextStyle(
+                              color: Statics.shared.colors.subTitleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            ),
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintStyle: TextStyle(
@@ -411,15 +458,26 @@ class UserInfoState extends State<UserInfo> {
                       child: new Row(
                         children: <Widget>[
                           Container(
-                            child: Text(
-                              Strings.shared.controllers.profile.userSchool,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left,
-                            ),
+                            child: Row(children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.userSchool,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.tabColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                            ]),
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
@@ -470,15 +528,26 @@ class UserInfoState extends State<UserInfo> {
                       child: new Row(
                         children: <Widget>[
                           Container(
-                            child: Text(
-                              Strings.shared.controllers.profile.userGisu,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.titleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.left,
-                            ),
+                            child: Row(children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.userGisu,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                              Text(
+                                "*",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.tabColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                            ]),
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
@@ -486,6 +555,10 @@ class UserInfoState extends State<UserInfo> {
                               child: TextField(
                             controller: _gisuController,
                             keyboardType: TextInputType.number,
+                            style: TextStyle(
+                              color: Statics.shared.colors.subTitleTextColor,
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                            ),
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(
@@ -657,6 +730,10 @@ class UserInfoState extends State<UserInfo> {
     return DropdownButton<String>(
       hint: Text('선택하세요'), // Not necessary for Option 1
       value: _selectedValue,
+      style: TextStyle(
+        color: Statics.shared.colors.subTitleTextColor,
+        fontSize: Statics.shared.fontSizes.supplementary,
+      ),
       onChanged: (String newValue) {
         setState(() {
           _selectedValue = newValue;

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,9 +42,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   StreamSubscription subscription;
+  FirebaseMessaging mainFirebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
     super.initState();
+
+    if (Platform.isIOS) iOS_Permission();
 
     subscription = Connectivity()
         .onConnectivityChanged
@@ -83,6 +87,15 @@ class _MyAppState extends State<MyApp> {
             },
           ).dialog();
         });
+  }
+
+  void iOS_Permission() {
+    mainFirebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    mainFirebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
   }
 
   @override
