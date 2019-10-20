@@ -7,16 +7,19 @@ class NoticeWidget extends StatelessWidget {
   String title = "";
   String shortDescription = "";
   String time = "";
-  double avatarRadius = 30;
+  double avatarRadius = 24;
   String avatarLink = "Resources/Icons/img_notice.png";
   String proceedingBackground = "Resources/Icons/proceedingBackground.png";
+  String proceedingBackgroundDark = "Resources/Icons/proceedingBackgroundDark.png";
   String iconDate = "Resources/Icons/icon_date.png";
   NoticeType type = NoticeType.Notice;
   VoidCallback onTapped;
   bool isOnSurveysTabs = false;
   String idx = "";
+  bool isDone = false;
 
   NoticeWidget({
+    bool isDone = false,
     bool isOnSurveysTabs = false,
     String title = "",
     String shortDescription = "",
@@ -25,6 +28,7 @@ class NoticeWidget extends StatelessWidget {
     VoidCallback onTapped,
     String idx = "",
   }) {
+    this.isDone = isDone;
     this.idx = idx;
     this.title = title;
     this.shortDescription = shortDescription;
@@ -120,6 +124,12 @@ class NoticeWidget extends StatelessWidget {
         ),
       );
     } else {
+
+      String pbck = this.proceedingBackground;
+      if(this.isDone){
+        pbck = this.proceedingBackgroundDark;
+      }
+
       return Container(
         color: Colors.white,
         margin: const EdgeInsets.only(top: 5),
@@ -143,7 +153,7 @@ class NoticeWidget extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(this.proceedingBackground)),
+                        image: AssetImage(pbck)),
                   ),
                   padding: const EdgeInsets.only(
                       top: 5, bottom: 5, left: 5, right: 15),

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
 
 class _StaticDbInformation {
-  static const String dbName = 'my_db_sina.db';
+  static const String dbName = 'my_db_haegisa2.db';
   static const String tblConversation = 'tblConversations';
   static const String tblVotes = 'tblVotes';
   static const String tblVotesAnswers = 'tblVotesAnswers';
@@ -14,6 +14,13 @@ class _StaticDbInformation {
   static const String tblChats = 'tblChats';
   static const String tblBlockUsers = 'tblBlockUsers';
   static const String tblSurveys = 'tblSurveys';
+  static const String tblNotices = 'tblNotices';
+
+  static const String tblNoticesId = 'noticeId';
+  static const String tblNoticesSubject = 'subject';
+  static const String tblNoticesFromId = 'fromId';
+  static const String tblNoticesFromName = 'fromName';
+  static const String tblNoticesContent = 'content';
 
   static const String tblConversationFieldId = 'convId';
   static const String tblConversationCreateDate = 'createDate';
@@ -56,6 +63,14 @@ class _StaticDbInformation {
   static const String tblAnswersSurveyQN = 'qNumber';
   static const String tblAnswersSurveyCNT = 'qCnt';
   static const String tblAnswersSurveyTitle = 'title';
+  static const String tblAnswersSurveyResult1 = 'result1';
+  static const String tblAnswersSurveyResult2 = 'result2';
+  static const String tblAnswersSurveyResult3 = 'result3';
+  static const String tblAnswersSurveyResult4 = 'result4';
+  static const String tblAnswersSurveyResult5 = 'result5';
+  static const String tblAnswersSurveyResult6 = 'result6';
+  static const String tblAnswersSurveyResult7 = 'result7';
+  static const String tblAnswersSurveyResult8 = 'result8';
   static const String tblAnswersSurveyQ1 = 'q1';
   static const String tblAnswersSurveyQ2 = 'q2';
   static const String tblAnswersSurveyQ3 = 'q3';
@@ -84,13 +99,16 @@ class MyDataBase {
   }
 
   void _checkDataBaseIsCreated() async {
-    prefs = await SharedPreferences.getInstance();
-    //await prefs.setBool('my_database_iscreated', true);
-    bool dbStatus = prefs.getBool('my_database_iscreated');
-    print(":::::::::: DB STATUS => [${dbStatus}] ::::::::::");
-    if (dbStatus != true) {
-      _createDataBase();
-    }
+    await SharedPreferences.getInstance().then((prefs){
+      this.prefs = prefs;
+      bool dbStatus = prefs.getBool('my_database_iscreated');
+      print(":::::::::: DB STATUS => [${dbStatus}] ::::::::::");
+      if (dbStatus != true) {
+        print("CREATION:::::");
+        _createDataBase();
+      }
+
+    });
   }
 
   void _createDataBase() async {
@@ -100,8 +118,7 @@ class MyDataBase {
     await openDatabase(path, version: 1,
             onCreate: (Database db, int version) async {
       // When creating the db, create the table
-      await db
-          .execute(
+      await db.execute(
               'CREATE TABLE ${_StaticDbInformation.tblConversation} (id INTEGER PRIMARY KEY AUTOINCREMENT , ${_StaticDbInformation.tblConversationUpdaterField} INTEGER,${_StaticDbInformation.tblConversationFieldId} TEXT,${_StaticDbInformation.tblConversationOtherSideUserId} TEXT,${_StaticDbInformation.tblConversationCreateDate} TEXT, ${_StaticDbInformation.tblConversationOtherSideUserFromName} TEXT)')
           .then((val) {
         print(
@@ -111,8 +128,7 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      db
-          .execute(
+      await db.execute(
               'CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsSeen} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT,${_StaticDbInformation.tblChatsChatDate2} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)')
           .then((val) {
         print(
@@ -122,8 +138,17 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db
-          .execute(
+      await db.execute(
+          'CREATE TABLE ${_StaticDbInformation.tblNotices} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblNoticesId} TEXT,${_StaticDbInformation.tblNoticesFromId} TEXT,${_StaticDbInformation.tblNoticesFromName} TEXT,${_StaticDbInformation.tblNoticesSubject} TEXT,${_StaticDbInformation.tblNoticesContent} TEXT)')
+          .then((val) {
+        print(
+            ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblNotices} STATUS => [TRUE] ::::::::::");
+      }).catchError((error) {
+        print(
+            ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblNotices} ${error.toString()} STATUS => [FALSE] ::::::::::");
+      });
+
+      await db.execute(
               'CREATE TABLE ${_StaticDbInformation.tblBlockUsers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblBlockUsersUserId} TEXT)')
           .then((val) {
         print(
@@ -133,8 +158,7 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db
-          .execute(
+      await db.execute(
               'CREATE TABLE ${_StaticDbInformation.tblVotes} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblVotesContent} TEXT,${_StaticDbInformation.tblVotesFromId} TEXT,${_StaticDbInformation.tblVotesFromName} TEXT,${_StaticDbInformation.tblVotesHttpPath} TEXT, ${_StaticDbInformation.tblVotesIdx} TEXT, ${_StaticDbInformation.tblVotesRegDate} TEXT, ${_StaticDbInformation.tblVotesStartDate} TEXT, ${_StaticDbInformation.tblVotesEndDate} TEXT, ${_StaticDbInformation.tblVotesSubject} TEXT)')
           .then((val) {
         print(
@@ -144,8 +168,7 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db
-          .execute(
+      await db.execute(
               'CREATE TABLE ${_StaticDbInformation.tblVotesAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersVoteIdx} TEXT, ${_StaticDbInformation.tblAnswersVoteDone} TEXT,${_StaticDbInformation.tblAnswersStatus} TEXT,${_StaticDbInformation.tblAnswersAnswer1} TEXT,${_StaticDbInformation.tblAnswersAnswer2} TEXT, ${_StaticDbInformation.tblAnswersAnswer3} TEXT, ${_StaticDbInformation.tblAnswersAnswer4} TEXT, ${_StaticDbInformation.tblAnswersAnswer5} TEXT, ${_StaticDbInformation.tblAnswersAnswer6} TEXT)')
           .then((val) {
         print(
@@ -155,8 +178,7 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db
-          .execute(
+      await db.execute(
               'CREATE TABLE ${_StaticDbInformation.tblSurveys} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblSurveysNo} TEXT, ${_StaticDbInformation.tblSurveysDone} TEXT,${_StaticDbInformation.tblSurveysBdIdx} TEXT,${_StaticDbInformation.tblSurveysStartDate} TEXT,${_StaticDbInformation.tblSurveysEndDate} TEXT, ${_StaticDbInformation.tblSurveysSubject} TEXT, ${_StaticDbInformation.tblSurveysContents} TEXT, ${_StaticDbInformation.tblSurveysQcnt} TEXT)')
           .then((val) {
         print(
@@ -166,9 +188,8 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db
-          .execute(
-              'CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersSurveyIdx} TEXT, ${_StaticDbInformation.tblAnswersSurveyQN} TEXT, ${_StaticDbInformation.tblAnswersSurveyTitle} TEXT,${_StaticDbInformation.tblAnswersSurveyCNT} TEXT,${_StaticDbInformation.tblAnswersSurveyQ1} TEXT,${_StaticDbInformation.tblAnswersSurveyQ2} TEXT,${_StaticDbInformation.tblAnswersSurveyQ3} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ4} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ5} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ6} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ7} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ8} TEXT)')
+      await db.execute(
+              'CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersSurveyIdx} TEXT,${_StaticDbInformation.tblAnswersSurveyResult1} TEXT,${_StaticDbInformation.tblAnswersSurveyResult2} TEXT,${_StaticDbInformation.tblAnswersSurveyResult3} TEXT,${_StaticDbInformation.tblAnswersSurveyResult4} TEXT,${_StaticDbInformation.tblAnswersSurveyResult5} TEXT,${_StaticDbInformation.tblAnswersSurveyResult6} TEXT,${_StaticDbInformation.tblAnswersSurveyResult7} TEXT,${_StaticDbInformation.tblAnswersSurveyResult8} TEXT, ${_StaticDbInformation.tblAnswersSurveyQN} TEXT, ${_StaticDbInformation.tblAnswersSurveyTitle} TEXT,${_StaticDbInformation.tblAnswersSurveyCNT} TEXT,${_StaticDbInformation.tblAnswersSurveyQ1} TEXT,${_StaticDbInformation.tblAnswersSurveyQ2} TEXT,${_StaticDbInformation.tblAnswersSurveyQ3} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ4} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ5} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ6} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ7} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ8} TEXT)')
           .then((val) {
         print(
             ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} STATUS => [TRUE] ::::::::::");
@@ -340,6 +361,34 @@ class MyDataBase {
         print(
             ":::::::::: DB INSERT(conversation) QUERY => [${val.toString()}] ::::::::::");
         onInserted();
+      }).whenComplete(() {
+        //db.close();
+        print(":::::::::: DB CLOSE ::::::::::");
+      });
+    });
+  }
+
+  void insertNotice(
+      {String noticeId = "",
+        String subject,
+        String fromId,
+        String fromName,
+        String content,
+        onInserted(bool st)}) async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    print(":::::::::: NEW Notice GENERATING ... ::::::::::");
+    await openDatabase(path).then((db) {
+      db
+          .rawInsert(
+          'INSERT INTO ${_StaticDbInformation.tblNotices} (${_StaticDbInformation.tblNoticesId},${_StaticDbInformation.tblNoticesFromId},${_StaticDbInformation.tblNoticesFromName},${_StaticDbInformation.tblNoticesSubject}, ${_StaticDbInformation.tblNoticesContent}) VALUES ("${noticeId.toString()}","${fromId.toString()}","${fromName.toString()}","${subject.toString()}","${content.toString()}")')
+          .catchError((err) {
+        print(":::::::::: DB INSERT(Notices) ERROR => [${err.toString()}] ::::::::::");
+        onInserted(false);
+      }).then((val) {
+        print(":::::::::: DB INSERT(Notices) QUERY => [${val.toString()}] ::::::::::");
+        onInserted(true);
       }).whenComplete(() {
         //db.close();
         print(":::::::::: DB CLOSE ::::::::::");
@@ -669,6 +718,31 @@ class MyDataBase {
     });
   }
 
+  void selectNotices({onResult(List<Map<String, dynamic>> results)}) async {
+    print(":::::::::: DB SELECTING Notices ::::::::::");
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      List<Map<String, dynamic>> myList = [];
+      db
+          .rawQuery(
+          "SELECT * FROM ${_StaticDbInformation.tblNotices}  ORDER BY id DESC")
+          .then((lists) {
+        for (int i = 0; i < lists.length; i++) {
+          myList.add(lists[i]);
+          print(
+              ":::::::::: DB SELECT ROW (${i}) => [${lists[i].toString()}] ::::::::::");
+        } // for loop
+        //db.close();
+        onResult(myList);
+      }).catchError((err) {
+        print(
+            ":::::::::: DB ERROR SELECT Notices : ${err.toString()} ::::::::::");
+      });
+    });
+  }
+
   void deleteSurvey({String no = "", onDeleted(bool st)}) async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -717,6 +791,30 @@ class MyDataBase {
     });
   }
 
+  void checkSurveyIsDone({onResult(bool st), String no = ""}) async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      db
+          .rawQuery(
+          "SELECT * FROM ${_StaticDbInformation.tblSurveys} WHERE ${_StaticDbInformation.tblSurveysNo} = '${no.toString()}' and ${_StaticDbInformation.tblSurveysDone} = 'TRUE'")
+          .then((lists) {
+        if (lists.length > 0) {
+          print(
+              ":::::::::: DB SELECT(Survey is done) ROW (${0}) => [${lists.first.toString()}] ::::::::::");
+          //db.close();
+          onResult(true);
+        } else {
+          print(
+              ":::::::::: DB SELECT(Survey is done) ROW (${0}) => Not Found Any Items ::::::::::");
+          //db.close();
+          onResult(false);
+        }
+      });
+    });
+  }
+
   void insertSurveyAnswer({
     String idx,
     String cnt = "0",
@@ -748,9 +846,10 @@ class MyDataBase {
     });
   }
 
-  void updateSurveyisDone({
+  void updateSurveyResult({
     String idx,
-    String voteDone = "FALSE",
+    String qNumber,
+    String result = "",
     onUpdated(),
   }) async {
     var databasesPath = await getDatabasesPath();
@@ -759,7 +858,27 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'UPDATE ${_StaticDbInformation.tblSurveys} SET ${_StaticDbInformation.tblSurveysDone} = "${voteDone.toString()}" WHERE ${_StaticDbInformation.tblSurveysBdIdx} = "${idx.toString()}"');
+            'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET result${qNumber.toString()} = "${result.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}" and ${_StaticDbInformation.tblAnswersSurveyQN} = "${qNumber.toString()}"');
+        print(
+            ":::::::::: DB UPDATE(answer survey Resultxxxy) QUERY => [${id1.toString()}] ::::::::::");
+        //db.close();
+        onUpdated();
+      });
+    });
+  }
+
+  void updateSurveyisDone({
+    String idx,
+    String surveyDone = "FALSE",
+    onUpdated(),
+  }) async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      db.transaction((txn) async {
+        int id1 = await txn.rawInsert(
+            'UPDATE ${_StaticDbInformation.tblSurveys} SET ${_StaticDbInformation.tblSurveysDone} = "${surveyDone.toString()}" WHERE ${_StaticDbInformation.tblSurveysBdIdx} = "${idx.toString()}"');
         print(
             ":::::::::: DB UPDATE(answer survey) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
@@ -769,15 +888,41 @@ class MyDataBase {
   }
 
   void selectSurveyAnswer(
-      {onResult(List<Map<String, dynamic>> results), String idx}) async {
+      {onResult(List<Map<String, dynamic>> results), String idx, String qNumber = ""}) async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
     // open the database
     await openDatabase(path).then((db) {
       List<Map<String, dynamic>> myList = [];
-      db
-          .rawQuery(
-              "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}'")
+      String query = "";
+      if(qNumber != ""){
+        query = "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}' and ${_StaticDbInformation.tblAnswersSurveyQN} = '${qNumber.toString()}'";
+      }else{
+        query = "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}'";
+      }
+      db.rawQuery(query)
+          .then((lists) {
+        for (int i = 0; i < lists.length; i++) {
+          myList.add(lists[i]);
+          print(
+              ":::::::::: DB SELECT ROW (${i}) => [${lists[i].toString()}] ::::::::::");
+        } // for loop
+        //db.close();
+        onResult(myList);
+      });
+    });
+  }
+
+  void selectAllSurveyAnswer(
+      {onResult(List<Map<String, dynamic>> results)}) async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      List<Map<String, dynamic>> myList = [];
+      String query = "";
+      query = "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers}";
+      db.rawQuery(query)
           .then((lists) {
         for (int i = 0; i < lists.length; i++) {
           myList.add(lists[i]);

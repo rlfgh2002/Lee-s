@@ -42,6 +42,8 @@ class HaegisaAlertDialog extends StatefulWidget {
   String content = "";
   String votingPeriod = "";
   List<String> votes = [];
+  String startDate = "";
+  String endDate = "";
 
   HaegisaAlertDialog(
       {String idx,
@@ -49,6 +51,8 @@ class HaegisaAlertDialog extends StatefulWidget {
       double popUpHeight = 0,
       String content,
       String votingPeriod,
+      String startDate,
+      String endDate,
       List<String> votes,
       VoidCallback onPressClose,
       VoidCallback onPressApply}) {
@@ -60,6 +64,8 @@ class HaegisaAlertDialog extends StatefulWidget {
     this.onPressClose = onPressClose;
     this.popUpHeight = popUpHeight;
     this.idx = idx;
+    this.startDate = startDate;
+    this.endDate = endDate;
 
     if (this.isFirst) {
       this.voteGroupItems.add(false);
@@ -138,6 +144,16 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
       );
     }
 
+    String votePeriod = "";
+    String year = this.widget.votingPeriod.substring(0,4);
+    String month = this.widget.votingPeriod.substring(4,6);
+    String day = this.widget.votingPeriod.substring(6,8);
+
+    String hours = this.widget.votingPeriod.substring(8,10);
+    String minutes = this.widget.votingPeriod.substring(10,12);
+    votePeriod = "${year.toString()}.${month.toString()}.${day.toString()} ${hours.toString()}:${minutes.toString()}";
+
+
     return AlertDialog(
       content: Container(
         child: Column(
@@ -198,7 +214,7 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
                   ),
                   SizedBox(width: 5),
                   Text(
-                    this.widget.votingPeriod,
+                    votePeriod,
                     style: TextStyle(
                         color: Statics.shared.colors.titleTextColor,
                         fontSize: Statics.shared.fontSizes.supplementary),

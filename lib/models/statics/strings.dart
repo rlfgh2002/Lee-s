@@ -20,6 +20,7 @@ class _StringsDialogs {
   String survey = "설문조사";
   String surveyingPeriod = "설문기간";
   String submitBtnTitle = "제출하기";
+  String surveyIsDoneAlert = "이미 설문에 참여하셨습니다.";
 
   String wouldYouLikeToBlockPart1Red = "차단";
   String wouldYouLikeToBlockPart2 = "하시겠어요?";

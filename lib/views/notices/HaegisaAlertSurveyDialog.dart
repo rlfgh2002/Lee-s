@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
+import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
+import 'package:haegisa2/models/Survey/SurveyResultPercentageObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
+import 'package:haegisa2/views/notices/HaegisaAlertComplete.dart';
 import 'package:haegisa2/views/notices/SurveyWidget.dart';
 import 'package:http/http.dart' as http;
+import 'package:haegisa2/views/notices/NoticeWidget.dart';
 
 class HaegisaAlertSurveyCheckedListObj
 {
@@ -26,6 +32,8 @@ class HaegisaAlertSurveyCheckedListObj
     this.cnt = cnt;
   }
 }
+
+
 class HaegisaAlertSurveyDialog extends StatefulWidget {
 
   final db = MyDataBase();
@@ -42,13 +50,17 @@ class HaegisaAlertSurveyDialog extends StatefulWidget {
   bool isFirst = true;
   double popUpHeight = 0;
   double popUpWidth = 0;
+  bool isDone = false;
   String content = "";
   String votingPeriod = "";
+  String endDate = "";
+  String startDate = "";
   List<Map<String, dynamic>> surveys = [];
   List<HaegisaAlertSurveyCheckedListObj> surveysChecked = [];
 
-  HaegisaAlertSurveyDialog({String idx,double popUpWidth = 0,double popUpHeight = 0,String content,String votingPeriod,List<Map<String, dynamic>> surveys, VoidCallback onPressClose, VoidCallback onPressApply}){
+  HaegisaAlertSurveyDialog({String endDate, String startDate,bool isDone,String idx,double popUpWidth = 0,double popUpHeight = 0,String content,String votingPeriod,List<Map<String, dynamic>> surveys, VoidCallback onPressClose, VoidCallback onPressApply}){
     this.content = content;
+    this.isDone = isDone;
     this.surveys = surveys;
     this.votingPeriod = votingPeriod;
     this.popUpWidth = popUpWidth;
@@ -56,6 +68,8 @@ class HaegisaAlertSurveyDialog extends StatefulWidget {
     this.onPressClose = onPressClose;
     this.popUpHeight = popUpHeight;
     this.idx = idx;
+    this.startDate = startDate;
+    this.endDate = endDate;
   }
 
   @override
@@ -72,7 +86,50 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
 
     this.widget.voteGroupItems[gId][item] = val;
   }
+
+  showPopUpVotingComplete(
+      {VoidCallback onPressOk,BuildContext context}) {
+    double height = MediaQuery.of(context).size.height / 1.5;
+    double width = MediaQuery.of(context).size.width - 16;
+
+    if (MediaQuery.of(context).size.height < 750) {
+      height = MediaQuery.of(context).size.height - 10;
+    }
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return HaegisaAlertCompleteDialog(
+              popUpWidth: width,
+              onPressOk: () {
+                onPressOk();
+              },
+              popUpHeight: height).dialog();
+        });
+  }
+
   void submitSurvey({String bdxId}) async{
+
+    DateTime now = DateTime.now();
+    DateTime strDate = DateTime.parse(this.widget.startDate);
+    DateTime endDate = DateTime.parse(this.widget.endDate);
+    bool isContinue = false;
+    if(strDate.difference(now).inDays <= 0){
+      if(endDate.difference(now).inDays >= 0){
+        isContinue = true;
+      }
+    }
+    print("CHOSSS1: ${strDate.difference(now).inDays.toString()}");
+    print("CHOSSS2: ${endDate.difference(now).inDays.toString()}");
+
+    if(!isContinue){
+      showPopUpVotingComplete(onPressOk: (){
+        Navigator.pop(this.myContext);
+      },
+        context: this.myContext,
+      );
+
+      return;
+    }
 
     String q1 = "";String q2 = "";String q3 = "";
     String q4 = "";String q5 = "";String q6 = "";
@@ -118,6 +175,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       }
     });
 
+
     MainTabBar.myChild.getUserId(onGetUserId: (uid){
       http.post(Statics.shared.urls.submitSurvey(),
           body: {
@@ -138,6 +196,85 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
           }
       ).then((val){
         print(":::::::::::::::::: Submitting survey was Successful. : ${val.body.toString()} ::::::::::::::::::");
+
+        final String responseBody = utf8.decode(val.bodyBytes);
+        Map<String, dynamic> body = json.decode(responseBody.trim());
+        print("BODY SUMIT: ${body.toString()}");
+
+        if(body['code'].toString() == "204"){
+
+          this.widget.db.updateSurveyisDone(idx: bdxId, surveyDone: "TRUE", onUpdated: (){
+            print(".....::::::::: SURVAY UPDAING DONE IN DATABASE :::::::::.....");
+            if(Notices.staticNoticesPage != null && Notices.staticNoticesPage.myChild != null){
+              Notices.staticNoticesPage.myChild.refreshNotices();
+            }
+
+            for(int i = 0; i<8; i++){
+              this.widget.db.selectSurveyAnswer(idx: bdxId,qNumber: "${i+1}",onResult: (results){
+                results.forEach((item){
+
+                  if(item['result1'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result1'].toString())));
+                  }
+                  if(item['result2'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result2'].toString())));
+                  }
+                  if(item['result3'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result3'].toString())));
+                  }
+                  if(item['result4'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result4'].toString())));
+                  }
+                  if(item['result5'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result5'].toString())));
+                  }
+                  if(item['result6'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result6'].toString())));
+                  }
+                  if(item['result7'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result7'].toString())));
+                  }
+                  if(item['result8'] != null){
+                    MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: int.parse(item['result8'].toString())));
+                  }
+                });
+              });
+            }// for loop
+
+            setState(() {
+              this.widget.bottomButton = afterSurvey();
+              this.widget.surveyList = resultList();
+            });
+
+          });
+          // already submitted
+        }else if(body['code'].toString() == "200"){
+
+          int qCnt = int.parse(body['table'][0]['q_cnt'].toString());
+          int qCount = int.parse(body['table'][0]['q_title']['q1_total'].toString());
+          for(int i = 0; i < qCnt; i++){
+            for(int j = 0; j < qCount; j++){
+              String strPercent = body['table'][0]['q_title']['q${i+1}_item']['q${i+1}_${j+1}_result_percent'].toString();
+              strPercent = strPercent.replaceAll("%", "");
+
+              this.widget.db.updateSurveyResult(idx: body['table'][0]['bd_idx'].toString(), qNumber: "${j+1}",result: strPercent,onUpdated: (){
+                print(".....::::::::: SURVAY UPDAING (q${j+1})={${strPercent.toString()}%} RESULT IN DATABASE :::::::::.....");
+              });
+
+              int percent = int.parse(strPercent);
+              MainTabBar.mainTabBar.mdw.lastSurveyPercentages.add(SurveyResultPercentageObject(qn: i+1,res: percent));
+            }
+          }
+
+          setState(() {
+            this.widget.bottomButton = afterSurvey();
+            this.widget.surveyList = resultList();
+          });
+
+          // submit survey
+        }
+
+
       }).catchError((error){
         print(":::::::::::::::::: error on sending Survey to Server : ${error.toString()} ::::::::::::::::::");
       });
@@ -159,10 +296,6 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
             // Submit this Survey to Server ...
             print("Connect To Server ........");
             this.submitSurvey(bdxId: this.widget.surveysChecked.first.idx);
-            setState(() {
-              this.widget.bottomButton = afterSurvey();
-              this.widget.surveyList = resultList();
-            });
           },),width: (this.widget.popUpWidth-16) / 2),
         ],
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -193,18 +326,18 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
             int oldJ = j + 1;
             bool isChecked = false;
             this.widget.surveysChecked.forEach((val){
-              if(val.idx == this.widget.surveys[i]['surveyIdx']){
+              if(val.idx == this.widget.surveys[i]['surveyIdx'].toString() && val.cnt == this.widget.surveys[i]['qNumber'].toString()){
                 if(oldJ.toString() == val.answer){
                   isChecked = true;
                 }
               }
             });
 
-            SurveyWidget sv = SurveyWidget(width: this.widget.popUpWidth - 64,survey: this.widget.surveys[i]['q${j+1}'],groupName: "voteGroup",itemIndex: i,result: 100,isChecked: isChecked,isAfter: false,surveyIdx: this.widget.surveys[i]['surveyIdx'],qNum: this.widget.surveys[i]['qNumber']
+            SurveyWidget sv = SurveyWidget(myIndex: j,width: this.widget.popUpWidth - 64,survey: this.widget.surveys[i]['q${j+1}'],groupName: "voteGroup",itemIndex: i,isChecked: isChecked,isAfter: false,surveyIdx: this.widget.surveys[i]['surveyIdx'],qNum: this.widget.surveys[i]['qNumber']
               ,
               onTappedTrue: (){
                 int newJ = j + 1;
-                this.widget.surveysChecked.removeWhere((item)=>item.idx == this.widget.surveys[i]['surveyIdx']);
+                this.widget.surveysChecked.removeWhere((item)=>item.idx == this.widget.surveys[i]['surveyIdx'].toString() && item.cnt == this.widget.surveys[i]['qNumber'].toString());
 
                 this.widget.surveysChecked.add(
                     HaegisaAlertSurveyCheckedListObj(
@@ -245,15 +378,10 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
 
     List<Widget> mySurveysList = [];
     for(int i = 0; i < widget.surveys.length; i++){
-      double percent = 5;
-      if(i == 0){
-        percent = 95;
-      }
-
       mySurveysList.add(Padding(child: Text("${this.widget.surveys[i]['title']}"),padding: const EdgeInsets.only(bottom: 8),));
       for(int j = 0; j < 8; j++){
         if(this.widget.surveys[i]['q${j+1}'] != ""){
-          mySurveysList.add(SurveyWidget(width: this.widget.popUpWidth - 64,survey: this.widget.surveys[i]['q${j+1}'],groupName: "voteGroup",itemIndex: i,result: percent,isChecked: true,isAfter: true));
+          mySurveysList.add(SurveyWidget(myIndex: j,width: this.widget.popUpWidth - 64,survey: this.widget.surveys[i]['q${j+1}'],groupName: "voteGroup",itemIndex: i,isChecked: true,isAfter: true));
         }
       }//loop2
     }
@@ -277,12 +405,20 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
     super.initState();
   }
 
+  BuildContext myContext;
+
   @override
   Widget build(BuildContext context) {
 
+    this.myContext = context;
     if (this.widget.isFirst) {
-      this.widget.bottomButton = beforeSurvey();
-      this.widget.surveyList = surveyList();
+      if(!this.widget.isDone){
+        this.widget.bottomButton = beforeSurvey();
+        this.widget.surveyList = surveyList();
+      }else{
+        this.widget.bottomButton = afterSurvey();
+        this.widget.surveyList = resultList();
+      }
       this.widget.isFirst = false;
     }
 

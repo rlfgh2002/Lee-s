@@ -83,6 +83,9 @@ class ChatState extends State<Chat> {
 
   void sendChat({String message,String toId = "", onSent(), onNotSent()}) async {
     MainTabBar.myChild.getUserId(onGetUserId: (uid) {
+
+      makeConversation(chatCurrentConvId);
+
       String y = DateTime.now().year.toString();
       String m = DateTime.now().month.toString();
       String d = DateTime.now().day.toString();
@@ -293,6 +296,33 @@ class ChatState extends State<Chat> {
     });
   }
 
+  void makeConversation(String chatCurrentConvId){
+    this.widget.db.checkConversationExist(
+        onResult: (result) {},
+        userId: MiddleWare.shared.user.UID,
+        convId: chatCurrentConvId,
+        onNoResult: () {
+
+          this.widget.db.insertConversation(
+            userId: MiddleWare.shared.user.UID,
+            convId: chatCurrentConvId,
+            createDate: DateTime.now().toString(),
+            fromName: MiddleWare.shared.user.fullName,
+            schoolName: MiddleWare.shared.user.caption,
+            schoolGisu: MiddleWare.shared.user.gisu,
+            onInserted: () {
+              print(
+                  ":::::::::: NEW Conversation GENERATED Succesfully ${chatCurrentConvId.toString()} ::::::::::");
+            },
+            onNoInerted: () {
+              print(
+                  ":::::::::: NEW Conversation GENERATING FAILURE. ::::::::::");
+            },
+          );
+
+        });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -306,7 +336,6 @@ class ChatState extends State<Chat> {
 
     _scrollController =
         new ScrollController(initialScrollOffset: 0.0, keepScrollOffset: true);
-    this.refreshChats();
 
     if (MiddleWare.shared.conversationID == 'xxx') {
       chatCurrentConvId = this.widget.db.generateRandomNumber(6).toString();
@@ -314,30 +343,17 @@ class ChatState extends State<Chat> {
           onResult: (result) {
             MiddleWare.shared.conversationID = result["convId"].toString();
             chatCurrentConvId = result["convId"].toString();
+            this.refreshChats();
           },
           userId: MiddleWare.shared.user.UID,
           onNoResult: () {
             MiddleWare.shared.conversationID = chatCurrentConvId;
-            this.widget.db.insertConversation(
-                  userId: MiddleWare.shared.user.UID,
-                  convId: chatCurrentConvId,
-                  createDate: DateTime.now().toString(),
-                  fromName: MiddleWare.shared.user.fullName,
-                  schoolName: MiddleWare.shared.user.caption,
-                  schoolGisu: MiddleWare.shared.user.gisu,
-                  onInserted: () {
-                    print(
-                        ":::::::::: NEW Conversation GENERATED Succesfully ${chatCurrentConvId.toString()} ::::::::::");
-                  },
-                  onNoInerted: () {
-                    print(
-                        ":::::::::: NEW Conversation GENERATING FAILURE. ::::::::::");
-                  },
-                );
+            this.refreshChats();
           });
     } // new Conversation Id Must be Generate
     else {
       chatCurrentConvId = MiddleWare.shared.conversationID;
+      this.refreshChats();
     }
 
     if (chatCurrentConvId != 'x0x0' && MiddleWare.shared.user.UID != '0') {
@@ -378,6 +394,8 @@ class ChatState extends State<Chat> {
     setState(() {
       MiddleWare.shared.messages = [];
     });
+
+    print("chatCurrentConvId: ${chatCurrentConvId}");
     this.widget.db.selectChats(
         onResult: (items) {
           for (int i = 0; i < items.length; i++) {
@@ -414,6 +432,7 @@ class ChatState extends State<Chat> {
   @override
   void dispose() {
     MiddleWare.shared.isFirst = true;
+    chatCurrentConvId = "";
     print("CCCCCCC: ${chatCurrentConvId.toString()}");
 
     print("DISPOSSSSSSSS CHAT PAGE");

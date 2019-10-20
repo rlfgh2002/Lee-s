@@ -5,13 +5,15 @@ import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/controllers/profile/Profile.dart';
 import 'package:haegisa2/controllers/findUser/FindUser.dart';
+import 'package:haegisa2/models/Survey/SurveyResultPercentageObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/chats/ConversationWidget.dart';
 
 class MiddleWare {
-  static MiddleWare shared = MiddleWare();
-  _MiddleWare() {}
+  static MiddleWare sh
+  
+  List<SurveyResultPercentageObject>lastSurveyPercentages = [];
 
 
   String shouldMoveToThisConvId = "";

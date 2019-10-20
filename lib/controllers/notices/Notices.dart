@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:haegisa2/controllers/NoticeWidgetSingle/NoticeSingle.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -55,6 +56,8 @@ class NoticesState extends State<Notices> {
       String idx,
       String votingPeriod,
       List<String> votes,
+      String startDate,
+      String endDate,
       VoidCallback onPressApply,
       VoidCallback onPressClose,
       NoticeType nt = NoticeType.Vote,
@@ -73,6 +76,8 @@ class NoticesState extends State<Notices> {
             return HaegisaAlertDialog(
                 votes: votes,
                 votingPeriod: votingPeriod,
+                startDate:startDate,
+                endDate:endDate,
                 popUpWidth: popUpWidth,
                 popUpHeight: height,
                 idx: idx,
@@ -87,6 +92,9 @@ class NoticesState extends State<Notices> {
           else {
             return HaegisaAlertSurveyDialog(
                 surveys: surveys,
+                isDone: false,
+                startDate: startDate,
+                endDate: endDate,
                 votingPeriod: votingPeriod,
                 popUpWidth: popUpWidth,
                 popUpHeight: height,
@@ -162,6 +170,7 @@ class NoticesState extends State<Notices> {
 
     widget.db.selectSurvey(onResult: (res) {
       for (int i = 0; i < res.length; i++) {
+
         NoticeWidget item = NoticeWidget(
           title: res[i]['subject'].toString(),
           shortDescription: res[i]['contents'].toString(),
@@ -169,49 +178,91 @@ class NoticesState extends State<Notices> {
           type: NoticeType.Survey,
           idx: "",
           onTapped: () {
-            widget.db.selectSurveyAnswer(
-                idx: res[i]['bd_idx'],
-                onResult: (surveys) {
-                  if (surveys.length > 0) {
-                    showPopUp(
-                        content: res[i]['contents'].toString(),
-                        nt: NoticeType.Survey,
-                        votingPeriod: " ~ ${res[i]['end_date'].toString()}",
-                        votes: [],
-                        surveys: surveys,
-                        idx: res[i]['bd_idx'].toString(),
-                        onPressClose: () {
-                          Navigator.pop(_scaffold.currentContext);
-                        },
-                        onPressApply: () {
-                          // Survey was Successful
-                          Navigator.pop(_scaffold.currentContext);
-                          showPopUpVotingComplete(
-                              onPressOk: () {
-                                Navigator.pop(_scaffold.currentContext);
-                              },
-                              noticeType: NoticeType.Survey);
-                        });
-                  } else {
-                    showPopUp(
-                        content: res[i]['contents'].toString(),
-                        votingPeriod: " ~ ${res[i]['end_date'].toString()}",
-                        votes: ["a1", "a2", "a3"],
-                        idx: res[i]['bd_idx'].toString(),
-                        onPressClose: () {
-                          Navigator.pop(_scaffold.currentContext);
-                        },
-                        onPressApply: () {
-                          // Survey was Successful
-                          Navigator.pop(_scaffold.currentContext);
-                          showPopUpVotingComplete(
-                              onPressOk: () {
-                                Navigator.pop(_scaffold.currentContext);
-                              },
-                              noticeType: NoticeType.Survey);
-                        });
-                  }
-                });
+
+            if(res[i]['isDone'].toString() != "TRUE"){
+              String startDateStr = res[i]['start_date'].toString();
+              String endDateStr = res[i]['end_date'].toString();
+              String votingDate = "";
+              votingDate = startDateStr.replaceAll("-", ".");
+              votingDate = "${votingDate.toString()} - ";
+              int i3 = 0;
+              endDateStr.split("-").forEach((item){
+                if(i3 == 1){
+                  votingDate = "${votingDate.toString()}${item.toString()}.";
+                }else if(i3 == 2){
+                  votingDate = "${votingDate.toString()}${item.toString()}";
+                }
+                i3 += 1;
+              });
+
+              widget.db.selectSurveyAnswer(
+                  idx: res[i]['bd_idx'],
+                  onResult: (surveys) {
+                    if (surveys.length > 0) {
+                      showPopUp(
+                          content: res[i]['contents'].toString(),
+                          startDate: startDateStr,
+                          endDate: endDateStr,
+                          nt: NoticeType.Survey,
+                          votingPeriod: " ~ ${votingDate.toString()}",
+                          votes: [],
+                          surveys: surveys,
+                          idx: res[i]['bd_idx'].toString(),
+                          onPressClose: () {
+                            Navigator.pop(_scaffold.currentContext);
+                          },
+                          onPressApply: () {
+                            // Survey was Successful
+                            Navigator.pop(_scaffold.currentContext);
+                            showPopUpVotingComplete(
+                                onPressOk: () {
+                                  Navigator.pop(_scaffold.currentContext);
+                                },
+                                noticeType: NoticeType.Survey);
+                          });
+                    } else {
+                      showPopUp(
+                          content: res[i]['contents'].toString(),
+                          startDate: startDateStr,
+                          endDate: endDateStr,
+                          votingPeriod: " ~ ${votingDate.toString()}",
+                          votes: ["a1", "a2", "a3"],
+                          idx: res[i]['bd_idx'].toString(),
+                          onPressClose: () {
+                            Navigator.pop(_scaffold.currentContext);
+                          },
+                          onPressApply: () {
+                            // Survey was Successful
+                            Navigator.pop(_scaffold.currentContext);
+                            showPopUpVotingComplete(
+                                onPressOk: () {
+                                  Navigator.pop(_scaffold.currentContext);
+                                },
+                                noticeType: NoticeType.Survey);
+                          });
+                    }
+                  });
+              // survey is not Done yet!
+            }else{
+              showSnackBar(Strings.shared.dialogs.surveyIsDoneAlert);
+              // survey is done.
+            }
+          },
+        );
+        myList.add(item);
+      }
+    });
+
+    widget.db.selectNotices(onResult: (res) {
+      for (int i = 0; i < res.length; i++) {
+
+        NoticeWidget item = NoticeWidget(
+          title: res[i]['subject'].toString(),
+          shortDescription: res[i]['content'].toString(),
+          time: "2019-10-20",
+          type: NoticeType.Notice,
+          onTapped: () {
+            Navigator.push(context, new MaterialPageRoute(builder: (context) => new NoticeSingle(obj: res.first)));
           },
         );
         myList.add(item);
@@ -225,6 +276,22 @@ class NoticesState extends State<Notices> {
     this.widget.db.selectVotes(onResult: (results) {
       if (results.length > 0) {
         for (int i = 0; i < results.length; i++) {
+
+          String startDateStr = results[i].startDate.toString();
+          String endDateStr = results[i].endDate.toString();
+          String votingDate = "";
+          votingDate = startDateStr.replaceAll("-", ".");
+          votingDate = "${votingDate.toString()} - ";
+          int i3 = 0;
+          endDateStr.split("-").forEach((item){
+            if(i3 == 1){
+              votingDate = "${votingDate.toString()}${item.toString()}.";
+            }else if(i3 == 2){
+              votingDate = "${votingDate.toString()}${item.toString()}";
+            }
+            i3 += 1;
+          });
+
           NoticeWidget item = NoticeWidget(
             title: results[i].subject.toString(),
             shortDescription: results[i].content,
@@ -260,8 +327,10 @@ class NoticesState extends State<Notices> {
 
                         showPopUp(
                             content: results[i].content,
-                            votingPeriod: " ~ ${results[i].endDate}",
+                            votingPeriod: " ~ ${votingDate.toString()}",
                             votes: answers,
+                            startDate: startDateStr,
+                            endDate: endDateStr,
                             surveys: [],
                             idx: answer['voteIdx'],
                             onPressClose: () {
@@ -366,11 +435,11 @@ class NoticesState extends State<Notices> {
       );
     }
 
-    if (MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId != "") {
+    if(MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId != ""){
       String vId = MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId;
       MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId = "";
 
-      Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
+      Future.delayed(Duration(milliseconds: 500)).whenComplete((){
         this.openNotice(vId);
       });
     }

@@ -37,6 +37,9 @@ class _SurveysTabsState extends State<SurveysTabs>
   showPopUp(
       {String content,
       String idx,
+        String startDate,
+        String endDate,
+      bool isDone,
       String votingPeriod,
       List<String> votes,
       VoidCallback onPressApply,
@@ -71,10 +74,13 @@ class _SurveysTabsState extends State<SurveysTabs>
           else {
             return HaegisaAlertSurveyDialog(
                 surveys: surveys,
+                startDate: startDate,
+                endDate: endDate,
                 votingPeriod: votingPeriod,
                 popUpWidth: popUpWidth,
                 popUpHeight: height,
                 idx: idx,
+                isDone:isDone,
                 content: content,
                 onPressApply: () {
                   onPressApply();
@@ -149,8 +155,15 @@ class _SurveysTabsState extends State<SurveysTabs>
       List<NoticeWidget> myList2 = [];
 
       for (int i = 0; i < res.length; i++) {
+
+        bool isDoneSurvey = false;
+        if (res[i]['isDone'] == "TRUE") {
+          isDoneSurvey = true;
+        }
+
         NoticeWidget item = NoticeWidget(
           isOnSurveysTabs: true,
+          isDone:isDoneSurvey,
           title: res[i]['subject'].toString(),
           shortDescription: res[i]['contents'].toString(),
           time: res[i]['start_date'].toString(),
@@ -159,11 +172,30 @@ class _SurveysTabsState extends State<SurveysTabs>
             widget.db.selectSurveyAnswer(
                 idx: res[i]['bd_idx'],
                 onResult: (surveys) {
+
+                  String startDateStr = res[i]['start_date'].toString();
+                  String endDateStr = res[i]['end_date'].toString();
+                  String votingDate = "";
+                  votingDate = startDateStr.replaceAll("-", ".");
+                  votingDate = "${votingDate.toString()} - ";
+                  int i3 = 0;
+                  endDateStr.split("-").forEach((item){
+                    if(i3 == 1){
+                      votingDate = "${votingDate.toString()}${item.toString()}.";
+                    }else if(i3 == 2){
+                      votingDate = "${votingDate.toString()}${item.toString()}";
+                    }
+                    i3 += 1;
+                  });
+
                   if (surveys.length > 0) {
                     showPopUp(
                         content: res[i]['contents'].toString(),
+                        startDate: startDateStr,
+                        endDate: endDateStr,
                         nt: NoticeType.Survey,
-                        votingPeriod: " ~ ${res[i]['end_date'].toString()}",
+                        votingPeriod: " ~ ${votingDate.toString()}",
+                        isDone:isDoneSurvey,
                         votes: [],
                         surveys: surveys,
                         idx: res[i]['bd_idx'].toString(),
@@ -182,8 +214,11 @@ class _SurveysTabsState extends State<SurveysTabs>
                   } else {
                     showPopUp(
                         content: res[i]['contents'].toString(),
-                        votingPeriod: " ~ ${res[i]['end_date'].toString()}",
+                        startDate: startDateStr,
+                        endDate: endDateStr,
+                        votingPeriod: " ~ ${votingDate.toString()}",
                         votes: ["a1", "a2", "a3"],
+                        isDone:isDoneSurvey,
                         idx: res[i]['bd_idx'].toString(),
                         onPressClose: () {
                           Navigator.pop(_scaffold.currentContext);

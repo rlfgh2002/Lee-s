@@ -7,6 +7,7 @@ import 'package:haegisa2/controllers/Chat/Chat.dart';
 import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/models/Vote/VoteObject.dart';
+import 'package:haegisa2/models/myFuncs.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/MainTabBar/locationPopUpWidget.dart';
 import 'MiddleWare.dart';
@@ -263,8 +264,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
+      print('MSGX=> on messageX Main $message');
         if (message['notification']['title'] == null) {
-          print('MSGX=> on messageX Main $message');
           analiseMessage(message, true, false);
         }
       },
@@ -376,6 +377,27 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
+        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
+
+          VoteObject noticeItem = VoteObject.fromJson(message);
+
+          myDb.insertNotice(
+              fromId: noticeItem.fromId,
+              fromName: noticeItem.fromName,
+              subject: noticeItem.subject,
+              noticeId: "",
+              content: noticeItem.content,
+              onInserted: (status){
+                if(status){
+
+                }// on inserted
+                else{
+
+                }// on no inserted
+              }
+          );
+
+        } // Notice Notification
       }
     } // notificationType is NOT null
 
@@ -571,6 +593,36 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
+        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
+
+          if(isOnResume){
+            //this.widget.mdw.shouldMoveToThisVoteId = message['data']['idx'].toString();
+            setState(() {
+              MiddleWare.shared.currentIndex = 3;
+              MiddleWare.shared.tabc.animateTo(3,duration: Duration(seconds: 0));
+            });
+            return;
+          }
+
+          VoteObject noticeItem = VoteObject.fromJson(message);
+          String noticeId = randomChatId();
+          widget.db.insertNotice(
+            fromId: noticeItem.fromId,
+            fromName: noticeItem.fromName,
+            subject: noticeItem.subject,
+            noticeId: noticeId,
+            content: noticeItem.content,
+            onInserted: (status){
+              if(status){
+
+              }// on inserted
+              else{
+
+              }// on no inserted
+            }
+          );
+
+        } // Notice Notification
       }
     } // notificationType is NOT null
   }
