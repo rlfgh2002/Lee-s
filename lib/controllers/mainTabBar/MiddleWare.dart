@@ -11,10 +11,9 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/chats/ConversationWidget.dart';
 
 class MiddleWare {
-  static MiddleWare sh
-  
-  List<SurveyResultPercentageObject>lastSurveyPercentages = [];
+  static MiddleWare shared;
 
+  List<SurveyResultPercentageObject> lastSurveyPercentages = [];
 
   String shouldMoveToThisConvId = "";
   String shouldMoveToThisFromId = "";
