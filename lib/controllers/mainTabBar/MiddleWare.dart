@@ -11,7 +11,8 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/chats/ConversationWidget.dart';
 
 class MiddleWare {
-  static MiddleWare shared;
+  static MiddleWare shared = MiddleWare();
+  _MiddleWare() {}
 
   List<SurveyResultPercentageObject> lastSurveyPercentages = [];
 
