@@ -167,16 +167,17 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                      color: Color.fromRGBO(235, 239, 245, 1),
-                    ),
-                    boxShadow: [
-                      new BoxShadow(
-                          color: Color.fromRGBO(235, 239, 245, 1),
-                          offset: new Offset(0.0, 0.0),
-                          spreadRadius: 2.0)
-                    ]),
+                  color: Colors.white,
+                  border: new Border.all(
+                    color: Color.fromRGBO(235, 239, 245, 1),
+                  ),
+                  // boxShadow: [
+                  //   new BoxShadow(
+                  //       color: Color.fromRGBO(235, 239, 245, 1),
+                  //       offset: new Offset(0.0, 0.0),
+                  //       spreadRadius: 2.0)
+                  // ]
+                ),
                 margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
                 child: Column(children: [
                   Container(
@@ -269,21 +270,21 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                      color: Color.fromRGBO(235, 239, 245, 1),
-                    ),
-                    boxShadow: [
-                      new BoxShadow(
-                          color: Color.fromRGBO(235, 239, 245, 1),
-                          offset: new Offset(0.0, 0.0),
-                          spreadRadius: 2.0)
-                    ]),
+                  color: Colors.white,
+                  border: new Border.all(
+                    color: Color.fromRGBO(235, 239, 245, 1),
+                  ),
+                  // boxShadow: [
+                  //   new BoxShadow(
+                  //       color: Color.fromRGBO(235, 239, 245, 1),
+                  //       offset: new Offset(0.0, 0.0),
+                  //       spreadRadius: 2.0)
+                  // ]
+                ),
                 margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
 
                 child: Column(children: [
                   Container(
-                    width: deviceWidth / 1.1,
                     child: Column(children: <Widget>[
                       Container(
                           child: FlatButton(
@@ -356,23 +357,23 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                      color: Color.fromRGBO(235, 239, 245, 1),
-                    ),
-                    boxShadow: [
-                      new BoxShadow(
-                          color: Color.fromRGBO(235, 239, 245, 1),
-                          offset: new Offset(0.0, 0.0),
-                          blurRadius: 10.0,
-                          spreadRadius: 2.0)
-                    ]),
+                  color: Colors.white,
+                  border: new Border.all(
+                    color: Color.fromRGBO(235, 239, 245, 1),
+                  ),
+                  // boxShadow: [
+                  //   new BoxShadow(
+                  //       color: Color.fromRGBO(235, 239, 245, 1),
+                  //       offset: new Offset(0.0, 0.0),
+                  //       blurRadius: 10.0,
+                  //       spreadRadius: 2.0)
+                  // ]
+                ),
                 margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
                 child: Column(children: [
                   Container(
                     child: Column(children: <Widget>[
                       Container(
-                          width: deviceWidth / 1.1,
                           child: FlatButton(
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
@@ -443,17 +444,18 @@ class _HomeState extends State<Home> {
               Container(
                   alignment: Alignment.center,
                   decoration: new BoxDecoration(
-                      color: Colors.white,
-                      border: new Border.all(
-                        color: Color.fromRGBO(235, 239, 245, 1),
-                      ),
-                      boxShadow: [
-                        new BoxShadow(
-                            color: Color.fromRGBO(235, 239, 245, 1),
-                            offset: new Offset(3.0, 3.0),
-                            blurRadius: 0.5,
-                            spreadRadius: 0)
-                      ]),
+                    color: Colors.white,
+                    border: new Border.all(
+                      color: Color.fromRGBO(235, 239, 245, 1),
+                    ),
+                    // boxShadow: [
+                    //   new BoxShadow(
+                    //       color: Color.fromRGBO(235, 239, 245, 1),
+                    //       offset: new Offset(3.0, 3.0),
+                    //       blurRadius: 0.5,
+                    //       spreadRadius: 0)
+                    // ]
+                  ),
                   margin: EdgeInsets.only(left: 10, right: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -695,17 +697,18 @@ class _HomeState extends State<Home> {
               Image.asset('Resources/Icons/Line3.png'),
               Container(
                 decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                      color: Color.fromRGBO(235, 239, 245, 1),
-                    ),
-                    boxShadow: [
-                      new BoxShadow(
-                          color: Color.fromRGBO(235, 239, 245, 1),
-                          offset: new Offset(3.0, 3.0),
-                          blurRadius: 0.5,
-                          spreadRadius: 0)
-                    ]),
+                  color: Colors.white,
+                  border: new Border.all(
+                    color: Color.fromRGBO(235, 239, 245, 1),
+                  ),
+                  // boxShadow: [
+                  //   new BoxShadow(
+                  //       color: Color.fromRGBO(235, 239, 245, 1),
+                  //       offset: new Offset(3.0, 3.0),
+                  //       blurRadius: 0.5,
+                  //       spreadRadius: 0)
+                  // ]
+                ),
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: FlatButton(
                   splashColor: Colors.transparent,
@@ -721,17 +724,18 @@ class _HomeState extends State<Home> {
               Image.asset('Resources/Icons/Line3.png'),
               Container(
                 decoration: new BoxDecoration(
-                    color: Colors.white,
-                    border: new Border.all(
-                      color: Color.fromRGBO(235, 239, 245, 1),
-                    ),
-                    boxShadow: [
-                      new BoxShadow(
-                          color: Color.fromRGBO(235, 239, 245, 1),
-                          offset: new Offset(3.0, 3.0),
-                          blurRadius: 0.5,
-                          spreadRadius: 0)
-                    ]),
+                  color: Colors.white,
+                  border: new Border.all(
+                    color: Color.fromRGBO(235, 239, 245, 1),
+                  ),
+                  // boxShadow: [
+                  //   new BoxShadow(
+                  //       color: Color.fromRGBO(235, 239, 245, 1),
+                  //       offset: new Offset(3.0, 3.0),
+                  //       blurRadius: 0.5,
+                  //       spreadRadius: 0)
+                  // ]
+                ),
                 margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
                 child: FlatButton(
                   splashColor: Colors.transparent,

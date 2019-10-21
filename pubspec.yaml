@@ -176,6 +176,7 @@ flutter:
 
     # map
     - Resources/Images/map.png
+    - Resources/Images/haegisa_map.jpg
     - Resources/Icons/mapDownload.png
     - Resources/Icons/icon_location.png
 

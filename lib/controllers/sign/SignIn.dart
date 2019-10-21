@@ -310,7 +310,7 @@ class _SignInState extends State<SignIn> {
     if (userInformation.userDeviceOS == "i") {
       height = MediaQuery.of(context).size.height / 1.2;
     } else {
-      height = MediaQuery.of(context).size.height / 1.4;
+      height = MediaQuery.of(context).size.height / 1.6;
     }
     return AlertDialog(
       contentPadding: EdgeInsets.all(0.0),

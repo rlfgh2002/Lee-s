@@ -155,7 +155,7 @@ class _BarcodeState extends State<Barcode> {
                       top: deviceHeight / 20,
                     ),
                     child: Text(
-                        "원이 되시면 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다.",
+                        "정회원이 되시면 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다.",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           color: Statics.shared.colors.titleTextColor,
@@ -179,7 +179,7 @@ class _BarcodeState extends State<Barcode> {
                             showDialog(
                                 barrierDismissible: false,
                                 context: context,
-                                builder: (_) => authAlert());
+                                builder: (_) => requestAlert());
                           })),
                 ],
               )),
@@ -188,12 +188,12 @@ class _BarcodeState extends State<Barcode> {
     }
   }
 
-  Widget authAlert() {
+  Widget requestAlert() {
     var height;
     if (userInformation.userDeviceOS == "i") {
       height = MediaQuery.of(context).size.height / 1.2;
     } else {
-      height = MediaQuery.of(context).size.height / 1.4;
+      height = MediaQuery.of(context).size.height / 1.35;
     }
     return AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
@@ -221,9 +221,6 @@ class _BarcodeState extends State<Barcode> {
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 60,
             ),
             Container(
                 child: Container(
@@ -264,9 +261,6 @@ class _BarcodeState extends State<Barcode> {
                 ],
               ),
             )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 60,
-            ),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 child: Container(
@@ -294,9 +288,6 @@ class _BarcodeState extends State<Barcode> {
                     ],
                   ),
                 )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 60,
-            ),
             Container(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
@@ -306,6 +297,9 @@ class _BarcodeState extends State<Barcode> {
                     height: MediaQuery.of(context).size.height / 14,
                     child: FlatButton(
                       color: Statics.shared.colors.captionColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(0.0),
+                      ),
                       child: Text(
                         "닫기",
                         style: TextStyle(
@@ -323,6 +317,9 @@ class _BarcodeState extends State<Barcode> {
                     height: MediaQuery.of(context).size.height / 14,
                     child: FlatButton(
                       color: Statics.shared.colors.mainColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(0.0),
+                      ),
                       child: Text(
                         "신청하기",
                         style: TextStyle(

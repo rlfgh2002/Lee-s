@@ -115,7 +115,7 @@ class _ProfileState extends State<Profile> {
                                       showDialog(
                                           barrierDismissible: false,
                                           context: context,
-                                          builder: (_) => authAlert());
+                                          builder: (_) => requestAlert());
                                     },
                                     child: Text(Strings
                                         .shared.controllers.profile.submitType),
@@ -433,12 +433,12 @@ class _ProfileState extends State<Profile> {
         ));
   }
 
-  Widget authAlert() {
+  Widget requestAlert() {
     var height;
     if (userInformation.userDeviceOS == "i") {
       height = MediaQuery.of(context).size.height / 1.2;
     } else {
-      height = MediaQuery.of(context).size.height / 1.4;
+      height = MediaQuery.of(context).size.height / 1.35;
     }
     return AlertDialog(
       contentPadding: EdgeInsets.all(0.0),
@@ -466,9 +466,6 @@ class _ProfileState extends State<Profile> {
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 60,
             ),
             Container(
                 child: Container(
@@ -509,9 +506,6 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 60,
-            ),
             Container(
                 width: MediaQuery.of(context).size.width / 1.5,
                 child: Container(
@@ -539,9 +533,6 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 )),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 60,
-            ),
             Container(
               padding: const EdgeInsets.only(top: 20),
               child: Row(
@@ -551,6 +542,9 @@ class _ProfileState extends State<Profile> {
                     height: MediaQuery.of(context).size.height / 14,
                     child: FlatButton(
                       color: Statics.shared.colors.captionColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(0.0),
+                      ),
                       child: Text(
                         "닫기",
                         style: TextStyle(
@@ -568,6 +562,9 @@ class _ProfileState extends State<Profile> {
                     height: MediaQuery.of(context).size.height / 14,
                     child: FlatButton(
                       color: Statics.shared.colors.mainColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(0.0),
+                      ),
                       child: Text(
                         "신청하기",
                         style: TextStyle(
@@ -587,7 +584,7 @@ class _ProfileState extends State<Profile> {
                         }
                       },
                     ),
-                  )),
+                  ))
                 ],
               ),
             )

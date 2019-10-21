@@ -264,7 +264,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-      print('MSGX=> on messageX Main $message');
+        print('MSGX=> on messageX Main $message');
         if (message['notification']['title'] == null) {
           analiseMessage(message, true, false);
         }
@@ -377,8 +377,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
-        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
-
+        else if (message['data']['notificationType'].toString().toLowerCase() ==
+            "notice") {
           VoteObject noticeItem = VoteObject.fromJson(message);
 
           myDb.insertNotice(
@@ -387,16 +387,11 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               subject: noticeItem.subject,
               noticeId: "",
               content: noticeItem.content,
-              onInserted: (status){
-                if(status){
-
-                }// on inserted
-                else{
-
-                }// on no inserted
-              }
-          );
-
+              onInserted: (status) {
+                if (status) {
+                } // on inserted
+                else {} // on no inserted
+              });
         } // Notice Notification
       }
     } // notificationType is NOT null
@@ -593,13 +588,14 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
-        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
-
-          if(isOnResume){
+        else if (message['data']['notificationType'].toString().toLowerCase() ==
+            "notice") {
+          if (isOnResume) {
             //this.widget.mdw.shouldMoveToThisVoteId = message['data']['idx'].toString();
             setState(() {
               MiddleWare.shared.currentIndex = 3;
-              MiddleWare.shared.tabc.animateTo(3,duration: Duration(seconds: 0));
+              MiddleWare.shared.tabc
+                  .animateTo(3, duration: Duration(seconds: 0));
             });
             return;
           }
@@ -607,21 +603,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           VoteObject noticeItem = VoteObject.fromJson(message);
           String noticeId = randomChatId();
           widget.db.insertNotice(
-            fromId: noticeItem.fromId,
-            fromName: noticeItem.fromName,
-            subject: noticeItem.subject,
-            noticeId: noticeId,
-            content: noticeItem.content,
-            onInserted: (status){
-              if(status){
-
-              }// on inserted
-              else{
-
-              }// on no inserted
-            }
-          );
-
+              fromId: noticeItem.fromId,
+              fromName: noticeItem.fromName,
+              subject: noticeItem.subject,
+              noticeId: noticeId,
+              content: noticeItem.content,
+              onInserted: (status) {
+                if (status) {
+                } // on inserted
+                else {} // on no inserted
+              });
         } // Notice Notification
       }
     } // notificationType is NOT null

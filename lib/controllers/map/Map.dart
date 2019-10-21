@@ -12,6 +12,7 @@ import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
 import 'package:url_launcher/url_launcher.dart';
@@ -208,81 +209,88 @@ class _MapPageState extends State<MapPage> {
                             scale: 3.0,
                           ),
                           onPressed: () async {
-                            final myFile =
-                                File(_localPath + "/haegisa_map.jpg");
-                            var fileURL =
-                                "https://mariners.or.kr/uploads/haegisa_map.jpg";
+                            ByteData data = await rootBundle
+                                .load("Resources/Images/haegisa_map.jpg");
+                            List<int> bytes = data.buffer.asUint8List(
+                                data.offsetInBytes, data.lengthInBytes);
+                            await File(_localPath + "/haegisa_map.jpg")
+                                .writeAsBytes(bytes);
 
-                            if (myFile.existsSync()) {
-                              isDownload = false;
-                            } else {
-                              isDownload = true;
-                            }
+                            OpenFile.open(_localPath + "/haegisa_map.jpg");
+                            // final myFile =
+                            //     File(_localPath + "/haegisa_map.jpg");
+                            // var fileURL =
+                            //     "https://mariners.or.kr/uploads/haegisa_map.jpg";
 
-                            if (isDownload == true) {
-                              print(fileURL);
-                              var changeURL;
-                              if (userInformation.userDeviceOS != "i") {
-                                changeURL = fileURL.replaceAll(
-                                    new RegExp("https://"), "http://");
-                              } else {
-                                changeURL = fileURL;
-                              }
+                            // if (myFile.existsSync()) {
+                            //   isDownload = false;
+                            // } else {
+                            //   isDownload = true;
+                            // }
 
-                              final taskId = await FlutterDownloader.enqueue(
-                                url: changeURL,
-                                savedDir: _localPath,
-                                showNotification:
-                                    true, // show download progress in status bar (for Android)
-                                openFileFromNotification:
-                                    true, // click on notification to open downloaded file (for Android)
-                              );
+                            // if (isDownload == true) {
+                            //   print(fileURL);
+                            //   var changeURL;
+                            //   if (userInformation.userDeviceOS != "i") {
+                            //     changeURL = fileURL.replaceAll(
+                            //         new RegExp("https://"), "http://");
+                            //   } else {
+                            //     changeURL = fileURL;
+                            //   }
 
-                              FlutterDownloader.registerCallback(
-                                  (id, status, progress) {
-                                // code to update your UI
-                                if (status == DownloadTaskStatus.complete) {
-                                  FlutterDownloader.open(taskId: taskId);
-                                  print("다운완료");
-                                  _displaySnackBar(context, "다운로드 완료");
-                                  OpenFile.open(_localPath +
-                                      "/haegisa_map.jpg"); //열때는 확장자명 pdf로, 그외는 hgs
-                                  return;
-                                } else if (status ==
-                                    DownloadTaskStatus.failed) {
-                                  print("다운실패");
-                                  _displaySnackBar(context, "다운로드 실패");
-                                  return;
-                                }
-                              });
+                            //   final taskId = await FlutterDownloader.enqueue(
+                            //     url: changeURL,
+                            //     savedDir: _localPath,
+                            //     showNotification:
+                            //         true, // show download progress in status bar (for Android)
+                            //     openFileFromNotification:
+                            //         true, // click on notification to open downloaded file (for Android)
+                            //   );
 
-                              var file = Directory(_localPath).listSync();
-                              print(file);
-                            } else {
-                              print("파일 오픈");
-                              //launch(fileURL);
+                            //   // FlutterDownloader.registerCallback(
+                            //   //     (id, status, progress) {
+                            //   //   // code to update your UI
+                            //   //   if (status == DownloadTaskStatus.complete) {
+                            //   //     FlutterDownloader.open(taskId: taskId);
+                            //   //     print("다운완료");
+                            //   //     _displaySnackBar(context, "다운로드 완료");
+                            //   //     OpenFile.open(_localPath +
+                            //   //         "/haegisa_map.jpg"); //열때는 확장자명 pdf로, 그외는 hgs
+                            //   //     return;
+                            //   //   } else if (status ==
+                            //   //       DownloadTaskStatus.failed) {
+                            //   //     print("다운실패");
+                            //   //     _displaySnackBar(context, "다운로드 실패");
+                            //   //     return;
+                            //   //   }
+                            //   // });
 
-                              //해운선사 지도 확장자명 변경
-                              //처음 선택시는 hgs를 pdf로 변경해서 써야함.
-                              //그이후에는 계속적 pdf로 실행됨(재시작 전까지)
+                            //   var file = Directory(_localPath).listSync();
+                            //   print(file);
+                            // } else {
+                            //   print("파일 오픈");
 
-                              OpenFile.open(_localPath + "/haegisa_map.jpg");
+                            //   //launch(fileURL);
 
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => FullPdfViewerScreen(
-                              //           _localPath + "/haegisa_map.pdf")),
-                              // );
+                            //   //해운선사 지도 확장자명 변경
+                            //   //처음 선택시는 hgs를 pdf로 변경해서 써야함.
+                            //   //그이후에는 계속적 pdf로 실행됨(재시작 전까지)
 
-                              // final ByteData bytes = await DefaultAssetBundle.of(context)
-                              //     .load(_localPath + "/" + serverFileName);
-                              // final Uint8List list = bytes.buffer.asUint8List();
+                            //   // Navigator.push(
+                            //   //   context,
+                            //   //   MaterialPageRoute(
+                            //   //       builder: (context) => FullPdfViewerScreen(
+                            //   //           _localPath + "/haegisa_map.pdf")),
+                            //   // );
 
-                              // final file = await File(_localPath + "/" + serverFileName)
-                              //     .create(recursive: true);
-                              // file.writeAsBytesSync(list);
-                            }
+                            //   // final ByteData bytes = await DefaultAssetBundle.of(context)
+                            //   //     .load(_localPath + "/" + serverFileName);
+                            //   // final Uint8List list = bytes.buffer.asUint8List();
+
+                            //   // final file = await File(_localPath + "/" + serverFileName)
+                            //   //     .create(recursive: true);
+                            //   // file.writeAsBytesSync(list);
+                            // }
                           },
                         ))
                   ],
@@ -436,6 +444,12 @@ class _MapPageState extends State<MapPage> {
       margin: const EdgeInsets.only(left: 16, top: 10),
     );
   }
+}
+
+Future<File> _getLocalFile(String filename) async {
+  String dir = (await getApplicationDocumentsDirectory()).path;
+  File f = new File('$dir/$filename');
+  return f;
 }
 
 Future<void> openUrl(String url) async {
