@@ -212,7 +212,7 @@ class UserInfoState extends State<UserInfo> {
                             textAlign: TextAlign.left,
                           ),
                         ],
-                      ), // Row Children
+                      ), // Row Children 
                     ),
                     Row(children: <Widget>[
                       Expanded(child: Divider(height: 0)),
