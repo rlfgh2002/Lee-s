@@ -167,6 +167,7 @@ flutter:
     - Resources/Icons/btn_advisory.png
     - Resources/Icons/btn_occasion.png
     - Resources/Icons/btn_inquiry.png
+    - Resources/Icons/btn_human.png
 
     # barcode
     - Resources/Images/barcodeType1.png
@@ -184,6 +185,7 @@ flutter:
     - Resources/Images/feeHistory.png
     - Resources/Images/occasion.png
     - Resources/Images/requestMember.png
+    - Resources/Images/humanRights.png
     - Resources/Icons/logout.png
     - Resources/Icons/push_off.png
     - Resources/Icons/push_on.png

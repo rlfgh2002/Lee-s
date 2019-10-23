@@ -11,6 +11,7 @@ import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/controllers/profile/Advisory.dart';
 import 'package:haegisa2/controllers/profile/FeeHistory.dart';
+import 'package:haegisa2/controllers/profile/HumanRights.dart';
 import 'package:haegisa2/controllers/profile/Inquiry.dart';
 import 'package:haegisa2/controllers/profile/Occasion.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -687,6 +688,33 @@ class _HomeState extends State<Home> {
                                   height: deviceWidth / 5,
                                   width: deviceWidth / 4.5),
                               Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/btn_human.png',
+                                              scale: 3.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new HumanRights()));
+                                          },
+                                        ),
+                                        Text("인권상담",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
                                   height: deviceWidth / 5,
                                   width: deviceWidth / 4.5),
                             ]),
