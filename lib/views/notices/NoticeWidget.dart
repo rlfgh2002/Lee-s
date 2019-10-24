@@ -17,6 +17,7 @@ class NoticeWidget extends StatelessWidget {
   bool isOnSurveysTabs = false;
   String idx = "";
   bool isDone = false;
+  DateTime date;
 
   NoticeWidget({
     bool isDone = false,
@@ -27,6 +28,7 @@ class NoticeWidget extends StatelessWidget {
     NoticeType type = NoticeType.Notice,
     VoidCallback onTapped,
     String idx = "",
+    DateTime date
   }) {
     this.isDone = isDone;
     this.idx = idx;
@@ -36,6 +38,7 @@ class NoticeWidget extends StatelessWidget {
     this.type = type;
     this.onTapped = onTapped;
     this.isOnSurveysTabs = isOnSurveysTabs;
+    this.date = date;
 
     switch (type) {
       case NoticeType.Notice:

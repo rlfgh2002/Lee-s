@@ -63,7 +63,7 @@ class _NoticeSingle extends State<NoticeSingle> {
           children: [
             blueSplitter,
             Padding(
-                child: Text("", style: TextStyle(
+                child: Text(this.widget.object['subject'], style: TextStyle(
                     fontSize: Statics.shared.fontSizes.subTitleInContent,
                     color: Statics.shared.colors.titleTextColor,
                     fontWeight: FontWeight.w600,

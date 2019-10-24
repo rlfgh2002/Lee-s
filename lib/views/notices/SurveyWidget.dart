@@ -16,8 +16,9 @@ class SurveyWidget extends StatefulWidget {
   String qNum = "";
   VoidCallback onTappedFalse;
   VoidCallback onTappedTrue;
+  Map<String, dynamic> surveyObj;
 
-  SurveyWidget({int myIndex,bool isChecked = false,double width = 0,String survey = "", String groupName = "", int itemIndex = 1, bool isAfter = false, String surveyIdx, String qNum, VoidCallback onTappedTrue}){
+  SurveyWidget({Map<String, dynamic> surveyObj,int myIndex,bool isChecked = false,double width = 0,String survey = "", String groupName = "", int itemIndex = 1, bool isAfter = false, String surveyIdx, String qNum, VoidCallback onTappedTrue}){
     this.myIndex = myIndex;
     this.width = width;
     this.survey = survey;
@@ -28,6 +29,7 @@ class SurveyWidget extends StatefulWidget {
     this.surveyIdx = surveyIdx;
     this.qNum = qNum;
     this.onTappedTrue = onTappedTrue;
+    this.surveyObj = surveyObj;
   }
 
   @override
@@ -46,15 +48,15 @@ class _SurveyWidgetState extends State<SurveyWidget> {
 
     Color progressColor = Color.fromRGBO(232, 240, 254, 1);
     double percent = (0 * (this.widget.width + 16) / 100);
-    if(MainTabBar.mainTabBar.mdw.lastSurveyPercentages.length > 0){
-
-      MainTabBar.mainTabBar.mdw.lastSurveyPercentages.forEach((item){
-        if(item.qNumber.toString() == this.widget.myIndex.toString()){
-          int p = item.result;
-          percent = (p * (this.widget.width + 16) / 100);
-        }
-      });
+    double p = 0;
+    if(this.widget.surveyObj != null){
+      if(this.widget.surveyObj['result${this.widget.myIndex + 1}'] != null){
+        p = double.parse(this.widget.surveyObj['result${this.widget.myIndex + 1}']);
+      }
+      percent = (p * (this.widget.width + 16) / 100);
     }
+
+    print("RESRES: ${percent} - ${p} - ${this.widget.survey}");
 
     if(this.widget.isAfter){
       return Stack(
@@ -83,7 +85,7 @@ class _SurveyWidgetState extends State<SurveyWidget> {
                 child: Row(
                   children: [
                     Text(this.widget.survey,style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content, fontWeight: FontWeight.normal),),
-                    Text("${percent.toString()}%",style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.normal),),
+                    Text("${p.toString()}%",style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.normal),),
                   ],
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,

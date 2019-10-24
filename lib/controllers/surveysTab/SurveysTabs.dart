@@ -87,7 +87,13 @@ class _SurveysTabsState extends State<SurveysTabs>
                 },
                 onPressClose: () {
                   onPressClose();
-                });
+                },
+              afterSubmit: (){
+                  setState(() {
+                    this.refreshSurveysTabs();
+                  });
+              },
+                );
           } // Survey
         });
   }
@@ -156,8 +162,16 @@ class _SurveysTabsState extends State<SurveysTabs>
 
       for (int i = 0; i < res.length; i++) {
 
+        String startDateStr = res[i]['start_date'].toString();
+        String endDateStr = res[i]['end_date'].toString();
+        DateTime endDate = DateTime.parse(endDateStr);
+
         bool isDoneSurvey = false;
         if (res[i]['isDone'] == "TRUE") {
+          isDoneSurvey = true;
+        }
+
+        if(endDate.isBefore(DateTime.now())){
           isDoneSurvey = true;
         }
 
@@ -173,8 +187,8 @@ class _SurveysTabsState extends State<SurveysTabs>
                 idx: res[i]['bd_idx'],
                 onResult: (surveys) {
 
-                  String startDateStr = res[i]['start_date'].toString();
-                  String endDateStr = res[i]['end_date'].toString();
+                  startDateStr = res[i]['start_date'].toString();
+                  endDateStr = res[i]['end_date'].toString();
                   String votingDate = "";
                   votingDate = startDateStr.replaceAll("-", ".");
                   votingDate = "${votingDate.toString()} - ";
@@ -237,7 +251,11 @@ class _SurveysTabsState extends State<SurveysTabs>
           },
         );
         if (res[i]['isDone'] == "FALSE") {
-          myList.add(item);
+          if(!endDate.isBefore(DateTime.now())){
+            myList.add(item);
+          }else{
+            myList2.add(item);
+          }
         } else {
           myList2.add(item);
         }
@@ -251,12 +269,16 @@ class _SurveysTabsState extends State<SurveysTabs>
     });
   }
 
-  @override
-  void initState() {
+  void refreshSurveysTabs(){
+    print("..........:::::::::: Refreshing surveys Tabs ::::::::::..........");
     refreshNotices();
     Future.delayed(Duration(seconds: 2)).then((val) {
       setState(() {});
     });
+  }
+  @override
+  void initState() {
+    refreshSurveysTabs();
     super.initState();
   }
 

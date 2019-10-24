@@ -21,6 +21,7 @@ class _StaticDbInformation {
   static const String tblNoticesFromId = 'fromId';
   static const String tblNoticesFromName = 'fromName';
   static const String tblNoticesContent = 'content';
+  static const String tblNoticesRegDate = 'regDate';
 
   static const String tblConversationFieldId = 'convId';
   static const String tblConversationCreateDate = 'createDate';
@@ -88,6 +89,7 @@ class _StaticDbInformation {
   static const String tblSurveysSubject = 'subject';
   static const String tblSurveysContents = 'contents';
   static const String tblSurveysQcnt = 'q_cnt';
+  static const String tblSurveysRegDate = 'regDate';
 }
 
 class MyDataBase {
@@ -139,7 +141,7 @@ class MyDataBase {
       });
 
       await db.execute(
-          'CREATE TABLE ${_StaticDbInformation.tblNotices} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblNoticesId} TEXT,${_StaticDbInformation.tblNoticesFromId} TEXT,${_StaticDbInformation.tblNoticesFromName} TEXT,${_StaticDbInformation.tblNoticesSubject} TEXT,${_StaticDbInformation.tblNoticesContent} TEXT)')
+          'CREATE TABLE ${_StaticDbInformation.tblNotices} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblNoticesId} TEXT,${_StaticDbInformation.tblNoticesRegDate} TEXT,${_StaticDbInformation.tblNoticesFromId} TEXT,${_StaticDbInformation.tblNoticesFromName} TEXT,${_StaticDbInformation.tblNoticesSubject} TEXT,${_StaticDbInformation.tblNoticesContent} TEXT)')
           .then((val) {
         print(
             ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblNotices} STATUS => [TRUE] ::::::::::");
@@ -179,7 +181,7 @@ class MyDataBase {
       });
 
       await db.execute(
-              'CREATE TABLE ${_StaticDbInformation.tblSurveys} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblSurveysNo} TEXT, ${_StaticDbInformation.tblSurveysDone} TEXT,${_StaticDbInformation.tblSurveysBdIdx} TEXT,${_StaticDbInformation.tblSurveysStartDate} TEXT,${_StaticDbInformation.tblSurveysEndDate} TEXT, ${_StaticDbInformation.tblSurveysSubject} TEXT, ${_StaticDbInformation.tblSurveysContents} TEXT, ${_StaticDbInformation.tblSurveysQcnt} TEXT)')
+              'CREATE TABLE ${_StaticDbInformation.tblSurveys} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblSurveysNo} TEXT, ${_StaticDbInformation.tblSurveysRegDate} TEXT, ${_StaticDbInformation.tblSurveysDone} TEXT,${_StaticDbInformation.tblSurveysBdIdx} TEXT,${_StaticDbInformation.tblSurveysStartDate} TEXT,${_StaticDbInformation.tblSurveysEndDate} TEXT, ${_StaticDbInformation.tblSurveysSubject} TEXT, ${_StaticDbInformation.tblSurveysContents} TEXT, ${_StaticDbInformation.tblSurveysQcnt} TEXT)')
           .then((val) {
         print(
             ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblSurveys} STATUS => [TRUE] ::::::::::");
@@ -382,7 +384,7 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db
           .rawInsert(
-          'INSERT INTO ${_StaticDbInformation.tblNotices} (${_StaticDbInformation.tblNoticesId},${_StaticDbInformation.tblNoticesFromId},${_StaticDbInformation.tblNoticesFromName},${_StaticDbInformation.tblNoticesSubject}, ${_StaticDbInformation.tblNoticesContent}) VALUES ("${noticeId.toString()}","${fromId.toString()}","${fromName.toString()}","${subject.toString()}","${content.toString()}")')
+          'INSERT INTO ${_StaticDbInformation.tblNotices} (${_StaticDbInformation.tblNoticesId},${_StaticDbInformation.tblNoticesRegDate},${_StaticDbInformation.tblNoticesFromId},${_StaticDbInformation.tblNoticesFromName},${_StaticDbInformation.tblNoticesSubject}, ${_StaticDbInformation.tblNoticesContent}) VALUES ("${noticeId.toString()}","${DateTime.now().toString()}","${fromId.toString()}","${fromName.toString()}","${subject.toString()}","${content.toString()}")')
           .catchError((err) {
         print(":::::::::: DB INSERT(Notices) ERROR => [${err.toString()}] ::::::::::");
         onInserted(false);
@@ -681,7 +683,7 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
-            'INSERT INTO ${_StaticDbInformation.tblSurveys} (${_StaticDbInformation.tblSurveysNo},${_StaticDbInformation.tblSurveysDone},${_StaticDbInformation.tblSurveysBdIdx},${_StaticDbInformation.tblSurveysStartDate}, ${_StaticDbInformation.tblSurveysEndDate}, ${_StaticDbInformation.tblSurveysSubject}, ${_StaticDbInformation.tblSurveysContents}, ${_StaticDbInformation.tblSurveysQcnt}) VALUES ("${no.toString()}","${isDone.toString()}","${bd_idx.toString()}","${start_date.toString()}","${end_date.toString()}","${subject.toString()}","${content.toString()}","${q_cnt.toString()}")');
+            'INSERT INTO ${_StaticDbInformation.tblSurveys} (${_StaticDbInformation.tblSurveysNo},${_StaticDbInformation.tblSurveysRegDate},${_StaticDbInformation.tblSurveysDone},${_StaticDbInformation.tblSurveysBdIdx},${_StaticDbInformation.tblSurveysStartDate}, ${_StaticDbInformation.tblSurveysEndDate}, ${_StaticDbInformation.tblSurveysSubject}, ${_StaticDbInformation.tblSurveysContents}, ${_StaticDbInformation.tblSurveysQcnt}) VALUES ("${no.toString()}","${DateTime.now().toString()}","${isDone.toString()}","${bd_idx.toString()}","${start_date.toString()}","${end_date.toString()}","${subject.toString()}","${content.toString()}","${q_cnt.toString()}")');
         print(
             ":::::::::: DB INSERT(survey) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();
@@ -849,6 +851,7 @@ class MyDataBase {
   void updateSurveyResult({
     String idx,
     String qNumber,
+    String resNum,
     String result = "",
     onUpdated(),
   }) async {
@@ -857,8 +860,9 @@ class MyDataBase {
     // open the database
     await openDatabase(path).then((db) {
       db.transaction((txn) async {
+        print("QUERY ==> ${'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET result${resNum.toString()} = "${result.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}" and ${_StaticDbInformation.tblAnswersSurveyQN} = "${qNumber.toString()}"'}");
         int id1 = await txn.rawInsert(
-            'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET result${qNumber.toString()} = "${result.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}" and ${_StaticDbInformation.tblAnswersSurveyQN} = "${qNumber.toString()}"');
+            'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET result${resNum.toString()} = "${result.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}" and ${_StaticDbInformation.tblAnswersSurveyQN} = "${qNumber.toString()}"');
         print(
             ":::::::::: DB UPDATE(answer survey Resultxxxy) QUERY => [${id1.toString()}] ::::::::::");
         //db.close();

@@ -165,18 +165,21 @@ class NoticesState extends State<Notices> {
 
   void refreshNotices() {
     widget.notices = [];
-    List<NoticeWidget> myList = [];
-    List<NoticeWidget> myList2 = [];
+    List<NoticeWidget> myVotesList = [];
+    List<NoticeWidget> mySurveysList = [];
+    List<NoticeWidget> myNoticesList = [];
+    List<NoticeWidget> total = [];
 
     widget.db.selectSurvey(onResult: (res) {
       for (int i = 0; i < res.length; i++) {
 
         NoticeWidget item = NoticeWidget(
           title: res[i]['subject'].toString(),
+          date: DateTime.parse(res[i]['regDate'].toString()),
           shortDescription: res[i]['contents'].toString(),
           time: res[i]['start_date'].toString(),
           type: NoticeType.Survey,
-          idx: "",
+          idx: res[i]['bd_idx'].toString(),
           onTapped: () {
 
             if(res[i]['isDone'].toString() != "TRUE"){
@@ -249,8 +252,12 @@ class NoticesState extends State<Notices> {
             }
           },
         );
-        myList.add(item);
+        mySurveysList.add(item);
       }
+
+      total = mySurveysList;
+      total.sort((item1, item2) => item1.date.compareTo(item2.date));
+      refreshAllNotices(total);
     });
 
     widget.db.selectNotices(onResult: (res) {
@@ -258,6 +265,7 @@ class NoticesState extends State<Notices> {
 
         NoticeWidget item = NoticeWidget(
           title: res[i]['subject'].toString(),
+          date: DateTime.parse(res[i]['regDate'].toString()),
           shortDescription: res[i]['content'].toString(),
           time: "2019-10-20",
           type: NoticeType.Notice,
@@ -265,12 +273,12 @@ class NoticesState extends State<Notices> {
             Navigator.push(context, new MaterialPageRoute(builder: (context) => new NoticeSingle(obj: res.first)));
           },
         );
-        myList.add(item);
+        myNoticesList.add(item);
       }
-    });
 
-    setState(() {
-      widget.notices = myList;
+      total = mySurveysList + myNoticesList;
+      total.sort((item1, item2) => item1.date.compareTo(item2.date));
+      refreshAllNotices(total);
     });
 
     this.widget.db.selectVotes(onResult: (results) {
@@ -293,6 +301,7 @@ class NoticesState extends State<Notices> {
           });
 
           NoticeWidget item = NoticeWidget(
+            date: DateTime.parse(results[i].regDate.toString()),
             title: results[i].subject.toString(),
             shortDescription: results[i].content,
             time: results[i].regDate,
@@ -381,17 +390,20 @@ class NoticesState extends State<Notices> {
                   });
             },
           );
-          myList2.add(item);
+          myVotesList.add(item);
         } // for loop
 
-        setState(() {
-          widget.notices = myList2 + myList;
-        });
-      } else {
-        setState(() {
-          widget.notices = myList;
-        });
+        total = mySurveysList + myNoticesList + myVotesList;
+        total.sort((item1, item2) => item1.date.compareTo(item2.date));
+        refreshAllNotices(total);
       }
+    });
+  }
+
+  void refreshAllNotices(List<NoticeWidget> myList){
+    myList.sort((item1, item2) => item2.date.compareTo(item1.date));
+    setState(() {
+      widget.notices = myList;
     });
   }
 
@@ -425,8 +437,6 @@ class NoticesState extends State<Notices> {
       child: noNoticesFoundYet(),
     );
     if (this.widget.notices.length > 0) {
-      this.widget.notices.sort((item1, item2) =>
-          DateTime.parse(item2.time).compareTo(DateTime.parse(item1.time)));
       bodyWd = Container(
         color: Color.fromRGBO(244, 248, 255, 1),
         child: ListView(

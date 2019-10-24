@@ -551,6 +551,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               MiddleWare.shared.currentIndex = 3;
               MiddleWare.shared.tabc
                   .animateTo(3, duration: Duration(seconds: 0));
+              Notices.staticNoticesPage.myChild.refreshNotices();
+              print(":::::: notices should be refreshed ::::::");
             });
             return;
           }
