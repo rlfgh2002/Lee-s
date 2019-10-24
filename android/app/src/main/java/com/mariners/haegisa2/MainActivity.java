@@ -1,4 +1,4 @@
-package com.parcweb.haegisa2.haegisa2;
+package com.mariners.haegisa2;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

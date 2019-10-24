@@ -8,12 +8,64 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:297450269741:android:1d9f67392d45c090279ca4",
+        "android_client_info": {
+          "package_name": "com.mariners.haegisa2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297450269741-eo12dqqltchhrc5gfhtlob27dmij5lnu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariners.haegisa2",
+            "certificate_hash": "75c87fd61255091c432c42c03a63c29a94ec6766"
+          }
+        },
+        {
+          "client_id": "297450269741-3b0en2mrhd6vujq5ftp73h2k2pbb5f2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxw-FIHMyKAyPHL7aUv9NznBcOvd3f7l0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297450269741-3b0en2mrhd6vujq5ftp73h2k2pbb5f2s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297450269741-pmjib127jh7sep4scgkbou7vc5j8jorl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.test.heagisa2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:297450269741:android:0b1474696eee5709",
         "android_client_info": {
           "package_name": "com.parcweb.haegisa2.haegisa2"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "297450269741-vf8fbt9nqtonob6k1gnf9d4nmiim7ols.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.parcweb.haegisa2.haegisa2",
+            "certificate_hash": "ce940ebf05408a52e64b01698a173d97b613303d"
+          }
+        },
         {
           "client_id": "297450269741-o77mvkh1kkdcm9mnvlmurcn821t5lh82.apps.googleusercontent.com",
           "client_type": 1,
@@ -48,10 +100,10 @@
               "client_type": 3
             },
             {
-              "client_id": "297450269741-iboavi4equetar1eqs64ukdor9vrdnvt.apps.googleusercontent.com",
+              "client_id": "297450269741-pmjib127jh7sep4scgkbou7vc5j8jorl.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.parcweb.haegisa2.haegisa2"
+                "bundle_id": "com.test.heagisa2"
               }
             }
           ]
