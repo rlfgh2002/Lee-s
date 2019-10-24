@@ -1,4 +1,4 @@
-package com.mariners.heagisa2;
+package com.mariners.haegisa2.haegisa2;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;

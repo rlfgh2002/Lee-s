@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:297450269741:android:df1f045edb2b3096279ca4",
+        "mobilesdk_app_id": "1:297450269741:android:c1e52e411660af03279ca4",
         "android_client_info": {
-          "package_name": "com.mariners.heagisa2"
+          "package_name": "com.mariners.haegisa2.haegisa2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "297450269741-hbpb1acgc5bdhftlvfnidptu4e8kgs7i.apps.googleusercontent.com",
+          "client_id": "297450269741-6pae25lkttenmd7mg097j34p8m3rcr6u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mariners.heagisa2",
-            "certificate_hash": "0f239798b19f9bc5c6f66e74789ad20ce7e50e1f"
+            "package_name": "com.mariners.haegisa2.haegisa2",
+            "certificate_hash": "75c87fd61255091c432c42c03a63c29a94ec6766"
           }
         },
         {
@@ -28,6 +28,9 @@
         }
       ],
       "api_key": [
+        {
+          "current_key": "AIzaSyBxw-FIHMyKAyPHL7aUv9NznBcOvd3f7l0"
+        },
         {
           "current_key": "AIzaSyBxw-FIHMyKAyPHL7aUv9NznBcOvd3f7l0"
         }
@@ -88,6 +91,9 @@
         }
       ],
       "api_key": [
+        {
+          "current_key": "AIzaSyBxw-FIHMyKAyPHL7aUv9NznBcOvd3f7l0"
+        },
         {
           "current_key": "AIzaSyBxw-FIHMyKAyPHL7aUv9NznBcOvd3f7l0"
         }
