@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "297450269741-ctpq2ga9oj3jns8ci83ahl96vidk09u1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariners.haegisa2",
+            "certificate_hash": "ce940ebf05408a52e64b01698a173d97b613303d"
+          }
+        },
+        {
+          "client_id": "297450269741-i5989g933ujomr3hgmu81tfdb3ua21p8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariners.haegisa2",
+            "certificate_hash": "a6862030754a9e392ba3f519be7b24ac0a4fd864"
+          }
+        },
+        {
           "client_id": "297450269741-eo12dqqltchhrc5gfhtlob27dmij5lnu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
