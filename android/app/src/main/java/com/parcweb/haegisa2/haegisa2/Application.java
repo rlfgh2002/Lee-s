@@ -1,4 +1,4 @@
-package com.mariners.haegisa2.haegisa2;
+package com.parcweb.haegisa2.haegisa2;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
