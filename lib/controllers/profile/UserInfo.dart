@@ -48,6 +48,16 @@ class UserInfoState extends State<UserInfo> {
   String postNo = userInformation.postNo;
   String address1 = userInformation.address1;
 
+  String btnText1 = "변경";
+  String btnText2 = "변경";
+  String btnText3 = "변경";
+  String btnText4 = "변경";
+
+  bool btnModify1 = false;
+  bool btnModify2 = false;
+  bool btnModify3 = false;
+  bool btnModify4 = false;
+
   @override
   void initState() {
     super.initState();
@@ -212,7 +222,7 @@ class UserInfoState extends State<UserInfo> {
                             textAlign: TextAlign.left,
                           ),
                         ],
-                      ), // Row Children 
+                      ), // Row Children
                     ),
                     Row(children: <Widget>[
                       Expanded(child: Divider(height: 0)),
@@ -269,6 +279,7 @@ class UserInfoState extends State<UserInfo> {
                                     )),
                           Spacer(),
                           Container(
+                              color: Colors.red,
                               width: deviceWidth / 6.2,
                               child: FlatButton(
                                 child: Text("변경",
@@ -350,7 +361,7 @@ class UserInfoState extends State<UserInfo> {
                     ]),
                     Container(
                       height: deviceWidth / 6,
-                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: new Row(
                         children: <Widget>[
                           Container(
@@ -377,19 +388,64 @@ class UserInfoState extends State<UserInfo> {
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
-                          Expanded(
-                              child: TextField(
-                            controller: _addressController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  color:
-                                      Statics.shared.colors.subTitleTextColor,
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                ),
-                                hintText: "상세주소"),
-                          )),
+                          Container(
+                            width: deviceWidth / 2.0,
+                            child: btnModify1 == false
+                                ? Text(
+                                    address2,
+                                    style: TextStyle(
+                                      color:
+                                          Statics.shared.colors.titleTextColor,
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  )
+                                : TextField(
+                                    controller: _addressController,
+                                    keyboardType: TextInputType.number,
+                                    style: TextStyle(
+                                      color: Statics
+                                          .shared.colors.subTitleTextColor,
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                    ),
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                          color: Statics
+                                              .shared.colors.subTitleTextColor,
+                                        ),
+                                        hintText: Strings.shared.controllers
+                                            .profile.userGisu),
+                                  ),
+                          ),
+                          Spacer(),
+                          Container(
+                              color: Colors.red,
+                              width: deviceWidth / 6.2,
+                              child: FlatButton(
+                                  child: Text(btnText1,
+                                      style: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                          color:
+                                              Statics.shared.colors.mainColor,
+                                          fontWeight: FontWeight.bold)),
+                                  onPressed: () {
+                                    setState(() {
+                                      if (btnText1 == "변경") {
+                                        btnText1 = "확인";
+                                        btnModify1 = true;
+                                      } else {
+                                        btnText1 = "변경";
+                                        btnModify1 = false;
+                                        address2 = _addressController.text;
+                                      }
+                                    });
+                                  }))
                         ],
                       ), // Row Children
                     ),
@@ -398,13 +454,13 @@ class UserInfoState extends State<UserInfo> {
                     ]),
                     Container(
                       height: deviceWidth / 6,
-                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: new Row(
                         children: <Widget>[
                           Container(
                             child: Row(children: <Widget>[
                               Text(
-                                Strings.shared.controllers.profile.userMail,
+                                "이메일",
                                 style: TextStyle(
                                     color: Statics.shared.colors.titleTextColor,
                                     fontSize:
@@ -425,27 +481,63 @@ class UserInfoState extends State<UserInfo> {
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
-                          Expanded(
-                              child: TextField(
-                            controller: _emailController,
-                            style: TextStyle(
-                              color: Statics.shared.colors.subTitleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                fontSize:
-                                    Statics.shared.fontSizes.supplementary,
-                                color: Statics.shared.colors.subTitleTextColor,
-                              ),
-                              hintText:
-                                  Strings.shared.controllers.profile.userMail,
-                            ),
-                          )),
-                          SizedBox(
-                            width: deviceWidth / 5,
-                          )
+                          Container(
+                              width: deviceWidth / 2.0,
+                              child: btnModify2 == false
+                                  ? Text(
+                                      email,
+                                      style: TextStyle(
+                                        color: Statics
+                                            .shared.colors.titleTextColor,
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    )
+                                  : TextField(
+                                      controller: _emailController,
+                                      style: TextStyle(
+                                        color: Statics
+                                            .shared.colors.subTitleTextColor,
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                      ),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                          color: Statics
+                                              .shared.colors.subTitleTextColor,
+                                        ),
+                                        hintText: Strings.shared.controllers
+                                            .profile.userMail,
+                                      ),
+                                    )),
+                          Spacer(),
+                          Container(
+                              color: Colors.red,
+                              width: deviceWidth / 6.2,
+                              child: FlatButton(
+                                child: Text(btnText2,
+                                    style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Statics.shared.colors.mainColor,
+                                        fontWeight: FontWeight.bold)),
+                                onPressed: () {
+                                  setState(() {
+                                    if (btnText2 == "변경") {
+                                      btnText2 = "확인";
+                                      btnModify2 = true;
+                                    } else {
+                                      btnText2 = "변경";
+                                      btnModify2 = false;
+                                      email = _emailController.text;
+                                    }
+                                  });
+                                },
+                              ))
                         ],
                       ), // Row Children
                     ),
@@ -454,7 +546,7 @@ class UserInfoState extends State<UserInfo> {
                     ]),
                     Container(
                       height: deviceWidth / 6,
-                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: new Row(
                         children: <Widget>[
                           Container(
@@ -481,7 +573,8 @@ class UserInfoState extends State<UserInfo> {
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
-                          Expanded(
+                          Container(
+                            width: deviceWidth / 2.0,
                             child: new FutureBuilder(
                               future: getSchool(), // a Future<String> or null
                               builder: (BuildContext context,
@@ -516,6 +609,19 @@ class UserInfoState extends State<UserInfo> {
                               },
                             ),
                           ),
+                          Spacer(),
+                          Container(
+                              color: Colors.red,
+                              width: deviceWidth / 6.2,
+                              child: FlatButton(
+                                child: Text(btnText3,
+                                    style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Statics.shared.colors.mainColor,
+                                        fontWeight: FontWeight.bold)),
+                                onPressed: () {},
+                              ))
                         ],
                       ), // Row Children
                     ),
@@ -524,7 +630,7 @@ class UserInfoState extends State<UserInfo> {
                     ]),
                     Container(
                       height: deviceWidth / 6,
-                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      padding: const EdgeInsets.only(left: 20),
                       child: new Row(
                         children: <Widget>[
                           Container(
@@ -551,25 +657,64 @@ class UserInfoState extends State<UserInfo> {
                             width: deviceWidth / 5,
                             padding: const EdgeInsets.only(right: 10),
                           ),
-                          Expanded(
-                              child: TextField(
-                            controller: _gisuController,
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(
-                              color: Statics.shared.colors.subTitleTextColor,
-                              fontSize: Statics.shared.fontSizes.supplementary,
-                            ),
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                  fontSize:
-                                      Statics.shared.fontSizes.supplementary,
-                                  color:
-                                      Statics.shared.colors.subTitleTextColor,
-                                ),
-                                hintText: Strings
-                                    .shared.controllers.profile.userGisu),
-                          )),
+                          Container(
+                            width: deviceWidth / 2.0,
+                            child: btnModify4 == false
+                                ? Text(
+                                    gisu,
+                                    style: TextStyle(
+                                      color:
+                                          Statics.shared.colors.titleTextColor,
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  )
+                                : new TextField(
+                                    controller: _gisuController,
+                                    keyboardType: TextInputType.number,
+                                    style: TextStyle(
+                                      color: Statics
+                                          .shared.colors.subTitleTextColor,
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                    ),
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                          color: Statics
+                                              .shared.colors.subTitleTextColor,
+                                        ),
+                                        hintText: Strings.shared.controllers
+                                            .profile.userGisu),
+                                  ),
+                          ),
+                          Spacer(),
+                          Container(
+                              color: Colors.red,
+                              width: deviceWidth / 6.2,
+                              child: FlatButton(
+                                child: Text(btnText4,
+                                    style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Statics.shared.colors.mainColor,
+                                        fontWeight: FontWeight.bold)),
+                                onPressed: () {
+                                  setState(() {
+                                    if (btnText4 == "변경") {
+                                      btnText4 = "확인";
+                                      btnModify4 = true;
+                                    } else {
+                                      btnText4 = "변경";
+                                      btnModify4 = false;
+                                      gisu = _gisuController.text;
+                                    }
+                                  });
+                                },
+                              ))
                         ],
                       ), // Row Children
                     ),
@@ -659,38 +804,43 @@ class UserInfoState extends State<UserInfo> {
                           print("출신학교 : ${school.toString()}");
                           print("기수 : ${userInformation.memberType}");
 
-                          var infomap = new Map<String, dynamic>();
-                          infomap["id"] = userInformation.userID;
-                          infomap["memberIdx"] = userInformation.userIdx;
-                          infomap["name"] = userInformation.fullName;
-                          infomap["memberType"] = userInformation.memberType;
-                          infomap["hp"] = hp;
-                          infomap["email"] = _emailController.text;
-                          infomap["school"] = school;
-                          infomap["gisu"] = _gisuController.text;
-                          infomap["address1"] = address1;
-                          infomap["address2"] = _addressController.text;
-                          infomap["postNo"] = postNo;
-                          await infoModify(
-                              Strings.shared.controllers.jsonURL
-                                  .userinfoModifyJson,
-                              body: infomap);
+                          if (btnModify1 == true ||
+                              btnModify2 == true ||
+                              btnModify3 == true ||
+                              btnModify4 == true) {
+                            _displaySnackBar(context, "수정내용을 확인 하세요.");
+                          } else {
+                            var infomap = new Map<String, dynamic>();
+                            infomap["id"] = userInformation.userID;
+                            infomap["memberIdx"] = userInformation.userIdx;
+                            infomap["name"] = userInformation.fullName;
+                            infomap["memberType"] = userInformation.memberType;
+                            infomap["hp"] = hp;
+                            infomap["email"] = _emailController.text;
+                            infomap["school"] = school;
+                            infomap["gisu"] = _gisuController.text;
+                            infomap["address1"] = address1;
+                            infomap["address2"] = _addressController.text;
+                            infomap["postNo"] = postNo;
+                            await infoModify(
+                                Strings.shared.controllers.jsonURL
+                                    .userinfoModifyJson,
+                                body: infomap);
 
-                          //변경된 정보로 userInformation 수정
-                          userInformation.hp = hp;
-                          userInformation.email = _emailController.text;
-                          userInformation.school = school;
-                          userInformation.gisu = _gisuController.text;
-                          userInformation.address1 = address1;
-                          userInformation.address2 = _addressController.text;
-                          userInformation.postNo = postNo;
+                            //변경된 정보로 userInformation 수정
+                            userInformation.hp = hp;
+                            userInformation.email = _emailController.text;
+                            userInformation.school = school;
+                            userInformation.gisu = _gisuController.text;
+                            userInformation.address1 = address1;
+                            userInformation.address2 = _addressController.text;
+                            userInformation.postNo = postNo;
 
-                          UserInfo.shared.g_address1 = "";
-                          UserInfo.shared.g_postNo = "";
+                            UserInfo.shared.g_address1 = "";
+                            UserInfo.shared.g_postNo = "";
 
-                          Navigator.pop(context, '수정되었습니다.');
-
-                          return;
+                            Navigator.pop(context, '수정되었습니다.');
+                          }
                         }))
               ],
             )
