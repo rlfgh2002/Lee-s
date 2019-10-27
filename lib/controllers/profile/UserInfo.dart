@@ -85,6 +85,10 @@ class UserInfoState extends State<UserInfo> {
 
     getSchool();
 
+    for (var i = 0; i < _schoolList.length; i++) {
+      print(_schoolList[i].chcode);
+    }
+
     if (userInformation.memberType == "51001") {
       typeAsset = "Resources/Icons/user_type_01.png";
       userType = "정회원";
