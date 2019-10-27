@@ -66,19 +66,22 @@ class ConversationWidget extends StatelessWidget {
 
     //NetworkImage avatar;
     AssetImage avatar;
-    if(this.avatarLink != ""){
-      //avatar = NetworkImage(this.avatarLink);
-      avatar = AssetImage(this.avatarLink);
-      this.avatarName = "";
-    }else{
-      if(convId != 'x0x0'){
-        avatar = AssetImage("Resources/Icons/userChatAvatar.png");
+    if(convId != 'x0x0'){
+      if(this.avatarLink != ""){
+        //avatar = NetworkImage(this.avatarLink);
+        avatar = AssetImage(this.avatarLink);
         this.avatarName = "";
       }else{
-        badgeColor = Colors.transparent;
-        widgetBadge = Container();
+        avatar = AssetImage("Resources/Icons/userChatAvatar.png");
+        this.avatarName = "";
       }
+    }else{
+      this.avatarName = "협회";
+      this.title = "한국해기사협회";
+      badgeColor = Colors.transparent;
+      widgetBadge = Container();
     }
+
 //    if (this.hasBlueBadge == false) {
 //      badgeColor = Colors.grey;
 //    }

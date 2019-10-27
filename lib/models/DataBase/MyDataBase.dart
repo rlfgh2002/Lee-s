@@ -407,7 +407,7 @@ class MyDataBase {
       List<Map<String, dynamic>> myList = [];
       db
           .rawQuery(
-              'SELECT * FROM ${_StaticDbInformation.tblConversation} ORDER BY id DESC')
+              'SELECT * FROM ${_StaticDbInformation.tblConversation} GROUP BY convId ORDER BY id DESC')
           .then((lists) {
         for (int i = 0; i < lists.length; i++) {
           myList.add(lists[i]);

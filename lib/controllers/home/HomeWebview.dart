@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 const kAndroidUserAgent =
@@ -11,10 +10,10 @@ const kAndroidUserAgent =
 
 class HomeWebview extends StatefulWidget {
   @override
-  _HomeWebview createState() => _HomeWebview();
+  _HomeWebviewState createState() => _HomeWebviewState();
 }
 
-class _HomeWebview extends State<HomeWebview> {
+class _HomeWebviewState extends State<HomeWebview> {
   // Instance of WebView plugin
   final flutterWebviewPlugin = FlutterWebviewPlugin();
 
@@ -33,7 +32,6 @@ class _HomeWebview extends State<HomeWebview> {
   String currentURL = '';
 
   final _urlCtrl = TextEditingController(text: selectedUrl);
-  final _codeCtrl = TextEditingController(text: 'window.navigator.userAgent');
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _history = [];
 

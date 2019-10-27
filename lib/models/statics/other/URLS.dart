@@ -2,9 +2,13 @@ class URLS {
   String sendChatServer = "http://mariners.or.kr/app_middle/chat/chatSend.php";
   String searchMembers =
       "http://mariners.or.kr/app_middle/chat/search_json.php";
-  String submitVote = "http://mariners.or.kr/app_middle/vote/vote_json.php";
+
   String searchSurveys(String uid) {
     return "http://mariners.or.kr/app_middle/survey/survey_json.php?userId=${uid.toString()}&mode=search&page_number=1";
+  }
+
+  String submitVote(String uid, String voteIdx, String answerId) {
+    return "http://mariners.or.kr/app_middle/vote/vote_json.php?mode=submit&userId=${uid.toString()}&idx=${voteIdx.toString()}&check=${answerId.toString()}";
   }
 
   String searchSurveysAnswers(String uid, String idx) {

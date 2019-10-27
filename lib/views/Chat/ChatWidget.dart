@@ -156,7 +156,7 @@ class ChatWidget extends StatelessWidget {
                       this.senderName,
                       style: TextStyle(
                           color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.subTitleInContent,
+                          fontSize: Statics.shared.fontSizes.medium,
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(width: 5),
@@ -164,7 +164,7 @@ class ChatWidget extends StatelessWidget {
                       clearDateTime,
                       style: TextStyle(
                           color: Statics.shared.colors.subTitleTextColor,
-                          fontSize: Statics.shared.fontSizes.small,
+                          fontSize: Statics.shared.fontSizes.verySmall,
                           fontWeight: FontWeight.normal),
                     )
                   ],
@@ -178,7 +178,8 @@ class ChatWidget extends StatelessWidget {
                       this.content,
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: Statics.shared.fontSizes.content),
+                          fontSize: Statics.shared.fontSizes.medium,
+                          fontWeight: FontWeight.w400),
                       textAlign: TextAlign.end,
                     ),
                     decoration: BoxDecoration(

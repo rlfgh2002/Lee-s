@@ -80,18 +80,31 @@ class HaegisaAlertDialog extends StatefulWidget {
 }
 
 class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
+
   void submitVote(
       {onSent(Map<String, dynamic> jj),
       onNotSent(),
       String idx,
       String check = "a1"}) async {
+
+    String votePeriod = "";
+    this.widget.votingPeriod = this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
+    String year = this.widget.votingPeriod.substring(0,4);
+    String month = this.widget.votingPeriod.substring(5,7);
+    String day = this.widget.votingPeriod.substring(6,8);
+
+    String hours = this.widget.votingPeriod.substring(8,10);
+    String minutes = this.widget.votingPeriod.substring(10,12);
+    votePeriod = "${year.toString()}-${month.toString()}-${day.toString()} ${hours.toString()}:${minutes.toString()}";
+    DateTime votePeriodDate = DateTime.parse(votePeriod);
+
+    if(votePeriodDate.isAfter(DateTime.now())){
+      this.widget.onPressApply();
+      return;
+    }
+
     MainTabBar.myChild.getUserId(onGetUserId: (uid) {
-      http.post(Statics.shared.urls.submitVote, body: {
-        'mode': 'submit',
-        'userId': uid,
-        'idx': idx,
-        'check': check,
-      }).then((val) {
+      http.get(Statics.shared.urls.submitVote(uid,idx,check)).then((val) {
         if (val.statusCode == 200) {
           print("OUTPUT: ${val.body.toString()}");
           var j = jsonDecode(val.body);
@@ -145,14 +158,14 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
     }
 
     String votePeriod = "";
+    this.widget.votingPeriod = this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
     String year = this.widget.votingPeriod.substring(0,4);
-    String month = this.widget.votingPeriod.substring(4,6);
+    String month = this.widget.votingPeriod.substring(5,7);
     String day = this.widget.votingPeriod.substring(6,8);
 
     String hours = this.widget.votingPeriod.substring(8,10);
     String minutes = this.widget.votingPeriod.substring(10,12);
-    votePeriod = "${year.toString()}.${month.toString()}.${day.toString()} ${hours.toString()}:${minutes.toString()}";
-
+    votePeriod = "~ ${year.toString()}.${month.toString()}.${day.toString()} ${hours.toString()}:${minutes.toString()}";
 
     return AlertDialog(
       content: Container(

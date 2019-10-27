@@ -129,8 +129,10 @@ class NoticeWidget extends StatelessWidget {
     } else {
 
       String pbck = this.proceedingBackground;
+      String prcdw = Strings.shared.dialogs.proceedingWord;
       if(this.isDone){
         pbck = this.proceedingBackgroundDark;
+        prcdw = Strings.shared.dialogs.proceedingWord2;
       }
 
       return Container(
@@ -148,7 +150,7 @@ class NoticeWidget extends StatelessWidget {
               children: [
                 Container(
                   child: Text(
-                    Strings.shared.dialogs.proceedingWord,
+                    prcdw,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: Statics.shared.fontSizes.medium,
@@ -156,10 +158,10 @@ class NoticeWidget extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(pbck)),
+                        image: AssetImage(pbck), fit: BoxFit.fill),
                   ),
                   padding: const EdgeInsets.only(
-                      top: 5, bottom: 5, left: 5, right: 15),
+                      top: 7, bottom: 7, left: 5, right: 15),
                   margin: const EdgeInsets.only(top: 5),
                 ),
                 SizedBox(width: 10),
