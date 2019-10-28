@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
         print("showNoInternet");
         showNoInternet(context);
       }
-    });c
+    });
 
     new Future.delayed(
         const Duration(seconds: 3),
