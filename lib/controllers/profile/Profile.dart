@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/profile/AlarmAgree.dart';
 import 'package:haegisa2/controllers/profile/FeeHistory.dart';
+import 'package:haegisa2/controllers/profile/HumanRights.dart';
 import 'package:haegisa2/controllers/profile/Inquiry.dart';
 import 'package:haegisa2/controllers/profile/Occasion.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -140,13 +141,9 @@ class _ProfileState extends State<Profile> {
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               child: Row(children: [
-                                Image.asset(
-                                    'Resources/Icons/btn_feehistory.png',
+                                Image.asset('Resources/Icons/btn_human.png',
                                     scale: 2.8),
-                                Text(
-                                    " " +
-                                        Strings.shared.controllers.profile
-                                            .feehistory,
+                                Text(" 인권상담",
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
@@ -158,7 +155,7 @@ class _ProfileState extends State<Profile> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            new FeeHistory()));
+                                            new HumanRights()));
                               },
                             ),
                             width: deviceWidth / 2,
@@ -309,6 +306,52 @@ class _ProfileState extends State<Profile> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => UserInfo()),
+                            );
+
+                            // After the Selection Screen returns a result, hide any previous snackbars
+                            // and show the new result.
+                            if (result != null && result != "") {
+                              _displaySnackBar(context, "$result");
+                            }
+                          },
+                        )),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                        height: deviceWidth / 5.5,
+                        padding: const EdgeInsets.only(left: 20, right: 5),
+                        child: FlatButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          child: new Row(
+                            children: <Widget>[
+                              Text(
+                                Strings.shared.controllers.profile.feehistory,
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary),
+                                textAlign: TextAlign.left,
+                              ),
+                              Spacer(),
+                              SizedBox(
+                                width: 50,
+                                child: Image.asset(
+                                    'Resources/Icons/Vector 3.2.png',
+                                    width: 10,
+                                    scale: 4),
+                              )
+                            ],
+                          ), // Row Children
+                          onPressed: () async {
+                            UserInfo.shared.g_address1 = "";
+                            UserInfo.shared.g_postNo = "";
+
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FeeHistory()),
                             );
 
                             // After the Selection Screen returns a result, hide any previous snackbars
@@ -516,7 +559,7 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "※ 정회원은 소정의 회비를 납부하고 본 협회의 제 규정과 결의사항을 준수 실천할 의무가 있습니다.",
+                        "※ ���회원은 소정의 회비를 납부하고 본 협회의 제 규정과 결의사항을 준수 실천할 의무가 있습니다.",
                         style: TextStyle(
                             color: Statics.shared.colors.subTitleTextColor,
                             fontSize: Statics.shared.fontSizes.supplementary),

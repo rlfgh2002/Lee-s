@@ -33,6 +33,10 @@ class UserInfoState extends State<UserInfo> {
   TextEditingController _emailController;
   TextEditingController _addressController;
   TextEditingController _gisuController;
+
+  FocusNode focusNode1;
+  FocusNode focusNode2;
+  FocusNode focusNode3;
   String _selectedValue;
 
   UserInfoState userinfo;
@@ -64,6 +68,10 @@ class UserInfoState extends State<UserInfo> {
     _emailController = new TextEditingController(text: email);
     _addressController = new TextEditingController(text: address2);
     _gisuController = new TextEditingController(text: gisu);
+
+    focusNode1 = FocusNode();
+    focusNode2 = FocusNode();
+    focusNode3 = FocusNode();
   }
 
   void callback() {
@@ -82,12 +90,6 @@ class UserInfoState extends State<UserInfo> {
     Color typeColor;
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-
-    getSchool();
-
-    for (var i = 0; i < _schoolList.length; i++) {
-      print(_schoolList[i].chcode);
-    }
 
     if (userInformation.memberType == "51001") {
       typeAsset = "Resources/Icons/user_type_01.png";
@@ -283,7 +285,6 @@ class UserInfoState extends State<UserInfo> {
                                     )),
                           Spacer(),
                           Container(
-                              color: Colors.red,
                               width: deviceWidth / 6.2,
                               child: FlatButton(
                                 child: Text("변경",
@@ -407,6 +408,8 @@ class UserInfoState extends State<UserInfo> {
                                   )
                                 : TextField(
                                     controller: _addressController,
+                                    focusNode: focusNode1,
+                                    autofocus: true,
                                     keyboardType: TextInputType.number,
                                     style: TextStyle(
                                       color: Statics
@@ -422,13 +425,11 @@ class UserInfoState extends State<UserInfo> {
                                           color: Statics
                                               .shared.colors.subTitleTextColor,
                                         ),
-                                        hintText: Strings.shared.controllers
-                                            .profile.userGisu),
+                                        hintText: "상세주소"),
                                   ),
                           ),
                           Spacer(),
                           Container(
-                              color: Colors.red,
                               width: deviceWidth / 6.2,
                               child: FlatButton(
                                   child: Text(btnText1,
@@ -447,6 +448,8 @@ class UserInfoState extends State<UserInfo> {
                                         btnText1 = "변경";
                                         btnModify1 = false;
                                         address2 = _addressController.text;
+                                        FocusScope.of(context)
+                                            .requestFocus(focusNode1);
                                       }
                                     });
                                   }))
@@ -500,6 +503,8 @@ class UserInfoState extends State<UserInfo> {
                                     )
                                   : TextField(
                                       controller: _emailController,
+                                      focusNode: focusNode2,
+                                      autofocus: true,
                                       style: TextStyle(
                                         color: Statics
                                             .shared.colors.subTitleTextColor,
@@ -520,7 +525,6 @@ class UserInfoState extends State<UserInfo> {
                                     )),
                           Spacer(),
                           Container(
-                              color: Colors.red,
                               width: deviceWidth / 6.2,
                               child: FlatButton(
                                 child: Text(btnText2,
@@ -538,6 +542,8 @@ class UserInfoState extends State<UserInfo> {
                                       btnText2 = "변경";
                                       btnModify2 = false;
                                       email = _emailController.text;
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNode2);
                                     }
                                   });
                                 },
@@ -578,44 +584,49 @@ class UserInfoState extends State<UserInfo> {
                             padding: const EdgeInsets.only(right: 10),
                           ),
                           Container(
-                            width: deviceWidth / 2.0,
-                            child: new FutureBuilder(
-                              future: getSchool(), // a Future<String> or null
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
-                                //print('project snapshot data is: ${snapshot.data}');
-                                switch (snapshot.connectionState) {
-                                  case ConnectionState.none:
-                                    return new Text('Press button to start');
-                                  case ConnectionState.waiting:
-                                    return new Container(
-                                      child: FlatButton(
-                                        splashColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        child: Text("",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: Statics.shared.colors
-                                                    .titleTextColor,
-                                                fontSize: Statics.shared
-                                                    .fontSizes.subTitle)),
-                                        onPressed: () {},
-                                      ),
-                                      height: deviceWidth / 6,
-                                    );
-                                  default:
-                                    if (snapshot.hasError)
-                                      return new Text(
-                                          'Error: ${snapshot.error}');
-                                    else
-                                      return schoolDropbox(context, snapshot);
-                                }
-                              },
-                            ),
-                          ),
+                              width: deviceWidth / 2.0,
+                              child: FutureBuilder(
+                                future: getSchool(), // a Future<String> or null
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  //print('project snapshot data is: ${snapshot.data}');
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.none:
+                                      return new Text('Press button to start');
+                                    case ConnectionState.waiting:
+                                      return new Container(
+                                        child: FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Text("",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Statics.shared.colors
+                                                      .titleTextColor,
+                                                  fontSize: Statics.shared
+                                                      .fontSizes.subTitle)),
+                                          onPressed: () {},
+                                        ),
+                                        height: deviceWidth / 6,
+                                      );
+                                    default:
+                                      if (snapshot.hasError)
+                                        return new Text(
+                                            'Error: ${snapshot.error}');
+                                      else {
+                                        if (btnModify3 == false) {
+                                          return getschoolName(
+                                              context, snapshot, school);
+                                        } else {
+                                          return schoolDropbox(
+                                              context, snapshot);
+                                        }
+                                      }
+                                  }
+                                },
+                              )),
                           Spacer(),
                           Container(
-                              color: Colors.red,
                               width: deviceWidth / 6.2,
                               child: FlatButton(
                                 child: Text(btnText3,
@@ -624,7 +635,17 @@ class UserInfoState extends State<UserInfo> {
                                             .shared.fontSizes.supplementary,
                                         color: Statics.shared.colors.mainColor,
                                         fontWeight: FontWeight.bold)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  setState(() {
+                                    if (btnText3 == "변경") {
+                                      btnText3 = "확인";
+                                      btnModify3 = true;
+                                    } else {
+                                      btnText3 = "변경";
+                                      btnModify3 = false;
+                                    }
+                                  });
+                                },
                               ))
                         ],
                       ), // Row Children
@@ -676,6 +697,8 @@ class UserInfoState extends State<UserInfo> {
                                   )
                                 : new TextField(
                                     controller: _gisuController,
+                                    focusNode: focusNode3,
+                                    autofocus: true,
                                     keyboardType: TextInputType.number,
                                     style: TextStyle(
                                       color: Statics
@@ -697,7 +720,6 @@ class UserInfoState extends State<UserInfo> {
                           ),
                           Spacer(),
                           Container(
-                              color: Colors.red,
                               width: deviceWidth / 6.2,
                               child: FlatButton(
                                 child: Text(btnText4,
@@ -715,6 +737,8 @@ class UserInfoState extends State<UserInfo> {
                                       btnText4 = "변경";
                                       btnModify4 = false;
                                       gisu = _gisuController.text;
+                                      FocusScope.of(context)
+                                          .requestFocus(focusNode3);
                                     }
                                   });
                                 },
@@ -925,8 +949,9 @@ class UserInfoState extends State<UserInfo> {
           throw Exception('Failed to load post');
         }
       });
-    } else
+    } else {
       return schoolTable;
+    }
   }
 
   infoModify(String url, {Map body}) async {
@@ -1229,6 +1254,23 @@ class _MyDialogState extends State<MyDialog> {
             Navigator.of(context).pop();
           },
         ));
+  }
+}
+
+getschoolName(BuildContext context, AsyncSnapshot snapshot, String chcode) {
+  var values = snapshot.data;
+
+  for (var res in values) {
+    if (res["CHCODE"] == chcode) {
+      return Text(
+        res["CCNAME"],
+        style: TextStyle(
+          color: Statics.shared.colors.titleTextColor,
+          fontSize: Statics.shared.fontSizes.supplementary,
+        ),
+        textAlign: TextAlign.left,
+      );
+    }
   }
 }
 

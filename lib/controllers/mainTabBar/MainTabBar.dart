@@ -264,8 +264,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print('MSGX=> on messageX Main $message');
-        if (message['notification']['title'] == null) {
+
+        if (message['notification']['title'] == null && message['notification']['body'] == null && message['data']['justNotify'] == null) {
+          print('MSGX=> on messageX Main $message');
           analiseMessage(message, true, false);
         }
       },
@@ -304,12 +305,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     } // notificationType is null
     else {
       if (message['data']['notificationType'].toString() == "chat") {
+        String convId = chatItem.notificationConversationId;
+        if(chatItem.notificationFromId == 'mariners123'){
+          convId = "x0x0";
+        }
         myDb.checkConversationExist(
             userId: chatItem.notificationFromId,
-            convId: chatItem.notificationConversationId,
+            convId: convId,
             onResult: (res) {
               myDb.insertChat(
-                  convId: chatItem.notificationConversationId,
+                  convId: convId,
                   userId: chatItem.notificationFromId,
                   content: chatItem.notificationContent,
                   date: chatItem.notificationRegDate,
@@ -320,7 +325,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             onNoResult: () {
               myDb.insertConversation(
                   userId: chatItem.notificationFromId,
-                  convId: chatItem.notificationConversationId,
+                  convId: convId,
                   createDate: chatItem.notificationRegDate,
                   fromName: chatItem.notificationFromName,
                   onInserted: () {
@@ -328,7 +333,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                         chatId: chatItem.chatId,
                         onNoResult: () {
                           myDb.insertChat(
-                              convId: chatItem.notificationConversationId,
+                              convId: convId,
                               userId: chatItem.notificationFromId,
                               content: chatItem.notificationContent,
                               date: chatItem.notificationRegDate,
@@ -377,8 +382,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
-        else if (message['data']['notificationType'].toString().toLowerCase() ==
-            "notice") {
+        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
+
           VoteObject noticeItem = VoteObject.fromJson(message);
 
           myDb.insertNotice(
@@ -440,15 +445,21 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           });
           return;
         }
+
+        String convId = chatItem.notificationConversationId;
+        if(chatItem.notificationFromId == 'mariners123'){
+          convId = "x0x0";
+        }
+
         widget.db.checkConversationExist(
             userId: chatItem.notificationFromId,
-            convId: chatItem.notificationConversationId,
+            convId: convId,
             onResult: (res) {
               widget.db.checkChatExistByUser(
                   chatId: chatItem.chatId,
                   onNoResult: () {
                     widget.db.insertChat(
-                        convId: chatItem.notificationConversationId,
+                        convId: convId,
                         userId: chatItem.notificationFromId,
                         content: chatItem.notificationContent,
                         date: chatItem.notificationRegDate,
@@ -476,7 +487,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             onNoResult: () {
               widget.db.insertConversation(
                   userId: chatItem.notificationFromId,
-                  convId: chatItem.notificationConversationId,
+                  convId: convId,
                   createDate: chatItem.notificationRegDate,
                   fromName: chatItem.notificationFromName,
                   onInserted: () {
@@ -487,7 +498,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                         chatId: chatItem.chatId,
                         onNoResult: () {
                           widget.db.insertChat(
-                              convId: chatItem.notificationConversationId,
+                              convId: convId,
                               userId: chatItem.notificationFromId,
                               content: chatItem.notificationContent,
                               date: chatItem.notificationRegDate,
@@ -517,8 +528,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                                     setState(() {
                                       MiddleWare.shared.tabc.animateTo(2);
                                       Chats.staticChatsPage.myChild.openChat(
-                                          convId: message['data']
-                                              ['conversationId'],
+                                          convId: convId,
                                           uId: message['data']['fromId'],
                                           uName: message['data']['fromName'],
                                           withDuration: true);
@@ -590,14 +600,15 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
-        else if (message['data']['notificationType'].toString().toLowerCase() ==
-            "notice") {
-          if (isOnResume) {
+        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
+
+          if(isOnResume){
             //this.widget.mdw.shouldMoveToThisVoteId = message['data']['idx'].toString();
             setState(() {
               MiddleWare.shared.currentIndex = 3;
-              MiddleWare.shared.tabc
-                  .animateTo(3, duration: Duration(seconds: 0));
+              MiddleWare.shared.tabc.animateTo(3,duration: Duration(seconds: 0));
+              Notices.staticNoticesPage.myChild.refreshNotices();
+              print(":::::: notices should be refreshed ::::::");
             });
             return;
           }
