@@ -1,4 +1,4 @@
-package com.mariners.haegisa2;
+package com.mariners.heagisa2;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

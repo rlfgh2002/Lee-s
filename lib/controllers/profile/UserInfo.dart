@@ -271,14 +271,14 @@ class UserInfoState extends State<UserInfo> {
                                         fontSize: Statics
                                             .shared.fontSizes.supplementary,
                                         color: Statics
-                                            .shared.colors.subTitleTextColor,
+                                            .shared.colors.titleTextColor,
                                       ),
                                     )
                                   : Text(
                                       postNo,
                                       style: TextStyle(
                                         color: Statics
-                                            .shared.colors.subTitleTextColor,
+                                            .shared.colors.titleTextColor,
                                         fontSize: Statics
                                             .shared.fontSizes.supplementary,
                                       ),
@@ -346,14 +346,14 @@ class UserInfoState extends State<UserInfo> {
                                         fontSize: Statics
                                             .shared.fontSizes.supplementary,
                                         color: Statics
-                                            .shared.colors.subTitleTextColor,
+                                            .shared.colors.titleTextColor,
                                       ),
                                     )
                                   : Text(
                                       address1,
                                       style: TextStyle(
                                         color: Statics
-                                            .shared.colors.subTitleTextColor,
+                                            .shared.colors.titleTextColor,
                                         fontSize: Statics
                                             .shared.fontSizes.supplementary,
                                       ),

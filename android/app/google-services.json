@@ -56,10 +56,70 @@
               "client_type": 3
             },
             {
-              "client_id": "297450269741-pmjib127jh7sep4scgkbou7vc5j8jorl.apps.googleusercontent.com",
+              "client_id": "297450269741-cg8dml8d2m918cb35g65d40lmbkmaa6p.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.test.heagisa2"
+                "bundle_id": "sdfsdfasdf"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297450269741:android:a82de6c67106b70a279ca4",
+        "android_client_info": {
+          "package_name": "com.mariners.heagisa2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297450269741-nioasccaf0gv350li702js27l5onelm9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariners.heagisa2",
+            "certificate_hash": "595758d78bbaf3e3b29eb8499ccce881ad2b6128"
+          }
+        },
+        {
+          "client_id": "297450269741-4pj6d0frthcq47kfkdcm46rahdk8h2jg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariners.heagisa2",
+            "certificate_hash": "ce940ebf05408a52e64b01698a173d97b613303d"
+          }
+        },
+        {
+          "client_id": "297450269741-0u93smqt3f8qb4fcp9ddvl1jvvdsku16.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariners.heagisa2",
+            "certificate_hash": "75c87fd61255091c432c42c03a63c29a94ec6766"
+          }
+        },
+        {
+          "client_id": "297450269741-3b0en2mrhd6vujq5ftp73h2k2pbb5f2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxw-FIHMyKAyPHL7aUv9NznBcOvd3f7l0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297450269741-3b0en2mrhd6vujq5ftp73h2k2pbb5f2s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297450269741-cg8dml8d2m918cb35g65d40lmbkmaa6p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "sdfsdfasdf"
               }
             }
           ]
@@ -116,10 +176,10 @@
               "client_type": 3
             },
             {
-              "client_id": "297450269741-pmjib127jh7sep4scgkbou7vc5j8jorl.apps.googleusercontent.com",
+              "client_id": "297450269741-cg8dml8d2m918cb35g65d40lmbkmaa6p.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.test.heagisa2"
+                "bundle_id": "sdfsdfasdf"
               }
             }
           ]

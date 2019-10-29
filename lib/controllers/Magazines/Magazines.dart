@@ -339,13 +339,14 @@ class _MagazinesState extends State<Magazines> {
             changeURL = fileURL;
           }
 
+          //await FlutterDownloader.initialize();
           final taskId = await FlutterDownloader.enqueue(
             url: changeURL,
             savedDir: _localPath,
             showNotification:
-                true, // show download progress in status bar (for Android)
+                false, // show download progress in status bar (for Android)
             openFileFromNotification:
-                true, // click on notification to open downloaded file (for Android)
+                false, // click on notification to open downloaded file (for Android)
           );
 
           FlutterDownloader.registerCallback((id, status, progress) {
