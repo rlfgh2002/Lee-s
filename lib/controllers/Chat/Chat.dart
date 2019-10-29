@@ -18,6 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:haegisa2/models/LifeCycle.dart';
 
 String chatCurrentConvId = "";
 
@@ -377,6 +378,10 @@ class ChatState extends State<Chat> {
     if (Chats.staticChatsPage != null) {
       Chats.staticChatsPage.refresh();
     }
+
+    WidgetsBinding.instance.addObserver(
+        new LifecycleEventHandler(resumeCallBack: (){refreshChats();}));
+
     super.initState();
   }
 
@@ -391,6 +396,9 @@ class ChatState extends State<Chat> {
   }
 
   void refreshChats() async {
+
+    print(".....:::::::::: START REFRESHING CHATS ::::::::::.....");
+
     setState(() {
       MiddleWare.shared.messages = [];
     });
