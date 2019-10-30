@@ -90,12 +90,13 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
     String votePeriod = "";
     this.widget.votingPeriod = this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
     String year = this.widget.votingPeriod.substring(0,4);
-    String month = this.widget.votingPeriod.substring(5,7);
+    String month = this.widget.votingPeriod.substring(4,6);
     String day = this.widget.votingPeriod.substring(6,8);
 
     String hours = this.widget.votingPeriod.substring(8,10);
     String minutes = this.widget.votingPeriod.substring(10,12);
     votePeriod = "${year.toString()}-${month.toString()}-${day.toString()} ${hours.toString()}:${minutes.toString()}";
+
     DateTime votePeriodDate = DateTime.parse(votePeriod);
 
     if(votePeriodDate.isAfter(DateTime.now())){
@@ -160,7 +161,7 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
     String votePeriod = "";
     this.widget.votingPeriod = this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
     String year = this.widget.votingPeriod.substring(0,4);
-    String month = this.widget.votingPeriod.substring(5,7);
+    String month = this.widget.votingPeriod.substring(4,6);
     String day = this.widget.votingPeriod.substring(6,8);
 
     String hours = this.widget.votingPeriod.substring(8,10);

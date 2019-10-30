@@ -278,9 +278,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         print('MSGX=> on launchX $message');
         analiseMessage(message, false, true);
       },
-      //onBackgroundMessage: fcmBackgroundMessageHandler,
-      onBackgroundMessage:
-          (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
+      onBackgroundMessage: fcmBackgroundMessageHandler,
+      //onBackgroundMessage:
+      //    (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
     );
   }
 
@@ -597,6 +597,11 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                               answer6: response['data']['a6'].toString(),
                             );
                           });
+
+                      if(Notices.staticNoticesPage != null){
+                        Notices.staticNoticesPage.myChild.refreshNotices();
+                      }
+
                     });
               });
         } // Vote Notification

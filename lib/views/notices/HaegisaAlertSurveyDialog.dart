@@ -132,6 +132,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       showPopUpVotingComplete(
         onPressOk: () {
           Navigator.pop(this.myContext);
+          Navigator.pop(this.myContext);
         },
         context: this.myContext,
       );
@@ -376,8 +377,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                       // submit Survey
                       // Submit this Survey to Server ...
                       print("Connect To Server ........");
-                      this.submitSurvey(
-                          bdxId: this.widget.surveysChecked.first.idx);
+                      this.submitSurvey(bdxId: this.widget.surveysChecked.first.idx);
                     },
                   ),
                   width: (this.widget.popUpWidth - 16) / 2)),
