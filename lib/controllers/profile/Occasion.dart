@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:haegisa2/controllers/home/Home.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/statics/strings.dart';

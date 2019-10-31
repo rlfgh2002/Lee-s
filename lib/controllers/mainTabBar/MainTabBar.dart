@@ -263,6 +263,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
 
     widget.mainFirebaseMessaging.configure(
+      //onBackgroundMessage: fcmBackgroundMessageHandler,
+      onBackgroundMessage:
+          (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
         if (Platform.isIOS) {
           print('MSGX=> on messageX Main $message');
@@ -287,10 +290,12 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         print('MSGX=> on launchX $message');
         analiseMessage(message, false, true);
       },
-      onBackgroundMessage: fcmBackgroundMessageHandler,
-      //onBackgroundMessage:
-      //    (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
     );
+  }
+
+  static Future<dynamic> testBackgroundMessageHandler(
+      Map<String, dynamic> message) async {
+    return Future<void>.value();
   }
 
   static Future<dynamic> fcmBackgroundMessageHandler(
@@ -607,10 +612,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                             );
                           });
 
-                      if(Notices.staticNoticesPage != null){
+                      if (Notices.staticNoticesPage != null) {
                         Notices.staticNoticesPage.myChild.refreshNotices();
                       }
-
                     });
               });
         } // Vote Notification
