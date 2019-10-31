@@ -264,10 +264,19 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     widget.mainFirebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-
-        if (message['notification']['title'] == null && message['notification']['body'] == null && message['data']['justNotify'] == null) {
+        if (Platform.isIOS) {
           print('MSGX=> on messageX Main $message');
-          analiseMessage(message, true, false);
+          Map<String, dynamic> body = {'data': []};
+          body['data'] = message;
+
+          analiseMessage(body, true, false);
+        } else {
+          if (message['notification']['title'] == null &&
+              message['notification']['body'] == null &&
+              message['data']['justNotify'] == null) {
+            print('MSGX=> on messageX Main $message');
+            analiseMessage(message, true, false);
+          }
         }
       },
       onResume: (Map<String, dynamic> message) async {
@@ -306,7 +315,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     else {
       if (message['data']['notificationType'].toString() == "chat") {
         String convId = chatItem.notificationConversationId;
-        if(chatItem.notificationFromId == 'mariners123'){
+        if (chatItem.notificationFromId == 'mariners123') {
           convId = "x0x0";
         }
         myDb.checkConversationExist(
@@ -382,8 +391,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
-        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
-
+        else if (message['data']['notificationType'].toString().toLowerCase() ==
+            "notice") {
           VoteObject noticeItem = VoteObject.fromJson(message);
 
           myDb.insertNotice(
@@ -447,7 +456,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         }
 
         String convId = chatItem.notificationConversationId;
-        if(chatItem.notificationFromId == 'mariners123'){
+        if (chatItem.notificationFromId == 'mariners123') {
           convId = "x0x0";
         }
 
@@ -600,13 +609,14 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
               });
         } // Vote Notification
-        else if (message['data']['notificationType'].toString().toLowerCase() == "notice") {
-
-          if(isOnResume){
+        else if (message['data']['notificationType'].toString().toLowerCase() ==
+            "notice") {
+          if (isOnResume) {
             //this.widget.mdw.shouldMoveToThisVoteId = message['data']['idx'].toString();
             setState(() {
               MiddleWare.shared.currentIndex = 3;
-              MiddleWare.shared.tabc.animateTo(3,duration: Duration(seconds: 0));
+              MiddleWare.shared.tabc
+                  .animateTo(3, duration: Duration(seconds: 0));
               Notices.staticNoticesPage.myChild.refreshNotices();
               print(":::::: notices should be refreshed ::::::");
             });

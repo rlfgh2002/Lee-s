@@ -12,6 +12,6 @@ import Flutter
   }
 }
 
-private func registerPlugins(registry: FlutterPluginRegistry) {
-    GeneratedPluginRegistrant.register(with: registry)
-}
+// private func registerPlugins(registry: FlutterPluginRegistry) {
+//     GeneratedPluginRegistrant.register(with: registry)
+// }

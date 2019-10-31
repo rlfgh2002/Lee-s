@@ -1,5 +1,4 @@
 class ChatObject {
-
   final String notificationKind;
   final String notificationRegDate;
   final String notificationFromId;
@@ -11,17 +10,14 @@ class ChatObject {
   final String chatId;
 
   ChatObject(
-      {
-        this.notificationKind,
-        this.notificationRegDate,
-        this.notificationFromId,
-        this.notificationContent,
-        this.notificationConversationId,
-        this.notificationFromName,
-        this.notificationType,
-        this.chatId
-      }
-      );
+      {this.notificationKind,
+      this.notificationRegDate,
+      this.notificationFromId,
+      this.notificationContent,
+      this.notificationConversationId,
+      this.notificationFromName,
+      this.notificationType,
+      this.chatId});
 
   factory ChatObject.fromJson(Map<String, dynamic> json) {
     return ChatObject(
@@ -29,7 +25,6 @@ class ChatObject {
       notificationRegDate: json['data']['regDate'],
       notificationFromId: json['data']['fromId'],
       notificationContent: json['data']['content'],
-
       notificationFromName: json['data']['fromName'],
       notificationConversationId: json['data']['conversationId'],
       notificationType: json['data']['notificationType'],
