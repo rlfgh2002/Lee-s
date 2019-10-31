@@ -181,7 +181,6 @@ class NoticesState extends State<Notices> {
           type: NoticeType.Survey,
           idx: res[i]['bd_idx'].toString(),
           onTapped: () {
-
             if(res[i]['isDone'].toString() != "TRUE"){
               String startDateStr = res[i]['start_date'].toString();
               String endDateStr = res[i]['end_date'].toString();
@@ -288,7 +287,7 @@ class NoticesState extends State<Notices> {
           String startDateStr = results[i].startDate.toString();
           String endDateStr = results[i].endDate.toString();
           String votingDate = "";
-          votingDate = startDateStr.replaceAll("-", ".");
+          votingDate = endDateStr.replaceAll("-", ".");
           votingDate = "${votingDate.toString()} - ";
           int i3 = 0;
           endDateStr.split("-").forEach((item){
