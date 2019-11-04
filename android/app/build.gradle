@@ -62,13 +62,13 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
 
             //##디버그용
-            //signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug
             //## 
 
             //##업로드용
-            signingConfig signingConfigs.release
-            minifyEnabled true //주석처리 실행 X
-            useProguard true
+            //signingConfig signingConfigs.release
+            //minifyEnabled true //주석처리 실행 X
+            //useProguard true
             //##
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

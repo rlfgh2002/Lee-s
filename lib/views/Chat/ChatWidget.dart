@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/models/statics/statics.dart';
+import 'package:intl/intl.dart';
 
 class ChatWidget extends StatelessWidget {
   String content = "";
@@ -56,18 +57,37 @@ class ChatWidget extends StatelessWidget {
 
       //clearDateTime = "${dateSpt[0].toString()}-${dateSpt[1].toString()}-${dateSpt[2].toString()} at ${timeSpt[0].toString()}:${timeSpt[1].toString()}";
     } else {
+      DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
       dt = DateTime.parse(this.time);
       if (DateTime.now().year == dt.year &&
-          DateTime.now().month == dt.month &&
-          DateTime.now().day == dt.day) {
-        clearDateTime = "오전 ${dt.hour}:${dt.minute}";
+          DateTime.now().month.toString().padLeft(2, '0') ==
+              dt.month.toString().padLeft(2, '0') &&
+          DateTime.now().day.toString().padLeft(2, '0') ==
+              dt.day.toString().padLeft(2, '0')) {
+        if (dt.hour > 12) {
+          clearDateTime =
+              "오후 ${(dt.hour - 12).toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+        } else {
+          clearDateTime =
+              "오전 ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+        }
       } else if (DateTime.now().year == dt.year &&
-          DateTime.now().month == dt.month &&
-          DateTime.now().day == dt.day + 1) {
-        clearDateTime = "어제 ${dt.hour}:${dt.minute}";
+          DateTime.now().month.toString().padLeft(2, '0') ==
+              dt.month.toString().padLeft(2, '0') &&
+          DateTime.now().day.toString().padLeft(2, '0') ==
+              (dt.day + 1).toString().padLeft(2, '0')) {
+        if (dt.hour > 12) {
+          clearDateTime =
+              "어제 오후 ${(dt.hour - 12).toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+        } else {
+          clearDateTime =
+              "어제 오전 ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+        }
       } else if (DateTime.now().year == dt.year &&
-          DateTime.now().month == dt.month &&
-          DateTime.now().day > dt.day + 1) {
+          DateTime.now().month.toString().padLeft(2, '0') ==
+              dt.month.toString().padLeft(2, '0') &&
+          int.parse(DateTime.now().day.toString().padLeft(2, '0')) >
+              int.parse((dt.day + 1).toString().padLeft(2, '0'))) {
         clearDateTime = "${dt.day}월 ${dt.month}일";
       } else {
         clearDateTime = "${dt.year}.${dt.month}.${dt.day}";

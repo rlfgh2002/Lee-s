@@ -8,6 +8,7 @@ import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/User.dart';
 import 'package:haegisa2/models/myFuncs.dart';
 import 'package:haegisa2/views/Chat/ChatWidget.dart';
+import 'package:intl/intl.dart';
 import 'MiddleWare.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -82,9 +83,9 @@ class ChatState extends State<Chat> {
     });
   }
 
-  void sendChat({String message,String toId = "", onSent(), onNotSent()}) async {
+  void sendChat(
+      {String message, String toId = "", onSent(), onNotSent()}) async {
     MainTabBar.myChild.getUserId(onGetUserId: (uid) {
-
       makeConversation(chatCurrentConvId);
 
       String y = DateTime.now().year.toString();
@@ -95,12 +96,13 @@ class ChatState extends State<Chat> {
       String i = DateTime.now().minute.toString();
       String s = DateTime.now().second.toString();
 
-      String date =
-          "${y.toString()}/${m.toString()}/${d.toString()} ${h.toString()}:${i.toString()}:${s.toString()}";
+      // String date =
+      //     "${y.toString()}/${m.toString()}/${d.toString()} ${h.toString()}:${i.toString()}:${s.toString()}";
+      String date = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
       String msg = MiddleWare.shared.txtChat.text;
 
       String usId = MiddleWare.shared.user.UID;
-      if(toId != ""){
+      if (toId != "") {
         usId = toId;
       }
       String chatIdRandom = randomChatId();
@@ -152,7 +154,6 @@ class ChatState extends State<Chat> {
   }
 
   Container bottomChat() {
-
     String toId = "";
     if (chatCurrentConvId != 'x0x0' && MiddleWare.shared.user.UID != '0') {
       toId = "";
@@ -177,7 +178,7 @@ class ChatState extends State<Chat> {
           hintText: Strings.shared.controllers.chat.hintChatTextField,
           fillColor: Color.fromRGBO(244, 248, 255, 1),
           contentPadding:
-          const EdgeInsets.only(left: 32, right: 32, top: 15, bottom: 15),
+              const EdgeInsets.only(left: 32, right: 32, top: 15, bottom: 15),
           suffixIcon: IconButton(
             icon: Image.asset(
               "Resources/Icons/icon_send.png",
@@ -189,7 +190,7 @@ class ChatState extends State<Chat> {
               if (MiddleWare.shared.txtChat.text.isNotEmpty) {
                 sendChat(
                     message: MiddleWare.shared.txtChat.text,
-                    toId:toId,
+                    toId: toId,
                     onSent: () {
                       setState(() {
                         MiddleWare.shared.messages.add(ChatWidget(
@@ -212,8 +213,8 @@ class ChatState extends State<Chat> {
             },
           ),
           enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromRGBO(241, 244, 250, 1)),
+              borderSide:
+                  BorderSide(width: 1, color: Color.fromRGBO(241, 244, 250, 1)),
               borderRadius: BorderRadius.all(Radius.circular(100))),
           hintStyle: TextStyle(
               fontSize: Statics.shared.fontSizes.content,
@@ -297,30 +298,29 @@ class ChatState extends State<Chat> {
     });
   }
 
-  void makeConversation(String chatCurrentConvId){
+  void makeConversation(String chatCurrentConvId) {
     this.widget.db.checkConversationExist(
         onResult: (result) {},
         userId: MiddleWare.shared.user.UID,
         convId: chatCurrentConvId,
         onNoResult: () {
-
           this.widget.db.insertConversation(
-            userId: MiddleWare.shared.user.UID,
-            convId: chatCurrentConvId,
-            createDate: DateTime.now().toString(),
-            fromName: MiddleWare.shared.user.fullName,
-            schoolName: MiddleWare.shared.user.caption,
-            schoolGisu: MiddleWare.shared.user.gisu,
-            onInserted: () {
-              print(
-                  ":::::::::: NEW Conversation GENERATED Succesfully ${chatCurrentConvId.toString()} ::::::::::");
-            },
-            onNoInerted: () {
-              print(
-                  ":::::::::: NEW Conversation GENERATING FAILURE. ::::::::::");
-            },
-          );
-
+                userId: MiddleWare.shared.user.UID,
+                convId: chatCurrentConvId,
+                createDate:
+                    DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now()),
+                fromName: MiddleWare.shared.user.fullName,
+                schoolName: MiddleWare.shared.user.caption,
+                schoolGisu: MiddleWare.shared.user.gisu,
+                onInserted: () {
+                  print(
+                      ":::::::::: NEW Conversation GENERATED Succesfully ${chatCurrentConvId.toString()} ::::::::::");
+                },
+                onNoInerted: () {
+                  print(
+                      ":::::::::: NEW Conversation GENERATING FAILURE. ::::::::::");
+                },
+              );
         });
   }
 
@@ -374,13 +374,16 @@ class ChatState extends State<Chat> {
     MiddleWare.shared.txtChat = TextEditingController();
 
     if (Platform.isIOS) iOS_Permission();
+    //why did you update lastDate?? lastDate is last chat response date
     widget.db.updateSeenChats(convId: chatCurrentConvId);
     if (Chats.staticChatsPage != null) {
       Chats.staticChatsPage.refresh();
     }
 
-    WidgetsBinding.instance.addObserver(
-        new LifecycleEventHandler(resumeCallBack: (){refreshChats();}));
+    WidgetsBinding.instance
+        .addObserver(new LifecycleEventHandler(resumeCallBack: () {
+      refreshChats();
+    }));
 
     super.initState();
   }
@@ -396,7 +399,6 @@ class ChatState extends State<Chat> {
   }
 
   void refreshChats() async {
-
     print(".....:::::::::: START REFRESHING CHATS ::::::::::.....");
 
     setState(() {

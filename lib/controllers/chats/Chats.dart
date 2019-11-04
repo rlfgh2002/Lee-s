@@ -10,6 +10,7 @@ import 'package:haegisa2/controllers/Chat/Chat.dart';
 import 'package:haegisa2/models/User.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -212,6 +213,7 @@ class _ChatsState extends State<Chats> {
   }
 
   void refreshList() async {
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
     await SharedPreferences.getInstance().then((val) {
       if (val.get("HAD_FIRST_WELCOME_MSG") != true) {
         // welcome message
@@ -234,9 +236,16 @@ class _ChatsState extends State<Chats> {
                         onResult: (itemContent) {
                           bool hasBadge = false;
                           String contentX = "";
-                          DateTime lastChatDate = DateTime.now();
-                          String chosenTime =
-                              "오전 ${DateTime.now().hour}:${DateTime.now().minute}";
+                          DateTime lastChatDate =
+                              DateTime.parse(dateFormat.format(DateTime.now()));
+                          String chosenTime = "";
+                          if (DateTime.now().hour > 12) {
+                            chosenTime =
+                                "오후 ${(DateTime.now().hour - 12).toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
+                          } else {
+                            chosenTime =
+                                "오전 ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
+                          }
 
                           if (itemContent != null) {
                             if (itemContent["chatDate2"].contains("-")) {
@@ -257,24 +266,51 @@ class _ChatsState extends State<Chats> {
                                         int.parse(dateSpt[1]) &&
                                     DateTime.now().day ==
                                         int.parse(dateSpt[2])) {
-                                  chosenTime = "오전 ${timeSpt[0]}:${timeSpt[1]}";
+                                  if (int.parse(timeSpt[0]) > 12) {
+                                    chosenTime =
+                                        "오후 ${(int.parse(timeSpt[0]) - 12).toString().padLeft(2, '0')}:${timeSpt[1].toString().padLeft(2, '0')}";
+                                  } else {
+                                    chosenTime =
+                                        "오전 ${timeSpt[0].toString().padLeft(2, '0')}:${timeSpt[1].toString().padLeft(2, '0')}";
+                                  }
                                 } else if (DateTime.now().year ==
                                         int.parse(dateSpt[0]) &&
-                                    DateTime.now().month ==
-                                        int.parse(dateSpt[1]) &&
-                                    DateTime.now().day ==
-                                        int.parse(dateSpt[2]) + 1) {
+                                    int.parse(DateTime.now()
+                                            .month
+                                            .toString()
+                                            .padLeft(2, '0')) ==
+                                        int.parse(dateSpt[1]
+                                            .toString()
+                                            .padLeft(2, '0')) &&
+                                    int.parse(DateTime.now()
+                                            .day
+                                            .toString()
+                                            .padLeft(2, '0')) ==
+                                        int.parse((dateSpt[2] + 1)
+                                            .toString()
+                                            .padLeft(2, '0'))) {
                                   chosenTime = "어제";
                                 } else if (DateTime.now().year ==
                                         int.parse(dateSpt[0]) &&
-                                    DateTime.now().month ==
-                                        int.parse(dateSpt[1]) &&
-                                    DateTime.now().day >
-                                        int.parse(dateSpt[2]) + 1) {
-                                  chosenTime = "${dateSpt[2]}월 ${dateSpt[1]}일";
+                                    int.parse(DateTime.now()
+                                            .month
+                                            .toString()
+                                            .padLeft(2, '0')) ==
+                                        int.parse(dateSpt[1]
+                                            .toString()
+                                            .padLeft(2, '0')) &&
+                                    int.parse(DateTime.now()
+                                            .day
+                                            .toString()
+                                            .padLeft(2, '0')) >
+                                        int.parse((dateSpt[2] + 1)
+                                            .toString()
+                                            .padLeft(2, '0'))) {
+                                  chosenTime =
+                                      "${dateSpt[2].toString().padLeft(2, '0')}월 ${dateSpt[1].toString().padLeft(2, '0')}일";
                                 } else {
                                   chosenTime =
-                                      "${dateSpt[0]}.${dateSpt[1]}.${dateSpt[2]}";
+                                      "${dateSpt[0]}.${dateSpt[1].toString().padLeft(2, '0')}.${dateSpt[2].toString().padLeft(2, '0')}";
                                 }
                               }
                             }
@@ -285,6 +321,9 @@ class _ChatsState extends State<Chats> {
                             } else {
                               hasBadge = false;
                             }
+
+                            MainTabBar.mainTabBar.createState();
+                      
 
                             if (itemContent != null) {
                               contentX = itemContent["content"].toString();
@@ -532,7 +571,7 @@ class _ChatsState extends State<Chats> {
       padding: const EdgeInsets.only(top: 120),
     );
 
-    if(MainTabBar.mainTabBar.mdw.shouldMoveToThisConvId != ""){
+    if (MainTabBar.mainTabBar.mdw.shouldMoveToThisConvId != "") {
       String cId = MainTabBar.mainTabBar.mdw.shouldMoveToThisConvId;
       String uId = MainTabBar.mainTabBar.mdw.shouldMoveToThisFromId;
       String uName = MainTabBar.mainTabBar.mdw.shouldMoveToThisFromName;
@@ -540,12 +579,12 @@ class _ChatsState extends State<Chats> {
       MainTabBar.mainTabBar.mdw.shouldMoveToThisFromId = "";
       MainTabBar.mainTabBar.mdw.shouldMoveToThisFromName = "";
 
-      Future.delayed(Duration(milliseconds: 500)).whenComplete((){
-      this.openChat(
-      convId: cId.toString(),
-      uId: uId.toString(),
-      uName: uName.toString(),
-      withDuration: false);
+      Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
+        this.openChat(
+            convId: cId.toString(),
+            uId: uId.toString(),
+            uName: uName.toString(),
+            withDuration: false);
       });
     }
 

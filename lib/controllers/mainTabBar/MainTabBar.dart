@@ -29,6 +29,8 @@ class MainTabBar extends StatefulWidget {
   StreamSubscription subscription;
   String myUserId = '';
   static MainTabBar mainTabBar;
+  static String btnChat = "Resources/Icons/btn_chat.png";
+  static String btnNotice = "Resources/Icons/btn_notice.png";
   static MainTabBarState myChild;
   MiddleWare mdw = MiddleWare.shared;
   @override
@@ -40,6 +42,7 @@ class MainTabBar extends StatefulWidget {
 
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static MainTabBarState shared = MainTabBarState();
+
   MainTabBarState() {}
   DateTime backButtonPressTime;
   static BottomNavigationBar navBar;
@@ -271,14 +274,35 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           print('MSGX=> on messageX Main $message');
           Map<String, dynamic> body = {'data': []};
           body['data'] = message;
-
           analiseMessage(body, true, false);
+          setState(() {
+            if (message['notificationType'].toString().toLowerCase() ==
+                "chat") {
+              btnChat = "Resources/Icons/btn_chat_new.png";
+            } else if (message['notificationType'].toString().toLowerCase() ==
+                "notice") {
+              btnNotice = "Resources/Icons/btn_notice_new.png";
+            }
+          });
         } else {
           if (message['notification']['title'] == null &&
               message['notification']['body'] == null &&
               message['data']['justNotify'] == null) {
             print('MSGX=> on messageX Main $message');
             analiseMessage(message, true, false);
+            setState(() {
+              if (message['data']['notificationType']
+                      .toString()
+                      .toLowerCase() ==
+                  "chat") {
+                btnChat = "Resources/Icons/btn_chat_new.png";
+              } else if (message['data']['notificationType']
+                      .toString()
+                      .toLowerCase() ==
+                  "notice") {
+                btnNotice = "Resources/Icons/btn_notice_new.png";
+              }
+            });
           }
         }
       },
@@ -674,7 +698,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     getUserId(onGetUserId: (uid) {
       getAllSurveys(uid: uid);
     });
-    firebaseCloudMessaging_Listeners();
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      firebaseCloudMessaging_Listeners();
+    });
+
     print("Main TabBar New...");
 
     widget.subscription = Connectivity()
@@ -740,6 +767,14 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   void clickToChangeMenu(index) {
     setState(() {
+      print(index);
+
+      if (index == 2) {
+        btnChat = "Resources/Icons/btn_chat.png";
+      } else if (index == 3) {
+        btnNotice = "Resources/Icons/btn_notice.png";
+      }
+
       MiddleWare.shared.currentIndex = index;
       MiddleWare.shared.tabc.animateTo(index);
     });
@@ -817,11 +852,12 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             Colors.black // Dark == white status bar -- for IOS.
         ));
     MainTabBarState.navBar = BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(
-            icon: new Image.asset("Resources/Icons/btn_main.png", width: 25),
+            icon: new Image.asset("Resources/Icons/btn_main.png", width: 50),
             activeIcon:
-                new Image.asset("Resources/Icons/btn_main_ac.png", width: 25),
+                new Image.asset("Resources/Icons/btn_main_ac.png", width: 50),
             title: Text("")),
         BottomNavigationBarItem(
             icon:
@@ -830,22 +866,22 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                 width: 50),
             title: Text("")),
         BottomNavigationBarItem(
-            icon: new Image.asset("Resources/Icons/btn_chat.png", width: 25),
+            icon: new Image.asset(btnChat, width: 50),
             activeIcon:
-                new Image.asset("Resources/Icons/btn_chat_ac.png", width: 25),
+                new Image.asset("Resources/Icons/btn_chat_ac.png", width: 50),
             title: Text("")),
         BottomNavigationBarItem(
-            icon: new Image.asset("Resources/Icons/btn_notice.png", width: 25),
+            icon: new Image.asset(btnNotice, width: 50),
             activeIcon:
-                new Image.asset("Resources/Icons/btn_notice_ac.png", width: 25),
+                new Image.asset("Resources/Icons/btn_notice_ac.png", width: 50),
             title: Text("")),
         BottomNavigationBarItem(
-            icon: new Image.asset("Resources/Icons/btn_mymenu.png", width: 40),
+            icon: new Image.asset("Resources/Icons/btn_mymenu.png", width: 50),
             activeIcon:
-                new Image.asset("Resources/Icons/btn_mymenu_ac.png", width: 40),
+                new Image.asset("Resources/Icons/btn_mymenu_ac.png", width: 50),
             title: Text("")),
       ],
-      backgroundColor: Colors.white30,
+      backgroundColor: Colors.white,
       fixedColor: Colors.black,
       unselectedItemColor: Colors.grey,
       currentIndex: MiddleWare.shared.currentIndex,

@@ -107,6 +107,7 @@ flutter:
     - Resources/Icons/icon_barcode.png
     - Resources/Icons/icon_date.png
     - Resources/Icons/btn_notice_ac.png
+    - Resources/Icons/btn_notice_new.png
     - Resources/Icons/btn_main_ac.png
     - Resources/Icons/icon_Permission.png
     - Resources/Icons/icon_send_active.png
@@ -130,6 +131,7 @@ flutter:
     - Resources/Icons/btn_finduser.png
     - Resources/Icons/btn_mymenu.png
     - Resources/Icons/btn_chat.png
+    - Resources/Icons/btn_chat_new.png
     - Resources/Icons/Line2.png
     - Resources/Icons/Line3.png
     - Resources/Icons/Line4.png

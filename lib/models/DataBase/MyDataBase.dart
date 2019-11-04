@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haegisa2/models/Vote/VoteObject.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -101,7 +102,7 @@ class MyDataBase {
   }
 
   void _checkDataBaseIsCreated() async {
-    await SharedPreferences.getInstance().then((prefs){
+    await SharedPreferences.getInstance().then((prefs) {
       this.prefs = prefs;
       bool dbStatus = prefs.getBool('my_database_iscreated');
       print(":::::::::: DB STATUS => [${dbStatus}] ::::::::::");
@@ -109,7 +110,6 @@ class MyDataBase {
         print("CREATION:::::");
         _createDataBase();
       }
-
     });
   }
 
@@ -120,7 +120,8 @@ class MyDataBase {
     await openDatabase(path, version: 1,
             onCreate: (Database db, int version) async {
       // When creating the db, create the table
-      await db.execute(
+      await db
+          .execute(
               'CREATE TABLE ${_StaticDbInformation.tblConversation} (id INTEGER PRIMARY KEY AUTOINCREMENT , ${_StaticDbInformation.tblConversationUpdaterField} INTEGER,${_StaticDbInformation.tblConversationFieldId} TEXT,${_StaticDbInformation.tblConversationOtherSideUserId} TEXT,${_StaticDbInformation.tblConversationCreateDate} TEXT, ${_StaticDbInformation.tblConversationOtherSideUserFromName} TEXT)')
           .then((val) {
         print(
@@ -130,7 +131,8 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db.execute(
+      await db
+          .execute(
               'CREATE TABLE ${_StaticDbInformation.tblChats} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblChatsChatId} TEXT,${_StaticDbInformation.tblChatsSeen} TEXT,${_StaticDbInformation.tblChatsConvId} TEXT,${_StaticDbInformation.tblChatsContent} TEXT,${_StaticDbInformation.tblChatsChatDate} TEXT,${_StaticDbInformation.tblChatsChatDate2} TEXT, ${_StaticDbInformation.tblChatsIsYours} TEXT)')
           .then((val) {
         print(
@@ -140,8 +142,9 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db.execute(
-          'CREATE TABLE ${_StaticDbInformation.tblNotices} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblNoticesId} TEXT,${_StaticDbInformation.tblNoticesRegDate} TEXT,${_StaticDbInformation.tblNoticesFromId} TEXT,${_StaticDbInformation.tblNoticesFromName} TEXT,${_StaticDbInformation.tblNoticesSubject} TEXT,${_StaticDbInformation.tblNoticesContent} TEXT)')
+      await db
+          .execute(
+              'CREATE TABLE ${_StaticDbInformation.tblNotices} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblNoticesId} TEXT,${_StaticDbInformation.tblNoticesRegDate} TEXT,${_StaticDbInformation.tblNoticesFromId} TEXT,${_StaticDbInformation.tblNoticesFromName} TEXT,${_StaticDbInformation.tblNoticesSubject} TEXT,${_StaticDbInformation.tblNoticesContent} TEXT)')
           .then((val) {
         print(
             ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblNotices} STATUS => [TRUE] ::::::::::");
@@ -150,7 +153,8 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblNotices} ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db.execute(
+      await db
+          .execute(
               'CREATE TABLE ${_StaticDbInformation.tblBlockUsers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblBlockUsersUserId} TEXT)')
           .then((val) {
         print(
@@ -160,7 +164,8 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db.execute(
+      await db
+          .execute(
               'CREATE TABLE ${_StaticDbInformation.tblVotes} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblVotesContent} TEXT,${_StaticDbInformation.tblVotesFromId} TEXT,${_StaticDbInformation.tblVotesFromName} TEXT,${_StaticDbInformation.tblVotesHttpPath} TEXT, ${_StaticDbInformation.tblVotesIdx} TEXT, ${_StaticDbInformation.tblVotesRegDate} TEXT, ${_StaticDbInformation.tblVotesStartDate} TEXT, ${_StaticDbInformation.tblVotesEndDate} TEXT, ${_StaticDbInformation.tblVotesSubject} TEXT)')
           .then((val) {
         print(
@@ -170,7 +175,8 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db.execute(
+      await db
+          .execute(
               'CREATE TABLE ${_StaticDbInformation.tblVotesAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersVoteIdx} TEXT, ${_StaticDbInformation.tblAnswersVoteDone} TEXT,${_StaticDbInformation.tblAnswersStatus} TEXT,${_StaticDbInformation.tblAnswersAnswer1} TEXT,${_StaticDbInformation.tblAnswersAnswer2} TEXT, ${_StaticDbInformation.tblAnswersAnswer3} TEXT, ${_StaticDbInformation.tblAnswersAnswer4} TEXT, ${_StaticDbInformation.tblAnswersAnswer5} TEXT, ${_StaticDbInformation.tblAnswersAnswer6} TEXT)')
           .then((val) {
         print(
@@ -180,7 +186,8 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db.execute(
+      await db
+          .execute(
               'CREATE TABLE ${_StaticDbInformation.tblSurveys} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblSurveysNo} TEXT, ${_StaticDbInformation.tblSurveysRegDate} TEXT, ${_StaticDbInformation.tblSurveysDone} TEXT,${_StaticDbInformation.tblSurveysBdIdx} TEXT,${_StaticDbInformation.tblSurveysStartDate} TEXT,${_StaticDbInformation.tblSurveysEndDate} TEXT, ${_StaticDbInformation.tblSurveysSubject} TEXT, ${_StaticDbInformation.tblSurveysContents} TEXT, ${_StaticDbInformation.tblSurveysQcnt} TEXT)')
           .then((val) {
         print(
@@ -190,7 +197,8 @@ class MyDataBase {
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
       });
 
-      await db.execute(
+      await db
+          .execute(
               'CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersSurveyIdx} TEXT,${_StaticDbInformation.tblAnswersSurveyResult1} TEXT,${_StaticDbInformation.tblAnswersSurveyResult2} TEXT,${_StaticDbInformation.tblAnswersSurveyResult3} TEXT,${_StaticDbInformation.tblAnswersSurveyResult4} TEXT,${_StaticDbInformation.tblAnswersSurveyResult5} TEXT,${_StaticDbInformation.tblAnswersSurveyResult6} TEXT,${_StaticDbInformation.tblAnswersSurveyResult7} TEXT,${_StaticDbInformation.tblAnswersSurveyResult8} TEXT, ${_StaticDbInformation.tblAnswersSurveyQN} TEXT, ${_StaticDbInformation.tblAnswersSurveyTitle} TEXT,${_StaticDbInformation.tblAnswersSurveyCNT} TEXT,${_StaticDbInformation.tblAnswersSurveyQ1} TEXT,${_StaticDbInformation.tblAnswersSurveyQ2} TEXT,${_StaticDbInformation.tblAnswersSurveyQ3} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ4} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ5} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ6} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ7} TEXT, ${_StaticDbInformation.tblAnswersSurveyQ8} TEXT)')
           .then((val) {
         print(
@@ -237,7 +245,8 @@ class MyDataBase {
           this.insertConversation(
               convId: adminConvId,
               userId: adminUserId,
-              createDate: DateTime.now().toString(),
+              createDate:
+                  DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now()),
               fromName: '한국해기사협회',
               schoolName: 'Haegisa Company',
               schoolGisu: '',
@@ -253,7 +262,8 @@ class MyDataBase {
                     convId: adminConvId,
                     isYours: 'FALSE',
                     seen: "0",
-                    date: DateTime.now().toString(),
+                    date: DateFormat("yyyy-MM-dd HH:mm:ss")
+                        .format(DateTime.now()),
                     content:
                         "반갑습니다. 한국해기사협회입니다. 앞으로 다양한 소식과 정보를 앱으로 받아보실 수 있습니다.",
                     onAdded: () {
@@ -372,11 +382,11 @@ class MyDataBase {
 
   void insertNotice(
       {String noticeId = "",
-        String subject,
-        String fromId,
-        String fromName,
-        String content,
-        onInserted(bool st)}) async {
+      String subject,
+      String fromId,
+      String fromName,
+      String content,
+      onInserted(bool st)}) async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
     // open the database
@@ -384,12 +394,14 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db
           .rawInsert(
-          'INSERT INTO ${_StaticDbInformation.tblNotices} (${_StaticDbInformation.tblNoticesId},${_StaticDbInformation.tblNoticesRegDate},${_StaticDbInformation.tblNoticesFromId},${_StaticDbInformation.tblNoticesFromName},${_StaticDbInformation.tblNoticesSubject}, ${_StaticDbInformation.tblNoticesContent}) VALUES ("${noticeId.toString()}","${DateTime.now().toString()}","${fromId.toString()}","${fromName.toString()}","${subject.toString()}","${content.toString()}")')
+              'INSERT INTO ${_StaticDbInformation.tblNotices} (${_StaticDbInformation.tblNoticesId},${_StaticDbInformation.tblNoticesRegDate},${_StaticDbInformation.tblNoticesFromId},${_StaticDbInformation.tblNoticesFromName},${_StaticDbInformation.tblNoticesSubject}, ${_StaticDbInformation.tblNoticesContent}) VALUES ("${noticeId.toString()}","${DateTime.now().toString()}","${fromId.toString()}","${fromName.toString()}","${subject.toString()}","${content.toString()}")')
           .catchError((err) {
-        print(":::::::::: DB INSERT(Notices) ERROR => [${err.toString()}] ::::::::::");
+        print(
+            ":::::::::: DB INSERT(Notices) ERROR => [${err.toString()}] ::::::::::");
         onInserted(false);
       }).then((val) {
-        print(":::::::::: DB INSERT(Notices) QUERY => [${val.toString()}] ::::::::::");
+        print(
+            ":::::::::: DB INSERT(Notices) QUERY => [${val.toString()}] ::::::::::");
         onInserted(true);
       }).whenComplete(() {
         //db.close();
@@ -524,8 +536,8 @@ class MyDataBase {
 
   void checkChatExistByUser(
       {onResult(Map<String, dynamic> result),
-        String chatId = "",
-        onNoResult()}) async {
+      String chatId = "",
+      onNoResult()}) async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
     // open the database
@@ -533,7 +545,7 @@ class MyDataBase {
       Map<String, dynamic> obj;
       db
           .rawQuery(
-          "SELECT * FROM ${_StaticDbInformation.tblChats} WHERE ${_StaticDbInformation.tblChatsChatId} = '${chatId.toString()}'")
+              "SELECT * FROM ${_StaticDbInformation.tblChats} WHERE ${_StaticDbInformation.tblChatsChatId} = '${chatId.toString()}'")
           .then((lists) {
         if (lists.length > 0) {
           obj = lists.first;
@@ -550,6 +562,7 @@ class MyDataBase {
       });
     });
   }
+
   void insertChat(
       {String convId,
       String seen = "1",
@@ -565,7 +578,7 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       String dt = "";
       dt =
-          "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day} ${DateTime.now().hour}:${DateTime.now().minute}";
+          "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')} ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
 
       db.transaction((txn) async {
         int id1 = await txn.rawInsert(
@@ -648,15 +661,17 @@ class MyDataBase {
   }
 
   void updateSeenChats({String convId}) async {
+    //why did you update chatDate2?? chatDate2 is last chat response date
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
     // open the database
     await openDatabase(path).then((db) {
       String lastDate =
-          "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day} ${DateTime.now().hour}:${DateTime.now().minute}";
+          "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')} ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
       db
           .rawQuery(
-              "UPDATE ${_StaticDbInformation.tblChats} SET seen = '1', chatDate2 = '${lastDate.toString()}' WHERE convId = '${convId}'")
+              "UPDATE ${_StaticDbInformation.tblChats} SET seen = '1' WHERE convId = '${convId}'")
+          //"UPDATE ${_StaticDbInformation.tblChats} SET seen = '1', chatDate2 = '${lastDate.toString()}' WHERE convId = '${convId}'"
           .then((lists) {
         print(":::::::::: DB UPDATE SEEN CHATS(${lists.length}) ::::::::::");
         //db.close();
@@ -729,7 +744,7 @@ class MyDataBase {
       List<Map<String, dynamic>> myList = [];
       db
           .rawQuery(
-          "SELECT * FROM ${_StaticDbInformation.tblNotices}  ORDER BY id DESC")
+              "SELECT * FROM ${_StaticDbInformation.tblNotices}  ORDER BY id DESC")
           .then((lists) {
         for (int i = 0; i < lists.length; i++) {
           myList.add(lists[i]);
@@ -800,7 +815,7 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db
           .rawQuery(
-          "SELECT * FROM ${_StaticDbInformation.tblSurveys} WHERE ${_StaticDbInformation.tblSurveysNo} = '${no.toString()}' and ${_StaticDbInformation.tblSurveysDone} = 'TRUE'")
+              "SELECT * FROM ${_StaticDbInformation.tblSurveys} WHERE ${_StaticDbInformation.tblSurveysNo} = '${no.toString()}' and ${_StaticDbInformation.tblSurveysDone} = 'TRUE'")
           .then((lists) {
         if (lists.length > 0) {
           print(
@@ -860,7 +875,8 @@ class MyDataBase {
     // open the database
     await openDatabase(path).then((db) {
       db.transaction((txn) async {
-        print("QUERY ==> ${'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET result${resNum.toString()} = "${result.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}" and ${_StaticDbInformation.tblAnswersSurveyQN} = "${qNumber.toString()}"'}");
+        print(
+            "QUERY ==> ${'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET result${resNum.toString()} = "${result.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}" and ${_StaticDbInformation.tblAnswersSurveyQN} = "${qNumber.toString()}"'}");
         int id1 = await txn.rawInsert(
             'UPDATE ${_StaticDbInformation.tblSurveysAnswers} SET result${resNum.toString()} = "${result.toString()}" WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = "${idx.toString()}" and ${_StaticDbInformation.tblAnswersSurveyQN} = "${qNumber.toString()}"');
         print(
@@ -892,20 +908,23 @@ class MyDataBase {
   }
 
   void selectSurveyAnswer(
-      {onResult(List<Map<String, dynamic>> results), String idx, String qNumber = ""}) async {
+      {onResult(List<Map<String, dynamic>> results),
+      String idx,
+      String qNumber = ""}) async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
     // open the database
     await openDatabase(path).then((db) {
       List<Map<String, dynamic>> myList = [];
       String query = "";
-      if(qNumber != ""){
-        query = "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}' and ${_StaticDbInformation.tblAnswersSurveyQN} = '${qNumber.toString()}'";
-      }else{
-        query = "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}'";
+      if (qNumber != "") {
+        query =
+            "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}' and ${_StaticDbInformation.tblAnswersSurveyQN} = '${qNumber.toString()}'";
+      } else {
+        query =
+            "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}'";
       }
-      db.rawQuery(query)
-          .then((lists) {
+      db.rawQuery(query).then((lists) {
         for (int i = 0; i < lists.length; i++) {
           myList.add(lists[i]);
           print(
@@ -926,8 +945,7 @@ class MyDataBase {
       List<Map<String, dynamic>> myList = [];
       String query = "";
       query = "SELECT * FROM ${_StaticDbInformation.tblSurveysAnswers}";
-      db.rawQuery(query)
-          .then((lists) {
+      db.rawQuery(query).then((lists) {
         for (int i = 0; i < lists.length; i++) {
           myList.add(lists[i]);
           print(
