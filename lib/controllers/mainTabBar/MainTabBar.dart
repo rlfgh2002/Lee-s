@@ -283,9 +283,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
 
     widget.mainFirebaseMessaging.configure(
-      //onBackgroundMessage: fcmBackgroundMessageHandler,
-      onBackgroundMessage:
-          (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
+      onBackgroundMessage: fcmBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
         if (Platform.isIOS) {
           print('MSGX=> on messageX Main $message');
@@ -341,7 +339,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   static Future<dynamic> fcmBackgroundMessageHandler(
-      Map<String, dynamic> message) {
+      Map<String, dynamic> message) async {
     print('MSGX=> on Background $message');
 
     final MyDataBase myDb = MyDataBase();
@@ -356,6 +354,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         }
       }
     }
+
+    print(message['data']['notificationType']);
 
     if (message['data']['notificationType'].toString() == null) {
     } // notificationType is null
