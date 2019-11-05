@@ -17,9 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Chats extends StatefulWidget {
   static Chats staticChatsPage;
-
   final db = MyDataBase();
-  _ChatsState myChild;
+  ChatsState myChild;
 
   void refresh() {
     Future.delayed(Duration(seconds: 1)).whenComplete(() {
@@ -29,20 +28,24 @@ class Chats extends StatefulWidget {
   }
 
   @override
-  _ChatsState createState() {
-    return _ChatsState();
+  ChatsState createState() {
+    return ChatsState();
   }
 }
 
-class _ChatsState extends State<Chats> {
+class ChatsState extends State<Chats> {
   BuildContext myCurrentContext;
-
   bool isSearched = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final TextEditingController txtSearchCtrl = TextEditingController();
   final TextEditingController _textFieldAddUserIdController =
       TextEditingController();
+
+  static void badgeRefresh(BuildContext context) {
+    ChatsState state = context.ancestorStateOfType(TypeMatcher<ChatsState>());
+    state.refreshList();
+  }
 
 //  _displayAddUserDialog() async {
 //    return showDialog(
@@ -214,6 +217,7 @@ class _ChatsState extends State<Chats> {
 
   void refreshList() async {
     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    bool badgeState = false;
     await SharedPreferences.getInstance().then((val) {
       if (val.get("HAD_FIRST_WELCOME_MSG") != true) {
         // welcome message
@@ -241,13 +245,14 @@ class _ChatsState extends State<Chats> {
                           String chosenTime = "";
                           if (DateTime.now().hour > 12) {
                             chosenTime =
-                                "오후 ${(DateTime.now().hour - 12).toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
+                                "오2후 ${(DateTime.now().hour - 12).toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
                           } else {
                             chosenTime =
                                 "오전 ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
                           }
 
                           if (itemContent != null) {
+                            contentX = itemContent["content"].toString();
                             if (itemContent["chatDate2"].contains("-")) {
                               var splited = itemContent["chatDate2"].split(" ");
                               var dateSpt = splited[0].split("-");
@@ -259,12 +264,19 @@ class _ChatsState extends State<Chats> {
                                   int.parse(timeSpt[0]),
                                   int.parse(timeSpt[1]));
 
-                              if (itemContent['chatDate2'].toString() != "") {
+                              if (itemContent['chatDate2'].toString() != "" ||
+                                  itemContent['chatDate2'].toString() != null) {
                                 if (DateTime.now().year ==
                                         int.parse(dateSpt[0]) &&
-                                    DateTime.now().month ==
+                                    int.parse(DateTime.now()
+                                            .month
+                                            .toString()
+                                            .padLeft(2, '0')) ==
                                         int.parse(dateSpt[1]) &&
-                                    DateTime.now().day ==
+                                    int.parse(DateTime.now()
+                                            .day
+                                            .toString()
+                                            .padLeft(2, '0')) ==
                                         int.parse(dateSpt[2])) {
                                   if (int.parse(timeSpt[0]) > 12) {
                                     chosenTime =
@@ -315,32 +327,23 @@ class _ChatsState extends State<Chats> {
                               }
                             }
 
+                            print(chosenTime);
+
                             hasBadge = false;
                             if (itemContent["seen"] == "0") {
                               hasBadge = true;
                             } else {
                               hasBadge = false;
                             }
-
-                            MainTabBar.mainTabBar.createState();
-                      
-
-                            if (itemContent != null) {
-                              contentX = itemContent["content"].toString();
-
-                              if (itemContent['chatDate2'] != null) {
-                                if (itemContent['chatDate2'].toString() != "") {
-                                  chosenTime =
-                                      itemContent['chatDate2'].toString();
-                                }
-                              }
-                            }
-
                             //itemContent != null
                           } else {
                             hasBadge = false;
                             contentX = "";
                             //itemContent is null
+                          }
+
+                          if (hasBadge == true) {
+                            badgeState = hasBadge; //false일때는 따로 저장X
                           }
 
                           String avatarLink = "";
@@ -349,6 +352,10 @@ class _ChatsState extends State<Chats> {
                               items[i]['otherSideUserId'] == "0") {
                             avatarLink = "";
                             avatarName = "협회";
+
+                            if (chosenTime == "1900-01-01 00:00:00") {
+                              chosenTime = "";
+                            }
                           } else {
                             avatarLink = "Resources/Icons/userChatAvatar.png";
                             avatarName = "";
@@ -378,6 +385,11 @@ class _ChatsState extends State<Chats> {
                           setState(() {
                             MiddleWare.shared.searchedConversations =
                                 MiddleWare.shared.conversations;
+
+                            if (i == items.length - 1) {
+                              MainTabBarState.setBadge(
+                                  context, "chat", badgeState);
+                            }
                           });
                         },
                         convId: items[i]['convId']);
@@ -440,14 +452,18 @@ class _ChatsState extends State<Chats> {
                             avatar: "",
                             caption: "${searchedItems[i].schoolName}",
                             gisu: "${searchedItems[i].schoolGisu}");
+
                         Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new Chat(
-                                      title: "${searchedItems[i].userName}",
-                                      conversationId: cID,
-                                      user: usr,
-                                    )));
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new Chat(
+                                    title: "${searchedItems[i].userName}",
+                                    conversationId: cID,
+                                    user: usr,
+                                  )),
+                        ).then((value) {
+                          setState(() {});
+                        });
                       },
                     );
                     MiddleWare.shared.searchedConversations.add(obj);
@@ -469,14 +485,18 @@ class _ChatsState extends State<Chats> {
                             avatar: "",
                             caption: "${searchedItems[i].schoolName}",
                             gisu: "${searchedItems[i].schoolGisu}");
+
                         Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new Chat(
-                                      title: "${searchedItems[i].userName}",
-                                      conversationId: cID,
-                                      user: usr,
-                                    )));
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new Chat(
+                                    title: "${searchedItems[i].userName}",
+                                    conversationId: cID,
+                                    user: usr,
+                                  )),
+                        ).then((value) {
+                          setState(() {});
+                        });
                       },
                     );
                     MiddleWare.shared.searchedConversations.add(obj);
@@ -507,26 +527,34 @@ class _ChatsState extends State<Chats> {
       Future.delayed(Duration(seconds: 1)).then((val) {
         String cID = convId; // Conversation ID
         User usr = User(UID: uId, fullName: uName, avatar: "", caption: '');
+
         Navigator.push(
-            _scaffoldKey.currentContext,
-            new MaterialPageRoute(
-                builder: (context) => new Chat(
-                      title: uName,
-                      conversationId: cID,
-                      user: usr,
-                    )));
-      });
-    } else {
-      String cID = convId; // Conversation ID
-      User usr = User(UID: uId, fullName: uName, avatar: "", caption: '');
-      Navigator.push(
           _scaffoldKey.currentContext,
           new MaterialPageRoute(
               builder: (context) => new Chat(
                     title: uName,
                     conversationId: cID,
                     user: usr,
-                  )));
+                  )),
+        ).then((value) {
+          setState(() {});
+        });
+      });
+    } else {
+      String cID = convId; // Conversation ID
+      User usr = User(UID: uId, fullName: uName, avatar: "", caption: '');
+
+      Navigator.push(
+        _scaffoldKey.currentContext,
+        new MaterialPageRoute(
+            builder: (context) => new Chat(
+                  title: uName,
+                  conversationId: cID,
+                  user: usr,
+                )),
+      ).then((value) {
+        setState(() {});
+      });
     }
   }
 

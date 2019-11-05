@@ -245,8 +245,7 @@ class MyDataBase {
           this.insertConversation(
               convId: adminConvId,
               userId: adminUserId,
-              createDate:
-                  DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now()),
+              createDate: "1900-01-01 00:00:00",
               fromName: '한국해기사협회',
               schoolName: 'Haegisa Company',
               schoolGisu: '',
@@ -262,8 +261,7 @@ class MyDataBase {
                     convId: adminConvId,
                     isYours: 'FALSE',
                     seen: "0",
-                    date: DateFormat("yyyy-MM-dd HH:mm:ss")
-                        .format(DateTime.now()),
+                    date: "1900-01-01 00:00:00",
                     content:
                         "반갑습니다. 한국해기사협회입니다. 앞으로 다양한 소식과 정보를 앱으로 받아보실 수 있습니다.",
                     onAdded: () {

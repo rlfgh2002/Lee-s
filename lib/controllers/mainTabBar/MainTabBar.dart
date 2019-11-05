@@ -29,8 +29,6 @@ class MainTabBar extends StatefulWidget {
   StreamSubscription subscription;
   String myUserId = '';
   static MainTabBar mainTabBar;
-  static String btnChat = "Resources/Icons/btn_chat.png";
-  static String btnNotice = "Resources/Icons/btn_notice.png";
   static MainTabBarState myChild;
   MiddleWare mdw = MiddleWare.shared;
   @override
@@ -42,6 +40,9 @@ class MainTabBar extends StatefulWidget {
 
 class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static MainTabBarState shared = MainTabBarState();
+  static String btnChat = "Resources/Icons/btn_chat.png";
+  static String btnChatAc = "Resources/Icons/btn_chat_ac.png";
+  static String btnNotice = "Resources/Icons/btn_notice.png";
 
   MainTabBarState() {}
   DateTime backButtonPressTime;
@@ -59,6 +60,22 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       currentLocation = null;
     }
     return currentLocation;
+  }
+
+  static void setBadge(BuildContext context, String type, bool newMessage) {
+    MainTabBarState state =
+        context.ancestorStateOfType(TypeMatcher<MainTabBarState>());
+    state.setState(() {
+      if (type == "chat") {
+        if (newMessage == true) {
+          btnChat = "Resources/Icons/btn_chat_new.png";
+          btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
+        } else {
+          btnChat = "Resources/Icons/btn_chat.png";
+          btnChatAc = "Resources/Icons/btn_chat_ac.png";
+        }
+      }
+    });
   }
 
   void getAllSurveys({String uid}) async {
@@ -279,6 +296,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             if (message['notificationType'].toString().toLowerCase() ==
                 "chat") {
               btnChat = "Resources/Icons/btn_chat_new.png";
+              btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
             } else if (message['notificationType'].toString().toLowerCase() ==
                 "notice") {
               btnNotice = "Resources/Icons/btn_notice_new.png";
@@ -768,13 +786,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   void clickToChangeMenu(index) {
     setState(() {
       print(index);
-
-      if (index == 2) {
-        btnChat = "Resources/Icons/btn_chat.png";
-      } else if (index == 3) {
-        btnNotice = "Resources/Icons/btn_notice.png";
-      }
-
       MiddleWare.shared.currentIndex = index;
       MiddleWare.shared.tabc.animateTo(index);
     });
@@ -867,8 +878,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             title: Text("")),
         BottomNavigationBarItem(
             icon: new Image.asset(btnChat, width: 50),
-            activeIcon:
-                new Image.asset("Resources/Icons/btn_chat_ac.png", width: 50),
+            activeIcon: new Image.asset(btnChatAc, width: 50),
             title: Text("")),
         BottomNavigationBarItem(
             icon: new Image.asset(btnNotice, width: 50),
