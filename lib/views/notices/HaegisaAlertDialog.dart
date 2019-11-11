@@ -80,32 +80,33 @@ class HaegisaAlertDialog extends StatefulWidget {
 }
 
 class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
-
   void submitVote(
       {onSent(Map<String, dynamic> jj),
       onNotSent(),
       String idx,
       String check = "a1"}) async {
-
     String votePeriod = "";
-    this.widget.votingPeriod = this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
-    String year = this.widget.votingPeriod.substring(0,4);
-    String month = this.widget.votingPeriod.substring(4,6);
-    String day = this.widget.votingPeriod.substring(6,8);
+    this.widget.votingPeriod =
+        this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
+    String year = this.widget.votingPeriod.substring(0, 4);
+    String month = this.widget.votingPeriod.substring(5, 7);
+    String day = this.widget.votingPeriod.substring(8, 10);
 
-    String hours = this.widget.votingPeriod.substring(8,10);
-    String minutes = this.widget.votingPeriod.substring(10,12);
-    votePeriod = "${year.toString()}-${month.toString()}-${day.toString()} ${hours.toString()}:${minutes.toString()}";
+    String month2 = this.widget.votingPeriod.substring(11, 13);
+    String day2 = this.widget.votingPeriod.substring(14, 16);
+    votePeriod =
+        "${year.toString()}.${month.toString()}.${day.toString()}~${month2.toString()}.${day2.toString()}";
 
-    DateTime votePeriodDate = DateTime.parse(votePeriod);
+    DateTime votePeriodDate = DateTime.parse(
+        DateTime.now().year.toString() + month2.toString() + day2.toString());
 
-    if(votePeriodDate.isAfter(DateTime.now())){
+    if (votePeriodDate.isAfter(DateTime.now())) {
       this.widget.onPressApply();
       return;
     }
 
     MainTabBar.myChild.getUserId(onGetUserId: (uid) {
-      http.get(Statics.shared.urls.submitVote(uid,idx,check)).then((val) {
+      http.get(Statics.shared.urls.submitVote(uid, idx, check)).then((val) {
         if (val.statusCode == 200) {
           print("OUTPUT: ${val.body.toString()}");
           var j = jsonDecode(val.body);
@@ -159,14 +160,16 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
     }
 
     String votePeriod = "";
-    this.widget.votingPeriod = this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
-    String year = this.widget.votingPeriod.substring(0,4);
-    String month = this.widget.votingPeriod.substring(4,6);
-    String day = this.widget.votingPeriod.substring(6,8);
+    this.widget.votingPeriod =
+        this.widget.votingPeriod.trim().replaceAll("~", "").replaceAll(" ", "");
+    String year = this.widget.votingPeriod.substring(0, 4);
+    String month = this.widget.votingPeriod.substring(5, 7);
+    String day = this.widget.votingPeriod.substring(8, 10);
 
-    String hours = this.widget.votingPeriod.substring(8,10);
-    String minutes = this.widget.votingPeriod.substring(10,12);
-    votePeriod = "~ ${year.toString()}.${month.toString()}.${day.toString()} ${hours.toString()}:${minutes.toString()}";
+    String month2 = this.widget.votingPeriod.substring(11, 13);
+    String day2 = this.widget.votingPeriod.substring(14, 16);
+    votePeriod =
+        "${year.toString()}.${month.toString()}.${day.toString()}~${month2.toString()}.${day2.toString()}";
 
     return AlertDialog(
       content: Container(
@@ -262,28 +265,12 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
               margin: const EdgeInsets.only(top: 15),
               child: Row(
                 children: [
-                  Container(
-                    color: Statics.shared.colors.subTitleTextColor,
-                    child: FlatButton(
-                      child: Text(
-                        Strings.shared.dialogs.closeBtnTitle,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize:
-                                Statics.shared.fontSizes.subTitleInContent,
-                            color: Colors.white),
-                      ),
-                      onPressed: () {
-                        this.widget.onPressClose();
-                      },
-                    ),
-                    width: (this.widget.popUpWidth - 16) / 2,
-                  ),
-                  Container(
-                      color: Statics.shared.colors.mainColor,
+                  Expanded(
+                    child: Container(
+                      color: Statics.shared.colors.subTitleTextColor,
                       child: FlatButton(
                         child: Text(
-                          Strings.shared.dialogs.applyVoteBtn,
+                          Strings.shared.dialogs.closeBtnTitle,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize:
@@ -291,35 +278,84 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
                               color: Colors.white),
                         ),
                         onPressed: () {
-                          // Send Vote Result To Server From Here ...
-                          var trueInt = 0;
-                          for (int i = 0;
-                              i < widget.voteGroupItems.length;
-                              i++) {
-                            if (widget.voteGroupItems[i]) {
-                              trueInt = i;
-                            }
-                          }
-                          submitVote(
-                              idx: widget.idx,
-                              check: "a${(trueInt + 1).toString()}",
-                              onSent: (res) {
-                                if (res['code'].toString() == "0") {
-                                  print("You have Already Voted.");
-                                  // you have already voted.
-                                } else {
-                                  print("Voting was Successful.");
-                                  widget.db.updateAnswer(
-                                      idx: widget.idx,
-                                      voteDone: "TRUE",
-                                      onUpdated: () {
-                                        this.widget.onPressApply();
-                                      });
-                                }
-                              });
+                          this.widget.onPressClose();
                         },
                       ),
-                      width: (this.widget.popUpWidth - 16) / 2),
+                      width: (this.widget.popUpWidth - 16) / 2,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        color: Statics.shared.colors.mainColor,
+                        child: FlatButton(
+                          child: Text(
+                            Strings.shared.dialogs.applyVoteBtn,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize:
+                                    Statics.shared.fontSizes.subTitleInContent,
+                                color: Colors.white),
+                          ),
+                          onPressed: () {
+                            // Send Vote Result To Server From Here ...
+                            int trueInt;
+                            for (int i = 0;
+                                i < widget.voteGroupItems.length;
+                                i++) {
+                              if (widget.voteGroupItems[i]) {
+                                trueInt = i;
+                              }
+                            }
+                            if (trueInt == null) {
+                              print("Tlqkf");
+                              showDialog(
+                                  barrierDismissible: true,
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                        title: new Text("투표 실패",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        content: new Text("1개 이상 항목을 선택 해 주세요.",
+                                            style: TextStyle()),
+                                        actions: <Widget>[
+                                          // usually buttons at the bottom of the dialog
+                                          new FlatButton(
+                                            child: new Text(
+                                              "확인",
+                                              style: TextStyle(
+                                                  fontSize: Statics.shared
+                                                      .fontSizes.supplementary,
+                                                  color: Colors.black),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      ));
+                            } else {
+                              submitVote(
+                                  idx: widget.idx,
+                                  check: "a${(trueInt + 1).toString()}",
+                                  onSent: (res) {
+                                    if (res['code'].toString() == "0") {
+                                      print("You have Already Voted.");
+                                      // you have already voted.
+                                    } else {
+                                      print("Voting was Successful.");
+                                      widget.db.updateAnswer(
+                                          idx: widget.idx,
+                                          voteDone: "TRUE",
+                                          onUpdated: () {
+                                            this.widget.onPressApply();
+                                          });
+                                    }
+                                  });
+                            }
+                          },
+                        ),
+                        width: (this.widget.popUpWidth - 16) / 2),
+                  ),
                 ],
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -19,21 +19,9 @@ class _TermsState extends State<Terms> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-    String typeAsset = "";
-    String typeTitle = "";
-    Color typeColor;
+
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-
-    if (userInformation.memberType == "51001") {
-      typeAsset = "Resources/Icons/user_type_01.png";
-      typeTitle = Strings.shared.controllers.profile.memberType1;
-      typeColor = Statics.shared.colors.mainColor;
-    } else {
-      typeAsset = "Resources/Icons/user_type_02.png";
-      typeTitle = Strings.shared.controllers.profile.memberType2;
-      typeColor = Statics.shared.colors.subColor;
-    }
 
     return Scaffold(
         appBar: AppBar(

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/sign/SignIn.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
@@ -12,6 +13,8 @@ import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+String jsonMsg;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -76,6 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
     userInformation.address1 = resultPost.address1;
     userInformation.address2 = resultPost.address2;
     userInformation.postNo = resultPost.postNo;
+    userInformation.haegisa = resultPost.haegisa;
     getSchool();
     _firebaseMessaging.getToken().then((token) {
       print(token);
@@ -163,7 +167,7 @@ class _SplashScreenState extends State<SplashScreen> {
           } // user is logged in
           else {
             Navigator.pushReplacement(context,
-                new MaterialPageRoute(builder: (context) => new SignSelect()));
+                new MaterialPageRoute(builder: (context) => new SignIn()));
           } // user is Not logged in
         });
       } // user is logged in
@@ -246,6 +250,7 @@ class Result {
   final String address1;
   final String address2;
   final String postNo;
+  final String haegisa;
 
   Result(
       {this.idx,
@@ -259,7 +264,8 @@ class Result {
       this.gisu,
       this.address1,
       this.address2,
-      this.postNo});
+      this.postNo,
+      this.haegisa});
 
   factory Result.fromJson(Map<String, dynamic> json, String url) {
     if (url == Strings.shared.controllers.jsonURL.userinfoJson) {
@@ -275,7 +281,8 @@ class Result {
           gisu: json['gisu'],
           address1: json['address1'],
           address2: json['address2'],
-          postNo: json['postNo']);
+          postNo: json['postNo'],
+          haegisa: json['haegisa']);
     } else if (url == Strings.shared.controllers.jsonURL.loginJson) {}
   }
 }

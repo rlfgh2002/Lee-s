@@ -7,10 +7,12 @@ import 'dart:async';
 import 'package:haegisa2/controllers/member/find_id.dart';
 import 'package:haegisa2/controllers/member/find_pw.dart';
 import 'package:haegisa2/controllers/member/join.dart';
+import 'package:haegisa2/controllers/sign/SignIn.dart';
 import 'dart:convert';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const kAndroidUserAgent =
     'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Mobile Safari/537.36';
@@ -126,8 +128,18 @@ class _AuthState extends State<Auth> {
 
             if (valueMap['status'] == 0) {
               flutterWebviewPlugin.close();
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new SignError()));
+              const url = 'http://www.mariners.or.kr/member/join_type.php';
+              if (await canLaunch(url)) {
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new SplashScreen()));
+                Future.delayed(const Duration(milliseconds: 200), () {
+                  launch(url);
+                });
+              } else {
+                throw 'Could not launch $url';
+              }
             } else if (valueMap['status'] == 1) {
               //res가 //0 : 해기사 회원이 아님, 1 : 신규회원, 2 : 이미 존재하는 회원(홈페이지) 4 : 오류
               flutterWebviewPlugin.close();
@@ -188,7 +200,7 @@ class _AuthState extends State<Auth> {
           if (state.type == WebViewState.finishLoad) {
             currentURL = ''; //아이폰이 다시 이전 페이지로 돌아오는 경우때문에 url을 초기화 시킴
             await new Future.delayed(const Duration(
-                seconds: 1)); //아이폰 바로 진행하면 res값이 null넘어와서 딜레이주고 실행
+                seconds: 1)); //아이폰 바로 진행하면 res값이 null넘어���서 딜레이주고 실행
             String script = 'statusMsg("' + userInformation.userDeviceOS + '")';
             //res = '1' already, '0' = new member7
             var res = await flutterWebviewPlugin.evalJavascript(script);

@@ -283,7 +283,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
 
     widget.mainFirebaseMessaging.configure(
-      onBackgroundMessage: fcmBackgroundMessageHandler,
+      onBackgroundMessage:
+          (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
         if (Platform.isIOS) {
           print('MSGX=> on messageX Main $message');
@@ -293,11 +294,11 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           setState(() {
             if (message['notificationType'].toString().toLowerCase() ==
                 "chat") {
-              btnChat = "Resources/Icons/btn_chat_new.png";
-              btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
+              //btnChat = "Resources/Icons/btn_chat_new.png";
+              //btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
             } else if (message['notificationType'].toString().toLowerCase() ==
                 "notice") {
-              btnNotice = "Resources/Icons/btn_notice_new.png";
+              //btnNotice = "Resources/Icons/btn_notice_new.png";
             }
           });
         } else {
@@ -311,12 +312,13 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                       .toString()
                       .toLowerCase() ==
                   "chat") {
-                btnChat = "Resources/Icons/btn_chat_new.png";
+                //btnChat = "Resources/Icons/btn_chat_new.png";
+                //btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
               } else if (message['data']['notificationType']
                       .toString()
                       .toLowerCase() ==
                   "notice") {
-                btnNotice = "Resources/Icons/btn_notice_new.png";
+                //btnNotice = "Resources/Icons/btn_notice_new.png";
               }
             });
           }
@@ -675,18 +677,20 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           }
 
           VoteObject noticeItem = VoteObject.fromJson(message);
-          String noticeId = randomChatId();
-          widget.db.insertNotice(
-              fromId: noticeItem.fromId,
-              fromName: noticeItem.fromName,
-              subject: noticeItem.subject,
-              noticeId: noticeId,
-              content: noticeItem.content,
-              onInserted: (status) {
-                if (status) {
-                } // on inserted
-                else {} // on no inserted
-              });
+          if (noticeItem.subject != null) {
+            String noticeId = randomChatId();
+            widget.db.insertNotice(
+                fromId: noticeItem.fromId,
+                fromName: noticeItem.fromName,
+                subject: noticeItem.subject,
+                noticeId: noticeId,
+                content: noticeItem.content,
+                onInserted: (status) {
+                  if (status) {
+                  } // on inserted
+                  else {} // on no inserted
+                });
+          }
         } // Notice Notification
       }
     } // notificationType is NOT null

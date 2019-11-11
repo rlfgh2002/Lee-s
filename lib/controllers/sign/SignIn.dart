@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -11,6 +12,8 @@ import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'SignAuth.dart';
 
 String idValue = "";
 String passValue = "";
@@ -43,6 +46,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceHeight = MediaQuery.of(context).size.height;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.white, // Color for Android
         systemNavigationBarColor:
@@ -61,16 +65,11 @@ class _SignInState extends State<SignIn> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        centerTitle: false,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
-      ),
       body: Container(
         color: Colors.white,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
                 child: Text(
@@ -192,103 +191,102 @@ class _SignInState extends State<SignIn> {
                   mainAxisAlignment: MainAxisAlignment.end,
                 ), // Row
                 alignment: Alignment.centerRight),
+
             Container(
-              child: Row(
-                children: [
-                  Container(
-                    child: ButtonTheme(
-                      child: FlatButton(
-                        onPressed: () async {
-                          if (_idChecked == true && _pwdChecked) {
-                            if (trim(idValue) == "") {
-                              _displaySnackBar(context,
-                                  Strings.shared.controllers.signIn.enterID);
-                            } else if (trim(passValue) == "") {
-                              _displaySnackBar(context,
-                                  Strings.shared.controllers.signIn.enterPass);
-                            }
+                height: 60,
+                alignment: FractionalOffset.bottomCenter,
+                child: new SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: FlatButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    padding: EdgeInsets.all(20),
+                    color: _idChecked && _pwdChecked
+                        ? Statics.shared.colors.mainColor
+                        : Statics.shared.colors.subTitleTextColor,
+                    child: Text(Strings.shared.controllers.signIn.loginBtnTitle,
+                        style: TextStyle(
+                            fontSize: Statics.shared.fontSizes.subTitle,
+                            color: Colors.white)),
+                    onPressed: () async {
+                      if (_idChecked == true && _pwdChecked) {
+                        if (trim(idValue) == "") {
+                          _displaySnackBar(context,
+                              Strings.shared.controllers.signIn.enterID);
+                        } else if (trim(passValue) == "") {
+                          _displaySnackBar(context,
+                              Strings.shared.controllers.signIn.enterPass);
+                        }
 
-                            var map = new Map<String, dynamic>();
-                            map["id"] = idValue;
-                            map["pwd"] = passValue;
-                            Result resultPost = await createPost(
-                                Strings.shared.controllers.jsonURL.loginJson,
-                                body: map);
-                            if (jsonMsg == "ID is Wrong") {
-                              _displaySnackBar(context,
-                                  Strings.shared.controllers.signIn.wrongID);
-                            } else if (jsonMsg == "PASSWORD is Wrong") {
-                              _displaySnackBar(context,
-                                  Strings.shared.controllers.signIn.wrongPass);
-                            } else if (jsonMsg == "no haegisa member") {
-                              //해기사 회원이 아닐 시 팝업
-                              await showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (_) => authAlert());
-                            } else if (jsonMsg == "success") {
-                              await deviceinfo();
+                        var map = new Map<String, dynamic>();
+                        map["id"] = idValue;
+                        map["pwd"] = passValue;
+                        Result resultPost = await createPost(
+                            Strings.shared.controllers.jsonURL.loginJson,
+                            body: map);
+                        if (jsonMsg == "ID is Wrong") {
+                          _displaySnackBar(context,
+                              Strings.shared.controllers.signIn.wrongID);
+                        } else if (jsonMsg == "PASSWORD is Wrong") {
+                          _displaySnackBar(context,
+                              Strings.shared.controllers.signIn.wrongPass);
+                        } else if (jsonMsg == "success") {
+                          await deviceinfo();
 
-                              userInformation.mode = "login";
-                              userInformation.fullName = resultPost.memberName;
-                              userInformation.hp = resultPost.hp;
-                              userInformation.loginCheck = 1;
-                              userInformation.userID = idValue;
-                              userInformation.memberType =
-                                  resultPost.memberType;
-                              userInformation.userIdx = resultPost.memberIdx;
+                          userInformation.mode = "login";
+                          userInformation.fullName = resultPost.memberName;
+                          userInformation.hp = resultPost.hp;
+                          userInformation.loginCheck = 1;
+                          userInformation.userID = idValue;
+                          userInformation.memberType = resultPost.memberType;
+                          userInformation.userIdx = resultPost.memberIdx;
+                          userInformation.haegisa = resultPost.haegisa;
 
-                              _firebaseMessaging.getToken().then((token) {
-                                print(token);
-                                userInformation.userToken = token;
-                              });
+                          _firebaseMessaging.getToken().then((token) {
+                            print(token);
+                            userInformation.userToken = token;
+                          });
 
-                              this.refreshUserInfo(() {
-                                Navigator.pushReplacement(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) =>
-                                            new SplashScreen()));
-                              });
-                            }
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              Strings.shared.controllers.signIn.loginBtnTitle,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: Statics.shared.fontSizes.subTitle),
-                            ), // Text
-                            SizedBox(width: 10),
-                            Image.asset(
-                              "Resources/Icons/Vector 3.2.png",
-                              width: 10,
-                              color: Colors.white,
-                              alignment: Alignment.center,
-                            ),
-                          ],
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                        ),
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, top: 10, bottom: 10),
-                      ), // Next Button
-                      height: 60,
+                          this.refreshUserInfo(() {
+                            Navigator.pushReplacement(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new SplashScreen()));
+                          });
+                        }
+                      }
+                    },
+                  ),
+                )),
+            Row(children: <Widget>[
+              Expanded(child: Divider(height: 30)),
+            ]),
+            Container(
+                height: 60,
+                alignment: FractionalOffset.bottomCenter,
+                child: new SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Statics.shared.colors.mainColor, width: 1),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(40)),
-                      color: _idChecked && _pwdChecked
-                          ? Statics.shared.colors.mainColor
-                          : Statics.shared.colors.subTitleTextColor,
-                    ),
-                  )
-                ],
-                mainAxisAlignment: MainAxisAlignment.end,
-              ),
-              padding: const EdgeInsets.only(top: 40),
-            ),
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    padding: EdgeInsets.all(20),
+                    color: Colors.white,
+                    child: Text(Strings.shared.controllers.signIn.joinTitle,
+                        style: TextStyle(
+                            fontSize: Statics.shared.fontSizes.subTitle,
+                            color: Statics.shared.colors.mainColor)),
+                    onPressed: () async {
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new SignAuth()));
+                    },
+                  ),
+                )),
           ], //Children
         ), // Column
         padding: const EdgeInsets.only(left: 32, right: 32),
@@ -452,6 +450,7 @@ class Result {
   final String memberName;
   final String hp;
   final String memberType;
+  final String haegisa;
 
   Result(
       {this.idx,
@@ -459,7 +458,8 @@ class Result {
       this.id,
       this.memberName,
       this.hp,
-      this.memberType});
+      this.memberType,
+      this.haegisa});
 
   factory Result.fromJson(Map<String, dynamic> json, String url) {
     if (url == Strings.shared.controllers.jsonURL.loginJson) {
@@ -470,6 +470,7 @@ class Result {
         memberName: json['member_name'],
         hp: json['hp'],
         memberType: json['member_type'],
+        haegisa: json['haegisa'],
       );
     } else if (url == Strings.shared.controllers.jsonURL.loginJson) {}
   }

@@ -155,8 +155,9 @@ class _StringsControllerNoticesSnackBar {
 // PROFILE Controller //
 class _StringsControllerProfile {
   String appTitle = " 내 메뉴";
-  String memberType1 = "님은 정회원 입니다";
-  String memberType2 = "님은 준회원 입니다";
+  String memberType1 = "정회원";
+  String memberType2 = "준회원";
+  String memberType3 = "일반회원";
   String feehistory = "회비납부 내역";
   String inquiry = "1:1문의";
   String occasion = "경조사 통보";

@@ -44,11 +44,16 @@ class _ProfileState extends State<Profile> {
       typeTitle = Strings.shared.controllers.profile.memberType1;
       typeColor = Statics.shared.colors.mainColor;
       _isMember = false;
-    } else {
+    } else if (userInformation.memberType == "51002") {
       typeAsset = "Resources/Icons/user_type_02.png";
       typeTitle = Strings.shared.controllers.profile.memberType2;
       typeColor = Statics.shared.colors.subColor;
       _isMember = true;
+    } else {
+      typeAsset = "Resources/Icons/user_type_03.png";
+      typeTitle = Strings.shared.controllers.profile.memberType3;
+      typeColor = Statics.shared.colors.captionColor;
+      _isMember = false;
     }
 
     return new WillPopScope(
@@ -88,20 +93,18 @@ class _ProfileState extends State<Profile> {
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Text(
-                                        userInformation.fullName +
-                                            typeTitle.substring(0, 3),
+                                    Text(userInformation.fullName + "님은 ",
                                         style: TextStyle(
                                             color: Statics
                                                 .shared.colors.titleTextColor,
                                             fontSize: Statics.shared.fontSizes
                                                 .titleInContent)),
-                                    Text(typeTitle.substring(3, 6),
+                                    Text(typeTitle,
                                         style: TextStyle(
                                             color: typeColor,
                                             fontSize: Statics.shared.fontSizes
                                                 .titleInContent)),
-                                    Text(typeTitle.substring(6, 10),
+                                    Text(" 입니다",
                                         style: TextStyle(
                                             color: Statics
                                                 .shared.colors.titleTextColor,

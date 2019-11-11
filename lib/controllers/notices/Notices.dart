@@ -11,6 +11,7 @@ import 'package:haegisa2/views/notices/NoticeWidget.dart';
 import 'package:haegisa2/views/notices/HaegisaAlertDialog.dart';
 import 'package:haegisa2/views/notices/HaegisaAlertComplete.dart';
 import 'package:haegisa2/views/notices/HaegisaAlertSurveyDialog.dart';
+import 'package:intl/intl.dart';
 import 'MiddleWare.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 
@@ -76,8 +77,8 @@ class NoticesState extends State<Notices> {
             return HaegisaAlertDialog(
                 votes: votes,
                 votingPeriod: votingPeriod,
-                startDate:startDate,
-                endDate:endDate,
+                startDate: startDate,
+                endDate: endDate,
                 popUpWidth: popUpWidth,
                 popUpHeight: height,
                 idx: idx,
@@ -172,7 +173,6 @@ class NoticesState extends State<Notices> {
 
     widget.db.selectSurvey(onResult: (res) {
       for (int i = 0; i < res.length; i++) {
-
         NoticeWidget item = NoticeWidget(
           title: res[i]['subject'].toString(),
           date: DateTime.parse(res[i]['regDate'].toString()),
@@ -181,17 +181,17 @@ class NoticesState extends State<Notices> {
           type: NoticeType.Survey,
           idx: res[i]['bd_idx'].toString(),
           onTapped: () {
-            if(res[i]['isDone'].toString() != "TRUE"){
+            if (res[i]['isDone'].toString() != "TRUE") {
               String startDateStr = res[i]['start_date'].toString();
               String endDateStr = res[i]['end_date'].toString();
               String votingDate = "";
               votingDate = startDateStr.replaceAll("-", ".");
               votingDate = "${votingDate.toString()} - ";
               int i3 = 0;
-              endDateStr.split("-").forEach((item){
-                if(i3 == 1){
+              endDateStr.split("-").forEach((item) {
+                if (i3 == 1) {
                   votingDate = "${votingDate.toString()}${item.toString()}.";
-                }else if(i3 == 2){
+                } else if (i3 == 2) {
                   votingDate = "${votingDate.toString()}${item.toString()}";
                 }
                 i3 += 1;
@@ -245,7 +245,7 @@ class NoticesState extends State<Notices> {
                     }
                   });
               // survey is not Done yet!
-            }else{
+            } else {
               showSnackBar(Strings.shared.dialogs.surveyIsDoneAlert);
               // survey is done.
             }
@@ -261,15 +261,22 @@ class NoticesState extends State<Notices> {
 
     widget.db.selectNotices(onResult: (res) {
       for (int i = 0; i < res.length; i++) {
+        String date = DateFormat("yyyy-MM-dd HH:mm").format(
+            DateFormat("yyyy-MM-dd HH:mm:ss")
+                .parse(res[i]['regDate'].toString()));
 
         NoticeWidget item = NoticeWidget(
+          id: res[i]['id'],
           title: res[i]['subject'].toString(),
           date: DateTime.parse(res[i]['regDate'].toString()),
           shortDescription: res[i]['content'].toString(),
-          time: "2019-10-20",
+          time: date,
           type: NoticeType.Notice,
           onTapped: () {
-            Navigator.push(context, new MaterialPageRoute(builder: (context) => new NoticeSingle(obj: res.first)));
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new NoticeSingle(obj: res.first)));
           },
         );
         myNoticesList.add(item);
@@ -283,17 +290,16 @@ class NoticesState extends State<Notices> {
     this.widget.db.selectVotes(onResult: (results) {
       if (results.length > 0) {
         for (int i = 0; i < results.length; i++) {
-
           String startDateStr = results[i].startDate.toString();
           String endDateStr = results[i].endDate.toString();
           String votingDate = "";
           votingDate = endDateStr.replaceAll("-", ".");
           votingDate = "${votingDate.toString()} - ";
           int i3 = 0;
-          endDateStr.split("-").forEach((item){
-            if(i3 == 1){
+          endDateStr.split("-").forEach((item) {
+            if (i3 == 1) {
               votingDate = "${votingDate.toString()}${item.toString()}.";
-            }else if(i3 == 2){
+            } else if (i3 == 2) {
               votingDate = "${votingDate.toString()}${item.toString()}";
             }
             i3 += 1;
@@ -399,7 +405,7 @@ class NoticesState extends State<Notices> {
     });
   }
 
-  void refreshAllNotices(List<NoticeWidget> myList){
+  void refreshAllNotices(List<NoticeWidget> myList) {
     myList.sort((item1, item2) => item2.date.compareTo(item1.date));
     setState(() {
       widget.notices = myList;
@@ -444,11 +450,11 @@ class NoticesState extends State<Notices> {
       );
     }
 
-    if(MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId != ""){
+    if (MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId != "") {
       String vId = MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId;
       MainTabBar.mainTabBar.mdw.shouldMoveToThisVoteId = "";
 
-      Future.delayed(Duration(milliseconds: 500)).whenComplete((){
+      Future.delayed(Duration(milliseconds: 500)).whenComplete(() {
         this.openNotice(vId);
       });
     }

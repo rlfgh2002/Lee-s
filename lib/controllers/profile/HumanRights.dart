@@ -84,7 +84,7 @@ class _HumanRightsState extends State<HumanRights> {
                       ),
                     ),
                     Container(
-                      height: deviceHeight / 2,
+                      height: deviceHeight / 1.6,
                       padding: const EdgeInsets.only(
                           left: 10, right: 10, top: 5, bottom: 5),
                       child: TextField(
@@ -108,102 +108,92 @@ class _HumanRightsState extends State<HumanRights> {
                         },
                       ),
                     ),
-                    Container(
-                        height: 60,
-                        width: deviceWidth,
-                        alignment: FractionalOffset.bottomCenter,
-                        child: new SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: FlatButton(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              padding: EdgeInsets.all(20),
-                              color: _subjectChecked && _contentChecked
-                                  ? Statics.shared.colors.mainColor
-                                  : Statics.shared.colors.subTitleTextColor,
-                              child: Text("보내기",
-                                  style: TextStyle(
-                                      fontSize: Statics
-                                          .shared.fontSizes.titleInContent,
-                                      color: Colors.white)),
-                              onPressed: () async {
-                                if (subject.length == 0) {
-                                  _displaySnackBar(context, "제목을 입력하세요.");
-                                  return;
-                                }
-                                if (content.length == 0) {
-                                  _displaySnackBar(context, "내용을 입력하세요.");
-                                  return;
-                                }
-                                if (content.length < 10) {
-                                  _displaySnackBar(
-                                      context, "내용은 10자 이상 입력하세요.");
-                                  return;
-                                }
-                                if (_subjectChecked == true &&
-                                    _contentChecked == true) {
-                                  var infomap = new Map<String, dynamic>();
-                                  infomap["mode"] = "submit";
-                                  infomap["userId"] = userInformation.userID;
-                                  infomap["subject"] = subject;
-                                  infomap["content"] = content;
-
-                                  await submit(
-                                      Strings
-                                          .shared.controllers.jsonURL.humanJson,
-                                      body: infomap);
-
-                                  showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (_) => AlertDialog(
-                                            title: new Text("접수 완료"),
-                                            content: new Text(
-                                                "작성하신 내용은 전송되었습니다 \n빠른시간내 회원님의 이메일로 답변을 보내드리겠습니다.",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            actions: <Widget>[
-                                              // usually buttons at the bottom of the dialog
-                                              new FlatButton(
-                                                child: new Text("확인",
-                                                    style: TextStyle(
-                                                        fontSize: Statics
-                                                            .shared
-                                                            .fontSizes
-                                                            .supplementary,
-                                                        color: Colors.black)),
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pop(); //팝업닫고
-                                                  Navigator.of(context)
-                                                      .pop(); //이전페이지로
-                                                },
-                                              ),
-                                            ],
-                                          ));
-
-                                  setState(() {
-                                    _subjectController =
-                                        new TextEditingController(text: "");
-                                    _contentController =
-                                        new TextEditingController(text: "");
-
-                                    _subjectChecked = false;
-                                    _contentChecked = false;
-
-                                    subject = "";
-                                    content = "";
-                                  });
-                                }
-                              }),
-                        )),
                   ],
                 ),
               ),
             ],
           ),
         ),
+        Container(
+            height: deviceHeight / 8,
+            width: deviceWidth,
+            alignment: FractionalOffset.bottomCenter,
+            child: new SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: FlatButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  padding: EdgeInsets.all(20),
+                  color: _subjectChecked && _contentChecked
+                      ? Statics.shared.colors.mainColor
+                      : Statics.shared.colors.subTitleTextColor,
+                  child: Text("보내기",
+                      style: TextStyle(
+                          fontSize: Statics.shared.fontSizes.titleInContent,
+                          color: Colors.white)),
+                  onPressed: () async {
+                    if (subject.length == 0) {
+                      _displaySnackBar(context, "제목을 입력하세요.");
+                      return;
+                    }
+                    if (content.length == 0) {
+                      _displaySnackBar(context, "내용을 입력하세요.");
+                      return;
+                    }
+                    if (content.length < 10) {
+                      _displaySnackBar(context, "내용은 10자 이상 입력하세요.");
+                      return;
+                    }
+                    if (_subjectChecked == true && _contentChecked == true) {
+                      var infomap = new Map<String, dynamic>();
+                      infomap["mode"] = "submit";
+                      infomap["userId"] = userInformation.userID;
+                      infomap["subject"] = subject;
+                      infomap["content"] = content;
+
+                      await submit(Strings.shared.controllers.jsonURL.humanJson,
+                          body: infomap);
+
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (_) => AlertDialog(
+                                title: new Text("접수 완료"),
+                                content: new Text(
+                                    "작성하신 내용은 전송되었습니다 \n빠른시간내 회원님의 이메일로 답변을 보내드리겠습니다.",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                actions: <Widget>[
+                                  // usually buttons at the bottom of the dialog
+                                  new FlatButton(
+                                    child: new Text("확인",
+                                        style: TextStyle(
+                                            fontSize: Statics
+                                                .shared.fontSizes.supplementary,
+                                            color: Colors.black)),
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); //팝업닫고
+                                      Navigator.of(context).pop(); //이전페이지로
+                                    },
+                                  ),
+                                ],
+                              ));
+
+                      setState(() {
+                        _subjectController =
+                            new TextEditingController(text: "");
+                        _contentController =
+                            new TextEditingController(text: "");
+
+                        _subjectChecked = false;
+                        _contentChecked = false;
+
+                        subject = "";
+                        content = "";
+                      });
+                    }
+                  }),
+            )),
       ]),
     );
   }

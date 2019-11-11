@@ -92,12 +92,14 @@ class UserInfoState extends State<UserInfo> {
     double deviceHeight = MediaQuery.of(context).size.height;
 
     if (userInformation.memberType == "51001") {
-      typeAsset = "Resources/Icons/user_type_01.png";
-      userType = "정회원";
+      userType = Strings.shared.controllers.profile.memberType1;
       typeColor = Statics.shared.colors.mainColor;
-    } else {
-      userType = "준회원";
+    } else if (userInformation.memberType == "51002") {
+      userType = Strings.shared.controllers.profile.memberType2;
       typeColor = Statics.shared.colors.subColor;
+    } else {
+      userType = Strings.shared.controllers.profile.memberType3;
+      typeColor = Statics.shared.colors.captionColor;
     }
 
     //학교 미등록시 초기값

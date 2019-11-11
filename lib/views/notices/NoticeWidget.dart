@@ -4,13 +4,15 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 
 class NoticeWidget extends StatelessWidget {
+  int id;
   String title = "";
   String shortDescription = "";
   String time = "";
   double avatarRadius = 24;
   String avatarLink = "Resources/Icons/img_notice.png";
   String proceedingBackground = "Resources/Icons/proceedingBackground.png";
-  String proceedingBackgroundDark = "Resources/Icons/proceedingBackgroundDark.png";
+  String proceedingBackgroundDark =
+      "Resources/Icons/proceedingBackgroundDark.png";
   String iconDate = "Resources/Icons/icon_date.png";
   NoticeType type = NoticeType.Notice;
   VoidCallback onTapped;
@@ -19,17 +21,18 @@ class NoticeWidget extends StatelessWidget {
   bool isDone = false;
   DateTime date;
 
-  NoticeWidget({
-    bool isDone = false,
-    bool isOnSurveysTabs = false,
-    String title = "",
-    String shortDescription = "",
-    String time = "",
-    NoticeType type = NoticeType.Notice,
-    VoidCallback onTapped,
-    String idx = "",
-    DateTime date
-  }) {
+  NoticeWidget(
+      {int id,
+      bool isDone = false,
+      bool isOnSurveysTabs = false,
+      String title = "",
+      String shortDescription = "",
+      String time = "",
+      NoticeType type = NoticeType.Notice,
+      VoidCallback onTapped,
+      String idx = "",
+      DateTime date}) {
+    this.id = id;
     this.isDone = isDone;
     this.idx = idx;
     this.title = title;
@@ -63,74 +66,75 @@ class NoticeWidget extends StatelessWidget {
 
     double screenSize = MediaQuery.of(context).size.width;
     if (!this.isOnSurveysTabs) {
+      //공지사항
       return Container(
-        color: Colors.white,
-        margin: const EdgeInsets.only(top: 5),
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: FlatButton(
-          padding: const EdgeInsets.all(0),
-          onPressed: () {
-            this.onTapped();
-          },
-          child: Container(
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: Row(children: [
-              CircleAvatar(
-                radius: this.avatarRadius,
-                backgroundImage: new AssetImage(this.avatarLink),
-                backgroundColor: Colors.white,
-              ),
-              SizedBox(width: 10),
-              Column(
-                children: [
-                  Container(
-                      child: Row(
-                        children: [
-                          Container(
-                            child: Text(
-                              this.title,
-                              style: TextStyle(
-                                  fontSize: Statics.shared.fontSizes.content,
-                                  color: Statics.shared.colors.titleTextColor),
-                              overflow: TextOverflow.fade,
+          color: Colors.white,
+          margin: const EdgeInsets.only(top: 5),
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          child: GestureDetector(
+            child: Container(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: Row(children: [
+                CircleAvatar(
+                  radius: this.avatarRadius,
+                  backgroundImage: new AssetImage(this.avatarLink),
+                  backgroundColor: Colors.white,
+                ),
+                SizedBox(width: 10),
+                Column(
+                  children: [
+                    Container(
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Text(
+                                this.title,
+                                style: TextStyle(
+                                    fontSize: Statics.shared.fontSizes.content,
+                                    color:
+                                        Statics.shared.colors.titleTextColor),
+                                overflow: TextOverflow.fade,
+                              ),
+                              width: screenSize - 100,
                             ),
-                            width: screenSize - 100,
-                          ),
 //                      Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),overflow: TextOverflow.fade,),
 //                        width: 100,),
-                        ],
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        width: screenSize - 100),
+                    SizedBox(height: 5),
+                    Container(
+                      child: Text(
+                        this.time,
+                        style: TextStyle(
+                            fontSize: Statics.shared.fontSizes.content,
+                            color: Statics.shared.colors.subTitleTextColor,
+                            fontWeight: FontWeight.normal),
+                        overflow: TextOverflow.fade,
                       ),
-                      width: screenSize - 100),
-                  SizedBox(height: 5),
-                  Container(
-                    child: Text(
-                      this.time,
-                      style: TextStyle(
-                          fontSize: Statics.shared.fontSizes.content,
-                          color: Statics.shared.colors.subTitleTextColor,
-                          fontWeight: FontWeight.normal),
-                      overflow: TextOverflow.fade,
-                    ),
-                    width: screenSize - 100,
-                  )
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                textDirection: TextDirection.ltr,
-              ),
-              SizedBox(width: 10),
-            ]),
-          ),
-          highlightColor: Color.fromRGBO(244, 248, 255, 1),
-        ),
-      );
+                      width: screenSize - 100,
+                    )
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  textDirection: TextDirection.ltr,
+                ),
+                SizedBox(width: 10),
+              ]),
+            ),
+            onTap: () {
+              this.onTapped();
+            },
+            onLongPress: () {
+              print("Sfsdfsdf");
+            },
+          ));
     } else {
-
       String pbck = this.proceedingBackground;
       String prcdw = Strings.shared.dialogs.proceedingWord;
-      if(this.isDone){
+      if (this.isDone) {
         pbck = this.proceedingBackgroundDark;
         prcdw = Strings.shared.dialogs.proceedingWord2;
       }

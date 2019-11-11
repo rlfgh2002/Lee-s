@@ -38,8 +38,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   DateTime backButtonPressTime;
-
   String url = Strings.shared.controllers.jsonURL.homeJson + "?mode=main";
+  bool _isMember = true;
 
   Future<List> getMainJson(String type) async {
     var response = await http.get(Uri.encodeFull(url));
@@ -82,21 +82,13 @@ class _HomeState extends State<Home> {
             Colors.black // Dark == white status bar -- for IOS.
         ));
 
-    String typeAsset = "";
-    String typeTitle = "";
-    Color typeColor;
+    if (userInformation.memberType == "51003") {
+      _isMember = false;
+    } else {
+      _isMember = true;
+    }
     deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
-
-    if (userInformation.memberType == "51001") {
-      typeAsset = "Resources/Icons/user_type_01.png";
-      typeTitle = Strings.shared.controllers.profile.memberType1;
-      typeColor = Statics.shared.colors.mainColor;
-    } else {
-      typeAsset = "Resources/Icons/user_type_02.png";
-      typeTitle = Strings.shared.controllers.profile.memberType2;
-      typeColor = Statics.shared.colors.subColor;
-    }
 
     return new WillPopScope(
       onWillPop: () async => false,
@@ -137,18 +129,21 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       Spacer(),
-                      FlatButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        child: Image.asset("Resources/Icons/icon_barcode.png",
-                            scale: 2.0),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) => new Barcode()));
-                        },
-                      )
+                      _isMember
+                          ? FlatButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Image.asset(
+                                  "Resources/Icons/icon_barcode.png",
+                                  scale: 2.0),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => new Barcode()));
+                              },
+                            )
+                          : Container()
                     ]), // Row
 
                 padding: const EdgeInsets.only(left: 20, bottom: 30, top: 30),

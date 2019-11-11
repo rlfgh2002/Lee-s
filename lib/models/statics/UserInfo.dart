@@ -22,7 +22,7 @@ class _UserInfo {
   String gender = ""; //0 : 여자, 1 : 남자
   String birth = ""; //0 : 여자, 1 : 남자
   String agree = "";
-  String memberType = ""; // 1:정회원 2:준회원
+  String memberType = ""; // 51001:정회원, 51002:준회원, 51003:비회원
   String email; //이메일
   String school; //학교코드
   String schoolName; //학교이름
@@ -30,6 +30,7 @@ class _UserInfo {
   String address1 = ""; //주소
   String address2 = ""; //상세주소
   String postNo = ""; //우편번호
+  String haegisa = ""; //해기사 회원 1, 기타회원 0
   Directory dirPath; //첨부파일 다운로드 기본경로
 
   User userData;
@@ -58,6 +59,7 @@ class _UserInfo {
     userInformation.address1 = "";
     userInformation.address2 = "";
     userInformation.postNo = "";
+    userInformation.haegisa = "";
 
     userInformation.dirPath;
     userInformation.schoolName = "";

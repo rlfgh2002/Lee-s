@@ -58,9 +58,8 @@ dev_dependencies:
   json_serializable: ^2.0.3 #json
 
 
-
 flutter_icons:
-  image_path_ios: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
+  image_path_ios: "Resources/appIcons/ios/iTunesArtwork@2x.png"
   image_path_android: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
   adaptive_icon_background: "#FFFFFF"
   #adaptive_icon_background: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
@@ -167,6 +166,7 @@ flutter:
     - Resources/Icons/icon_barcode.png
     - Resources/Icons/user_type_01.png
     - Resources/Icons/user_type_02.png
+    - Resources/Icons/user_type_03.png
     - Resources/Icons/btn_certi.png
     - Resources/Icons/btn_feehistory.png
     - Resources/Icons/btn_advisory.png

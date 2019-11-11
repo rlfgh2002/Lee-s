@@ -387,8 +387,8 @@ class ChatsState extends State<Chats> {
                                 MiddleWare.shared.conversations;
 
                             if (i == items.length - 1) {
-                              MainTabBarState.setBadge(
-                                  context, "chat", badgeState);
+                              // MainTabBarState.setBadge(
+                              //     context, "chat", badgeState);
                             }
                           });
                         },
