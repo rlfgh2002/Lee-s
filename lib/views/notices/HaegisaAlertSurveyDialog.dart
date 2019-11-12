@@ -377,7 +377,8 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                       // submit Survey
                       // Submit this Survey to Server ...
                       print("Connect To Server ........");
-                      this.submitSurvey(bdxId: this.widget.surveysChecked.first.idx);
+                      this.submitSurvey(
+                          bdxId: this.widget.surveysChecked.first.idx);
                     },
                   ),
                   width: (this.widget.popUpWidth - 16) / 2)),
@@ -553,11 +554,6 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
         child: Column(
           children: [
             Container(
-              width: this.widget.popUpWidth,
-              color: Statics.shared.colors.mainColor,
-              height: 5,
-            ),
-            Container(
               child: Stack(
                 children: [
                   Container(
@@ -570,41 +566,42 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                     ),
                     padding: const EdgeInsets.only(left: 32),
                     alignment: Alignment.centerLeft,
-                    height: 100,
+                    height: this.widget.popUpWidth / 4,
                     color: Color.fromRGBO(244, 248, 255, 1),
                   ),
                   Container(
                     child: Image.asset(
                       "Resources/Images/ill_survey.png",
-                      width: this.widget.popUpWidth / 3.2,
+                      width: this.widget.popUpWidth / 4,
                     ),
                     alignment: Alignment.bottomRight,
                     padding: const EdgeInsets.only(right: 32),
-                    margin: const EdgeInsets.only(top: 20),
-                    height: 100,
+                    height: this.widget.popUpWidth / 3.4,
                   )
                 ],
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.only(left: 32, right: 32),
-              child: Row(
+              child: Column(
                 children: [
-                  Image.asset(
-                    "Resources/Icons/icon_date.png",
-                    height: 16,
-                    width: 16,
+                  Row(
+                    children: <Widget>[
+                      Image.asset(
+                        "Resources/Icons/icon_date.png",
+                        height: 16,
+                        width: 16,
+                      ),
+                      Text(
+                        Strings.shared.dialogs.surveyingPeriod,
+                        style: TextStyle(
+                            color: Statics.shared.colors.mainColor,
+                            fontSize: Statics.shared.fontSizes.supplementary,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 5),
-                  Text(
-                    Strings.shared.dialogs.surveyingPeriod,
-                    style: TextStyle(
-                        color: Statics.shared.colors.mainColor,
-                        fontSize: Statics.shared.fontSizes.supplementary,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 5),
                   Text(
                     this.widget.votingPeriod,
                     style: TextStyle(
@@ -612,7 +609,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                         fontSize: Statics.shared.fontSizes.supplementary),
                   ),
                 ],
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
               ),
             ),

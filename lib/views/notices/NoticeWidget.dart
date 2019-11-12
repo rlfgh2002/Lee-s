@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/auth/Terms.dart';
+import 'package:haegisa2/controllers/notices/Notices.dart';
+import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 
@@ -63,74 +66,218 @@ class NoticeWidget extends StatelessWidget {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-
+    final db = MyDataBase();
     double screenSize = MediaQuery.of(context).size.width;
     if (!this.isOnSurveysTabs) {
       //공지사항
       return Container(
-          color: Colors.white,
-          margin: const EdgeInsets.only(top: 5),
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: GestureDetector(
-            child: Container(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Row(children: [
-                CircleAvatar(
-                  radius: this.avatarRadius,
-                  backgroundImage: new AssetImage(this.avatarLink),
-                  backgroundColor: Colors.white,
-                ),
-                SizedBox(width: 10),
-                Column(
-                  children: [
-                    Container(
-                        child: Row(
-                          children: [
-                            Container(
-                              child: Text(
-                                this.title,
-                                style: TextStyle(
-                                    fontSize: Statics.shared.fontSizes.content,
-                                    color:
-                                        Statics.shared.colors.titleTextColor),
-                                overflow: TextOverflow.fade,
-                              ),
-                              width: screenSize - 100,
-                            ),
+        color: Colors.white,
+        margin: const EdgeInsets.only(top: 5),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        child: this.type == NoticeType.Notice
+            ? Dismissible(
+                key: Key(this.id.toString()),
+                child: GestureDetector(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Row(children: [
+                      CircleAvatar(
+                        radius: this.avatarRadius,
+                        backgroundImage: new AssetImage(this.avatarLink),
+                        backgroundColor: Colors.white,
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        children: [
+                          Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    child: Text(
+                                      this.title,
+                                      style: TextStyle(
+                                          fontSize:
+                                              Statics.shared.fontSizes.content,
+                                          color: Statics
+                                              .shared.colors.titleTextColor),
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                    width: screenSize - 100,
+                                  ),
 //                      Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),overflow: TextOverflow.fade,),
 //                        width: 100,),
-                          ],
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                        width: screenSize - 100),
-                    SizedBox(height: 5),
-                    Container(
-                      child: Text(
-                        this.time,
-                        style: TextStyle(
-                            fontSize: Statics.shared.fontSizes.content,
-                            color: Statics.shared.colors.subTitleTextColor,
-                            fontWeight: FontWeight.normal),
-                        overflow: TextOverflow.fade,
+                                ],
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                              ),
+                              width: screenSize - 100),
+                          SizedBox(height: 5),
+                          Container(
+                            child: Text(
+                              this.time,
+                              style: TextStyle(
+                                  fontSize: Statics.shared.fontSizes.content,
+                                  color:
+                                      Statics.shared.colors.subTitleTextColor,
+                                  fontWeight: FontWeight.normal),
+                              overflow: TextOverflow.fade,
+                            ),
+                            width: screenSize - 100,
+                          )
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        textDirection: TextDirection.ltr,
                       ),
-                      width: screenSize - 100,
-                    )
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  textDirection: TextDirection.ltr,
+                      SizedBox(width: 10),
+                    ]),
+                  ),
+                  onTap: () {
+                    this.onTapped();
+                  },
+                  onLongPress: () {
+                    if (this.type == NoticeType.Notice) {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (_) => AlertDialog(
+                                title: new Text("삭제"),
+                                content: new Text("삭제 하시겠어요?",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                actions: <Widget>[
+                                  // usually buttons at the bottom of the dialog
+                                  new FlatButton(
+                                    child: new Text("취소",
+                                        style: TextStyle(
+                                            fontSize: Statics
+                                                .shared.fontSizes.supplementary,
+                                            color: Colors.black)),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  new FlatButton(
+                                    child: new Text(
+                                      "확인",
+                                      style: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                          color: Colors.red),
+                                    ),
+                                    onPressed: () {
+                                      db.deleteNotices(id: this.id);
+                                      Navigator.of(context).pop();
+                                      NoticesState.setStateStatic(context);
+                                    },
+                                  ),
+                                ],
+                              ));
+                    }
+                  },
                 ),
-                SizedBox(width: 10),
-              ]),
-            ),
-            onTap: () {
-              this.onTapped();
-            },
-            onLongPress: () {
-              print("Sfsdfsdf");
-            },
-          ));
+                onDismissed: (direction) {},
+                confirmDismiss: (bl) {
+                  if (this.type == NoticeType.Notice) {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => AlertDialog(
+                              title: new Text("삭제"),
+                              content: new Text("삭제 하시겠어요?",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              actions: <Widget>[
+                                // usually buttons at the bottom of the dialog
+                                new FlatButton(
+                                  child: new Text("취소",
+                                      style: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                          color: Colors.black)),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                new FlatButton(
+                                  child: new Text(
+                                    "확인",
+                                    style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Colors.red),
+                                  ),
+                                  onPressed: () {
+                                    db.deleteNotices(id: this.id);
+                                    Navigator.of(context).pop();
+                                    NoticesState.setStateStatic(context);
+                                  },
+                                ),
+                              ],
+                            ));
+                  }
+                },
+              )
+            : GestureDetector(
+                child: Container(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Row(children: [
+                    CircleAvatar(
+                      radius: this.avatarRadius,
+                      backgroundImage: new AssetImage(this.avatarLink),
+                      backgroundColor: Colors.white,
+                    ),
+                    SizedBox(width: 10),
+                    Column(
+                      children: [
+                        Container(
+                            child: Row(
+                              children: [
+                                Container(
+                                  child: Text(
+                                    this.title,
+                                    style: TextStyle(
+                                        fontSize:
+                                            Statics.shared.fontSizes.content,
+                                        color: Statics
+                                            .shared.colors.titleTextColor),
+                                    overflow: TextOverflow.fade,
+                                  ),
+                                  width: screenSize - 100,
+                                ),
+//                      Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),overflow: TextOverflow.fade,),
+//                        width: 100,),
+                              ],
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ),
+                            width: screenSize - 100),
+                        SizedBox(height: 5),
+                        Container(
+                          child: Text(
+                            this.time,
+                            style: TextStyle(
+                                fontSize: Statics.shared.fontSizes.content,
+                                color: Statics.shared.colors.subTitleTextColor,
+                                fontWeight: FontWeight.normal),
+                            overflow: TextOverflow.fade,
+                          ),
+                          width: screenSize - 100,
+                        )
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      textDirection: TextDirection.ltr,
+                    ),
+                    SizedBox(width: 10),
+                  ]),
+                ),
+                onTap: () {
+                  this.onTapped();
+                },
+              ),
+      );
     } else {
       String pbck = this.proceedingBackground;
       String prcdw = Strings.shared.dialogs.proceedingWord;

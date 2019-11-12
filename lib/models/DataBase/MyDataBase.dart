@@ -757,8 +757,8 @@ class MyDataBase {
     });
   }
 
-  void deleteNotices({String id = "", onDeleted(bool st)}) async {
-    print(":::::::::: DB SELECTING Notices ::::::::::");
+  void deleteNotices({int id, onDeleted(bool st)}) async {
+    print(":::::::::: DB DELETE Notices ::::::::::");
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
     // open the database
@@ -766,7 +766,7 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db
           .rawDelete(
-              "DELETE FROM ${_StaticDbInformation.tblNotices} WHERE id='${id.toString()}'")
+              "DELETE FROM ${_StaticDbInformation.tblNotices} WHERE id='${id}'")
           .then((val) {
         print(":::::::::: DB DELETE ROW => [${val}] ::::::::::");
         onDeleted(true);
@@ -774,6 +774,8 @@ class MyDataBase {
       }).catchError((err) {
         print(
             ":::::::::: DB DELETE ROW ERROR => [${err.toString()}] ::::::::::");
+        onDeleted(false);
+        //db.close();
       });
     });
   }

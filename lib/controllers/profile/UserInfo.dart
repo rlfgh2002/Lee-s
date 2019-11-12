@@ -841,6 +841,8 @@ class UserInfoState extends State<UserInfo> {
                             _displaySnackBar(context, "수정내용을 확인 하세요.");
                           } else {
                             var infomap = new Map<String, dynamic>();
+                            infomap["type"] =
+                                userInformation.haegisa; //0이면 일반회원, 1해기사
                             infomap["id"] = userInformation.userID;
                             infomap["memberIdx"] = userInformation.userIdx;
                             infomap["name"] = userInformation.fullName;

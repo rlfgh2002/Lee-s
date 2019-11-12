@@ -164,6 +164,12 @@ class NoticesState extends State<Notices> {
     super.initState();
   }
 
+  static void setStateStatic(BuildContext context) {
+    NoticesState state =
+        context.ancestorStateOfType(TypeMatcher<NoticesState>());
+    state.initState();
+  }
+
   void refreshNotices() {
     widget.notices = [];
     List<NoticeWidget> myVotesList = [];
@@ -184,18 +190,7 @@ class NoticesState extends State<Notices> {
             if (res[i]['isDone'].toString() != "TRUE") {
               String startDateStr = res[i]['start_date'].toString();
               String endDateStr = res[i]['end_date'].toString();
-              String votingDate = "";
-              votingDate = startDateStr.replaceAll("-", ".");
-              votingDate = "${votingDate.toString()} - ";
-              int i3 = 0;
-              endDateStr.split("-").forEach((item) {
-                if (i3 == 1) {
-                  votingDate = "${votingDate.toString()}${item.toString()}.";
-                } else if (i3 == 2) {
-                  votingDate = "${votingDate.toString()}${item.toString()}";
-                }
-                i3 += 1;
-              });
+              String votingDate = startDateStr + " ~ " + endDateStr;
 
               widget.db.selectSurveyAnswer(
                   idx: res[i]['bd_idx'],
@@ -206,7 +201,7 @@ class NoticesState extends State<Notices> {
                           startDate: startDateStr,
                           endDate: endDateStr,
                           nt: NoticeType.Survey,
-                          votingPeriod: " ~ ${votingDate.toString()}",
+                          votingPeriod: "${votingDate.toString()}",
                           votes: [],
                           surveys: surveys,
                           idx: res[i]['bd_idx'].toString(),
