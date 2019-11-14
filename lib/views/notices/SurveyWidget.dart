@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/statics.dart';
+import 'package:http/http.dart' as http;
 
 class SurveyWidget extends StatefulWidget {
-
   int myIndex = 0;
+  double p = 0;
   double width = 0;
   String survey = "";
   bool isChecked = false;
@@ -18,8 +22,21 @@ class SurveyWidget extends StatefulWidget {
   VoidCallback onTappedTrue;
   Map<String, dynamic> surveyObj;
 
-  SurveyWidget({Map<String, dynamic> surveyObj,int myIndex,bool isChecked = false,double width = 0,String survey = "", String groupName = "", int itemIndex = 1, bool isAfter = false, String surveyIdx, String qNum, VoidCallback onTappedTrue}){
+  SurveyWidget(
+      {Map<String, dynamic> surveyObj,
+      int myIndex,
+      double p = 0,
+      bool isChecked = false,
+      double width = 0,
+      String survey = "",
+      String groupName = "",
+      int itemIndex = 1,
+      bool isAfter = false,
+      String surveyIdx,
+      String qNum,
+      VoidCallback onTappedTrue}) {
     this.myIndex = myIndex;
+    this.p = p;
     this.width = width;
     this.survey = survey;
     this.groupName = groupName;
@@ -37,7 +54,6 @@ class SurveyWidget extends StatefulWidget {
 }
 
 class _SurveyWidgetState extends State<SurveyWidget> {
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -48,118 +64,151 @@ class _SurveyWidgetState extends State<SurveyWidget> {
 
     Color progressColor = Color.fromRGBO(232, 240, 254, 1);
     double percent = (0 * (this.widget.width + 16) / 100);
-    double p = 0;
-    if(this.widget.surveyObj != null){
-      if(this.widget.surveyObj['result${this.widget.myIndex + 1}'] != null){
-        p = double.parse(this.widget.surveyObj['result${this.widget.myIndex + 1}']);
-      }
-      percent = (p * (this.widget.width + 16) / 100);
+    if (this.widget.surveyObj != null) {
+      percent = (this.widget.p * (this.widget.width - 25) / 100);
     }
 
-    print("RESRES: ${percent} - ${p} - ${this.widget.survey}");
+    print("RESRES: ${percent} - ${this.widget.p} - ${this.widget.survey}");
 
-    if(this.widget.isAfter){
-      return Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              color: progressColor,
-            ),
-            width: percent,
-            height: 50,
-            padding: const EdgeInsets.only(left: 16,right: 16),
-            margin: const EdgeInsets.only(bottom: 10),
-          ),
-          Container(
-            child: FlatButton(
-              onPressed: (){
-                setState(() {
-                  this.widget.isChecked = true;
-                });
-                this.widget.onTappedTrue();
-              },
-              padding: const EdgeInsets.all(0),
-              child: Container(
-                width: this.widget.width,
-                child: Row(
-                  children: [
-                    Text(this.widget.survey,style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content, fontWeight: FontWeight.normal),),
-                    Text("${p.toString()}%",style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.supplementary, fontWeight: FontWeight.normal),),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+    if (this.widget.isAfter) {
+      return this.widget.survey != "null"
+          ? Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: progressColor,
+                  ),
+                  width: percent,
+                  height: 50,
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  margin: const EdgeInsets.only(bottom: 10),
                 ),
-              ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              border: Border.all(color: Statics.shared.colors.subTitleTextColor,width: 1),
-            ),
-            //width: this.widget.width,
-            padding: const EdgeInsets.only(left: 16,right: 16),
-            margin: const EdgeInsets.only(bottom: 10),
-          ),
-        ],
-      );
-    }// after Survey
-    else{
-      if(this.widget.isChecked){
-        return Container(
-          child: FlatButton(
-            onPressed: (){
-              this.widget.onTappedTrue();
-            },
-            padding: const EdgeInsets.all(0),
-            child: Container(
-              width: this.widget.width,
-              child: Row(
-                children: [
-                  Text(this.widget.survey,style: TextStyle(color: Statics.shared.colors.mainColor, fontSize: Statics.shared.fontSizes.content, fontWeight: FontWeight.normal),),
-                  Icon(Icons.check, color: Statics.shared.colors.mainColor)
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-              ),
-            ),
-          ),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              border: Border.all(color: Statics.shared.colors.mainColor,width: 1),
-          ),
-          width: this.widget.width,
-          padding: const EdgeInsets.only(left: 16,right: 16),
-          margin: const EdgeInsets.only(bottom: 10),
-        );
-      }// checked
-      else{
-        return Container(
-          child: FlatButton(
-            onPressed: (){
-              this.widget.onTappedTrue();
-            },
-            padding: const EdgeInsets.all(0),
-            child: Container(
-              width: this.widget.width,
-              child: Row(
-                children: [
-                  Text(this.widget.survey,style: TextStyle(color: Statics.shared.colors.titleTextColor, fontSize: Statics.shared.fontSizes.content, fontWeight: FontWeight.normal),),
-                  Icon(Icons.check, color: Statics.shared.colors.subTitleTextColor)
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-              ),
-            ),
-          ),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              border: Border.all(color: Statics.shared.colors.subTitleTextColor,width: 1),
-          ),
-          width: this.widget.width,
-          padding: const EdgeInsets.only(left: 16,right: 16),
-          margin: const EdgeInsets.only(bottom: 10),
-        );
-      }// not checked
-    }// before Survey
+                Container(
+                  child: FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        this.widget.isChecked = true;
+                      });
+                      this.widget.onTappedTrue();
+                    },
+                    padding: const EdgeInsets.all(0),
+                    child: Container(
+                      width: this.widget.width,
+                      child: Row(
+                        children: [
+                          Text(
+                            this.widget.survey,
+                            style: TextStyle(
+                                color: Statics.shared.colors.titleTextColor,
+                                fontSize: Statics.shared.fontSizes.content,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          Text(
+                            "${this.widget.p.toString()}%",
+                            style: TextStyle(
+                                color: Statics.shared.colors.mainColor,
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary,
+                                fontWeight: FontWeight.normal),
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                      ),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    border: Border.all(
+                        color: Statics.shared.colors.subTitleTextColor,
+                        width: 1),
+                  ),
+                  //width: this.widget.width,
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  margin: const EdgeInsets.only(bottom: 10),
+                ),
+              ],
+            )
+          : null;
+    } // after Survey
+    else {
+      if (this.widget.isChecked) {
+        return this.widget.survey != "null"
+            ? Container(
+                child: FlatButton(
+                  onPressed: () {
+                    this.widget.onTappedTrue();
+                  },
+                  padding: const EdgeInsets.all(0),
+                  child: Container(
+                    width: this.widget.width,
+                    child: Row(
+                      children: [
+                        Text(
+                          this.widget.survey,
+                          style: TextStyle(
+                              color: Statics.shared.colors.mainColor,
+                              fontSize: Statics.shared.fontSizes.content,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Icon(Icons.check,
+                            color: Statics.shared.colors.mainColor)
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  border: Border.all(
+                      color: Statics.shared.colors.mainColor, width: 1),
+                ),
+                width: this.widget.width,
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                margin: const EdgeInsets.only(bottom: 10),
+              )
+            : null;
+      } // checked
+      else {
+        return this.widget.survey != "null"
+            ? Container(
+                child: FlatButton(
+                  onPressed: () {
+                    this.widget.onTappedTrue();
+                  },
+                  padding: const EdgeInsets.all(0),
+                  child: Container(
+                    width: this.widget.width,
+                    child: Row(
+                      children: [
+                        Text(
+                          this.widget.survey,
+                          style: TextStyle(
+                              color: Statics.shared.colors.titleTextColor,
+                              fontSize: Statics.shared.fontSizes.content,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        Icon(Icons.check,
+                            color: Statics.shared.colors.subTitleTextColor)
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                    ),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  border: Border.all(
+                      color: Statics.shared.colors.subTitleTextColor, width: 1),
+                ),
+                width: this.widget.width,
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                margin: const EdgeInsets.only(bottom: 10),
+              )
+            : Container();
+      } // not checked
+    } // before Survey
   }
 }

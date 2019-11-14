@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -74,12 +75,22 @@ class _SignInState extends State<SignAuth> {
                     "Resources/Icons/btn_certi.png",
                     scale: 2.0,
                   ),
-                  onPressed: () {
-                    userInformation.mode = "join";
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => new Auth()));
+                  onPressed: () async {
+                    String url =
+                        "http://www.mariners.or.kr/member/joinStep1.php?USER_NAME=${'이길호'}&USER_JUMIN=${'19920908'}&USER_PHONE=${'01029703662'}";
+
+                    if (await canLaunch(url)) {
+                      Future.delayed(const Duration(milliseconds: 200), () {
+                        launch(url);
+                      });
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                    // userInformation.mode = "join";
+                    // Navigator.push(
+                    //     context,
+                    //     new MaterialPageRoute(
+                    //         builder: (context) => new Auth()));
                   },
                 ),
                 alignment: Alignment.center,

@@ -37,8 +37,8 @@ class _SurveysTabsState extends State<SurveysTabs>
   showPopUp(
       {String content,
       String idx,
-        String startDate,
-        String endDate,
+      String startDate,
+      String endDate,
       bool isDone,
       String votingPeriod,
       List<String> votes,
@@ -73,27 +73,27 @@ class _SurveysTabsState extends State<SurveysTabs>
           } // Vote
           else {
             return HaegisaAlertSurveyDialog(
-                surveys: surveys,
-                startDate: startDate,
-                endDate: endDate,
-                votingPeriod: votingPeriod,
-                popUpWidth: popUpWidth,
-                popUpHeight: height,
-                idx: idx,
-                isDone:isDone,
-                content: content,
-                onPressApply: () {
-                  onPressApply();
-                },
-                onPressClose: () {
-                  onPressClose();
-                },
-              afterSubmit: (){
-                  setState(() {
-                    this.refreshSurveysTabs();
-                  });
+              surveys: surveys,
+              startDate: startDate,
+              endDate: endDate,
+              votingPeriod: votingPeriod,
+              popUpWidth: popUpWidth,
+              popUpHeight: height,
+              idx: idx,
+              isDone: isDone,
+              content: content,
+              onPressApply: () {
+                onPressApply();
               },
-                );
+              onPressClose: () {
+                onPressClose();
+              },
+              afterSubmit: () {
+                setState(() {
+                  this.refreshSurveysTabs();
+                });
+              },
+            );
           } // Survey
         });
   }
@@ -161,23 +161,25 @@ class _SurveysTabsState extends State<SurveysTabs>
       List<NoticeWidget> myList2 = [];
 
       for (int i = 0; i < res.length; i++) {
-
         String startDateStr = res[i]['start_date'].toString();
         String endDateStr = res[i]['end_date'].toString();
         DateTime endDate = DateTime.parse(endDateStr);
 
         bool isDoneSurvey = false;
+        bool isEndSurvey = false;
         if (res[i]['isDone'] == "TRUE") {
+          //투표를 완료 했다고 종료된건 아님.
           isDoneSurvey = true;
         }
 
-        if(endDate.isBefore(DateTime.now())){
-          isDoneSurvey = true;
+        if (endDate.isBefore(DateTime.now())) {
+          isEndSurvey = true;
         }
 
         NoticeWidget item = NoticeWidget(
           isOnSurveysTabs: true,
-          isDone:isDoneSurvey,
+          isDone: isDoneSurvey,
+          endDate: endDateStr,
           title: res[i]['subject'].toString(),
           shortDescription: res[i]['contents'].toString(),
           time: res[i]['start_date'].toString(),
@@ -186,17 +188,17 @@ class _SurveysTabsState extends State<SurveysTabs>
             widget.db.selectSurveyAnswer(
                 idx: res[i]['bd_idx'],
                 onResult: (surveys) {
-
                   startDateStr = res[i]['start_date'].toString();
                   endDateStr = res[i]['end_date'].toString();
                   String votingDate = "";
                   votingDate = startDateStr.replaceAll("-", ".");
                   votingDate = "${votingDate.toString()} - ";
                   int i3 = 0;
-                  endDateStr.split("-").forEach((item){
-                    if(i3 == 1){
-                      votingDate = "${votingDate.toString()}${item.toString()}.";
-                    }else if(i3 == 2){
+                  endDateStr.split("-").forEach((item) {
+                    if (i3 == 1) {
+                      votingDate =
+                          "${votingDate.toString()}${item.toString()}.";
+                    } else if (i3 == 2) {
                       votingDate = "${votingDate.toString()}${item.toString()}";
                     }
                     i3 += 1;
@@ -209,7 +211,7 @@ class _SurveysTabsState extends State<SurveysTabs>
                         endDate: endDateStr,
                         nt: NoticeType.Survey,
                         votingPeriod: " ~ ${votingDate.toString()}",
-                        isDone:isDoneSurvey,
+                        isDone: isDoneSurvey,
                         votes: [],
                         surveys: surveys,
                         idx: res[i]['bd_idx'].toString(),
@@ -232,7 +234,7 @@ class _SurveysTabsState extends State<SurveysTabs>
                         endDate: endDateStr,
                         votingPeriod: " ~ ${votingDate.toString()}",
                         votes: ["a1", "a2", "a3"],
-                        isDone:isDoneSurvey,
+                        isDone: isDoneSurvey,
                         idx: res[i]['bd_idx'].toString(),
                         onPressClose: () {
                           Navigator.pop(_scaffold.currentContext);
@@ -250,15 +252,21 @@ class _SurveysTabsState extends State<SurveysTabs>
                 });
           },
         );
-        if (res[i]['isDone'] == "FALSE") {
-          if(!endDate.isBefore(DateTime.now())){
-            myList.add(item);
-          }else{
-            myList2.add(item);
-          }
+        //투표를 완료 했다고 종료된건 아님.
+        if (!isEndSurvey) {
+          myList.add(item);
         } else {
           myList2.add(item);
         }
+        // if (res[i]['isDone'] == "FALSE") {
+        //   if (!endDate.isBefore(DateTime.now())) {
+        //     myList.add(item);
+        //   } else {
+        //     myList2.add(item);
+        //   }
+        // } else {
+        //   myList2.add(item);
+        // }
       }
 
       widget.onGoingSurveys = myList;
@@ -269,13 +277,14 @@ class _SurveysTabsState extends State<SurveysTabs>
     });
   }
 
-  void refreshSurveysTabs(){
+  void refreshSurveysTabs() {
     print("..........:::::::::: Refreshing surveys Tabs ::::::::::..........");
     refreshNotices();
     Future.delayed(Duration(seconds: 2)).then((val) {
       setState(() {});
     });
   }
+
   @override
   void initState() {
     refreshSurveysTabs();

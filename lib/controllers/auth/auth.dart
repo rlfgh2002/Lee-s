@@ -58,6 +58,7 @@ class _AuthState extends State<Auth> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
+
     return WebviewScaffold(
       url: selectedUrl,
       appBar: AppBar(
@@ -127,8 +128,11 @@ class _AuthState extends State<Auth> {
             Map valueMap = json.decode(res);
 
             if (valueMap['status'] == 0) {
-              flutterWebviewPlugin.close();
-              const url = 'http://www.mariners.or.kr/member/join_type.php';
+              flutterWebviewPlugin.dispose();
+
+              String url =
+                  "http://www.mariners.or.kr/member/joinStep1.php?USER_NAME=${valueMap['name']}&USER_JUMIN=${valueMap['bitrh']}&USER_PHONE=${valueMap['hp']}";
+
               if (await canLaunch(url)) {
                 Navigator.push(
                     context,
@@ -142,7 +146,7 @@ class _AuthState extends State<Auth> {
               }
             } else if (valueMap['status'] == 1) {
               //res가 //0 : 해기사 회원이 아님, 1 : 신규회원, 2 : 이미 존재하는 회원(홈페이지) 4 : 오류
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
               userInformation.fullName = valueMap['name'];
               userInformation.hp = valueMap['hp'];
               userInformation.userIdx = valueMap['member_idx'];
@@ -151,7 +155,7 @@ class _AuthState extends State<Auth> {
               Navigator.push(context,
                   new MaterialPageRoute(builder: (context) => new Join()));
             } else if (valueMap['status'] == 2) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
               if (userInformation.userDeviceOS == "i") {
                 userInformation.mode =
                     Strings.shared.controllers.signIn.already;
@@ -166,14 +170,14 @@ class _AuthState extends State<Auth> {
                         builder: (context) => new SplashScreen()));
               }
             } else if (valueMap['status'] == 3) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
               Navigator.push(
                   context,
                   new MaterialPageRoute(
                       builder: (context) => new SplashScreen()));
             } else if (valueMap['status'] == 4) {
               if (userInformation.userDeviceOS == "i") {
-                flutterWebviewPlugin.close();
+                flutterWebviewPlugin.dispose();
                 userInformation.mode = "인증 에러";
                 Navigator.push(
                     context,
@@ -186,7 +190,7 @@ class _AuthState extends State<Auth> {
                         builder: (context) => new SplashScreen()));
               }
             } else {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
 
               userInformation.mode = "인증 에러";
               Navigator.push(context,
@@ -206,20 +210,21 @@ class _AuthState extends State<Auth> {
             var res = await flutterWebviewPlugin.evalJavascript(script);
             Map valueMap = json.decode(res);
             if (valueMap["status"] == 0) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
               Navigator.push(
                   context,
                   new MaterialPageRoute(
                       builder: (context) => new SplashScreen()));
             } else if (valueMap["status"] == 1) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
               userInformation.userID = valueMap['id'];
-              flutterWebviewPlugin.close();
+
+              flutterWebviewPlugin.dispose();
               flutterWebviewPlugin.onDestroy;
               Navigator.push(context,
                   new MaterialPageRoute(builder: (context) => new FindID()));
             } else if (valueMap["status"] == 2) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
               if (userInformation.userDeviceOS == "i") {
                 userInformation.mode =
                     Strings.shared.controllers.signIn.nomember;
@@ -234,7 +239,7 @@ class _AuthState extends State<Auth> {
                         builder: (context) => new SplashScreen()));
               }
             } else {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
 
               userInformation.mode = "인증 에러";
               Navigator.push(context,
@@ -254,22 +259,22 @@ class _AuthState extends State<Auth> {
             var res = await flutterWebviewPlugin.evalJavascript(script);
             Map valueMap = json.decode(res);
             if (valueMap["status"] == 0) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
 
               Navigator.push(
                   context,
                   new MaterialPageRoute(
                       builder: (context) => new SplashScreen()));
             } else if (valueMap["status"] == 1) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
 
               currentURL = '';
               userInformation.userID = valueMap['id'];
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
               Navigator.push(context,
                   new MaterialPageRoute(builder: (context) => new FindPW()));
             } else if (valueMap["status"] == 2) {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
 
               if (userInformation.userDeviceOS == "i") {
                 userInformation.mode =
@@ -285,7 +290,7 @@ class _AuthState extends State<Auth> {
                         builder: (context) => new SplashScreen()));
               }
             } else {
-              flutterWebviewPlugin.close();
+              flutterWebviewPlugin.dispose();
 
               userInformation.mode = "인증 에러";
               Navigator.push(context,
@@ -296,8 +301,7 @@ class _AuthState extends State<Auth> {
       } else if (currentURL ==
           'http://www.mariners.or.kr/member/mobile_checkplus_fail.php') {}
     });
-
-    flutterWebviewPlugin.close();
+    flutterWebviewPlugin.dispose();
 
     _urlCtrl.addListener(() {
       selectedUrl = _urlCtrl.text;

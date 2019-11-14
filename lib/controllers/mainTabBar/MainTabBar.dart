@@ -79,7 +79,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void getAllSurveys({String uid}) async {
-    String url = Statics.shared.urls.searchSurveys(uid);
+    String url = Statics.shared.urls.searchSurveys(uid, "search", "");
+    widget.db.deleteSurvey();
+    widget.db.deleteSurveyAnswer();
     await http.get(url).then((val) {
       if (val.statusCode == 200) {
         print("OUTPUT: ${val.body.toString()}");
@@ -93,7 +95,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                 onNoResult: () {
                   widget.db.insertSurvey(
                       no: myList[i]['no'].toString(),
-                      isDone: 'FALSE',
+                      isDone: myList[i]['status'].toString() == "Y"
+                          ? "TRUE"
+                          : "FALSE",
                       bd_idx: myList[i]['bd_idx'].toString(),
                       start_date: myList[i]['start_date'].toString(),
                       end_date: myList[i]['end_date'].toString(),

@@ -786,8 +786,9 @@ class MyDataBase {
     // open the database
     await openDatabase(path).then((db) {
       db
-          .rawDelete(
-              "DELETE FROM ${_StaticDbInformation.tblSurveys} WHERE no='${no.toString()}'")
+          // .rawDelete(
+          //     "DELETE FROM ${_StaticDbInformation.tblSurveys} WHERE no='${no.toString()}'")
+          .rawDelete("DELETE FROM ${_StaticDbInformation.tblSurveys}")
           .then((val) {
         print(":::::::::: DB DELETE ROW => [${val}] ::::::::::");
         onDeleted(true);
@@ -983,8 +984,9 @@ class MyDataBase {
     // open the database
     await openDatabase(path).then((db) {
       db
-          .rawDelete(
-              "DELETE FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}'")
+          // .rawDelete(
+          //     "DELETE FROM ${_StaticDbInformation.tblSurveysAnswers} WHERE ${_StaticDbInformation.tblAnswersSurveyIdx} = '${idx}'")
+          .rawDelete("DELETE FROM ${_StaticDbInformation.tblSurveysAnswers}")
           .then((val) {
         print(":::::::::: DB DELETE ROW => [${val}] ::::::::::");
         onDeleted(true);

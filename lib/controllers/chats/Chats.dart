@@ -245,7 +245,7 @@ class ChatsState extends State<Chats> {
                           String chosenTime = "";
                           if (DateTime.now().hour > 12) {
                             chosenTime =
-                                "오2후 ${(DateTime.now().hour - 12).toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
+                                "오후 ${(DateTime.now().hour - 12).toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";
                           } else {
                             chosenTime =
                                 "오전 ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}";

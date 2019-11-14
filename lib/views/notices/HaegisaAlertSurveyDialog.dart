@@ -6,6 +6,7 @@ import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/Survey/SurveyResultPercentageObject.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/notices/HaegisaAlertComplete.dart';
@@ -39,6 +40,7 @@ class HaegisaAlertSurveyDialog extends StatefulWidget {
 
   Widget bottomButton = Container();
   Widget surveyList = Container();
+  var surveySelect;
 
   VoidCallback onPressClose;
   VoidCallback onPressApply;
@@ -377,8 +379,64 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                       // submit Survey
                       // Submit this Survey to Server ...
                       print("Connect To Server ........");
-                      this.submitSurvey(
-                          bdxId: this.widget.surveysChecked.first.idx);
+
+                      if (this.widget.surveysChecked.length == 0) {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: new Text("알림"),
+                                  content: new Text("항목을 선택하세요.",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  actions: <Widget>[
+                                    // usually buttons at the bottom of the dialog
+
+                                    new FlatButton(
+                                      child: new Text(
+                                        "확인",
+                                        style: TextStyle(
+                                            fontSize: Statics
+                                                .shared.fontSizes.supplementary,
+                                            color: Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ));
+                      } else if (this.widget.surveys.length !=
+                          this.widget.surveysChecked.length) {
+                        showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (_) => AlertDialog(
+                                  title: new Text("알림"),
+                                  content: new Text("항목을 선택하세요.",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  actions: <Widget>[
+                                    // usually buttons at the bottom of the dialog
+
+                                    new FlatButton(
+                                      child: new Text(
+                                        "확인",
+                                        style: TextStyle(
+                                            fontSize: Statics
+                                                .shared.fontSizes.supplementary,
+                                            color: Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ));
+                      } else {
+                        this.submitSurvey(
+                            bdxId: this.widget.surveysChecked.first.idx);
+                      }
                     },
                   ),
                   width: (this.widget.popUpWidth - 16) / 2)),
@@ -416,10 +474,15 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
   Container surveyList() {
     List<Widget> mySurveysList = [];
     for (int i = 0; i < widget.surveys.length; i++) {
+      String number = (i + 1).toString();
+      var selectItem =
+          this.widget.surveySelect[0]["q_title"]["q" + (number) + "_item"];
+      print(selectItem["q" + number]);
       mySurveysList.add(Padding(
-        child: Text("${this.widget.surveys[i]['title']}"),
+        child: Text("${selectItem["q" + number]}"),
         padding: const EdgeInsets.only(bottom: 8),
       ));
+
       for (int j = 0; j < 4; j++) {
         if (this.widget.surveys[i]['q${j + 1}'] != null) {
           if (this.widget.surveys[i]['q${j + 1}'] != "") {
@@ -491,21 +554,37 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
 
   Container resultList() {
     List<Widget> mySurveysList = [];
+
     for (int i = 0; i < widget.surveys.length; i++) {
+      String number = (i + 1).toString();
+      var selectItem =
+          this.widget.surveySelect[0]["q_title"]["q" + (number) + "_item"];
+      print(selectItem["q" + number]);
       mySurveysList.add(Padding(
-        child: Text("${this.widget.surveys[i]['title']}"),
+        child: Text("${selectItem["q" + number]}"),
         padding: const EdgeInsets.only(bottom: 8),
       ));
-      for (int j = 0; j < 8; j++) {
-        if (this.widget.surveys[i]['q${j + 1}'] != "") {
+
+      print(this.widget.surveys[i]['title']);
+      print(this.widget.surveySelect[0]);
+
+      for (int j = 0; j < 4; j++) {
+        if (selectItem["q" + number + "_" + (j + 1).toString()] != null) {
           print("RESRES: ${this.widget.surveys[i]}");
+          print(selectItem["q" + number + "_" + (j + 1).toString()]);
           mySurveysList.add(SurveyWidget(
               myIndex: j,
-              surveyObj: this.widget.surveys[i],
+              p: double.parse(selectItem["q" +
+                      number +
+                      "_" +
+                      (j + 1).toString() +
+                      "_result_percent"]
+                  .replaceAll("%", "")),
+              surveyObj: selectItem,
               qNum: this.widget.surveys[i]['qNumber'].toString(),
               surveyIdx: this.widget.surveys[i]['surveyIdx'].toString(),
               width: this.widget.popUpWidth - 64,
-              survey: this.widget.surveys[i]['q${j + 1}'],
+              survey: selectItem["q" + number + "_" + (j + 1).toString()],
               groupName: "voteGroup",
               itemIndex: i,
               isChecked: true,
@@ -533,20 +612,54 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
     super.initState();
   }
 
+  void getSurveys({String uid, String idx}) async {
+    String url = Statics.shared.urls.searchSurveys(uid, "view", idx);
+
+    await http.get(url).then((val) {
+      if (val.statusCode == 200) {
+        print("OUTPUT: ${val.body.toString()}");
+        final String responseBody = utf8.decode(val.bodyBytes);
+        Map<String, dynamic> body = json.decode(responseBody.trim());
+        if (body['code'] == "200") {
+          setState(() {
+            this.widget.surveySelect = body['table'];
+          });
+        }
+      }
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on getting Survey error : ${error.toString()} ::::::::::::::::::");
+    });
+  }
+
   BuildContext myContext;
 
   @override
   Widget build(BuildContext context) {
     this.myContext = context;
-    if (this.widget.isFirst) {
-      if (!this.widget.isDone) {
-        this.widget.bottomButton = beforeSurvey();
-        this.widget.surveyList = surveyList();
-      } else {
-        this.widget.bottomButton = afterSurvey();
-        this.widget.surveyList = resultList();
+
+    if (this.widget.surveySelect == null) {
+      getSurveys(uid: userInformation.userID, idx: this.widget.idx);
+    } else {
+      print(this.widget.surveySelect);
+      print(this.widget.surveySelect[0]["status"]);
+      print(this.widget.surveySelect[0]["q_title"]["q1_item"]);
+      if (this.widget.isFirst) {
+        if (this.widget.surveySelect[0]["status"] == "N") {
+          if (!DateTime.parse(this.widget.surveySelect[0]["end_date"])
+              .isBefore(DateTime.now())) {
+            this.widget.bottomButton = beforeSurvey();
+            this.widget.surveyList = surveyList();
+          } else {
+            this.widget.bottomButton = afterSurvey();
+            this.widget.surveyList = resultList();
+          }
+        } else {
+          this.widget.bottomButton = afterSurvey();
+          this.widget.surveyList = resultList();
+        }
+        this.widget.isFirst = false;
       }
-      this.widget.isFirst = false;
     }
 
     return AlertDialog(

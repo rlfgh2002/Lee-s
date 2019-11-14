@@ -11,6 +11,7 @@ class NoticeWidget extends StatelessWidget {
   String title = "";
   String shortDescription = "";
   String time = "";
+  String endDate = "";
   double avatarRadius = 24;
   String avatarLink = "Resources/Icons/img_notice.png";
   String proceedingBackground = "Resources/Icons/proceedingBackground.png";
@@ -31,6 +32,7 @@ class NoticeWidget extends StatelessWidget {
       String title = "",
       String shortDescription = "",
       String time = "",
+      String endDate = "",
       NoticeType type = NoticeType.Notice,
       VoidCallback onTapped,
       String idx = "",
@@ -41,6 +43,7 @@ class NoticeWidget extends StatelessWidget {
     this.title = title;
     this.shortDescription = shortDescription;
     this.time = time;
+    this.endDate = endDate;
     this.type = type;
     this.onTapped = onTapped;
     this.isOnSurveysTabs = isOnSurveysTabs;
@@ -68,6 +71,7 @@ class NoticeWidget extends StatelessWidget {
         ));
     final db = MyDataBase();
     double screenSize = MediaQuery.of(context).size.width;
+
     if (!this.isOnSurveysTabs) {
       //공지사항
       return Container(
@@ -219,7 +223,8 @@ class NoticeWidget extends StatelessWidget {
                   }
                 },
               )
-            : GestureDetector(
+            : //알림 페이지 설문조사
+            GestureDetector(
                 child: Container(
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Row(children: [
@@ -256,7 +261,7 @@ class NoticeWidget extends StatelessWidget {
                         SizedBox(height: 5),
                         Container(
                           child: Text(
-                            this.time,
+                            this.time + " ~ " + this.endDate,
                             style: TextStyle(
                                 fontSize: Statics.shared.fontSizes.content,
                                 color: Statics.shared.colors.subTitleTextColor,
@@ -279,9 +284,11 @@ class NoticeWidget extends StatelessWidget {
               ),
       );
     } else {
+      //설문조사 페이지
       String pbck = this.proceedingBackground;
       String prcdw = Strings.shared.dialogs.proceedingWord;
-      if (this.isDone) {
+
+      if (DateTime.parse(this.endDate).isBefore(DateTime.now())) {
         pbck = this.proceedingBackgroundDark;
         prcdw = Strings.shared.dialogs.proceedingWord2;
       }
@@ -296,55 +303,59 @@ class NoticeWidget extends StatelessWidget {
             this.onTapped();
           },
           child: Container(
-            padding: const EdgeInsets.only(left: 16, right: 16),
+            padding: const EdgeInsets.only(right: 16),
             child: Row(
               children: [
-                Container(
-                  child: Text(
-                    prcdw,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Statics.shared.fontSizes.medium,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(pbck), fit: BoxFit.fill),
-                  ),
-                  padding: const EdgeInsets.only(
-                      top: 7, bottom: 7, left: 5, right: 15),
-                  margin: const EdgeInsets.only(top: 5),
+                Column(
+                  children: <Widget>[
+                    Container(
+                      child: Text(
+                        prcdw,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Statics.shared.fontSizes.medium,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(pbck), fit: BoxFit.fill),
+                      ),
+                      padding: const EdgeInsets.only(
+                          top: 7, bottom: 7, left: 7, right: 15),
+                      margin: EdgeInsets.only(left: 12),
+                    ),
+                    this.isDone
+                        ? Container(
+                            child: Text(
+                              "투표완료",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: Statics.shared.fontSizes.medium,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          )
+                        : Container()
+                  ],
                 ),
                 SizedBox(width: 10),
                 Column(
                   children: [
                     Container(
-                        child: Row(
-                          children: [
-                            Container(
-                              child: Text(
-                                this.title,
-                                style: TextStyle(
-                                    fontSize: Statics.shared.fontSizes.content,
-                                    color:
-                                        Statics.shared.colors.titleTextColor),
-                                overflow: TextOverflow.fade,
-                              ),
-                              width: screenSize - 116,
-                            ),
-                          ],
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Text(
+                          this.title,
+                          style: TextStyle(
+                              fontSize: Statics.shared.fontSizes.content,
+                              color: Statics.shared.colors.titleTextColor),
+                          overflow: TextOverflow.fade,
                         ),
                         width: screenSize - 116),
-                    SizedBox(height: 10),
                     Container(
                       child: Row(
                         children: [
                           Image.asset(this.iconDate, width: 15),
                           SizedBox(width: 5),
                           Text(
-                            this.time,
+                            this.time + " ~ " + this.endDate,
                             style: TextStyle(
                                 fontSize: Statics.shared.fontSizes.medium,
                                 fontWeight: FontWeight.w400,
@@ -357,12 +368,12 @@ class NoticeWidget extends StatelessWidget {
                     )
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   textDirection: TextDirection.ltr,
                 ),
-                SizedBox(width: 10),
               ],
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
             ),
           ),
           highlightColor: Color.fromRGBO(244, 248, 255, 1),

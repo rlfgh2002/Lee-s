@@ -3,8 +3,8 @@ class URLS {
   String searchMembers =
       "http://mariners.or.kr/app_middle/chat/search_json.php";
 
-  String searchSurveys(String uid) {
-    return "http://mariners.or.kr/app_middle/survey/survey_json.php?userId=${uid.toString()}&mode=search&page_number=1";
+  String searchSurveys(String uid, String mode, String idx) {
+    return "http://mariners.or.kr/app_middle/survey/survey_json.php?userId=${uid.toString()}&mode=${mode.toString()}&bd_idx=${idx.toString()}&page_number=99";
   }
 
   String submitVote(String uid, String voteIdx, String answerId) {
