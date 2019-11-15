@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
@@ -266,64 +267,13 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                       });
                 } // for loop
 
-                this.widget.afterSubmit();
                 setState(() {
                   this.widget.bottomButton = afterSurvey();
                   this.widget.surveyList = resultList();
                 });
+                print("완료");
               });
           // already submitted
-        } else if (body['code'].toString() == "200") {
-          int qCnt = int.parse(body['table'][0]['q_cnt'].toString());
-          for (int i = 0; i < qCnt; i++) {
-            for (int j = 0; j < 4; j++) {
-              String strPercent = body['table'][0]['q_title']['q${i + 1}_item']
-                      ['q${i + 1}_${j + 1}_result_percent']
-                  .toString();
-              strPercent = strPercent.replaceAll("%", "");
-              print(
-                  "=====>>>> ${strPercent.toString()}  - q${i + 1}_${j + 1}_result_percent");
-
-              int newNum = j + 1;
-              int newNum2 = i + 1;
-              this.widget.db.updateSurveyResult(
-                  idx: body['table'][0]['bd_idx'].toString(),
-                  resNum: "${newNum.toString()}",
-                  qNumber: "${newNum2.toString()}",
-                  result: strPercent,
-                  onUpdated: () {
-                    print(
-                        ".....::::::::: SURVAY UPDAING (result${j + 1})={${strPercent.toString()}} RESULT IN DATABASE :::::::::.....");
-                  });
-
-              this.widget.db.updateSurveyisDone(
-                  idx: body['table'][0]['bd_idx'].toString(),
-                  surveyDone: "TRUE",
-                  onUpdated: () {
-                    print(
-                        ".....::::::::: SURVAY UPDAING DONE IN DATABASE :::::::::.....");
-                  });
-
-              int percent = int.parse(strPercent);
-              MainTabBar.mainTabBar.mdw.lastSurveyPercentages
-                  .add(SurveyResultPercentageObject(qn: i + 1, res: percent));
-            }
-          }
-
-          this.widget.afterSubmit();
-
-          this.widget.db.selectSurveyAnswer(
-              idx: this.widget.idx,
-              onResult: (res) {
-                this.widget.surveys = res;
-
-                setState(() {
-                  this.widget.bottomButton = afterSurvey();
-                  this.widget.surveyList = resultList();
-                });
-              });
-
-          // submit survey
         }
       }).catchError((error) {
         print(
@@ -478,9 +428,12 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       var selectItem =
           this.widget.surveySelect[0]["q_title"]["q" + (number) + "_item"];
       print(selectItem["q" + number]);
-      mySurveysList.add(Padding(
-        child: Text("${selectItem["q" + number]}"),
+      mySurveysList.add(Container(
+        child: Text(
+          "${selectItem["q" + number]}",
+        ),
         padding: const EdgeInsets.only(bottom: 8),
+        alignment: Alignment.centerLeft,
       ));
 
       for (int j = 0; j < 4; j++) {
@@ -543,11 +496,11 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       } //loop2
     } //loop1
 
+    print(mySurveysList);
     return Container(
-      child: ListView(
+      child: Column(
         children: mySurveysList,
       ),
-      height: 220,
       padding: const EdgeInsets.only(left: 16, right: 16),
     );
   }
@@ -593,10 +546,9 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       } //loop2
     }
     return Container(
-      child: ListView(
+      child: Column(
         children: mySurveysList,
       ),
-      height: 220,
       padding: const EdgeInsets.only(left: 16, right: 16),
     );
   }
@@ -695,50 +647,53 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
               ),
             ),
             SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.only(left: 32, right: 32),
-              child: Column(
-                children: [
-                  Row(
-                    children: <Widget>[
-                      Image.asset(
-                        "Resources/Icons/icon_date.png",
-                        height: 16,
-                        width: 16,
+            Expanded(
+                child: ListView(
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.only(left: 16, right: 32),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          Image.asset(
+                            "Resources/Icons/icon_date.png",
+                            height: 16,
+                            width: 16,
+                          ),
+                          Text(
+                            Strings.shared.dialogs.surveyingPeriod,
+                            style: TextStyle(
+                                color: Statics.shared.colors.mainColor,
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                       Text(
-                        Strings.shared.dialogs.surveyingPeriod,
+                        this.widget.votingPeriod,
                         style: TextStyle(
-                            color: Statics.shared.colors.mainColor,
-                            fontSize: Statics.shared.fontSizes.supplementary,
-                            fontWeight: FontWeight.bold),
+                            color: Statics.shared.colors.titleTextColor,
+                            fontSize: Statics.shared.fontSizes.supplementary),
                       ),
                     ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
                   ),
-                  Text(
-                    this.widget.votingPeriod,
-                    style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.supplementary),
+                ),
+                Container(
+                  child: Html(
+                    data: this.widget.content,
                   ),
-                ],
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-              ),
-            ),
-            Container(
-              child: Text(
-                this.widget.content,
-                style: TextStyle(
-                    color: Statics.shared.colors.titleTextColor,
-                    fontSize: Statics.shared.fontSizes.content),
-              ),
-              padding: const EdgeInsets.only(
-                  left: 32, right: 32, top: 20, bottom: 10),
-            ),
-            SizedBox(height: 10),
-            this.widget.surveyList, // survey List
-            SizedBox(height: 30),
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 32, top: 20, bottom: 10),
+                ),
+                //SizedBox(height: 10),
+                this.widget.surveyList, // survey List
+                //SizedBox(height: 30),
+              ],
+            )),
             this.widget.bottomButton,
           ], // Column Children
           crossAxisAlignment: CrossAxisAlignment.center,

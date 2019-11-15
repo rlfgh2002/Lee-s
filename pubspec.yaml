@@ -47,6 +47,7 @@ dependencies:
   open_file: ^2.0.3 #파일 오픈(경로)
   barcode_flutter: ^1.0.2 #generate barcode
   pdf_viewer_plugin: ^1.0.0+2
+  flutter_html: ^0.9.6
 
   # flutter_localizations:
   #   sdk: flutter

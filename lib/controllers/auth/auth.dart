@@ -133,6 +133,8 @@ class _AuthState extends State<Auth> {
               String url =
                   "http://www.mariners.or.kr/member/joinStep1.php?USER_NAME=${valueMap['name']}&USER_JUMIN=${valueMap['bitrh']}&USER_PHONE=${valueMap['hp']}";
 
+              url = Uri.encodeFull(url);
+
               if (await canLaunch(url)) {
                 Navigator.push(
                     context,
