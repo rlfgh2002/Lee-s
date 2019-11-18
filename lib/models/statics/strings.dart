@@ -258,6 +258,7 @@ class _StringJsonURL {
       "http://mariners.or.kr/app_middle/etc/manager_json.php";
   String requestMemberJson =
       "http://mariners.or.kr/app_middle/member/requestMembership.php";
+  String getVersion = "http://mariners.or.kr/app_middle/etc/appVersion.php";
   String terms =
       "https://www.mariners.or.kr/app_middle/terms/service_term.html";
   String privacy =

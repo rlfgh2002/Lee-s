@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
+import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
+import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/Survey/SurveyResultPercentageObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -217,7 +219,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
         Map<String, dynamic> body = json.decode(responseBody.trim());
         print("BODY SUMIT: ${body.toString()}");
 
-        if (body['code'].toString() == "204") {
+        if (body['code'].toString() == "200") {
           this.widget.db.updateSurveyisDone(
               idx: bdxId,
               surveyDone: "TRUE",
@@ -268,12 +270,35 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                 } // for loop
 
                 setState(() {
-                  this.widget.bottomButton = afterSurvey();
-                  this.widget.surveyList = resultList();
+                  this.widget.surveySelect = null;
                 });
                 print("완료");
               });
           // already submitted
+        } else if (body['code'].toString() == "204") {
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (_) => AlertDialog(
+                    title: new Text("알림"),
+                    content: new Text("이미 투표하셨습니다.",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    actions: <Widget>[
+                      // usually buttons at the bottom of the dialog
+
+                      new FlatButton(
+                        child: new Text(
+                          "확인",
+                          style: TextStyle(
+                              fontSize: Statics.shared.fontSizes.supplementary,
+                              color: Colors.red),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ));
         }
       }).catchError((error) {
         print(
@@ -414,7 +439,8 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
                   color: Colors.white),
             ),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context).pop();
+              SurveysTabsState.setRefresh(context);
             },
           ),
           width: (this.widget.popUpWidth - 16) / 2),
@@ -574,6 +600,7 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
         Map<String, dynamic> body = json.decode(responseBody.trim());
         if (body['code'] == "200") {
           setState(() {
+            this.widget.surveySelect = null;
             this.widget.surveySelect = body['table'];
           });
         }
@@ -596,21 +623,21 @@ class _HaegisaAlertSurveyDialogState extends State<HaegisaAlertSurveyDialog> {
       print(this.widget.surveySelect);
       print(this.widget.surveySelect[0]["status"]);
       print(this.widget.surveySelect[0]["q_title"]["q1_item"]);
-      if (this.widget.isFirst) {
-        if (this.widget.surveySelect[0]["status"] == "N") {
-          if (!DateTime.parse(this.widget.surveySelect[0]["end_date"])
-              .isBefore(DateTime.now())) {
-            this.widget.bottomButton = beforeSurvey();
-            this.widget.surveyList = surveyList();
-          } else {
-            this.widget.bottomButton = afterSurvey();
-            this.widget.surveyList = resultList();
-          }
+
+      if (this.widget.surveySelect[0]["status"] == "N") {
+        this.widget.isFirst = true;
+        if (!DateTime.parse(this.widget.surveySelect[0]["end_date"])
+            .isBefore(DateTime.now())) {
+          this.widget.bottomButton = beforeSurvey();
+          this.widget.surveyList = surveyList();
         } else {
           this.widget.bottomButton = afterSurvey();
           this.widget.surveyList = resultList();
         }
+      } else {
         this.widget.isFirst = false;
+        this.widget.bottomButton = afterSurvey();
+        this.widget.surveyList = resultList();
       }
     }
 

@@ -27,10 +27,10 @@ class SurveysTabs extends StatefulWidget {
   Widget List2 = Container();
 
   @override
-  _SurveysTabsState createState() => _SurveysTabsState();
+  SurveysTabsState createState() => SurveysTabsState();
 }
 
-class _SurveysTabsState extends State<SurveysTabs>
+class SurveysTabsState extends State<SurveysTabs>
     with TickerProviderStateMixin {
   final _scaffold = GlobalKey<ScaffoldState>();
 
@@ -289,6 +289,12 @@ class _SurveysTabsState extends State<SurveysTabs>
   void initState() {
     refreshSurveysTabs();
     super.initState();
+  }
+
+  static void setRefresh(BuildContext context) {
+    SurveysTabsState state =
+        context.ancestorStateOfType(TypeMatcher<SurveysTabsState>());
+    state.refreshSurveysTabs();
   }
 
   @override

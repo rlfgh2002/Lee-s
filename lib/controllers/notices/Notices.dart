@@ -191,63 +191,58 @@ class NoticesState extends State<Notices> {
             type: NoticeType.Survey,
             idx: res[i]['bd_idx'].toString(),
             onTapped: () {
-              if (res[i]['isDone'].toString() != "TRUE") {
-                String startDateStr = res[i]['start_date'].toString();
-                String endDateStr = res[i]['end_date'].toString();
-                String votingDate = startDateStr + " ~ " + endDateStr;
+              String startDateStr = res[i]['start_date'].toString();
+              String endDateStr = res[i]['end_date'].toString();
+              String votingDate = startDateStr + " ~ " + endDateStr;
 
-                widget.db.selectSurveyAnswer(
-                    idx: res[i]['bd_idx'],
-                    onResult: (surveys) {
-                      if (surveys.length > 0) {
-                        showPopUp(
-                            content: res[i]['contents'].toString(),
-                            startDate: startDateStr,
-                            endDate: endDateStr,
-                            nt: NoticeType.Survey,
-                            votingPeriod: "${votingDate.toString()}",
-                            votes: [],
-                            surveys: surveys,
-                            idx: res[i]['bd_idx'].toString(),
-                            onPressClose: () {
-                              Navigator.pop(_scaffold.currentContext);
-                            },
-                            onPressApply: () {
-                              // Survey was Successful
-                              Navigator.pop(_scaffold.currentContext);
-                              showPopUpVotingComplete(
-                                  onPressOk: () {
-                                    Navigator.pop(_scaffold.currentContext);
-                                  },
-                                  noticeType: NoticeType.Survey);
-                            });
-                      } else {
-                        showPopUp(
-                            content: res[i]['contents'].toString(),
-                            startDate: startDateStr,
-                            endDate: endDateStr,
-                            votingPeriod: " ~ ${votingDate.toString()}",
-                            votes: ["a1", "a2", "a3"],
-                            idx: res[i]['bd_idx'].toString(),
-                            onPressClose: () {
-                              Navigator.pop(_scaffold.currentContext);
-                            },
-                            onPressApply: () {
-                              // Survey was Successful
-                              Navigator.pop(_scaffold.currentContext);
-                              showPopUpVotingComplete(
-                                  onPressOk: () {
-                                    Navigator.pop(_scaffold.currentContext);
-                                  },
-                                  noticeType: NoticeType.Survey);
-                            });
-                      }
-                    });
-                // survey is not Done yet!
-              } else {
-                showSnackBar(Strings.shared.dialogs.surveyIsDoneAlert);
-                // survey is done.
-              }
+              widget.db.selectSurveyAnswer(
+                  idx: res[i]['bd_idx'],
+                  onResult: (surveys) {
+                    if (surveys.length > 0) {
+                      showPopUp(
+                          content: res[i]['contents'].toString(),
+                          startDate: startDateStr,
+                          endDate: endDateStr,
+                          nt: NoticeType.Survey,
+                          votingPeriod: "${votingDate.toString()}",
+                          votes: [],
+                          surveys: surveys,
+                          idx: res[i]['bd_idx'].toString(),
+                          onPressClose: () {
+                            Navigator.pop(_scaffold.currentContext);
+                          },
+                          onPressApply: () {
+                            // Survey was Successful
+                            Navigator.pop(_scaffold.currentContext);
+                            showPopUpVotingComplete(
+                                onPressOk: () {
+                                  Navigator.pop(_scaffold.currentContext);
+                                },
+                                noticeType: NoticeType.Survey);
+                          });
+                    } else {
+                      showPopUp(
+                          content: res[i]['contents'].toString(),
+                          startDate: startDateStr,
+                          endDate: endDateStr,
+                          votingPeriod: " ~ ${votingDate.toString()}",
+                          votes: ["a1", "a2", "a3"],
+                          idx: res[i]['bd_idx'].toString(),
+                          onPressClose: () {
+                            Navigator.pop(_scaffold.currentContext);
+                          },
+                          onPressApply: () {
+                            // Survey was Successful
+                            Navigator.pop(_scaffold.currentContext);
+                            showPopUpVotingComplete(
+                                onPressOk: () {
+                                  Navigator.pop(_scaffold.currentContext);
+                                },
+                                noticeType: NoticeType.Survey);
+                          });
+                    }
+                  });
+              // survey is not Done yet!
             },
           );
           mySurveysList.add(item);
