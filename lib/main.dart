@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/Chat/chatObject.dart';
@@ -21,16 +22,16 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() {
   runApp(new MaterialApp(
-    // localizationsDelegates: [
-    //   // ... app-specific localization delegate[s] here
-    //   GlobalMaterialLocalizations.delegate,
-    //   GlobalWidgetsLocalizations.delegate,
-    //   GlobalCupertinoLocalizations.delegate,
+    localizationsDelegates: [
+      // ... app-specific localization delegate[s] here
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    // supportedLocales: [
+    //   const Locale('ko', 'KR'),
     // ],
-    // // supportedLocales: [
-    // //   const Locale('ko', 'KR'),
-    // // ],
-    // // locale: Locale('ko', 'KR'),
+    // locale: Locale('ko', 'KR'),
     home: new MyApp(),
   ));
 }

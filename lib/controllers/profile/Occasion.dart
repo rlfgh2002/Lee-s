@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/home/Home.dart';
@@ -9,6 +10,7 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
 
 import 'Profile.dart';
@@ -56,10 +58,21 @@ class _OccasionState extends State<Occasion> {
   String address;
   String date;
   String etc;
-
+  String filePath;
   int radioType;
 
   String _value = '';
+
+  String _fileName;
+  String _path;
+  Map<String, String> _paths;
+  String _extension;
+  bool _loadingPath = false;
+  bool _multiPick = false;
+  bool _hasValidMime = false;
+  FileType _pickingType;
+  TextEditingController _controller = new TextEditingController();
+
   void _setDate() {
     Navigator.of(context).pop();
   }
@@ -74,6 +87,37 @@ class _OccasionState extends State<Occasion> {
     _birthController = new TextEditingController(text: birth);
     _companyController = new TextEditingController(text: company);
     _phoneController = new TextEditingController(text: phone);
+    _controller.addListener(() => _extension = _controller.text);
+  }
+
+  void _openFileExplorer() async {
+    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
+      setState(() => _loadingPath = true);
+      try {
+        if (_multiPick) {
+          _path = null;
+          _paths = await FilePicker.getMultiFilePath(
+              type: _pickingType, fileExtension: _extension);
+        } else {
+          _paths = null;
+          _path = await FilePicker.getFilePath(
+              type: _pickingType, fileExtension: _extension);
+        }
+      } on PlatformException catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
+      if (!mounted) return;
+      setState(() {
+        _loadingPath = false;
+        _fileName = _path != null
+            ? _path.split('/').last
+            : _paths != null ? _paths.keys.toString() : _fileName;
+      });
+    }
+    _controller = new TextEditingController(text: _fileName);
+    print(_path);
+    print(_paths);
+    filePath = _path;
   }
 
   @override
@@ -644,6 +688,50 @@ class _OccasionState extends State<Occasion> {
       ),
       SizedBox(height: 5),
       Container(
+          alignment: Alignment.center,
+          height: MediaQuery.of(context).size.height / 11,
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width - 80,
+                child: TextField(
+                  controller: _controller,
+                  readOnly: true,
+                  textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.left,
+                  decoration: InputDecoration(
+                      hintStyle: TextStyle(
+                        fontSize: Statics.shared.fontSizes.subTitle,
+                        color: Statics.shared.colors.subTitleTextColor,
+                      ),
+                      border: OutlineInputBorder(),
+                      labelStyle: TextStyle(
+                        color: Statics.shared.colors.subTitleTextColor,
+                      ),
+                      hintText: "첨부파일"),
+                  obscureText: false, // decoration
+                ),
+              ),
+              Spacer(),
+              Container(
+                width: 60,
+                child: FlatButton(
+                  child: Text("첨부"),
+                  onPressed: () {
+                    setState(() {
+                      _pickingType = FileType.IMAGE;
+                      if (_pickingType != FileType.CUSTOM) {
+                        _controller.text = _extension = '';
+                      }
+                      _openFileExplorer();
+                    });
+                  },
+                ),
+              )
+            ],
+          )),
+      SizedBox(height: 5),
+      Container(
         height: MediaQuery.of(context).size.height / 6,
         child: TextField(
           maxLines: 200,
@@ -724,7 +812,7 @@ class _OccasionState extends State<Occasion> {
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankName", null, TextInputType.text,
-                            20, "은행명", bankName, _bankNameChecked)),
+                            20, "��행명", bankName, _bankNameChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
