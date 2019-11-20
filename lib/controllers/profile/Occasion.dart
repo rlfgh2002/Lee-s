@@ -1,6 +1,8 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/home/Home.dart';
@@ -10,8 +12,10 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 
 import 'Profile.dart';
 
@@ -108,13 +112,35 @@ class _OccasionState extends State<Occasion> {
       }
       if (!mounted) return;
       setState(() {
-        _loadingPath = false;
-        _fileName = _path != null
-            ? _path.split('/').last
-            : _paths != null ? _paths.keys.toString() : _fileName;
+        if (path.extension(nullCheck(_path).toLowerCase()) != ".jpeg" &&
+            path.extension(nullCheck(_path).toLowerCase()) != ".jpg" &&
+            path.extension(nullCheck(_path).toLowerCase()) != ".png" &&
+            path.extension(nullCheck(_path).toLowerCase()) != ".gif") {
+          _loadingPath = false;
+          _fileName = "";
+          _path = "";
+          return _displaySnackBar(context, "이미지 파일만 업로드 할 수 있습니다.");
+        } else {
+          File imageFile = new File(_path);
+          // get file length
+          var length = imageFile.lengthSync();
+
+          if (length > 10485760) {
+            _loadingPath = false;
+            _fileName = "";
+            _path = "";
+            return _displaySnackBar(context, "용량을 초과하였습니다. (10M이하)");
+          } else {
+            _loadingPath = false;
+            _fileName = _path != null
+                ? _path.split('/').last
+                : _paths != null ? _paths.keys.toString() : _fileName;
+          }
+        }
       });
     }
     _controller = new TextEditingController(text: _fileName);
+
     print(_path);
     print(_paths);
     filePath = _path;
@@ -314,135 +340,129 @@ class _OccasionState extends State<Occasion> {
                         alignment: Alignment.centerLeft,
                         child: selectForm()),
                     SizedBox(height: 40),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: FlatButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            padding: EdgeInsets.all(20),
-                            color: Statics.shared.colors.mainColor,
-                            child: Text("보내기",
-                                style: TextStyle(
-                                    fontSize:
-                                        Statics.shared.fontSizes.titleInContent,
-                                    color: Colors.white)),
-                            onPressed: () async {
-                              if (name == null || name.length == 0) {
-                                _displaySnackBar(context, "이름을 입력하세요.");
-                                return;
-                              }
-
-                              if (birth == null || birth.length == 0) {
-                                _displaySnackBar(context, "생년월일을 입력하세요.");
-                                return;
-                              }
-
-                              if (phone == null || phone.length == 0) {
-                                _displaySnackBar(context, "휴대폰 번호를 입력하세요.");
-                                return;
-                              }
-
-                              if (holidayType == 0 || holidayType == null) {
-                                _displaySnackBar(context, "경조사 구분을 선택하세요.");
-                                return;
-                              }
-
-                              if (holidayType == 1 || holidayType == 2) {
-                                if (date == null || date.length == 0) {
-                                  if (holidayType == 1) {
-                                    _displaySnackBar(context, "결혼식 일시를 입력하세요.");
-                                    return;
-                                  } else if (holidayType == 2) {
-                                    _displaySnackBar(context, "발인 일시를 입력하세요.");
-                                    return;
-                                  }
-                                }
-
-                                if (address == null || address.length == 0) {
-                                  if (holidayType == 1) {
-                                    _displaySnackBar(
-                                        context, "결혼식장명 및 주소를 입력ㅎ세요.");
-                                    return;
-                                  } else if (holidayType == 2) {
-                                    _displaySnackBar(
-                                        context, "장례식장명 및 주소를 입력하세요.");
-                                    return;
-                                  }
-                                }
-                              }
-
-                              var postMap = new Map<String, dynamic>();
-                              postMap["mode"] = "submit";
-                              postMap["user_id"] = userInformation.userID;
-                              postMap["email"] = userInformation.email;
-                              postMap["user_name"] = userInformation.fullName;
-                              postMap["user_idx"] = userInformation.userIdx;
-                              postMap["member_type"] =
-                                  userInformation.memberType;
-                              postMap["member_name"] = name;
-                              postMap["birth"] = birth;
-                              postMap["company"] = company;
-                              postMap["position"] = position;
-                              postMap["phone"] = phone;
-                              postMap["holiday_type"] = holidayType.toString();
-                              if (holidayType == 1) {
-                                postMap["holiday_type2"] =
-                                    _weddingSelectedValue;
-                              } else if (holidayType == 2) {
-                                postMap["holiday_type2"] =
-                                    _deathTypeSelectedValue;
-                              }
-                              postMap["money_type"] = _moneySelectedValue;
-                              if (_moneySelectedValue == "2") {
-                                postMap["bank_user"] = bankUser;
-                                postMap["bank_name"] = bankName;
-                                postMap["bank_num"] = bankNumber;
-                              } else {
-                                postMap["bank_user"] = "";
-                                postMap["bank_name"] = "";
-                                postMap["bank_num"] = "";
-                              }
-                              postMap["addr"] = address;
-                              postMap["holiday_date"] = date;
-                              postMap["etc"] = etc;
-
-                              await submit(
-                                  Strings
-                                      .shared.controllers.jsonURL.occasionJson,
-                                  body: postMap);
-
-                              showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                        title: new Text("전송 완료"),
-                                        content: new Text("전송이 완료되었습니다.",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)),
-                                        actions: <Widget>[
-                                          // usually buttons at the bottom of the dialog
-                                          new FlatButton(
-                                            child: new Text(
-                                              "확인",
-                                              style: TextStyle(
-                                                  fontSize: Statics.shared
-                                                      .fontSizes.supplementary,
-                                                  color: Colors.black),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); //팝업닫고
-                                              Navigator.of(context)
-                                                  .pop(); //이전페이지로
-                                            },
-                                          ),
-                                        ],
-                                      ));
-                            }))
                   ])
             ],
           ),
-        )
+        ),
+        Container(
+            width: MediaQuery.of(context).size.width,
+            child: FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                padding: EdgeInsets.all(20),
+                color: Statics.shared.colors.mainColor,
+                child: Text("보내기",
+                    style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.titleInContent,
+                        color: Colors.white)),
+                onPressed: () async {
+                  print(File(filePath));
+                  if (name == null || name.length == 0) {
+                    _displaySnackBar(context, "이름을 입력하세요.");
+                    return;
+                  }
+
+                  if (birth == null || birth.length == 0) {
+                    _displaySnackBar(context, "생년월일을 입력하세요.");
+                    return;
+                  }
+
+                  if (phone == null || phone.length == 0) {
+                    _displaySnackBar(context, "휴대폰 번호를 입력하세요.");
+                    return;
+                  }
+
+                  if (holidayType == 0 || holidayType == null) {
+                    _displaySnackBar(context, "경조사 구분을 선택하세요.");
+                    return;
+                  }
+
+                  if (holidayType == 1 || holidayType == 2) {
+                    if (date == null || date.length == 0) {
+                      if (holidayType == 1) {
+                        _displaySnackBar(context, "결혼식 일시를 입력하세요.");
+                        return;
+                      } else if (holidayType == 2) {
+                        _displaySnackBar(context, "발인 일시를 입력하세요.");
+                        return;
+                      }
+                    }
+
+                    if (address == null || address.length == 0) {
+                      if (holidayType == 1) {
+                        _displaySnackBar(context, "결혼식장명 및 주소를 입력하세요.");
+                        return;
+                      } else if (holidayType == 2) {
+                        _displaySnackBar(context, "장례식장명 및 주소를 입력하세요.");
+                        return;
+                      }
+                    }
+                  }
+
+                  var postMap = new Map<String, dynamic>();
+                  postMap["mode"] = "submit";
+                  postMap["upfile01"] = filePath;
+                  postMap["user_id"] = userInformation.userID;
+                  postMap["email"] = userInformation.email;
+                  postMap["user_name"] = userInformation.fullName;
+                  postMap["user_idx"] = userInformation.userIdx;
+                  postMap["member_type"] = userInformation.memberType;
+                  postMap["member_name"] = name;
+                  postMap["birth"] = birth;
+                  postMap["company"] = company;
+                  postMap["position"] = position;
+                  postMap["phone"] = phone;
+                  postMap["holiday_type"] = holidayType.toString();
+                  if (holidayType == 1) {
+                    postMap["holiday_type2"] = _weddingSelectedValue;
+                  } else if (holidayType == 2) {
+                    postMap["holiday_type2"] = _deathTypeSelectedValue;
+                  }
+                  postMap["money_type"] = _moneySelectedValue;
+                  if (_moneySelectedValue == "2") {
+                    postMap["bank_user"] = bankUser;
+                    postMap["bank_name"] = bankName;
+                    postMap["bank_num"] = bankNumber;
+                  } else {
+                    postMap["bank_user"] = "";
+                    postMap["bank_name"] = "";
+                    postMap["bank_num"] = "";
+                  }
+                  postMap["addr"] = address;
+                  postMap["holiday_date"] = date;
+                  postMap["etc"] = etc;
+
+                  await submit(Strings.shared.controllers.jsonURL.occasionJson,
+                      body: postMap);
+
+                  // showDialog(
+                  //     barrierDismissible: false,
+                  //     context: context,
+                  //     builder: (_) => AlertDialog(
+                  //           title: new Text("전송 완료"),
+                  //           content: new Text("전송이 완료되었습니다.",
+                  //               style: TextStyle(
+                  //                   fontWeight: FontWeight.bold)),
+                  //           actions: <Widget>[
+                  //             // usually buttons at the bottom of the dialog
+                  //             new FlatButton(
+                  //               child: new Text(
+                  //                 "확인",
+                  //                 style: TextStyle(
+                  //                     fontSize: Statics.shared
+                  //                         .fontSizes.supplementary,
+                  //                     color: Colors.black),
+                  //               ),
+                  //               onPressed: () {
+                  //                 Navigator.of(context)
+                  //                     .pop(); //팝업닫고
+                  //                 Navigator.of(context)
+                  //                     .pop(); //이전페이지로
+                  //               },
+                  //             ),
+                  //           ],
+                  //         ));
+                }))
       ]),
     );
   }
@@ -688,6 +708,24 @@ class _OccasionState extends State<Occasion> {
       ),
       SizedBox(height: 5),
       Container(
+        height: MediaQuery.of(context).size.height / 6,
+        child: TextField(
+          maxLines: 200,
+          decoration: InputDecoration(
+              hintStyle: TextStyle(
+                fontSize: Statics.shared.fontSizes.subTitle,
+                color: Statics.shared.colors.subTitleTextColor,
+              ),
+              border: OutlineInputBorder(),
+              hintText: "비고"),
+          obscureText: false, // decoration
+          onChanged: (String str) {
+            etc = str;
+          },
+        ),
+      ),
+      SizedBox(height: 5),
+      Container(
           alignment: Alignment.center,
           height: MediaQuery.of(context).size.height / 11,
           child: Row(
@@ -720,7 +758,7 @@ class _OccasionState extends State<Occasion> {
                   onPressed: () {
                     setState(() {
                       _pickingType = FileType.IMAGE;
-                      if (_pickingType != FileType.CUSTOM) {
+                      if (_pickingType != FileType.IMAGE) {
                         _controller.text = _extension = '';
                       }
                       _openFileExplorer();
@@ -730,24 +768,6 @@ class _OccasionState extends State<Occasion> {
               )
             ],
           )),
-      SizedBox(height: 5),
-      Container(
-        height: MediaQuery.of(context).size.height / 6,
-        child: TextField(
-          maxLines: 200,
-          decoration: InputDecoration(
-              hintStyle: TextStyle(
-                fontSize: Statics.shared.fontSizes.subTitle,
-                color: Statics.shared.colors.subTitleTextColor,
-              ),
-              border: OutlineInputBorder(),
-              hintText: "비고"),
-          obscureText: false, // decoration
-          onChanged: (String str) {
-            etc = str;
-          },
-        ),
-      ),
     ]);
   }
 
@@ -906,28 +926,131 @@ class _OccasionState extends State<Occasion> {
           },
         ),
       ),
+      SizedBox(height: 5),
+      Container(
+          alignment: Alignment.center,
+          height: MediaQuery.of(context).size.height / 11,
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width - 80,
+                child: TextField(
+                  controller: _controller,
+                  readOnly: true,
+                  textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.left,
+                  decoration: InputDecoration(
+                      hintStyle: TextStyle(
+                        fontSize: Statics.shared.fontSizes.subTitle,
+                        color: Statics.shared.colors.subTitleTextColor,
+                      ),
+                      border: OutlineInputBorder(),
+                      labelStyle: TextStyle(
+                        color: Statics.shared.colors.subTitleTextColor,
+                      ),
+                      hintText: "첨부파일"),
+                  obscureText: false, // decoration
+                ),
+              ),
+              Spacer(),
+              Container(
+                width: 60,
+                child: FlatButton(
+                  child: Text("첨부"),
+                  onPressed: () {
+                    setState(() {
+                      _pickingType = FileType.IMAGE;
+                      if (_pickingType != FileType.IMAGE) {
+                        _controller.text = _extension = '';
+                      }
+                      _openFileExplorer();
+                    });
+                  },
+                ),
+              )
+            ],
+          )),
     ]);
   }
 
   submit(String url, {Map body}) async {
-    return http.post(url, body: body).then((http.Response response) {
-      final int statusCode = response.statusCode;
-      //final String responseBody = response.body; //한글 깨짐
-      final String responseBody = utf8.decode(response.bodyBytes);
-      var responseJSON = json.decode(responseBody);
-      var code = responseJSON["code"];
+    print(body['upfile01']);
 
-      if (statusCode == 200) {
-        if (code == 200) {
-          // If the call to the server was successful, parse the JSON
+    if (body['upfile01'] != "" || body['upfile01'] != null) {
+      File imageFile = new File(body['upfile01']);
+      var stream =
+          new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+      // get file length
+      var length = await imageFile.length();
+
+      // string to uri
+      var uri = Uri.parse(url);
+
+      // create multipart request
+      var request = new http.MultipartRequest("POST", uri);
+
+      // multipart that takes file
+      var multipartFile = new http.MultipartFile('upfile01', stream, length,
+          filename: path.basename(imageFile.path));
+
+      // add file to multipart
+      request.files.add(multipartFile);
+      request.fields['mode'] = nullCheck(body['mode']);
+      request.fields['user_id'] = nullCheck(body['user_id']);
+      request.fields['email'] = nullCheck(body['email']);
+      request.fields['user_name'] = nullCheck(body['user_name']);
+      request.fields['user_idx'] = nullCheck(body['user_idx']);
+      request.fields['member_type'] = nullCheck(body['member_type']);
+      request.fields['member_name'] = nullCheck(body['member_name']);
+      request.fields['birth'] = nullCheck(body['birth']);
+      request.fields['company'] = nullCheck(body['company']);
+      request.fields['position'] = nullCheck(body['position']);
+      request.fields['phone'] = nullCheck(body['phone']);
+      request.fields['holiday_type'] = nullCheck(body['holiday_type']);
+      request.fields['holiday_type2'] = nullCheck(body['holiday_type2']);
+      request.fields['money_type'] = nullCheck(body['money_type']);
+      request.fields['bank_user'] = nullCheck(body['bank_user']);
+      request.fields['bank_name'] = nullCheck(body['bank_name']);
+      request.fields['bank_num'] = nullCheck(body['bank_num']);
+      request.fields['addr'] = nullCheck(body['addr']);
+      request.fields['holiday_date'] = nullCheck(body['holiday_date']);
+      request.fields['etc'] = nullCheck(body['etc']);
+
+      // send
+      request
+          .send()
+          .then((result) async {
+            http.Response.fromStream(result).then((response) {
+              if (response.statusCode == 200) {
+                print("Uploaded! ");
+                print('response.body ' + response.body);
+              }
+
+              return response.body;
+            });
+          })
+          .catchError((err) => throw Exception('error : ' + err.toString()))
+          .whenComplete(() {});
+    } else {
+      return http.post(url, body: body).then((http.Response response) {
+        final int statusCode = response.statusCode;
+        //final String responseBody = response.body; //한글 깨짐
+        final String responseBody = utf8.decode(response.bodyBytes);
+        var responseJSON = json.decode(responseBody);
+        var code = responseJSON["code"];
+
+        if (statusCode == 200) {
+          if (code == 200) {
+            // If the call to the server was successful, parse the JSON
+          } else {
+            throw Exception('Failed to load post');
+          }
         } else {
+          // If that call was not successful, throw an error.
           throw Exception('Failed to load post');
         }
-      } else {
-        // If that call was not successful, throw an error.
-        throw Exception('Failed to load post');
-      }
-    });
+      });
+    }
   }
 }
 
@@ -936,4 +1059,11 @@ class KeyValueModel {
   String value;
 
   KeyValueModel({this.key, this.value});
+}
+
+nullCheck(String str) {
+  if (str == null) {
+    return str = "";
+  }
+  return str;
 }

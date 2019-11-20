@@ -50,7 +50,8 @@ dependencies:
   pdf_viewer_plugin: ^1.0.0+2
   flutter_html: ^0.9.6
   file_picker: ^1.4.3
-
+  path: ^1.6.4
+  
   flutter_localizations:
     sdk: flutter
   flutter_cupertino_localizations: ^1.0.1
