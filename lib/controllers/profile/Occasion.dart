@@ -75,7 +75,7 @@ class _OccasionState extends State<Occasion> {
   bool _multiPick = false;
   bool _hasValidMime = false;
   FileType _pickingType;
-  TextEditingController _controller = new TextEditingController();
+  TextEditingController _fileController = new TextEditingController();
 
   void _setDate() {
     Navigator.of(context).pop();
@@ -91,7 +91,7 @@ class _OccasionState extends State<Occasion> {
     _birthController = new TextEditingController(text: birth);
     _companyController = new TextEditingController(text: company);
     _phoneController = new TextEditingController(text: phone);
-    _controller.addListener(() => _extension = _controller.text);
+    _fileController.addListener(() => _extension = _fileController.text);
   }
 
   void _openFileExplorer() async {
@@ -139,7 +139,7 @@ class _OccasionState extends State<Occasion> {
         }
       });
     }
-    _controller = new TextEditingController(text: _fileName);
+    _fileController = new TextEditingController(text: _fileName);
 
     print(_path);
     print(_paths);
@@ -432,36 +432,47 @@ class _OccasionState extends State<Occasion> {
                   postMap["holiday_date"] = date;
                   postMap["etc"] = etc;
 
-                  await submit(Strings.shared.controllers.jsonURL.occasionJson,
-                      body: postMap);
+                  String title = "";
+                  String content = "";
+                  if (await submit(
+                          Strings.shared.controllers.jsonURL.occasionJson,
+                          body: postMap) ==
+                      200) {
+                    title = "전송 완료";
+                    content = "전송이 완료되었습니다.";
+                  } else {
+                    title = "전송 실패";
+                    content = "전송이 실패했습니다. \n관리자에게 연락바랍니다.";
+                  }
 
-                  // showDialog(
-                  //     barrierDismissible: false,
-                  //     context: context,
-                  //     builder: (_) => AlertDialog(
-                  //           title: new Text("전송 완료"),
-                  //           content: new Text("전송이 완료되었습니다.",
-                  //               style: TextStyle(
-                  //                   fontWeight: FontWeight.bold)),
-                  //           actions: <Widget>[
-                  //             // usually buttons at the bottom of the dialog
-                  //             new FlatButton(
-                  //               child: new Text(
-                  //                 "확인",
-                  //                 style: TextStyle(
-                  //                     fontSize: Statics.shared
-                  //                         .fontSizes.supplementary,
-                  //                     color: Colors.black),
-                  //               ),
-                  //               onPressed: () {
-                  //                 Navigator.of(context)
-                  //                     .pop(); //팝업닫고
-                  //                 Navigator.of(context)
-                  //                     .pop(); //이전페이지로
-                  //               },
-                  //             ),
-                  //           ],
-                  //         ));
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (_) => AlertDialog(
+                            title: new Text(title),
+                            content: new Text(content,
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            actions: <Widget>[
+                              // usually buttons at the bottom of the dialog
+                              new FlatButton(
+                                child: new Text(
+                                  "확인",
+                                  style: TextStyle(
+                                      fontSize: Statics
+                                          .shared.fontSizes.supplementary,
+                                      color: Colors.black),
+                                ),
+                                onPressed: () {
+                                  if (title == "전송 완료") {
+                                    Navigator.of(context).pop(); //팝업닫고
+                                    Navigator.of(context).pop(); //이전페이지로
+                                  } else {
+                                    Navigator.of(context).pop(); //팝업만 닫기
+                                  }
+                                },
+                              ),
+                            ],
+                          ));
                 }))
       ]),
     );
@@ -733,7 +744,7 @@ class _OccasionState extends State<Occasion> {
               Container(
                 width: MediaQuery.of(context).size.width - 80,
                 child: TextField(
-                  controller: _controller,
+                  controller: _fileController,
                   readOnly: true,
                   textAlignVertical: TextAlignVertical.center,
                   textAlign: TextAlign.left,
@@ -752,20 +763,35 @@ class _OccasionState extends State<Occasion> {
               ),
               Spacer(),
               Container(
-                width: 60,
-                child: FlatButton(
-                  child: Text("첨부"),
-                  onPressed: () {
-                    setState(() {
-                      _pickingType = FileType.IMAGE;
-                      if (_pickingType != FileType.IMAGE) {
-                        _controller.text = _extension = '';
-                      }
-                      _openFileExplorer();
-                    });
-                  },
-                ),
-              )
+                  width: 60,
+                  child: nullCheck(_fileController.text) == ""
+                      ? FlatButton(
+                          child: Image.asset(
+                            "Resources/Icons/btn_more.png",
+                            scale: 2.0,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _pickingType = FileType.IMAGE;
+                              if (_pickingType != FileType.IMAGE) {
+                                _fileController.text = _extension = '';
+                              }
+                              _openFileExplorer();
+                            });
+                          },
+                        )
+                      : FlatButton(
+                          child: Image.asset("Resources/Icons/btn_delete.png"),
+                          onPressed: () {
+                            setState(() {
+                              _loadingPath = false;
+                              _fileName = "";
+                              _path = "";
+                              filePath = "";
+                              _fileController.text = "";
+                            });
+                          },
+                        ))
             ],
           )),
     ]);
@@ -826,7 +852,7 @@ class _OccasionState extends State<Occasion> {
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankUser", null, TextInputType.text,
-                            20, "예금주명", bankUser, _bankUserChecked)),
+                            20, "���금주명", bankUser, _bankUserChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
@@ -935,7 +961,7 @@ class _OccasionState extends State<Occasion> {
               Container(
                 width: MediaQuery.of(context).size.width - 80,
                 child: TextField(
-                  controller: _controller,
+                  controller: _fileController,
                   readOnly: true,
                   textAlignVertical: TextAlignVertical.center,
                   textAlign: TextAlign.left,
@@ -954,20 +980,35 @@ class _OccasionState extends State<Occasion> {
               ),
               Spacer(),
               Container(
-                width: 60,
-                child: FlatButton(
-                  child: Text("첨부"),
-                  onPressed: () {
-                    setState(() {
-                      _pickingType = FileType.IMAGE;
-                      if (_pickingType != FileType.IMAGE) {
-                        _controller.text = _extension = '';
-                      }
-                      _openFileExplorer();
-                    });
-                  },
-                ),
-              )
+                  width: 60,
+                  child: nullCheck(_fileController.text) == ""
+                      ? FlatButton(
+                          child: Image.asset(
+                            "Resources/Icons/btn_more.png",
+                            scale: 2.0,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _pickingType = FileType.IMAGE;
+                              if (_pickingType != FileType.IMAGE) {
+                                _fileController.text = _extension = '';
+                              }
+                              _openFileExplorer();
+                            });
+                          },
+                        )
+                      : FlatButton(
+                          child: Image.asset("Resources/Icons/btn_delete.png"),
+                          onPressed: () {
+                            setState(() {
+                              _loadingPath = false;
+                              _fileName = "";
+                              _path = "";
+                              filePath = "";
+                              _fileController.text = "";
+                            });
+                          },
+                        ))
             ],
           )),
     ]);
@@ -1021,12 +1062,17 @@ class _OccasionState extends State<Occasion> {
           .send()
           .then((result) async {
             http.Response.fromStream(result).then((response) {
+              final String responseBody = utf8.decode(response.bodyBytes);
+              var responseJSON = json.decode(responseBody);
+              var code = responseJSON["code"];
               if (response.statusCode == 200) {
                 print("Uploaded! ");
                 print('response.body ' + response.body);
-              }
 
-              return response.body;
+                return code;
+              } else {
+                return "error";
+              }
             });
           })
           .catchError((err) => throw Exception('error : ' + err.toString()))
@@ -1042,12 +1088,11 @@ class _OccasionState extends State<Occasion> {
         if (statusCode == 200) {
           if (code == 200) {
             // If the call to the server was successful, parse the JSON
-          } else {
-            throw Exception('Failed to load post');
           }
+          return code;
         } else {
           // If that call was not successful, throw an error.
-          throw Exception('Failed to load post');
+          return "error";
         }
       });
     }
