@@ -581,8 +581,13 @@ class ChatsState extends State<Chats> {
       MiddleWare.shared.topBarWidget = this.showTopBarTitle();
     }
 
-    MiddleWare.shared.searchedConversations
-        .sort((a, b) => b.lastChatDate.compareTo(a.lastChatDate));
+    MiddleWare.shared.searchedConversations.sort((a, b) {
+      if (a.lastChatDate == null || b.lastChatDate == null) {
+        return null;
+      } else {
+        return b.lastChatDate.compareTo(a.lastChatDate);
+      }
+    });
 
     Widget notFoundView = Container(
       child: Column(
