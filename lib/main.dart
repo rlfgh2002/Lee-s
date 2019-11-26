@@ -15,7 +15,6 @@ import 'package:haegisa2/models/myFuncs.dart';
 import 'package:haegisa2/views/MainTabBar/NoInternetPopUp.dart';
 import 'controllers/mainTabBar/MainTabBar.dart';
 import 'controllers/mainTabBar/MiddleWare.dart';
-import 'controllers/sign/SignSelect.dart';
 import 'models/statics/UserInfo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';

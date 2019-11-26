@@ -8,8 +8,11 @@ import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/models/Vote/VoteObject.dart';
 import 'package:haegisa2/models/myFuncs.dart';
+import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/statics.dart';
+import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/views/MainTabBar/locationPopUpWidget.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'MiddleWare.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -715,6 +718,83 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
+  void getVersion() async {
+    var infomap = new Map<String, dynamic>();
+    infomap["mode"] = userInformation.userDeviceOS;
+
+    return http
+        .post(Strings.shared.controllers.jsonURL.getVersion, body: infomap)
+        .then((http.Response response) {
+      final int statusCode = response.statusCode;
+      //final String responseBody = response.body; //한글 깨짐
+      final String responseBody = utf8.decode(response.bodyBytes);
+      var responseJSON = json.decode(responseBody);
+      var code = responseJSON["code"];
+      var data = responseJSON['version'];
+
+      if (statusCode == 200) {
+        if (code == 200) {
+          // If the call to the server was successful, parse the JSON
+          if (data != userInformation.appVersion) {
+            return showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (_) => AlertDialog(
+                      title: new Text("알림"),
+                      content: new Text("새 버전이 있습니다. 다운로드 하시겠습니까?",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        new FlatButton(
+                          child: new Text("취소",
+                              style: TextStyle(
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  color: Colors.black)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        new FlatButton(
+                          child: new Text(
+                            "확인",
+                            style: TextStyle(
+                                fontSize:
+                                    Statics.shared.fontSizes.supplementary,
+                                color: Colors.black),
+                          ),
+                          onPressed: () async {
+                            var url = "";
+                            if (Platform.isIOS == true) {
+                              url =
+                                  "http://apps.apple.com/kr/app/%ED%95%9C%EA%B5%AD%ED%95%B4%EA%B8%B0%EC%82%AC%ED%98%91%ED%9A%8C/id1485498659";
+                            } else {
+                              url =
+                                  "https://play.google.com/store/apps/details?id=com.mariners.heagisa2&hl=ko";
+                            }
+
+                            var url2 = Uri.encodeFull(url).toString();
+                            if (await canLaunch(url2)) {
+                              await launch(url2);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
+                          },
+                        ),
+                      ],
+                    ));
+          }
+        } else {
+          // If that call was not successful, throw an error.
+          throw Exception('Failed to load post');
+        }
+      } else {
+        // If that call was not successful, throw an error.
+        throw Exception('Failed to load post');
+      }
+    });
+  }
+
   @override
   void initState() {
     MainTabBar.myChild = this;
@@ -727,6 +807,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     Future.delayed(const Duration(milliseconds: 2000), () {
       firebaseCloudMessaging_Listeners();
     });
+
+    getVersion();
 
     print("Main TabBar New...");
 

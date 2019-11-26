@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/NoticesList/NoticesListObject.dart';
 import '../../models/iO/IOObject.dart';
@@ -759,7 +761,7 @@ class _HomeState extends State<Home> {
                   //       spreadRadius: 0)
                   // ]
                 ),
-                margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
+                margin: EdgeInsets.only(left: 10, right: 10),
                 child: FlatButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -772,6 +774,47 @@ class _HomeState extends State<Home> {
                             builder: (context) => new LicenseTestQuestions()));
                   },
                 ),
+              ),
+              Image.asset('Resources/Icons/Line3.png'),
+              Container(
+                alignment: Alignment.bottomCenter,
+                decoration: new BoxDecoration(
+                    color: Color(0xff00B0ED),
+                    border: new Border.all(
+                      color: Color.fromRGBO(235, 239, 245, 1),
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(5.0))
+                    // boxShadow: [
+                    //   new BoxShadow(
+                    //       color: Color.fromRGBO(235, 239, 245, 1),
+                    //       offset: new Offset(3.0, 3.0),
+                    //       blurRadius: 0.5,
+                    //       spreadRadius: 0)
+                    // ]
+                    ),
+                child: GestureDetector(
+                  child: Image.asset(
+                    'Resources/Images/main_banner1.png',
+                  ),
+                  onTap: () async {
+                    var url = "";
+                    if (Platform.isIOS == true) {
+                      url =
+                          "http://apps.apple.com/kr/app/%EB%A7%88%EB%A6%AC%EB%84%88%EC%8A%A4%EC%9E%A1-marinersjob/id1470020259";
+                    } else {
+                      url =
+                          "http://play.google.com/store/apps/details?id=kr.co.job.mariner&hl=ko";
+                    }
+
+                    var url2 = Uri.encodeFull(url).toString();
+                    if (await canLaunch(url2)) {
+                      await launch(url2);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  },
+                ),
+                margin: EdgeInsets.only(left: 10, bottom: 10, right: 10),
               ),
             ], // Row Children
           ), // Row

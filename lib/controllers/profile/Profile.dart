@@ -324,52 +324,52 @@ class _ProfileState extends State<Profile> {
                     Row(children: <Widget>[
                       Expanded(child: Divider(height: 0)),
                     ]),
-                    Container(
-                        height: deviceWidth / 5.5,
-                        padding: const EdgeInsets.only(left: 20, right: 5),
-                        child: FlatButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          child: new Row(
-                            children: <Widget>[
-                              Text(
-                                Strings.shared.controllers.profile.feehistory,
-                                style: TextStyle(
-                                    color: Statics.shared.colors.titleTextColor,
-                                    fontSize:
-                                        Statics.shared.fontSizes.supplementary),
-                                textAlign: TextAlign.left,
-                              ),
-                              Spacer(),
-                              SizedBox(
-                                width: 50,
-                                child: Image.asset(
-                                    'Resources/Icons/Vector 3.2.png',
-                                    width: 10,
-                                    scale: 4),
-                              )
-                            ],
-                          ), // Row Children
-                          onPressed: () async {
-                            UserInfo.shared.g_address1 = "";
-                            UserInfo.shared.g_postNo = "";
+                    // Container(
+                    //     height: deviceWidth / 5.5,
+                    //     padding: const EdgeInsets.only(left: 20, right: 5),
+                    //     child: FlatButton(
+                    //       splashColor: Colors.transparent,
+                    //       highlightColor: Colors.transparent,
+                    //       child: new Row(
+                    //         children: <Widget>[
+                    //           Text(
+                    //             Strings.shared.controllers.profile.feehistory,
+                    //             style: TextStyle(
+                    //                 color: Statics.shared.colors.titleTextColor,
+                    //                 fontSize:
+                    //                     Statics.shared.fontSizes.supplementary),
+                    //             textAlign: TextAlign.left,
+                    //           ),
+                    //           Spacer(),
+                    //           SizedBox(
+                    //             width: 50,
+                    //             child: Image.asset(
+                    //                 'Resources/Icons/Vector 3.2.png',
+                    //                 width: 10,
+                    //                 scale: 4),
+                    //           )
+                    //         ],
+                    //       ), // Row Children
+                    //       onPressed: () async {
+                    //         UserInfo.shared.g_address1 = "";
+                    //         UserInfo.shared.g_postNo = "";
 
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FeeHistory()),
-                            );
+                    //         final result = await Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) => FeeHistory()),
+                    //         );
 
-                            // After the Selection Screen returns a result, hide any previous snackbars
-                            // and show the new result.
-                            if (result != null && result != "") {
-                              _displaySnackBar(context, "$result");
-                            }
-                          },
-                        )),
-                    Row(children: <Widget>[
-                      Expanded(child: Divider(height: 0)),
-                    ]),
+                    //         // After the Selection Screen returns a result, hide any previous snackbars
+                    //         // and show the new result.
+                    //         if (result != null && result != "") {
+                    //           _displaySnackBar(context, "$result");
+                    //         }
+                    //       },
+                    //     )),
+                    // Row(children: <Widget>[
+                    //   Expanded(child: Divider(height: 0)),
+                    // ]),
                     Container(
                         height: deviceWidth / 5.5,
                         padding: const EdgeInsets.only(left: 20, right: 5),
@@ -687,7 +687,7 @@ class _ProfileState extends State<Profile> {
                         typeSubmit();
                         Navigator.of(context).pop();
                         if (requestCode == 200) {
-                          _displaySnackBar(context, "정회원 신청이 완료되었��니다.");
+                          _displaySnackBar(context, "정회원 신청이 완료되었습니다.");
                         } else {
                           _displaySnackBar(
                               context, "오류가 발생하였습니다. 관리자에게 연락바랍니다.");
@@ -768,7 +768,6 @@ class _ProfileState extends State<Profile> {
         }
       } else {
         // If that call was not successful, throw an error.
-        requestCode = 0;
         throw Exception('Failed to load post');
       }
     });

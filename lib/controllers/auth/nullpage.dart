@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/sign/SignIn.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/controllers/sign/SignSelect.dart';
 
 class Nullpage extends StatefulWidget {
   String alertMessage;
@@ -33,7 +33,7 @@ class _NullInState extends State<Nullpage> {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) => new SignSelect()));
+                          builder: (context) => new SignIn()));
                 })
           ],
         ),

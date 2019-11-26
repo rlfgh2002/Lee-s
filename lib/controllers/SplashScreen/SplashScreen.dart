@@ -6,7 +6,6 @@ import 'package:haegisa2/controllers/sign/SignIn.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
-import 'package:haegisa2/controllers/sign/SignSelect.dart';
 import 'package:haegisa2/controllers/Auth/Terms.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
