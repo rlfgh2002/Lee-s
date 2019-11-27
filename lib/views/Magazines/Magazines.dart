@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/auth/Terms.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';

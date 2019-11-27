@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/models/LicenseTestQuestions/LicenseTestQuestionObject.dart';
-import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:haegisa2/models/statics/strings.dart';
 
 class LicenseTestQuestionWidget extends StatelessWidget {
   String title = "";

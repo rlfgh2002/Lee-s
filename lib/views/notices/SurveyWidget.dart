@@ -1,11 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
-import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:http/http.dart' as http;
 
 class SurveyWidget extends StatefulWidget {
   int myIndex = 0;

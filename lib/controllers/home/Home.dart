@@ -11,7 +11,6 @@ import 'package:haegisa2/controllers/barcode/Barcode.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/controllers/profile/Advisory.dart';
-import 'package:haegisa2/controllers/profile/FeeHistory.dart';
 import 'package:haegisa2/controllers/profile/HumanRights.dart';
 import 'package:haegisa2/controllers/profile/Inquiry.dart';
 import 'package:haegisa2/controllers/profile/Occasion.dart';

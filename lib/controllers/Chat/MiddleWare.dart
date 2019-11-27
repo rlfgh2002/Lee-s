@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:haegisa2/models/statics/strings.dart';
-import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/User.dart';
 
 class MiddleWare {

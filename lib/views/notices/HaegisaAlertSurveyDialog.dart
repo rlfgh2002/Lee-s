@@ -6,7 +6,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
-import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/Survey/SurveyResultPercentageObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -15,7 +14,6 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/notices/HaegisaAlertComplete.dart';
 import 'package:haegisa2/views/notices/SurveyWidget.dart';
 import 'package:http/http.dart' as http;
-import 'package:haegisa2/views/notices/NoticeWidget.dart';
 
 class HaegisaAlertSurveyCheckedListObj {
   String question = "";

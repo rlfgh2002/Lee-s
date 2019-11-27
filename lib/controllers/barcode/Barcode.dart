@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';

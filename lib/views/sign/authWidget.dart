@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
-import 'package:haegisa2/controllers/auth/auth.dart';
-import 'package:haegisa2/main.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:haegisa2/controllers/member/find_pw.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/views/buttons/Buttons.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 String idValue = "";
