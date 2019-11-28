@@ -356,7 +356,10 @@ class _OccasionState extends State<Occasion> {
                         fontSize: Statics.shared.fontSizes.titleInContent,
                         color: Colors.white)),
                 onPressed: () async {
-                  print(File(filePath));
+                  //print(File(filePath));
+                  if (filePath == null) {
+                    filePath = "";
+                  }
                   if (name == null || name.length == 0) {
                     _displaySnackBar(context, "이름을 입력하세요.");
                     return;
@@ -1017,7 +1020,7 @@ class _OccasionState extends State<Occasion> {
   submit(String url, {Map body}) async {
     print(body['upfile01']);
 
-    if (body['upfile01'] != "" || body['upfile01'] != null) {
+    if (body['upfile01'] != "" && body['upfile01'] != null) {
       File imageFile = new File(body['upfile01']);
       var stream =
           new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));

@@ -34,65 +34,69 @@ class ChatWidget extends StatelessWidget {
 
     var dt = DateTime.now();
     String clearDateTime = "";
-    if (this.time.contains("/")) {
-      var splited = this.time.split(" ");
-      var dateSpt = splited[0].split("/");
-      var timeSpt = splited[1].split(":");
-
-      if (DateTime.now().year == int.parse(dateSpt[0]) &&
-          DateTime.now().month == int.parse(dateSpt[1]) &&
-          DateTime.now().day == int.parse(dateSpt[2])) {
-        clearDateTime = "오전 ${timeSpt[0]}:${timeSpt[1]}";
-      } else if (DateTime.now().year == int.parse(dateSpt[0]) &&
-          DateTime.now().month == int.parse(dateSpt[1]) &&
-          DateTime.now().day == int.parse(dateSpt[2]) + 1) {
-        clearDateTime = "어제 ${timeSpt[0]}:${timeSpt[1]}";
-      } else if (DateTime.now().year == int.parse(dateSpt[0]) &&
-          DateTime.now().month == int.parse(dateSpt[1]) &&
-          DateTime.now().day > int.parse(dateSpt[2]) + 1) {
-        clearDateTime = "${dateSpt[2]}월 ${dateSpt[1]}일";
-      } else {
-        clearDateTime = "${dateSpt[0]}.${dateSpt[1]}.${dateSpt[2]}";
-      }
-
-      //clearDateTime = "${dateSpt[0].toString()}-${dateSpt[1].toString()}-${dateSpt[2].toString()} at ${timeSpt[0].toString()}:${timeSpt[1].toString()}";
+    if (this.senderName == "한국해기사협회") {
+      clearDateTime = "";
     } else {
-      DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-      dt = DateTime.parse(this.time);
-      if (DateTime.now().year == dt.year &&
-          DateTime.now().month.toString().padLeft(2, '0') ==
-              dt.month.toString().padLeft(2, '0') &&
-          DateTime.now().day.toString().padLeft(2, '0') ==
-              dt.day.toString().padLeft(2, '0')) {
-        if (dt.hour > 12) {
-          clearDateTime =
-              "오후 ${(dt.hour - 12).toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+      if (this.time.contains("/")) {
+        var splited = this.time.split(" ");
+        var dateSpt = splited[0].split("/");
+        var timeSpt = splited[1].split(":");
+
+        if (DateTime.now().year == int.parse(dateSpt[0]) &&
+            DateTime.now().month == int.parse(dateSpt[1]) &&
+            DateTime.now().day == int.parse(dateSpt[2])) {
+          clearDateTime = "오전 ${timeSpt[0]}:${timeSpt[1]}";
+        } else if (DateTime.now().year == int.parse(dateSpt[0]) &&
+            DateTime.now().month == int.parse(dateSpt[1]) &&
+            DateTime.now().day == int.parse(dateSpt[2]) + 1) {
+          clearDateTime = "어제 ${timeSpt[0]}:${timeSpt[1]}";
+        } else if (DateTime.now().year == int.parse(dateSpt[0]) &&
+            DateTime.now().month == int.parse(dateSpt[1]) &&
+            DateTime.now().day > int.parse(dateSpt[2]) + 1) {
+          clearDateTime = "${dateSpt[1]}월 ${dateSpt[2]}일";
         } else {
-          clearDateTime =
-              "오전 ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+          clearDateTime = "${dateSpt[0]}.${dateSpt[1]}.${dateSpt[2]}";
         }
-      } else if (DateTime.now().year == dt.year &&
-          DateTime.now().month.toString().padLeft(2, '0') ==
-              dt.month.toString().padLeft(2, '0') &&
-          DateTime.now().day.toString().padLeft(2, '0') ==
-              (dt.day + 1).toString().padLeft(2, '0')) {
-        if (dt.hour > 12) {
-          clearDateTime =
-              "어제 오후 ${(dt.hour - 12).toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
-        } else {
-          clearDateTime =
-              "어제 오전 ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
-        }
-      } else if (DateTime.now().year == dt.year &&
-          DateTime.now().month.toString().padLeft(2, '0') ==
-              dt.month.toString().padLeft(2, '0') &&
-          int.parse(DateTime.now().day.toString().padLeft(2, '0')) >
-              int.parse((dt.day + 1).toString().padLeft(2, '0'))) {
-        clearDateTime = "${dt.day}월 ${dt.month}일";
+
+        //clearDateTime = "${dateSpt[0].toString()}-${dateSpt[1].toString()}-${dateSpt[2].toString()} at ${timeSpt[0].toString()}:${timeSpt[1].toString()}";
       } else {
-        clearDateTime = "${dt.year}.${dt.month}.${dt.day}";
+        DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+        dt = DateTime.parse(this.time);
+        if (DateTime.now().year == dt.year &&
+            DateTime.now().month.toString().padLeft(2, '0') ==
+                dt.month.toString().padLeft(2, '0') &&
+            DateTime.now().day.toString().padLeft(2, '0') ==
+                dt.day.toString().padLeft(2, '0')) {
+          if (dt.hour > 12) {
+            clearDateTime =
+                "오후 ${(dt.hour - 12).toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+          } else {
+            clearDateTime =
+                "오전 ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+          }
+        } else if (DateTime.now().year == dt.year &&
+            DateTime.now().month.toString().padLeft(2, '0') ==
+                dt.month.toString().padLeft(2, '0') &&
+            DateTime.now().day.toString().padLeft(2, '0') ==
+                (dt.day + 1).toString().padLeft(2, '0')) {
+          if (dt.hour > 12) {
+            clearDateTime =
+                "어제 오후 ${(dt.hour - 12).toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+          } else {
+            clearDateTime =
+                "어제 오전 ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+          }
+        } else if (DateTime.now().year == dt.year &&
+            DateTime.now().month.toString().padLeft(2, '0') ==
+                dt.month.toString().padLeft(2, '0') &&
+            int.parse(DateTime.now().day.toString().padLeft(2, '0')) >
+                int.parse((dt.day + 1).toString().padLeft(2, '0'))) {
+          clearDateTime = "${dt.month}월 ${dt.day}일";
+        } else {
+          clearDateTime = "${dt.year}.${dt.month}.${dt.day}";
+        }
+        //clearDateTime = "${dt.year.toString()}-${dt.month.toString()}-${dt.day.toString()} at ${dt.hour.toString()}:${dt.minute.toString()}";
       }
-      //clearDateTime = "${dt.year.toString()}-${dt.month.toString()}-${dt.day.toString()} at ${dt.hour.toString()}:${dt.minute.toString()}";
     }
 
     if (!this.isYours) {

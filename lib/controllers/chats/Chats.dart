@@ -327,7 +327,7 @@ class ChatsState extends State<Chats> {
                               }
                             }
 
-                            print(chosenTime);
+                            print("chosenTime = ${chosenTime}");
 
                             hasBadge = false;
                             if (itemContent["seen"] == "0") {
