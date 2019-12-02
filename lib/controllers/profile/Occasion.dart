@@ -448,6 +448,8 @@ class _OccasionState extends State<Occasion> {
                     content = "전송이 실패했습니다. \n관리자에게 연락바랍니다.";
                   }
 
+                  print(title);
+
                   showDialog(
                       barrierDismissible: false,
                       context: context,
