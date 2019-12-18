@@ -8,26 +8,34 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:297450269741:android:0b1474696eee5709",
+        "mobilesdk_app_id": "1:297450269741:android:4e20af2c256fc33e279ca4",
         "android_client_info": {
-          "package_name": "com.parcweb.haegisa2.haegisa2"
+          "package_name": "com.mariners.heagisa2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "297450269741-o77mvkh1kkdcm9mnvlmurcn821t5lh82.apps.googleusercontent.com",
+          "client_id": "297450269741-4pj6d0frthcq47kfkdcm46rahdk8h2jg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.parcweb.haegisa2.haegisa2",
-            "certificate_hash": "a6862030754a9e392ba3f519be7b24ac0a4fd864"
+            "package_name": "com.mariners.heagisa2",
+            "certificate_hash": "ce940ebf05408a52e64b01698a173d97b613303d"
           }
         },
         {
-          "client_id": "297450269741-8231v07kk518a8kgn1rhmr80l84cel4u.apps.googleusercontent.com",
+          "client_id": "297450269741-0u93smqt3f8qb4fcp9ddvl1jvvdsku16.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.parcweb.haegisa2.haegisa2",
+            "package_name": "com.mariners.heagisa2",
             "certificate_hash": "75c87fd61255091c432c42c03a63c29a94ec6766"
+          }
+        },
+        {
+          "client_id": "297450269741-bgmlr0rpvrk6pas1p9v7ek5d1nqkg5vi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariners.heagisa2",
+            "certificate_hash": "a6862030754a9e392ba3f519be7b24ac0a4fd864"
           }
         },
         {
@@ -48,10 +56,11 @@
               "client_type": 3
             },
             {
-              "client_id": "297450269741-iboavi4equetar1eqs64ukdor9vrdnvt.apps.googleusercontent.com",
+              "client_id": "297450269741-miftuuf3a1eoli2vgotdev0i673bor14.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.parcweb.haegisa2.haegisa2"
+                "bundle_id": "com.mariners.haegisa2",
+                "app_store_id": "1485498659"
               }
             }
           ]

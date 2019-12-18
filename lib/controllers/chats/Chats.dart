@@ -298,7 +298,7 @@ class ChatsState extends State<Chats> {
                                             .day
                                             .toString()
                                             .padLeft(2, '0')) ==
-                                        int.parse((dateSpt[2] + 1)
+                                        int.parse((int.parse(dateSpt[2]) + 1)
                                             .toString()
                                             .padLeft(2, '0'))) {
                                   chosenTime = "어제";
@@ -315,7 +315,7 @@ class ChatsState extends State<Chats> {
                                             .day
                                             .toString()
                                             .padLeft(2, '0')) >
-                                        int.parse((dateSpt[2] + 1)
+                                        int.parse((int.parse(dateSpt[2]) + 1)
                                             .toString()
                                             .padLeft(2, '0'))) {
                                   chosenTime =

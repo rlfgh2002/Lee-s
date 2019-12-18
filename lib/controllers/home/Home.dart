@@ -14,6 +14,7 @@ import 'package:haegisa2/controllers/profile/Advisory.dart';
 import 'package:haegisa2/controllers/profile/HumanRights.dart';
 import 'package:haegisa2/controllers/profile/Inquiry.dart';
 import 'package:haegisa2/controllers/profile/Occasion.dart';
+import 'package:haegisa2/models/FileDownload/fileDownlaoder.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';

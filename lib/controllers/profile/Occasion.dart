@@ -5,12 +5,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:haegisa2/controllers/home/Home.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+//import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
@@ -210,35 +211,38 @@ class _OccasionState extends State<Occasion> {
                           left: 10, right: 10, bottom: 2.5, top: 2.5),
                       alignment: Alignment.center,
                       height: MediaQuery.of(context).size.height / 11,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: MediaQuery.of(context).size.height / 11,
-                        child: DateTimeField(
-                          readOnly: true,
-                          decoration: InputDecoration(
-                              hintStyle: TextStyle(
-                                fontSize: Statics.shared.fontSizes.subTitle,
-                                color: Statics.shared.colors.subTitleTextColor,
-                              ),
-                              border: OutlineInputBorder(),
-                              labelStyle: TextStyle(
-                                color: Statics.shared.colors.subTitleTextColor,
-                              ),
-                              hintText: "생년월일"),
-                          format: DateFormat("yyyy-MM-dd"),
-                          onChanged: (DateTime value) {
-                            birth = DateFormat("yyyy-MM-dd").format(value);
-                            print(birth);
+                      child: TextField(
+                        controller: _birthController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                              fontSize: Statics.shared.fontSizes.subTitle,
+                              color: Statics.shared.colors.subTitleTextColor,
+                            ),
+                            border: OutlineInputBorder(),
+                            labelStyle: TextStyle(
+                              color: Statics.shared.colors.subTitleTextColor,
+                            ),
+                            hintText: "생년월일"),
+                        onTap: () {
+                          DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime(1900, 1, 1),
+                              maxTime:
+                                  DateTime(DateTime.now().year + 1, 12, 31),
+                              onChanged: (dateValue) {
+                            print('change $dateValue');
+                          }, onConfirm: (dateValue) {
+                            print('confirm $dateValue');
+
+                            birth = DateFormat('yyyy-MM-dd').format(dateValue);
+                            _birthController =
+                                new TextEditingController(text: birth);
+                            setState(() {});
                           },
-                          onShowPicker: (context, currentValue) {
-                            return showDatePicker(
-                                context: context,
-                                firstDate: DateTime(1900),
-                                initialDate: currentValue ?? DateTime.now(),
-                                lastDate: DateTime(2100),
-                                locale: const Locale('ko', 'KR'));
-                          },
-                        ),
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.ko);
+                        },
                       ),
                     ),
                     Container(
@@ -694,9 +698,9 @@ class _OccasionState extends State<Occasion> {
       Container(
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height / 11,
-        child: DateTimeField(
-          readOnly: true,
+        child: TextField(
           controller: _dateController,
+          readOnly: true,
           decoration: InputDecoration(
               hintStyle: TextStyle(
                 fontSize: Statics.shared.fontSizes.subTitle,
@@ -707,20 +711,50 @@ class _OccasionState extends State<Occasion> {
                 color: Statics.shared.colors.subTitleTextColor,
               ),
               hintText: "결혼식 일시"),
-          format: DateFormat("yyyy-MM-dd"),
-          onChanged: (DateTime value) {
-            date = DateFormat("yyyy-MM-dd").format(value);
-            print(date);
-          },
-          onShowPicker: (context, currentValue) {
-            return showDatePicker(
-                context: context,
-                firstDate: DateTime(1900),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2100),
-                locale: const Locale('ko', 'KR'));
+          onTap: () {
+            DatePicker.showDatePicker(context,
+                showTitleActions: true,
+                minTime: DateTime(1900, 1, 1),
+                maxTime: DateTime(DateTime.now().year + 1, 12, 31),
+                onChanged: (dateValue) {
+              print('change $dateValue');
+            }, onConfirm: (dateValue) {
+              print('confirm $dateValue');
+
+              date = DateFormat('yyyy-MM-dd').format(dateValue);
+              _dateController = new TextEditingController(text: date);
+              setState(() {});
+            }, currentTime: DateTime.now(), locale: LocaleType.ko);
           },
         ),
+
+        //  DateTimeField(
+        //   readOnly: true,
+        //   controller: _dateController,
+        //   decoration: InputDecoration(
+        //       hintStyle: TextStyle(
+        //         fontSize: Statics.shared.fontSizes.subTitle,
+        //         color: Statics.shared.colors.subTitleTextColor,
+        //       ),
+        //       border: OutlineInputBorder(),
+        //       labelStyle: TextStyle(
+        //         color: Statics.shared.colors.subTitleTextColor,
+        //       ),
+        //       hintText: "결혼식 일시"),
+        //   format: DateFormat("yyyy-MM-dd"),
+        //   onChanged: (DateTime value) {
+        //     date = DateFormat("yyyy-MM-dd").format(value);
+        //     print(date);
+        //   },
+        //   onShowPicker: (context, currentValue) {
+        //     return showDatePicker(
+        //         context: context,
+        //         firstDate: DateTime(1900),
+        //         initialDate: currentValue ?? DateTime.now(),
+        //         lastDate: DateTime(2100),
+        //         locale: const Locale('ko', 'KR'));
+        //   },
+        // ),
       ),
       SizedBox(height: 5),
       Container(
@@ -912,7 +946,8 @@ class _OccasionState extends State<Occasion> {
       Container(
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height / 11,
-        child: DateTimeField(
+        child: TextField(
+          controller: _dateController,
           readOnly: true,
           decoration: InputDecoration(
               hintStyle: TextStyle(
@@ -924,20 +959,48 @@ class _OccasionState extends State<Occasion> {
                 color: Statics.shared.colors.subTitleTextColor,
               ),
               hintText: "발인 일시"),
-          format: DateFormat("yyyy-MM-dd"),
-          onChanged: (DateTime value) {
-            date = DateFormat("yyyy-MM-dd").format(value);
-            print(date);
-          },
-          onShowPicker: (context, currentValue) {
-            return showDatePicker(
-                context: context,
-                firstDate: DateTime(1900),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2100),
-                locale: const Locale('ko', 'KR'));
+          onTap: () {
+            DatePicker.showDatePicker(context,
+                showTitleActions: true,
+                minTime: DateTime(1900, 1, 1),
+                maxTime: DateTime(DateTime.now().year + 1, 12, 31),
+                onChanged: (dateValue) {
+              print('change $dateValue');
+            }, onConfirm: (dateValue) {
+              print('confirm $dateValue');
+
+              date = DateFormat('yyyy-MM-dd').format(dateValue);
+              _dateController = new TextEditingController(text: date);
+              setState(() {});
+            }, currentTime: DateTime.now(), locale: LocaleType.ko);
           },
         ),
+        // DateTimeField(
+        //   readOnly: true,
+        //   decoration: InputDecoration(
+        //       hintStyle: TextStyle(
+        //         fontSize: Statics.shared.fontSizes.subTitle,
+        //         color: Statics.shared.colors.subTitleTextColor,
+        //       ),
+        //       border: OutlineInputBorder(),
+        //       labelStyle: TextStyle(
+        //         color: Statics.shared.colors.subTitleTextColor,
+        //       ),
+        //       hintText: "발인 일시"),
+        //   format: DateFormat("yyyy-MM-dd"),
+        //   onChanged: (DateTime value) {
+        //     date = DateFormat("yyyy-MM-dd").format(value);
+        //     print(date);
+        //   },
+        //   onShowPicker: (context, currentValue) {
+        //     return showDatePicker(
+        //         context: context,
+        //         firstDate: DateTime(1900),
+        //         initialDate: currentValue ?? DateTime.now(),
+        //         lastDate: DateTime(2100),
+        //         locale: const Locale('ko', 'KR'));
+        //   },
+        // ),
       ),
       SizedBox(height: 5),
       Container(

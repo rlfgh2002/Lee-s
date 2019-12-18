@@ -59,132 +59,133 @@ class _BarcodeState extends State<Barcode> {
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
 
-    if (code == "51001") {
-      return Column(
-        children: <Widget>[
-          Image.asset(
-            "Resources/Images/barcodeType1.png",
-            width: deviceWidth / 1.12,
-          ),
-          Container(
-              padding: new EdgeInsets.only(left: 20.0, right: 20.0),
-              constraints: new BoxConstraints.expand(
-                  height: deviceHeight / 1.5, width: deviceWidth / 1.1),
-              alignment: Alignment.center,
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: new AssetImage('Resources/Images/bgBarcode.png'),
-                  fit: BoxFit.cover,
-                ),
+    // if (code == "51001") {
+    return Column(
+      children: <Widget>[
+        Image.asset(
+          code == "51001"
+              ? "Resources/Images/barcodeType1.png"
+              : "Resources/Images/barcodeType2.png",
+          width: deviceWidth / 1.12,
+        ),
+        Container(
+            padding: new EdgeInsets.only(left: 20.0, right: 20.0),
+            constraints: new BoxConstraints.expand(
+                height: deviceHeight / 1.5, width: deviceWidth / 1.1),
+            alignment: Alignment.center,
+            decoration: new BoxDecoration(
+              image: new DecorationImage(
+                image: new AssetImage('Resources/Images/bgBarcode.png'),
+                fit: BoxFit.cover,
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                      padding: new EdgeInsets.only(
-                          top: deviceHeight / 10, bottom: deviceHeight / 20),
-                      child: Image.asset("Resources/Images/barcodeLounge.png",
-                          scale: 3.0)),
-                  Container(
-                      alignment: Alignment.center,
-                      height: deviceHeight / 8,
-                      child: new BarCodeImage(
-                        data:
-                            userInformation.userIdx, // Code string. (required)
-                        codeType: BarCodeType.Code39, // Code type (required)
-                        lineWidth:
-                            1.8, // width for a single black/white bar (default: 2.0)
-                        barHeight: deviceHeight /
-                            8, // height for the entire widget (default: 100.0)
-                        hasText:
-                            false, // Render with text label or not (default: false)
-                        onError: (error) {
-                          // Error handler
-                          print('error = $error');
-                        },
-                      )),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: new EdgeInsets.only(
-                        top: deviceHeight / 10, bottom: deviceHeight / 20),
-                    child: Text(
-                        "회원님은 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        )),
-                  ),
-                ],
-              ))
-        ],
-      );
-    } else {
-      return Column(
-        children: <Widget>[
-          Image.asset(
-            "Resources/Images/barcodeType2.png",
-            width: deviceWidth / 1.12,
-          ),
-          Container(
-              padding: new EdgeInsets.only(left: 20.0, right: 20.0),
-              constraints: new BoxConstraints.expand(
-                  height: deviceHeight / 1.5, width: deviceWidth / 1.1),
-              alignment: Alignment.center,
-              decoration: new BoxDecoration(
-                image: new DecorationImage(
-                  image: new AssetImage('Resources/Images/bgBarcode.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
                     padding: new EdgeInsets.only(
                         top: deviceHeight / 10, bottom: deviceHeight / 20),
                     child: Image.asset("Resources/Images/barcodeLounge.png",
-                        scale: 3.0),
-                  ),
-                  Container(
+                        scale: 3.0)),
+                Container(
                     alignment: Alignment.center,
-                    padding: new EdgeInsets.only(
-                      top: deviceHeight / 20,
-                    ),
-                    child: Text(
-                        "정회원이 되시면 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다.",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.supplementary,
-                        )),
-                  ),
-                  Container(
-                      alignment: Alignment.center,
-                      padding: new EdgeInsets.only(
-                        top: deviceHeight / 20,
-                      ),
-                      child: FlatButton(
-                          child: Text("정회원으로 전환하기 >",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  color: Statics.shared.colors.mainColor,
-                                  fontSize: Statics
-                                      .shared.fontSizes.subTitleInContent,
-                                  fontWeight: FontWeight.bold)),
-                          onPressed: () {
-                            showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (_) => requestAlert());
-                          })),
-                ],
-              )),
-        ],
-      );
-    }
+                    height: deviceHeight / 8,
+                    child: new BarCodeImage(
+                      data: userInformation.userIdx, // Code string. (required)
+                      codeType: BarCodeType.Code39, // Code type (required)
+                      lineWidth:
+                          1.8, // width for a single black/white bar (default: 2.0)
+                      barHeight: deviceHeight /
+                          8, // height for the entire widget (default: 100.0)
+                      hasText:
+                          false, // Render with text label or not (default: false)
+                      onError: (error) {
+                        // Error handler
+                        print('error = $error');
+                      },
+                    )),
+                Container(
+                  alignment: Alignment.center,
+                  padding: new EdgeInsets.only(
+                      top: deviceHeight / 10, bottom: deviceHeight / 20),
+                  child: Text(
+                      "회원님은 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Statics.shared.colors.titleTextColor,
+                        fontSize: Statics.shared.fontSizes.supplementary,
+                      )),
+                ),
+              ],
+            ))
+      ],
+    );
+    // } else {
+    //   return Column(
+    //     children: <Widget>[
+    //       Image.asset(
+    //         "Resources/Images/barcodeType2.png",
+    //         width: deviceWidth / 1.12,
+    //       ),
+    //       Container(
+    //           padding: new EdgeInsets.only(left: 20.0, right: 20.0),
+    //           constraints: new BoxConstraints.expand(
+    //               height: deviceHeight / 1.5, width: deviceWidth / 1.1),
+    //           alignment: Alignment.center,
+    //           decoration: new BoxDecoration(
+    //             image: new DecorationImage(
+    //               image: new AssetImage('Resources/Images/bgBarcode.png'),
+    //               fit: BoxFit.cover,
+    //             ),
+    //           ),
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: <Widget>[
+    //               Container(
+    //                 padding: new EdgeInsets.only(
+    //                     top: deviceHeight / 10, bottom: deviceHeight / 20),
+    //                 child: Image.asset("Resources/Images/barcodeLounge.png",
+    //                     scale: 3.0),
+    //               ),
+    //               Container(
+    //                 alignment: Alignment.center,
+    //                 padding: new EdgeInsets.only(
+    //                   top: deviceHeight / 20,
+    //                 ),
+    //                 child: Text(
+    //                     "정회원이 되시면 해기사들의 복합 문화 공간인 라운지M(한국해기사협회 빌딩 1층)을 자유롭게 이용 가능하십니다.",
+    //                     textAlign: TextAlign.left,
+    //                     style: TextStyle(
+    //                       color: Statics.shared.colors.titleTextColor,
+    //                       fontSize: Statics.shared.fontSizes.supplementary,
+    //                     )),
+    //               ),
+    //               Container(
+    //                   alignment: Alignment.center,
+    //                   padding: new EdgeInsets.only(
+    //                     top: deviceHeight / 20,
+    //                   ),
+    //                   child: FlatButton(
+    //                       child: Text("정회원으로 전환하기 >",
+    //                           textAlign: TextAlign.left,
+    //                           style: TextStyle(
+    //                               color: Statics.shared.colors.mainColor,
+    //                               fontSize: Statics
+    //                                   .shared.fontSizes.subTitleInContent,
+    //                               fontWeight: FontWeight.bold)),
+    //                       onPressed: () {
+    //                         showDialog(
+    //                             barrierDismissible: false,
+    //                             context: context,
+    //                             builder: (_) => requestAlert());
+    //                       })),
+    //             ],
+    //           )),
+    //     ],
+    //   );
+    // }
   }
 
   Widget requestAlert() {

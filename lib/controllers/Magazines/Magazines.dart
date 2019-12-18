@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,9 +17,16 @@ import 'package:open_file/open_file.dart';
 import 'dart:convert';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 bool isDownload = true; //다운로드 할수 있는지 이미 다운된것은 false
+DownloadTaskStatus fileDownloadStatus = DownloadTaskStatus.undefined;
+String btnTitle;
+String btnFileURL;
+String btnServerFileName;
+int btnMagazineNum;
+MagazineObject btnObj;
 
 var _localPath = userInformation.dirPath.path + "/Magazines";
 
@@ -38,6 +47,50 @@ class Magazines extends StatefulWidget {
 class _MagazinesState extends State<Magazines> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int magazineNum = 0;
+  ReceivePort _port = ReceivePort();
+  String downloadId;
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _init();
+  }
+
+  Future<void> _init() async {
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      print('UI Isolate Callback: $data');
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+
+      if (status == DownloadTaskStatus.complete) {
+        print("complete.");
+        print(fileDownloadStatus);
+        fileDownloadStatus = status;
+        refresh();
+      }
+
+      print("status: $status");
+      print("progress: $progress");
+      print("id == downloadId: ${id == downloadId}");
+    });
+    print("gdgd");
+    FlutterDownloader.registerCallback(downloadCallback);
+    // _localPath = (await _findLocalPath()) + '/Download';
+    // final savedDir = Directory(_localPath);
+    // bool hasExisted = await savedDir.exists();
+    // if (!hasExisted) {
+    //   savedDir.create();
+    // }
+  }
 
   void refreshList(int pCurrent, pTotal) {
     widget.myList = [];
@@ -331,48 +384,59 @@ class _MagazinesState extends State<Magazines> {
       padding: const EdgeInsets.all(0),
       onPressed: () async {
         if (isDownload == true) {
-          print(fileURL);
-          var changeURL;
-          if (userInformation.userDeviceOS != "i") {
-            changeURL = fileURL.replaceAll(new RegExp("https://"), "http://");
-          } else {
-            changeURL = fileURL;
-          }
-
-          //await FlutterDownloader.initialize();
-          final taskId = await FlutterDownloader.enqueue(
-            url: changeURL,
-            savedDir: _localPath,
-            showNotification:
-                false, // show download progress in status bar (for Android)
-            openFileFromNotification:
-                false, // click on notification to open downloaded file (for Android)
-          );
-
-          FlutterDownloader.registerCallback((id, status, progress) {
-            // code to update your UI
-            if (status == DownloadTaskStatus.complete) {
-              FlutterDownloader.open(taskId: taskId);
-              print("다운완료");
-              setState(() {
-                widget.magazinesList[magazineNum + 1] = buttonList(
-                    title, fileURL, serverFileName, magazineNum, false, obj);
-                widget.myList[magazineNum + 1] = buttonList(
-                    title, fileURL, serverFileName, magazineNum, false, obj);
-
-                _displaySnackBar(context, "다운로드 완료");
-                OpenFile.open(_localPath + "/" + serverFileName);
-                return;
-              });
-            } else if (status == DownloadTaskStatus.failed) {
-              print("다운실패");
-              _displaySnackBar(context, "다운로드 실패");
-              return;
+          if (await _checkPermission()) {
+            print(fileURL);
+            var changeURL;
+            if (userInformation.userDeviceOS != "i") {
+              changeURL = fileURL.replaceAll(new RegExp("https://"), "http://");
+            } else {
+              changeURL = fileURL;
             }
-          });
 
-          var file = Directory(_localPath).listSync();
-          print(file);
+            //await FlutterDownloader.initialize();
+
+            final taskId = await FlutterDownloader.enqueue(
+              url: changeURL,
+              savedDir: _localPath,
+              showNotification:
+                  false, // show download progress in status bar (for Android)
+              openFileFromNotification:
+                  false, // click on notification to open downloaded file (for Android)
+            );
+
+            downloadId = taskId;
+            btnTitle = title;
+            btnFileURL = fileURL;
+            btnServerFileName = serverFileName;
+            btnMagazineNum = magazineNum;
+            isDownload = false;
+            btnObj = obj;
+
+            // FlutterDownloader.registerCallback((id, status, progress) {
+            //   // code to update your UI
+            //   if (status == DownloadTaskStatus.complete) {
+            //     FlutterDownloader.open(taskId: taskId);
+            //     print("다운완료");
+            //     setState(() {
+            //       widget.magazinesList[magazineNum + 1] = buttonList(
+            //           title, fileURL, serverFileName, magazineNum, false, obj);
+            //       widget.myList[magazineNum + 1] = buttonList(
+            //           title, fileURL, serverFileName, magazineNum, false, obj);
+
+            //       _displaySnackBar(context, "다운로드 완료");
+            //       OpenFile.open(_localPath + "/" + serverFileName);
+            //       return;
+            //     });
+            //   } else if (status == DownloadTaskStatus.failed) {
+            //     print("다운실패");
+            //     _displaySnackBar(context, "다운로드 실패");
+            //     return;
+            //   }
+            // });
+
+            var file = Directory(_localPath).listSync();
+            print(file);
+          }
         } else {
           print("파일 오픈");
           //launch(fileURL);
@@ -389,5 +453,62 @@ class _MagazinesState extends State<Magazines> {
         }
       },
     );
+  }
+
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send.send([id, status, progress]);
+  }
+
+  Future<String> _findLocalPath() async {
+    final directory = await getExternalStorageDirectory();
+    return directory.path;
+  }
+
+  Future<bool> _checkPermission() async {
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      PermissionStatus permission = await PermissionHandler()
+          .checkPermissionStatus(PermissionGroup.storage);
+      if (permission != PermissionStatus.granted) {
+        Map<PermissionGroup, PermissionStatus> permissions =
+            await PermissionHandler()
+                .requestPermissions([PermissionGroup.storage]);
+        if (permissions[PermissionGroup.storage] == PermissionStatus.granted) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> refresh() async {
+    if (fileDownloadStatus == DownloadTaskStatus.complete) {
+      // FlutterDownloader.open(taskId: id);
+      print("다운완료");
+      if (mounted) {
+        setState(() {
+          widget.magazinesList[btnMagazineNum + 1] = buttonList(btnTitle,
+              btnFileURL, btnServerFileName, btnMagazineNum, false, btnObj);
+          widget.myList[btnMagazineNum + 1] = buttonList(btnTitle, btnFileURL,
+              btnServerFileName, btnMagazineNum, false, btnObj);
+
+          _displaySnackBar(context, "다운로드 완료");
+          OpenFile.open(_localPath + "/" + btnServerFileName);
+          return;
+        });
+      }
+    } else if (fileDownloadStatus == DownloadTaskStatus.failed) {
+      print("다운실패");
+      _displaySnackBar(context, "다운로드 실패");
+      return;
+    }
   }
 }

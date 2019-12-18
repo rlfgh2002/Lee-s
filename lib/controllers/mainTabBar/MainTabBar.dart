@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:haegisa2/controllers/Chat/Chat.dart';
 import 'package:haegisa2/controllers/chats/Chats.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
@@ -290,8 +291,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
 
     widget.mainFirebaseMessaging.configure(
-      onBackgroundMessage:
-          (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
       onMessage: (Map<String, dynamic> message) async {
         if (Platform.isIOS) {
           print('MSGX=> on messageX Main $message');
@@ -339,6 +338,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         print('MSGX=> on launchX $message');
         analiseMessage(message, false, true);
       },
+      onBackgroundMessage:
+          (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
     );
   }
 
@@ -361,105 +362,105 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
     print(message['data']['notificationType']);
 
-    // if (message['data']['notificationType'].toString() == null) {
-    // } // notificationType is null
-    // else {
-    //   if (message['data']['notificationType'].toString() == "chat") {
-    //     String convId = chatItem.notificationConversationId;
-    //     if (chatItem.notificationFromId == 'mariners123') {
-    //       convId = "x0x0";
-    //     }
-    //     myDb.checkConversationExist(
-    //         userId: chatItem.notificationFromId,
-    //         convId: convId,
-    //         onResult: (res) {
-    //           myDb.insertChat(
-    //               convId: convId,
-    //               userId: chatItem.notificationFromId,
-    //               content: chatItem.notificationContent,
-    //               date: chatItem.notificationRegDate,
-    //               seen: seen,
-    //               isYours: "FALSE",
-    //               onAdded: () {});
-    //         },
-    //         onNoResult: () {
-    //           myDb.insertConversation(
-    //               userId: chatItem.notificationFromId,
-    //               convId: convId,
-    //               createDate: chatItem.notificationRegDate,
-    //               fromName: chatItem.notificationFromName,
-    //               onInserted: () {
-    //                 myDb.checkChatExistByUser(
-    //                     chatId: chatItem.chatId,
-    //                     onNoResult: () {
-    //                       myDb.insertChat(
-    //                           convId: convId,
-    //                           userId: chatItem.notificationFromId,
-    //                           content: chatItem.notificationContent,
-    //                           date: chatItem.notificationRegDate,
-    //                           seen: seen,
-    //                           isYours: "FALSE",
-    //                           chatId: chatItem.chatId,
-    //                           onAdded: () {});
-    //                     });
-    //               },
-    //               onNoInerted: () {});
-    //         });
-    //     // chat notification
-    //   } else {
-    //     if (message['data']['notificationType'].toString() == "vote") {
-    //       // vote notification
-    //       VoteObject voteItem = VoteObject.fromJson(message);
-    //       myDb.checkVoteExist(
-    //           bd_idx: voteItem.idx.toString(),
-    //           onNoResult: () {
-    //             myDb.insertVote(
-    //                 voteItem: voteItem,
-    //                 onAdded: () {
-    //                   staticGetUserId(onGetUserId: (uid) {
-    //                     String url =
-    //                         "${voteItem.httpPath.toString()}&userId=${uid}&mode=view";
-    //                     url = url.replaceAll("https://", "http://");
-    //                     staticGetVoteAnswers(
-    //                         url: url,
-    //                         onSent: (response) {
-    //                           myDb.insertAnswer(
-    //                             onAdded: () {},
-    //                             idx: voteItem.idx,
-    //                             status: response['data']['status'].toString(),
-    //                             answer1: response['data']['a1'].toString(),
-    //                             answer2: response['data']['a2'].toString(),
-    //                             answer3: response['data']['a3'].toString(),
-    //                             answer4: response['data']['a4'].toString(),
-    //                             answer5: response['data']['a5'].toString(),
-    //                             answer6: response['data']['a6'].toString(),
-    //                           );
-    //                         });
-    //                   });
+    if (message['data']['notificationType'].toString() == null) {
+    } // notificationType is null
+    else {
+      if (message['data']['notificationType'].toString() == "chat") {
+        String convId = chatItem.notificationConversationId;
+        if (chatItem.notificationFromId == 'mariners123') {
+          convId = "x0x0";
+        }
+        myDb.checkConversationExist(
+            userId: chatItem.notificationFromId,
+            convId: convId,
+            onResult: (res) {
+              myDb.insertChat(
+                  convId: convId,
+                  userId: chatItem.notificationFromId,
+                  content: chatItem.notificationContent,
+                  date: chatItem.notificationRegDate,
+                  seen: seen,
+                  isYours: "FALSE",
+                  onAdded: () {});
+            },
+            onNoResult: () {
+              myDb.insertConversation(
+                  userId: chatItem.notificationFromId,
+                  convId: convId,
+                  createDate: chatItem.notificationRegDate,
+                  fromName: chatItem.notificationFromName,
+                  onInserted: () {
+                    myDb.checkChatExistByUser(
+                        chatId: chatItem.chatId,
+                        onNoResult: () {
+                          myDb.insertChat(
+                              convId: convId,
+                              userId: chatItem.notificationFromId,
+                              content: chatItem.notificationContent,
+                              date: chatItem.notificationRegDate,
+                              seen: seen,
+                              isYours: "FALSE",
+                              chatId: chatItem.chatId,
+                              onAdded: () {});
+                        });
+                  },
+                  onNoInerted: () {});
+            });
+        // chat notification
+      } else {
+        if (message['data']['notificationType'].toString() == "vote") {
+          // vote notification
+          VoteObject voteItem = VoteObject.fromJson(message);
+          myDb.checkVoteExist(
+              bd_idx: voteItem.idx.toString(),
+              onNoResult: () {
+                myDb.insertVote(
+                    voteItem: voteItem,
+                    onAdded: () {
+                      staticGetUserId(onGetUserId: (uid) {
+                        String url =
+                            "${voteItem.httpPath.toString()}&userId=${uid}&mode=view";
+                        url = url.replaceAll("https://", "http://");
+                        staticGetVoteAnswers(
+                            url: url,
+                            onSent: (response) {
+                              myDb.insertAnswer(
+                                onAdded: () {},
+                                idx: voteItem.idx,
+                                status: response['data']['status'].toString(),
+                                answer1: response['data']['a1'].toString(),
+                                answer2: response['data']['a2'].toString(),
+                                answer3: response['data']['a3'].toString(),
+                                answer4: response['data']['a4'].toString(),
+                                answer5: response['data']['a5'].toString(),
+                                answer6: response['data']['a6'].toString(),
+                              );
+                            });
+                      });
 
-    //                   /* GOTO VOTE PAGE */
-    //                   /* GOTO VOTE PAGE */
-    //                 });
-    //           });
-    //     } // Vote Notification
-    //     else if (message['data']['notificationType'].toString().toLowerCase() ==
-    //         "notice") {
-    //       VoteObject noticeItem = VoteObject.fromJson(message);
+                      /* GOTO VOTE PAGE */
+                      /* GOTO VOTE PAGE */
+                    });
+              });
+        } // Vote Notification
+        else if (message['data']['notificationType'].toString().toLowerCase() ==
+            "notice") {
+          VoteObject noticeItem = VoteObject.fromJson(message);
 
-    //       myDb.insertNotice(
-    //           fromId: noticeItem.fromId,
-    //           fromName: noticeItem.fromName,
-    //           subject: noticeItem.subject,
-    //           noticeId: "",
-    //           content: noticeItem.content,
-    //           onInserted: (status) {
-    //             if (status) {
-    //             } // on inserted
-    //             else {} // on no inserted
-    //           });
-    //     } // Notice Notification
-    //   }
-    // } // notificationType is NOT null
+          myDb.insertNotice(
+              fromId: noticeItem.fromId,
+              fromName: noticeItem.fromName,
+              subject: noticeItem.subject,
+              noticeId: "",
+              content: noticeItem.content,
+              onInserted: (status) {
+                if (status) {
+                } // on inserted
+                else {} // on no inserted
+              });
+        } // Notice Notification
+      }
+    } // notificationType is NOT null
 
     if (message.containsKey('data')) {
       // Handle data message
@@ -503,7 +504,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             MiddleWare.shared.currentIndex = 2;
             MiddleWare.shared.tabc.animateTo(2, duration: Duration(seconds: 0));
           });
-          return;
+          //return;
         }
 
         String convId = chatItem.notificationConversationId;
@@ -804,7 +805,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
 
     getVersion();
-
+    filedownloaderInitialize();
     print("Main TabBar New...");
 
     widget.subscription = Connectivity()
@@ -824,6 +825,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     widget.subscription.cancel();
+  }
+
+  void filedownloaderInitialize() async {
+    await FlutterDownloader.initialize();
   }
 
   void updateUserLocation() async {

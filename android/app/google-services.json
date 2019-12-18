@@ -56,70 +56,11 @@
               "client_type": 3
             },
             {
-              "client_id": "297450269741-cg8dml8d2m918cb35g65d40lmbkmaa6p.apps.googleusercontent.com",
+              "client_id": "297450269741-miftuuf3a1eoli2vgotdev0i673bor14.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "sdfsdfasdf"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:297450269741:android:0b1474696eee5709",
-        "android_client_info": {
-          "package_name": "com.parcweb.haegisa2.haegisa2"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "297450269741-vf8fbt9nqtonob6k1gnf9d4nmiim7ols.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.parcweb.haegisa2.haegisa2",
-            "certificate_hash": "ce940ebf05408a52e64b01698a173d97b613303d"
-          }
-        },
-        {
-          "client_id": "297450269741-o77mvkh1kkdcm9mnvlmurcn821t5lh82.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.parcweb.haegisa2.haegisa2",
-            "certificate_hash": "a6862030754a9e392ba3f519be7b24ac0a4fd864"
-          }
-        },
-        {
-          "client_id": "297450269741-8231v07kk518a8kgn1rhmr80l84cel4u.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.parcweb.haegisa2.haegisa2",
-            "certificate_hash": "75c87fd61255091c432c42c03a63c29a94ec6766"
-          }
-        },
-        {
-          "client_id": "297450269741-3b0en2mrhd6vujq5ftp73h2k2pbb5f2s.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBxw-FIHMyKAyPHL7aUv9NznBcOvd3f7l0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "297450269741-3b0en2mrhd6vujq5ftp73h2k2pbb5f2s.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "297450269741-cg8dml8d2m918cb35g65d40lmbkmaa6p.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "sdfsdfasdf"
+                "bundle_id": "com.mariners.haegisa2",
+                "app_store_id": "1485498659"
               }
             }
           ]
