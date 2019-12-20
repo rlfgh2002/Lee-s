@@ -52,12 +52,22 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Needed to media file</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Needed to calender</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Needed to member information</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Needed to access location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Needed to access location</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Needed to motion usage</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Explain why your app uses photo library</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Needed to speech recognition</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
