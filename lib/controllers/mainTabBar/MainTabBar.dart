@@ -332,11 +332,23 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       },
       onResume: (Map<String, dynamic> message) async {
         print('MSGX=> on resumeX $message');
-        analiseMessage(message, false, true);
+        if (Platform.isIOS) {
+          Map<String, dynamic> body = {'data': []};
+          body['data'] = message;
+          analiseMessage(body, false, true);
+        } else {
+          analiseMessage(message, false, true);
+        }
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('MSGX=> on launchX $message');
-        analiseMessage(message, false, true);
+        if (Platform.isIOS) {
+          Map<String, dynamic> body = {'data': []};
+          body['data'] = message;
+          analiseMessage(body, false, true);
+        } else {
+          analiseMessage(message, false, true);
+        }
       },
       onBackgroundMessage:
           (Platform.isIOS) ? null : fcmBackgroundMessageHandler,
