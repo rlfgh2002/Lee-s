@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // Imports Every Menu Controllers
 import 'package:haegisa2/controllers/home/Home.dart';
 import 'package:haegisa2/controllers/chats/Chats.dart';
+import 'package:haegisa2/controllers/home/Home2.dart';
 import 'package:haegisa2/controllers/notices/Notices.dart';
 import 'package:haegisa2/controllers/profile/Profile.dart';
 import 'package:haegisa2/controllers/findUser/FindUser.dart';
@@ -26,7 +27,7 @@ class MiddleWare {
   int currentIndex = 0;
   TabController tabc;
   List<Widget> myTabBarList = [
-    Home(),
+    Home2(),
     FindUser(),
     Chats(),
     Notices(),

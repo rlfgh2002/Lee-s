@@ -169,6 +169,8 @@ flutter:
     - userChatAvatar.png
 
     # home
+    - Resources/Images/bgHome.png
+    - Resources/Images/bgCount.png
     - Resources/Images/ill_service.png
     - Resources/Images/gichul.png
     - Resources/Images/totalWork.png
@@ -183,6 +185,7 @@ flutter:
     - Resources/Icons/btn_occasion.png
     - Resources/Icons/btn_inquiry.png
     - Resources/Icons/btn_human.png
+    - Resources/Icons/btn_barcode.png
 
     # barcode
     - Resources/Images/barcodeType1.png
