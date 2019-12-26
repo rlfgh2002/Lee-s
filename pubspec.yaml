@@ -151,20 +151,24 @@ flutter:
     - Resources/Icons/arrow_down.png
     - Resources/Icons/Vector.png
     - Resources/Icons/btn_delete.png
+
     # Images
     - Resources/Images/ill_survey.png
     - Resources/Images/ill_vote.png
     - Resources/Images/no_member.png
     - Resources/Images/splash.png
+
     # Single Chat Page
     - Resources/Images/leftEdge.png
     - Resources/Images/rightEdge.png
     - Resources/Icons/Line.png
     - Resources/Images/userAvatar.png
     - Resources/Images/userAlertTop.png
+
     # SurveysTabs
     - proceedingBackground.png
     - proceedingBackgroundDark.png
+
     # Conversations
     - userChatAvatar.png
 
@@ -176,6 +180,7 @@ flutter:
     - Resources/Images/totalWork.png
     - Resources/Images/main_banner1.png
     - Resources/Icons/icon_barcode.png
+    - Resources/Icons/home_logo.png
     - Resources/Icons/user_type_01.png
     - Resources/Icons/user_type_02.png
     - Resources/Icons/user_type_03.png
@@ -186,6 +191,19 @@ flutter:
     - Resources/Icons/btn_inquiry.png
     - Resources/Icons/btn_human.png
     - Resources/Icons/btn_barcode.png
+    - Resources/Icons/btn_notify.png
+    - Resources/Icons/btn_gallery.png
+    - Resources/Icons/btn_magazine.png
+    - Resources/Icons/btn_map.png
+    - Resources/Icons/btn_intro2.png
+    - Resources/Icons/btn_job2.png
+    - Resources/Icons/btn_advisory2.png
+    - Resources/Icons/btn_survey2.png
+    - Resources/Icons/btn_occasion2.png
+    - Resources/Icons/btn_inquiry2.png
+    - Resources/Icons/btn_human2.png
+    - Resources/Icons/icon_mariners.png
+    - Resources/Icons/icon_exam.png
 
     # barcode
     - Resources/Images/barcodeType1.png

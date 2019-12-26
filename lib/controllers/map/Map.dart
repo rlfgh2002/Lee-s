@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:haegisa2/controllers/home/Home.dart';
+import 'package:haegisa2/controllers/home/Home2.dart';
 import 'package:haegisa2/models/Magazines/Magazine.dart';
 import 'package:haegisa2/models/Map/Map.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
