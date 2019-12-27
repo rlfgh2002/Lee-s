@@ -516,7 +516,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             MiddleWare.shared.currentIndex = 2;
             MiddleWare.shared.tabc.animateTo(2, duration: Duration(seconds: 0));
           });
-          //return;
+          return;
         }
 
         String convId = chatItem.notificationConversationId;
