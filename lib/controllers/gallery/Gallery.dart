@@ -32,7 +32,7 @@ class _LicenseTestQuestionsState extends State<Gallery> {
       child: Stack(
         children: [
           Image.asset(
-            "Resources/Images/bgLicense.png",
+            "Resources/Images/bgGallery.png",
             width: screenWidth,
             height: 100,
           ),
@@ -80,7 +80,6 @@ class _LicenseTestQuestionsState extends State<Gallery> {
         width: screenWidth,
         height: 60,
         alignment: Alignment.center,
-        margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
       );
       widget.myList.add(downloadMoreView);
     }
@@ -171,7 +170,7 @@ class _LicenseTestQuestionsState extends State<Gallery> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text("해기사기출문제",
+            child: Text("협회활동",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontSize: Statics.shared.fontSizes.subTitle,
