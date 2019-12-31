@@ -1,28 +1,28 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestionSingle.dart';
+import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
-import 'package:haegisa2/models/LicenseTestQuestions/LicenseTestQuestionObject.dart';
+import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
-import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/strings.dart';
-import 'package:haegisa2/views/LicenseTestQuestionWidget/LicenseTestQuestionWidget.dart';
+import 'package:haegisa2/models/statics/statics.dart';
+import 'package:haegisa2/views/NoticesListWidget/NoticesListWidget.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class Gallery extends StatefulWidget {
+class GalleryList extends StatefulWidget {
   bool isFirstInit = true;
-  Gallery({Key key}) : super(key: key);
+  GalleryList({Key key}) : super(key: key);
   List<Widget> myList = [];
-  List<Widget> licenseTestQuestionsList = [];
+  List<Widget> noticesList = [];
 
   @override
-  _LicenseTestQuestionsState createState() => _LicenseTestQuestionsState();
+  _NoticesListState createState() => _NoticesListState();
 }
 
-class _LicenseTestQuestionsState extends State<Gallery> {
+class _NoticesListState extends State<GalleryList> {
   final _scaffold = GlobalKey<ScaffoldState>();
 
   void refreshList(int pCurrent, pTotal) {
@@ -36,26 +36,20 @@ class _LicenseTestQuestionsState extends State<Gallery> {
             width: screenWidth,
             height: 100,
           ),
-          Container(
-            child: Image.asset("Resources/Icons/archive.png", width: 45),
-            alignment: Alignment.centerRight,
-            margin: const EdgeInsets.only(right: 16),
-          )
         ],
       ),
       alignment: Alignment.center,
       height: 100,
     );
     Widget blueSplitter = Container(
-        color: Colors.blue,
+        color: Statics.shared.colors.blueLineColor,
         height: 3,
         margin:
-            const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 20));
+            const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 10));
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
-    widget.myList
-        .addAll(this.widget.licenseTestQuestionsList); // fetch from server
+    widget.myList.addAll(this.widget.noticesList); // fetch from server
 
     if (pTotal > pCurrent) {
       Widget downloadMoreView = Container(
@@ -64,46 +58,47 @@ class _LicenseTestQuestionsState extends State<Gallery> {
             child: Text(Strings.shared.controllers.magazines.downloadMoreKey,
                 style: TextStyle(
                     color: Statics.shared.colors.mainColor,
-                    fontSize: Statics.shared.fontSizes.subTitle,
-                    fontWeight: FontWeight.w600)),
+                    fontSize: Statics.shared.fontSizes.supplementary,
+                    fontWeight: FontWeight.w200)),
             alignment: Alignment.center,
           ),
           onPressed: () {
             // download 5 more magazines ...
-            this.download5MoreLicense(page: pCurrent + 1);
+            this.download5MoreNotices(page: pCurrent + 1);
           },
           padding: const EdgeInsets.all(0),
         ),
         decoration: BoxDecoration(
             border:
-                Border.all(width: 2, color: Statics.shared.colors.mainColor)),
+                Border.all(width: 1, color: Statics.shared.colors.mainColor)),
         width: screenWidth,
         height: 60,
         alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
       );
       widget.myList.add(downloadMoreView);
     }
     setState(() {});
   }
 
-  void download5MoreLicense({int page = 1}) async {
-    http.get(Statics.shared.urls.licenseTestQuestions(page: page)).then((val) {
+  void download5MoreNotices({int page = 1}) async {
+    http.get(Statics.shared.urls.noticesList(page: page)).then((val) {
       if (val.statusCode == 200) {
         print(
-            "::::::::::::::::::::: [ Getting License Test Qs Start ] :::::::::::::::::::::");
+            "::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
         print("BODY: ${val.body.toString()}");
         var myJson = json.decode(utf8.decode(val.bodyBytes));
 
         int code = myJson["code"];
         if (code == 200) {
-          List<LicenseTestQuestionObject> myReturnList = [];
+          List<NoticesListObject> myReturnList = [];
           int pTotal = myJson["totalPageNum"];
           int pCurrent = myJson["nowPageNum"];
           List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
           rows.forEach((item) {
-            LicenseTestQuestionObject object = LicenseTestQuestionObject(
+            NoticesListObject object = NoticesListObject(
               subject: item["subject"].toString(),
               no: item["no"],
               content: item["content"].toString(),
@@ -122,7 +117,7 @@ class _LicenseTestQuestionsState extends State<Gallery> {
               serverFileName_3: item["serverFileName_3"].toString(),
               serverFileName_4: item["serverFileName_4"].toString(),
             );
-            newList.add(LicenseTestQuestionWidget(
+            newList.add(NoticesListWidget(
                 title: item["subject"].toString(),
                 obj: object,
                 onTap: () {
@@ -130,25 +125,25 @@ class _LicenseTestQuestionsState extends State<Gallery> {
                       context,
                       new MaterialPageRoute(
                           builder: (context) =>
-                              new LicenseTestQuestionSingle(obj: object)));
+                              new NoticesListSingle(obj: object)));
                 }));
           });
           if (page == 1) {
-            this.widget.licenseTestQuestionsList = newList;
+            this.widget.noticesList = newList;
           } else {
-            this.widget.licenseTestQuestionsList.addAll(newList);
+            this.widget.noticesList.addAll(newList);
           }
           this.refreshList(pCurrent, pTotal);
         }
         print(
-            "::::::::::::::::::::: [ Getting License Test Qs End ] :::::::::::::::::::::");
+            "::::::::::::::::::::: [ Getting NoticesList End ] :::::::::::::::::::::");
       } else {
         print(
-            ":::::::::::::::::: on Getting License Test Qs error :: Server Error ::::::::::::::::::");
+            ":::::::::::::::::: on Getting NoticesList error :: Server Error ::::::::::::::::::");
       }
     }).catchError((error) {
       print(
-          ":::::::::::::::::: on Getting License Test Qs error : ${error.toString()} ::::::::::::::::::");
+          ":::::::::::::::::: on Getting NoticesList error : ${error.toString()} ::::::::::::::::::");
     });
   }
 
@@ -159,9 +154,8 @@ class _LicenseTestQuestionsState extends State<Gallery> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-
     if (widget.isFirstInit) {
-      download5MoreLicense(page: 1);
+      download5MoreNotices(page: 1);
       widget.isFirstInit = false;
     }
 
@@ -170,7 +164,7 @@ class _LicenseTestQuestionsState extends State<Gallery> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text("협회활동",
+            child: Text(Strings.shared.controllers.noticesList.pageTitle,
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontSize: Statics.shared.fontSizes.subTitle,

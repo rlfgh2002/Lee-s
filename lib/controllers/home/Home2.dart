@@ -8,7 +8,7 @@ import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.d
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
 import 'package:haegisa2/controllers/barcode/Barcode.dart';
-import 'package:haegisa2/controllers/gallery/Gallery.dart';
+import 'package:haegisa2/controllers/gallery/GalleryList.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/controllers/profile/Advisory.dart';
@@ -309,7 +309,7 @@ class _HomeState extends State<Home2> {
                                                 context,
                                                 new MaterialPageRoute(
                                                     builder: (context) =>
-                                                        new Gallery()));
+                                                        new GalleryList()));
                                           },
                                         ),
                                         Text("협회활동",
