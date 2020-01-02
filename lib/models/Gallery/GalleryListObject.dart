@@ -1,4 +1,4 @@
-class GalleryObject {
+class GalleryListObject {
   int no = 0;
   String subject = "";
   String writer = "";
@@ -21,7 +21,7 @@ class GalleryObject {
   String realFileName4 = "";
   String fileUrl_4 = "";
 
-  GalleryObject({
+  GalleryListObject({
     int no = 0,
     String subject,
     String writer,

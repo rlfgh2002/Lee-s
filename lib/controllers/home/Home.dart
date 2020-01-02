@@ -376,7 +376,7 @@ class _HomeState extends State<Home> {
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             child: Row(children: [
-                              Text("직역소개",
+                              Text("역소개",
                                   style: TextStyle(
                                       color:
                                           Statics.shared.colors.titleTextColor,

@@ -31,6 +31,10 @@ class URLS {
     return "http://mariners.or.kr/app_middle/etc/notice_json.php?mode=list&pageNum=${page.toString()}";
   }
 
+  String galleryList({int page = 0}) {
+    return "http://mariners.or.kr/app_middle/etc/gallery_json.php?mode=list&pageNum=${page.toString()}";
+  }
+
   String iO({int page = 0}) {
     return "http://mariners.or.kr/app_middle/etc/introduction_json.php?mode=list&pageNum=${page.toString()}";
   }

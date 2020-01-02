@@ -22,23 +22,23 @@ class _NoticeSingle extends State<NoticeSingle> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.white, // Color for Android
         systemNavigationBarColor:
-        Colors.black // Dark == white status bar -- for IOS.
-    ));
+            Colors.black // Dark == white status bar -- for IOS.
+        ));
 
     double screenWidth = MediaQuery.of(context).size.width;
     Widget blueSplitter = Container(
         color: Statics.shared.colors.blueLineColor,
         height: 3,
         margin:
-        const EdgeInsets.only(left: 16, right: 16, bottom: 20, top: 10));
+            const EdgeInsets.only(left: 16, right: 16, bottom: 20, top: 10));
     Widget greySplitter = Container(
         color: Statics.shared.colors.lineColor,
         height: 1,
         margin:
-        const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 10));
+            const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 10));
 
     String strDate = "";
-    if(this.widget.object['date'] != null){
+    if (this.widget.object['date'] != null) {
       strDate = this.widget.object['date'];
     }
 
@@ -63,7 +63,9 @@ class _NoticeSingle extends State<NoticeSingle> {
           children: [
             blueSplitter,
             Padding(
-                child: Text(this.widget.object['subject'], style: TextStyle(
+                child: Text(
+                  this.widget.object['subject'],
+                  style: TextStyle(
                     fontSize: Statics.shared.fontSizes.subTitleInContent,
                     color: Statics.shared.colors.titleTextColor,
                     fontWeight: FontWeight.w600,

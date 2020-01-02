@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
+import 'package:haegisa2/controllers/gallery/GallerylistSingle.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
-import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
+import 'package:haegisa2/models/Gallery/GalleryListObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:haegisa2/views/NoticesListWidget/NoticesListWidget.dart';
+import 'package:haegisa2/views/GalleryListWidget/GalleryListWidget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -16,13 +16,13 @@ class GalleryList extends StatefulWidget {
   bool isFirstInit = true;
   GalleryList({Key key}) : super(key: key);
   List<Widget> myList = [];
-  List<Widget> noticesList = [];
+  List<Widget> galleryList = [];
 
   @override
-  _NoticesListState createState() => _NoticesListState();
+  _GalleryListState createState() => _GalleryListState();
 }
 
-class _NoticesListState extends State<GalleryList> {
+class _GalleryListState extends State<GalleryList> {
   final _scaffold = GlobalKey<ScaffoldState>();
 
   void refreshList(int pCurrent, pTotal) {
@@ -49,7 +49,7 @@ class _NoticesListState extends State<GalleryList> {
     widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
-    widget.myList.addAll(this.widget.noticesList); // fetch from server
+    widget.myList.addAll(this.widget.galleryList); // fetch from server
 
     if (pTotal > pCurrent) {
       Widget downloadMoreView = Container(
@@ -82,7 +82,7 @@ class _NoticesListState extends State<GalleryList> {
   }
 
   void download5MoreNotices({int page = 1}) async {
-    http.get(Statics.shared.urls.noticesList(page: page)).then((val) {
+    http.get(Statics.shared.urls.galleryList(page: page)).then((val) {
       if (val.statusCode == 200) {
         print(
             "::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
@@ -91,14 +91,14 @@ class _NoticesListState extends State<GalleryList> {
 
         int code = myJson["code"];
         if (code == 200) {
-          List<NoticesListObject> myReturnList = [];
+          List<GalleryListObject> myReturnList = [];
           int pTotal = myJson["totalPageNum"];
           int pCurrent = myJson["nowPageNum"];
           List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
           rows.forEach((item) {
-            NoticesListObject object = NoticesListObject(
+            GalleryListObject object = GalleryListObject(
               subject: item["subject"].toString(),
               no: item["no"],
               content: item["content"].toString(),
@@ -117,21 +117,38 @@ class _NoticesListState extends State<GalleryList> {
               serverFileName_3: item["serverFileName_3"].toString(),
               serverFileName_4: item["serverFileName_4"].toString(),
             );
-            newList.add(NoticesListWidget(
-                title: item["subject"].toString(),
-                obj: object,
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) =>
-                              new NoticesListSingle(obj: object)));
-                }));
+            GalleryListObject object2 = GalleryListObject(
+              subject: item["subject_2"].toString(),
+              no: item["no_2"],
+              content: item["content_2"].toString(),
+              regDate: item["regDate_2"].toString(),
+              writer: item["writer_2"].toString(),
+              fileUrl_1: item["fileUrl_1_2"].toString(),
+              fileUrl_2: item["fileUrl_2_2"].toString(),
+              fileUrl_3: item["fileUrl_3_2"].toString(),
+              fileUrl_4: item["fileUrl_4_2"].toString(),
+              realFileName1: item["realFileName1_2"].toString(),
+              realFileName2: item["realFileName2_2"].toString(),
+              realFileName3: item["realFileName3_2"].toString(),
+              realFileName4: item["realFileName4_2"].toString(),
+              serverFileName_1: item["serverFileName_1_2"].toString(),
+              serverFileName_2: item["serverFileName_2_2"].toString(),
+              serverFileName_3: item["serverFileName_3_2"].toString(),
+              serverFileName_4: item["serverFileName_4_2"].toString(),
+            );
+            newList.add(GalleryListWidget(
+              title: item["subject"].toString(),
+              title2: item["subject_2"].toString(),
+              thumb: item["serverFileName_1"].toString(),
+              thumb2: item["serverFileName_1_2"].toString(),
+              obj: object,
+              obj2: object2,
+            ));
           });
           if (page == 1) {
-            this.widget.noticesList = newList;
+            this.widget.galleryList = newList;
           } else {
-            this.widget.noticesList.addAll(newList);
+            this.widget.galleryList.addAll(newList);
           }
           this.refreshList(pCurrent, pTotal);
         }
@@ -164,7 +181,7 @@ class _NoticesListState extends State<GalleryList> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text(Strings.shared.controllers.noticesList.pageTitle,
+            child: Text("협회활동",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontSize: Statics.shared.fontSizes.subTitle,

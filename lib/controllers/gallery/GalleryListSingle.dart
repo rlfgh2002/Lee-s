@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
+import 'package:haegisa2/models/Gallery/GalleryListObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:haegisa2/views/NoticesListWidget/NoticesListWidget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'NoticesList.dart';
+import 'Gallerylist.dart';
 
-class NoticesListSingle extends StatefulWidget {
-  NoticesListObject object;
+class GallerylistSingle extends StatefulWidget {
+  GalleryListObject object;
 
-  NoticesListSingle({NoticesListObject obj}) {
+  GallerylistSingle({GalleryListObject obj}) {
     this.object = obj;
   }
 
   @override
-  _NoticesListSingleState createState() => _NoticesListSingleState();
+  _GallerylistSingleState createState() => _GallerylistSingleState();
 }
 
-class _NoticesListSingleState extends State<NoticesListSingle> {
+class _GallerylistSingleState extends State<GallerylistSingle> {
   final _scaffold = GlobalKey<ScaffoldState>();
 
   _launchURL(String url) async {
@@ -66,7 +65,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
         ),
         onPressed: () {
           Navigator.pop(context,
-              new MaterialPageRoute(builder: (context) => new NoticesList()));
+              new MaterialPageRoute(builder: (context) => new GalleryList()));
         },
         padding: const EdgeInsets.all(0),
       ),
@@ -79,8 +78,10 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
     );
 
     Widget files = Container();
+    Widget thumb = Container();
     bool isThereAnyFiles = false;
     List<FlatButton> myFilesList = [];
+    List<Container> myThumbList = [];
 
     if (this.widget.object.fileUrl_1.isNotEmpty) {
       isThereAnyFiles = true;
@@ -110,6 +111,15 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
           },
         ),
       );
+      myThumbList.add(
+        Container(
+          child: Image.network(
+            "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
+                this.widget.object.serverFileName_1.toString(),
+            height: screenWidth / 1.7,
+          ),
+        ),
+      );
     }
     if (this.widget.object.fileUrl_2.isNotEmpty) {
       isThereAnyFiles = true;
@@ -135,6 +145,15 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
           onPressed: () {
             _launchURL(this.widget.object.fileUrl_2);
           },
+        ),
+      );
+      myThumbList.add(
+        Container(
+          child: Image.network(
+            "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
+                this.widget.object.serverFileName_2.toString(),
+            height: screenWidth / 1.7,
+          ),
         ),
       );
     }
@@ -164,6 +183,15 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
           },
         ),
       );
+      myThumbList.add(
+        Container(
+          child: Image.network(
+            "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
+                this.widget.object.serverFileName_3.toString(),
+            height: screenWidth / 1.7,
+          ),
+        ),
+      );
     }
     if (this.widget.object.fileUrl_4.isNotEmpty) {
       isThereAnyFiles = true;
@@ -191,6 +219,15 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
           },
         ),
       );
+      myThumbList.add(
+        Container(
+          child: Image.network(
+            "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
+                this.widget.object.serverFileName_4.toString(),
+            height: screenWidth / 1.7,
+          ),
+        ),
+      );
     }
 
     if (isThereAnyFiles) {
@@ -198,9 +235,12 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
         color: Color.fromRGBO(244, 248, 255, 1),
         padding: const EdgeInsets.only(bottom: 16, top: 16, left: 8, right: 8),
         margin: const EdgeInsets.only(left: 32, right: 32, top: 20, bottom: 32),
-        child: Column(
-          children: myFilesList,
-        ),
+        child: Column(children: myFilesList),
+      );
+      thumb = Container(
+        padding: const EdgeInsets.only(bottom: 16, top: 16, left: 8, right: 8),
+        margin: const EdgeInsets.only(left: 32, right: 32, top: 20, bottom: 32),
+        child: Column(children: myThumbList),
       );
     }
 
@@ -209,7 +249,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text("공지사항",
+            child: Text("협회활동",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontWeight: FontWeight.bold,
@@ -268,6 +308,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
                 padding: const EdgeInsets.only(left: 32, right: 32)),
             greySplitter,
             files,
+            thumb,
             HtmlView(
               data: this.widget.object.content,
               scrollable: false,
@@ -286,5 +327,5 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
   void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"
       ? true
       : Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new NoticesList()));
+          new MaterialPageRoute(builder: (context) => new GalleryList()));
 }
