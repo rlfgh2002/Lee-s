@@ -456,7 +456,7 @@ class ChatState extends State<Chat> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-    //ChatsState.badgeRefresh(context); //뱃지 새로고침해서 화면 뒤로 갔을때 새로고침할수 있도록
+    ChatsState.badgeRefresh(context); //뱃지 새로고침해서 화면 뒤로 갔을때 새로고침할수 있도록
     this.widget.myChild = this;
     this.mainContext = context;
     if (widget.isFirstInit) {

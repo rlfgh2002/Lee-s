@@ -68,7 +68,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   static void setBadge(BuildContext context, String type, bool newMessage) {
     MainTabBarState state =
-        context.ancestorStateOfType(TypeMatcher<MainTabBarState>());
+        context.findAncestorStateOfType<State<MainTabBar>>();
+
     state.setState(() {
       if (type == "chat") {
         if (newMessage == true) {
@@ -505,18 +506,23 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     } // notificationType is null
     else {
       if (message['data']['notificationType'].toString() == "chat") {
+        // 주석 해제 할 시 해당 채팅방으로 이동
+        // 주석 처리할 시그냥 단순히 채팅 탭으로 이동
         if (isOnResume) {
-          this.widget.mdw.shouldMoveToThisConvId =
-              message['data']['conversationId'].toString();
-          this.widget.mdw.shouldMoveToThisFromName =
-              message['data']['fromName'].toString();
-          this.widget.mdw.shouldMoveToThisFromId =
-              message['data']['fromId'].toString();
+          // this.widget.mdw.shouldMoveToThisConvId =
+          //     message['data']['conversationId'].toString();
+          // this.widget.mdw.shouldMoveToThisFromName =
+          //     message['data']['fromName'].toString();
+          // this.widget.mdw.shouldMoveToThisFromId =
+          //     message['data']['fromId'].toString();
           setState(() {
             MiddleWare.shared.currentIndex = 2;
             MiddleWare.shared.tabc.animateTo(2, duration: Duration(seconds: 0));
           });
-          return;
+
+          if (Platform.isAndroid) {
+            return;
+          } //아이폰은 return 넣으면 다음으로 넘어가지 않아서 데이터 저장이 안됨. 안드로이드는 return 없으면 노티 누르면 해당 데이터가 저장되서 중복으로 저장이 됨
         }
 
         String convId = chatItem.notificationConversationId;

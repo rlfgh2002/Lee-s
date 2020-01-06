@@ -43,8 +43,8 @@ class ChatsState extends State<Chats> {
       TextEditingController();
 
   static void badgeRefresh(BuildContext context) {
-    ChatsState state = context.ancestorStateOfType(TypeMatcher<ChatsState>());
-    state.refreshList();
+    //ChatsState state = context.findAncestorStateOfType<State<Chats>>();
+    //state.refreshList();
   }
 
 //  _displayAddUserDialog() async {
@@ -387,8 +387,8 @@ class ChatsState extends State<Chats> {
                                 MiddleWare.shared.conversations;
 
                             if (i == items.length - 1) {
-                              // MainTabBarState.setBadge(
-                              //     context, "chat", badgeState);
+                              MainTabBarState.setBadge(
+                                  context, "chat", badgeState);
                             }
                           });
                         },
