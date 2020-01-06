@@ -88,11 +88,11 @@ class _FindInState extends State<FindPW> {
                   children: [
                     FlatButton(
                       child: Row(children: [
-                        Text(Strings.shared.controllers.signIn.change,
+                        Text(Strings.shared.controllers.signIn.change + " ",
                             style: TextStyle(
                                 color: Statics.shared.colors.titleTextColor,
-                                fontSize:
-                                    Statics.shared.fontSizes.supplementary)),
+                                fontSize: Statics
+                                    .shared.fontSizes.subTitleInContent)),
                         Image.asset('Resources/Icons/btn_next_blue.png',
                             width: 28, height: 28),
                       ]),
@@ -136,7 +136,8 @@ class _FindInState extends State<FindPW> {
                       },
                     ),
                   ], // Row Children
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                 ), // Row
                 alignment: Alignment.center),
             SizedBox(height: 40),

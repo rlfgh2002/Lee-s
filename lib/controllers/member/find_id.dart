@@ -68,11 +68,11 @@ class FindID extends StatelessWidget {
                   children: [
                     FlatButton(
                       child: Row(children: [
-                        Text(Strings.shared.controllers.signSelect.button1,
+                        Text(
+                            Strings.shared.controllers.signSelect.button1 + " ",
                             style: TextStyle(
                                 color: Statics.shared.colors.titleTextColor,
-                                fontSize:
-                                    Statics.shared.fontSizes.supplementary)),
+                                fontSize: Statics.shared.fontSizes.subTitle)),
                         Image.asset('Resources/Icons/btn_next_blue.png',
                             width: 28, height: 28),
                       ]),
@@ -84,7 +84,8 @@ class FindID extends StatelessWidget {
                       },
                     ),
                   ], // Row Children
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                 ), // Row
                 alignment: Alignment.center),
             SizedBox(height: 40),

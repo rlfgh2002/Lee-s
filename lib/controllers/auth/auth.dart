@@ -43,7 +43,11 @@ class _AuthState extends State<Auth> {
   StreamSubscription<double> _onScrollXChanged;
   String currentURL = '';
 
-  final _urlCtrl = TextEditingController(text: selectedUrl);
+  //final _urlCtrl = TextEditingController(text: selectedUrl);
+  final _urlCtrl = TextEditingController(
+      text: Strings.shared.controllers.jsonURL.authJson +
+          '?mode=' +
+          userInformation.mode);
   final _codeCtrl = TextEditingController(text: 'window.navigator.userAgent');
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _history = [];
@@ -56,6 +60,8 @@ class _AuthState extends State<Auth> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
+
+    print(_urlCtrl);
 
     return WebviewScaffold(
       url: selectedUrl,

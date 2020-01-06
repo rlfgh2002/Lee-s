@@ -434,7 +434,7 @@ class ChatsState extends State<Chats> {
               this.widget.db.checkConversationExistByUser(
                   userId: searchedItems[i].userId,
                   onResult: (res) {
-                    String chosenTime = "오전 9:30";
+                    String chosenTime = ""; //"오전 9:30";
 
                     ConversationWidget obj = ConversationWidget(
                       title: searchedItems[i].userName,
@@ -476,7 +476,7 @@ class ChatsState extends State<Chats> {
                       badges: 0,
                       avatarLink: "",
                       shortDescription: searchedItems[i].userName,
-                      time: "오전 9:30",
+                      time: "",//"오전 9:30",
                       onTapped: () {
                         String cID = 'xxx'; // Conversation ID
                         User usr = User(
