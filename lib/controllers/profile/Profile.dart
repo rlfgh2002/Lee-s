@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/Inquiry/InquiryList.dart';
 import 'package:haegisa2/controllers/profile/AlarmAgree.dart';
 import 'package:haegisa2/controllers/profile/FeeHistory.dart';
 import 'package:haegisa2/controllers/profile/HumanRights.dart';
-import 'package:haegisa2/controllers/profile/Inquiry.dart';
 import 'package:haegisa2/controllers/profile/Occasion.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -192,7 +192,7 @@ class _ProfileState extends State<Profile> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Inquiry()),
+                                      builder: (context) => InquiryList()),
                                 );
                               },
                             ),

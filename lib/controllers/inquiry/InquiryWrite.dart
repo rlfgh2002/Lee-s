@@ -2,17 +2,28 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/models/inquiry/InquiryListObject.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 
-class Inquiry extends StatefulWidget {
+import 'InquiryList.dart';
+
+class InquiryWrite extends StatefulWidget {
+  int pCurrent = 0;
+  int pTotal = 0;
+
+  InquiryWrite({int pCurrent, int pTotal}) {
+    this.pCurrent = pCurrent;
+    this.pTotal = pTotal;
+  }
+
   @override
   _InquiryState createState() => _InquiryState();
 }
 
-class _InquiryState extends State<Inquiry> {
+class _InquiryState extends State<InquiryWrite> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController _subjectController;
@@ -170,6 +181,11 @@ class _InquiryState extends State<Inquiry> {
                                                 .shared.fontSizes.supplementary,
                                             color: Colors.black)),
                                     onPressed: () {
+                                      // InquiryListState state =
+                                      //     context.findAncestorStateOfType<
+                                      //         State<InquiryList>>();
+                                      // state.refreshList(this.widget.pCurrent,
+                                      //     this.widget.pTotal);
                                       Navigator.of(context).pop(); //팝업닫고
                                       Navigator.of(context).pop(); //이전페이지로
                                     },

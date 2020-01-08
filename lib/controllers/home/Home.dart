@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/Inquiry/InquiryList.dart';
 import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dart';
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
@@ -12,7 +13,6 @@ import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/controllers/profile/Advisory.dart';
 import 'package:haegisa2/controllers/profile/HumanRights.dart';
-import 'package:haegisa2/controllers/profile/Inquiry.dart';
 import 'package:haegisa2/controllers/profile/Occasion.dart';
 import 'package:haegisa2/models/FileDownload/fileDownlaoder.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -642,7 +642,7 @@ class _HomeState extends State<Home> {
                                                 context,
                                                 new MaterialPageRoute(
                                                     builder: (context) =>
-                                                        new Inquiry()));
+                                                        new InquiryList()));
                                           },
                                         ),
                                         Text("1:1문의",

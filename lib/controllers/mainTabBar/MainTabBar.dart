@@ -79,6 +79,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           btnChat = "Resources/Icons/btn_chat.png";
           btnChatAc = "Resources/Icons/btn_chat_ac.png";
         }
+      } else if (type == "notice") {
+        btnNotice = "Resources/Icons/btn_notice_new.png";
       }
     });
   }
@@ -301,11 +303,11 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           setState(() {
             if (message['notificationType'].toString().toLowerCase() ==
                 "chat") {
-              //btnChat = "Resources/Icons/btn_chat_new.png";
-              //btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
+              btnChat = "Resources/Icons/btn_chat_new.png";
+              btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
             } else if (message['notificationType'].toString().toLowerCase() ==
                 "notice") {
-              //btnNotice = "Resources/Icons/btn_notice_new.png";
+              btnNotice = "Resources/Icons/btn_notice_new.png";
             }
           });
         } else {
@@ -314,20 +316,16 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               message['data']['justNotify'] == null) {
             print('MSGX=> on messageX Main $message');
             analiseMessage(message, true, false);
-            setState(() {
-              if (message['data']['notificationType']
-                      .toString()
-                      .toLowerCase() ==
-                  "chat") {
-                //btnChat = "Resources/Icons/btn_chat_new.png";
-                //btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
-              } else if (message['data']['notificationType']
-                      .toString()
-                      .toLowerCase() ==
-                  "notice") {
-                //btnNotice = "Resources/Icons/btn_notice_new.png";
-              }
-            });
+
+            if (message['data']['notificationType'].toString().toLowerCase() ==
+                "chat") {
+              setBadge(context, "chat", true);
+            } else if (message['data']['notificationType']
+                    .toString()
+                    .toLowerCase() ==
+                "notice") {
+              setBadge(context, "notice", true);
+            }
           }
         }
       },
@@ -749,7 +747,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       if (statusCode == 200) {
         if (code == 200) {
           // If the call to the server was successful, parse the JSON
-          if (data != userInformation.appVersion) {
+          //print(int.parse(data.replaceAll(".", "")));
+          //print(int.parse(userInformation.appVersion.replaceAll(".", "")));
+          if (int.parse(data.replaceAll(".", "")) >
+              int.parse(userInformation.appVersion.replaceAll(".", ""))) {
             return showDialog(
                 barrierDismissible: false,
                 context: context,

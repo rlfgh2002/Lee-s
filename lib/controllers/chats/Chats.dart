@@ -319,10 +319,10 @@ class ChatsState extends State<Chats> {
                                             .toString()
                                             .padLeft(2, '0'))) {
                                   chosenTime =
-                                      "${dateSpt[2].toString().padLeft(2, '0')}월 ${dateSpt[1].toString().padLeft(2, '0')}일";
+                                      "${dateSpt[1].toString().padLeft(2, '0')}월 ${dateSpt[2].toString().padLeft(2, '0')}일";
                                 } else {
                                   chosenTime =
-                                      "${dateSpt[0]}.${dateSpt[1].toString().padLeft(2, '0')}.${dateSpt[2].toString().padLeft(2, '0')}";
+                                      "${dateSpt[0]}-${dateSpt[1].toString().padLeft(2, '0')}-${dateSpt[2].toString().padLeft(2, '0')}";
                                 }
                               }
                             }
