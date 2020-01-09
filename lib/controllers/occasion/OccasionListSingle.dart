@@ -9,20 +9,20 @@ import 'dart:convert';
 import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'InquiryList.dart';
+import 'occasionList.dart';
 
-class InquiryListSingle extends StatefulWidget {
+class OccasionListSingle extends StatefulWidget {
   InquiryListObject object;
 
-  InquiryListSingle({InquiryListObject obj}) {
+  OccasionListSingle({InquiryListObject obj}) {
     this.object = obj;
   }
 
   @override
-  _InquiryListOSingleState createState() => _InquiryListOSingleState();
+  _OccasionListSingleState createState() => _OccasionListSingleState();
 }
 
-class _InquiryListOSingleState extends State<InquiryListSingle> {
+class _OccasionListSingleState extends State<OccasionListSingle> {
   final _scaffold = GlobalKey<ScaffoldState>();
 
   _launchURL(String url) async {
@@ -65,7 +65,7 @@ class _InquiryListOSingleState extends State<InquiryListSingle> {
         ),
         onPressed: () {
           Navigator.pop(context,
-              new MaterialPageRoute(builder: (context) => new InquiryList()));
+              new MaterialPageRoute(builder: (context) => new OccasionList()));
         },
         padding: const EdgeInsets.all(0),
       ),
@@ -128,7 +128,7 @@ class _InquiryListOSingleState extends State<InquiryListSingle> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text("1:1문의",
+            child: Text("경조사통보",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontWeight: FontWeight.bold,
@@ -205,5 +205,5 @@ class _InquiryListOSingleState extends State<InquiryListSingle> {
   void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"
       ? true
       : Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new InquiryList()));
+          new MaterialPageRoute(builder: (context) => new OccasionList()));
 }

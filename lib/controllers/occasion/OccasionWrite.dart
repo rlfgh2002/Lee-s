@@ -18,14 +18,12 @@ import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
-import 'Profile.dart';
-
-class Occasion extends StatefulWidget {
+class OccasionWrite extends StatefulWidget {
   @override
   _OccasionState createState() => _OccasionState();
 }
 
-class _OccasionState extends State<Occasion> {
+class _OccasionState extends State<OccasionWrite> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   int holidayType = 0;
 

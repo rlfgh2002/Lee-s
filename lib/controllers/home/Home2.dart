@@ -12,9 +12,9 @@ import 'package:haegisa2/controllers/barcode/Barcode.dart';
 import 'package:haegisa2/controllers/gallery/GalleryList.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
+import 'package:haegisa2/controllers/occasion/occasionList.dart';
 import 'package:haegisa2/controllers/profile/Advisory.dart';
 import 'package:haegisa2/controllers/profile/HumanRights.dart';
-import 'package:haegisa2/controllers/profile/Occasion.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -546,7 +546,7 @@ class _HomeState extends State<Home2> {
                                                 context,
                                                 new MaterialPageRoute(
                                                     builder: (context) =>
-                                                        new Occasion()));
+                                                        new OccasionList()));
                                           },
                                         ),
                                         Text("경조사통보",

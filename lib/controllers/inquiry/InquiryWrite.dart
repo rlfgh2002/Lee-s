@@ -167,7 +167,7 @@ class _InquiryState extends State<InquiryWrite> {
                           builder: (_) => AlertDialog(
                                 title: new Text("접수 완료"),
                                 content: new Text(
-                                    "작성하신 내용은 전송되었습니다 \n빠른시간내 회원님의 이메일로 답변을 보내드리겠습니다.",
+                                    "작성하신 내용은 전송되었습니다 \n빠른시간내 답변을 보내드리겠습니다.",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: Statics
@@ -187,7 +187,7 @@ class _InquiryState extends State<InquiryWrite> {
                                       // state.refreshList(this.widget.pCurrent,
                                       //     this.widget.pTotal);
                                       Navigator.of(context).pop(); //팝업닫고
-                                      Navigator.of(context).pop(); //이전페이지로
+                                      Navigator.pop(context, true); //이전페이지로
                                     },
                                   ),
                                 ],

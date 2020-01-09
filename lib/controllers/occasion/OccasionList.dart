@@ -3,32 +3,28 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/Inquiry/InquiryWrite.dart';
-import 'package:haegisa2/controllers/NoticesList/NoticesListSingle.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/controllers/mainTabBar/MiddleWare.dart';
-import 'package:haegisa2/models/NoticesList/NoticesListObject.dart';
-import 'package:haegisa2/models/inquiry/InquiryListObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:haegisa2/views/inquiry/InquiryListWidget.dart';
+import 'package:haegisa2/occasion/OccasionListObject.dart';
+import 'package:haegisa2/views/occasion/OccasionListWidget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'InquiryListSingle.dart';
-
-class InquiryList extends StatefulWidget {
+class OccasionList extends StatefulWidget {
   bool isFirstInit = true;
-  InquiryList({Key key}) : super(key: key);
+  OccasionList({Key key}) : super(key: key);
   List<Widget> myList = [];
   List<Widget> inquiryList = [];
 
   @override
-  InquiryListState createState() => InquiryListState();
+  OccasionListState createState() => OccasionListState();
 }
 
-class InquiryListState extends State<InquiryList> {
+class OccasionListState extends State<OccasionList> {
   final _scaffold = GlobalKey<ScaffoldState>();
 
   _getRequests() async {
@@ -44,7 +40,7 @@ class InquiryListState extends State<InquiryList> {
       child: Stack(
         children: [
           Image.asset(
-            "Resources/Images/noticeListHeader.png",
+            "Resources/Images/occasion.png",
             width: screenWidth,
             height: 100,
           ),
@@ -139,14 +135,14 @@ class InquiryListState extends State<InquiryList> {
 
         int code = myJson["code"];
         if (code == 200) {
-          List<InquiryListObject> myReturnList = [];
+          List<OccasionListObject> myReturnList = [];
           int pTotal = myJson["totalPageNum"];
           int pCurrent = myJson["nowPageNum"];
           List<dynamic> rows = myJson["rows"];
 
           List<Widget> newList = [];
           rows.forEach((item) {
-            InquiryListObject object = InquiryListObject(
+            OccasionListObject object = OccasionListObject(
               no: item["no"],
               subject: item["subject"].toString(),
               contents: item["contents"].toString(),
@@ -156,14 +152,14 @@ class InquiryListState extends State<InquiryList> {
               commentdate: item["commentdate"].toString(),
             );
 
-            newList.add(InquiryListWidget(
+            newList.add(OccasionListWidget(
                 obj: object,
                 onTap: () {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
                           builder: (context) =>
-                              new InquiryListSingle(obj: object)));
+                              new OccasionListWidget(obj: object)));
                 }));
           });
           if (page == 1) {
@@ -202,7 +198,7 @@ class InquiryListState extends State<InquiryList> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text("1:1문의",
+            child: Text("경조사통보",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontSize: Statics.shared.fontSizes.subTitle,
