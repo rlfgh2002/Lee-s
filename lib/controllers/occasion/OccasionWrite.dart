@@ -6,15 +6,12 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:haegisa2/controllers/home/Home.dart';
-import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
+import 'package:haegisa2/controllers/home/Home2.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 //import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
@@ -63,7 +60,7 @@ class _OccasionState extends State<OccasionWrite> {
   String etc;
   String filePath;
   int radioType;
-
+  int requestCode;
   String _value = '';
 
   String _fileName;
@@ -153,8 +150,8 @@ class _OccasionState extends State<OccasionWrite> {
             Colors.black // Dark == white status bar -- for IOS.
         ));
 
-    double deviceWidth = MediaQuery.of(context).size.width;
-    double deviceHeight = MediaQuery.of(context).size.height;
+    deviceWidth = MediaQuery.of(context).size.width;
+    deviceHeight = MediaQuery.of(context).size.height;
     setSelectedRadio(int val) {
       setState(() {
         holidayType = val;
@@ -439,47 +436,55 @@ class _OccasionState extends State<OccasionWrite> {
 
                   String title = "";
                   String content = "";
-                  if (await submit(
-                          Strings.shared.controllers.jsonURL.occasionJson,
-                          body: postMap) ==
-                      200) {
-                    title = "전송 완료";
-                    content = "전송이 완료되었습니다.";
-                  } else {
-                    title = "전송 실패";
-                    content = "전송이 실패했습니다. \n관리자에게 연락바랍니다.";
+
+                  Future<int> token() async {
+                    await submit(
+                        Strings.shared.controllers.jsonURL.occasionJson,
+                        body: postMap);
+
+                    return requestCode;
                   }
 
-                  print(title);
+                  token().then((value) {
+                    print(value);
+                    if (value == 200) {
+                      title = "전송 완료";
+                      content = "전송이 완료되었습니다.";
+                    } else {
+                      title = "전송 실패";
+                      content = "전송이 실패했습니다. \n자에게 연락바랍니다.";
+                    }
 
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (_) => AlertDialog(
-                            title: new Text(title),
-                            content: new Text(content,
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            actions: <Widget>[
-                              // usually buttons at the bottom of the dialog
-                              new FlatButton(
-                                child: new Text(
-                                  "확인",
-                                  style: TextStyle(
-                                      fontSize: Statics
-                                          .shared.fontSizes.supplementary,
-                                      color: Colors.black),
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => AlertDialog(
+                              title: new Text(title),
+                              content: new Text(content,
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              actions: <Widget>[
+                                // usually buttons at the bottom of the dialog
+                                new FlatButton(
+                                  child: new Text(
+                                    "확인",
+                                    style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Colors.black),
+                                  ),
+                                  onPressed: () {
+                                    if (title == "전송 완료") {
+                                      Navigator.of(context).pop(); //팝업닫고
+                                      Navigator.of(context).pop(); //이전페이지로
+                                    } else {
+                                      Navigator.of(context).pop(); //팝업만 닫기
+                                    }
+                                  },
                                 ),
-                                onPressed: () {
-                                  if (title == "전송 완료") {
-                                    Navigator.of(context).pop(); //팝업닫고
-                                    Navigator.of(context).pop(); //이전페이지로
-                                  } else {
-                                    Navigator.of(context).pop(); //팝업만 닫기
-                                  }
-                                },
-                              ),
-                            ],
-                          ));
+                              ],
+                            ));
+                  });
                 }))
       ]),
     );
@@ -592,7 +597,7 @@ class _OccasionState extends State<OccasionWrite> {
 
   Widget weddingForm() {
     List<KeyValueModel> _money = [
-      KeyValueModel(key: "경조비 지급방식 선택", value: "0"),
+      KeyValueModel(key: "경조비 식 선택", value: "0"),
       KeyValueModel(key: "화환", value: "1"),
       KeyValueModel(key: "축의금[계좌이체]", value: "2")
     ];
@@ -600,7 +605,7 @@ class _OccasionState extends State<OccasionWrite> {
     List<KeyValueModel> _wedding = [
       KeyValueModel(key: "본인/자녀 대상자 선택", value: "0"),
       KeyValueModel(key: "본인결혼", value: "1"),
-      KeyValueModel(key: "자녀결혼", value: "2")
+      KeyValueModel(key: "자녀���혼", value: "2")
     ];
 
     return Column(children: <Widget>[
@@ -889,13 +894,13 @@ class _OccasionState extends State<OccasionWrite> {
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankUser", null, TextInputType.text,
-                            20, "���금주명", bankUser, _bankUserChecked)),
+                            20, "예금금주명", bankUser, _bankUserChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
                         height: MediaQuery.of(context).size.height / 11,
                         child: txtField("bankName", null, TextInputType.text,
-                            20, "��행명", bankName, _bankNameChecked)),
+                            20, "은행명", bankName, _bankNameChecked)),
                     SizedBox(height: 5),
                     Container(
                         alignment: Alignment.center,
@@ -1082,7 +1087,11 @@ class _OccasionState extends State<OccasionWrite> {
 
   submit(String url, {Map body}) async {
     print(body['upfile01']);
+    // string to uri
+    var uri = Uri.parse(url);
 
+    // create multipart request
+    var request = new http.MultipartRequest("POST", uri);
     if (body['upfile01'] != "" && body['upfile01'] != null) {
       File imageFile = new File(body['upfile01']);
       var stream =
@@ -1090,78 +1099,54 @@ class _OccasionState extends State<OccasionWrite> {
       // get file length
       var length = await imageFile.length();
 
-      // string to uri
-      var uri = Uri.parse(url);
-
-      // create multipart request
-      var request = new http.MultipartRequest("POST", uri);
-
       // multipart that takes file
       var multipartFile = new http.MultipartFile('upfile01', stream, length,
           filename: path.basename(imageFile.path));
 
       // add file to multipart
       request.files.add(multipartFile);
-      request.fields['mode'] = nullCheck(body['mode']);
-      request.fields['user_id'] = nullCheck(body['user_id']);
-      request.fields['email'] = nullCheck(body['email']);
-      request.fields['user_name'] = nullCheck(body['user_name']);
-      request.fields['user_idx'] = nullCheck(body['user_idx']);
-      request.fields['member_type'] = nullCheck(body['member_type']);
-      request.fields['member_name'] = nullCheck(body['member_name']);
-      request.fields['birth'] = nullCheck(body['birth']);
-      request.fields['company'] = nullCheck(body['company']);
-      request.fields['position'] = nullCheck(body['position']);
-      request.fields['phone'] = nullCheck(body['phone']);
-      request.fields['holiday_type'] = nullCheck(body['holiday_type']);
-      request.fields['holiday_type2'] = nullCheck(body['holiday_type2']);
-      request.fields['money_type'] = nullCheck(body['money_type']);
-      request.fields['bank_user'] = nullCheck(body['bank_user']);
-      request.fields['bank_name'] = nullCheck(body['bank_name']);
-      request.fields['bank_num'] = nullCheck(body['bank_num']);
-      request.fields['addr'] = nullCheck(body['addr']);
-      request.fields['holiday_date'] = nullCheck(body['holiday_date']);
-      request.fields['etc'] = nullCheck(body['etc']);
-
-      // send
-      request
-          .send()
-          .then((result) async {
-            http.Response.fromStream(result).then((response) {
-              final String responseBody = utf8.decode(response.bodyBytes);
-              var responseJSON = json.decode(responseBody);
-              var code = responseJSON["code"];
-              if (response.statusCode == 200) {
-                print("Uploaded! ");
-                print('response.body ' + response.body);
-
-                return code;
-              } else {
-                return "error";
-              }
-            });
-          })
-          .catchError((err) => throw Exception('error : ' + err.toString()))
-          .whenComplete(() {});
-    } else {
-      return http.post(url, body: body).then((http.Response response) {
-        final int statusCode = response.statusCode;
-        //final String responseBody = response.body; //한글 깨짐
-        final String responseBody = utf8.decode(response.bodyBytes);
-        var responseJSON = json.decode(responseBody);
-        var code = responseJSON["code"];
-
-        if (statusCode == 200) {
-          if (code == 200) {
-            // If the call to the server was successful, parse the JSON
-          }
-          return code;
-        } else {
-          // If that call was not successful, throw an error.
-          return "error";
-        }
-      });
     }
+    request.fields['mode'] = nullCheck(body['mode']);
+    request.fields['user_id'] = nullCheck(body['user_id']);
+    request.fields['email'] = nullCheck(body['email']);
+    request.fields['user_name'] = nullCheck(body['user_name']);
+    request.fields['user_idx'] = nullCheck(body['user_idx']);
+    request.fields['member_type'] = nullCheck(body['member_type']);
+    request.fields['member_name'] = nullCheck(body['member_name']);
+    request.fields['birth'] = nullCheck(body['birth']);
+    request.fields['company'] = nullCheck(body['company']);
+    request.fields['position'] = nullCheck(body['position']);
+    request.fields['phone'] = nullCheck(body['phone']);
+    request.fields['holiday_type'] = nullCheck(body['holiday_type']);
+    request.fields['holiday_type2'] = nullCheck(body['holiday_type2']);
+    request.fields['money_type'] = nullCheck(body['money_type']);
+    request.fields['bank_user'] = nullCheck(body['bank_user']);
+    request.fields['bank_name'] = nullCheck(body['bank_name']);
+    request.fields['bank_num'] = nullCheck(body['bank_num']);
+    request.fields['addr'] = nullCheck(body['addr']);
+    request.fields['holiday_date'] = nullCheck(body['holiday_date']);
+    request.fields['etc'] = nullCheck(body['etc']);
+
+    // send
+    request
+        .send()
+        .then((result) async {
+          http.Response.fromStream(result).then((response) {
+            final String responseBody = utf8.decode(response.bodyBytes);
+            var responseJSON = json.decode(responseBody);
+            var code = responseJSON["code"];
+            if (response.statusCode == 200) {
+              print("Uploaded! ");
+              print('response.body ' + response.body);
+
+              requestCode = code;
+            } else {
+              requestCode = code;
+            }
+          });
+        })
+        .catchError((err) => throw Exception('error : ' + err.toString()))
+        .whenComplete(() {});
   }
 }
 

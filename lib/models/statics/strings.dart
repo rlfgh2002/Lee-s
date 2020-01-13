@@ -56,7 +56,7 @@ class _StringsControllers {
 
 // HOME Controller //
 class _StringsControllerHome {
-  String cnter = "종합서비스센터";
+  String center = "종합서비스센터";
 }
 // HOME Controller //
 

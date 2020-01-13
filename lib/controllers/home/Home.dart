@@ -29,6 +29,7 @@ import '../NoticesList/NoticesListSingle.dart';
 import 'HomeWebview.dart';
 
 double deviceWidth;
+double deviceHeight;
 var noticeList = [];
 var introList = [];
 var memberTotal = "";

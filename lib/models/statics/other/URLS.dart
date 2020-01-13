@@ -35,6 +35,10 @@ class URLS {
     return "http://mariners.or.kr/app_middle/etc/qna_json.php?&mode=${mode.toString()}&userId=${userId.toString()}&pageNum=${page.toString()}";
   }
 
+  String occasion({String mode, String user_id, int page = 0}) {
+    return "http://mariners.or.kr/app_middle/etc/occasion_json.php?&mode=${mode.toString()}&user_id=${user_id.toString()}&pageNum=${page.toString()}";
+  }
+
   String galleryList({int page = 0}) {
     return "http://mariners.or.kr/app_middle/etc/gallery_json.php?mode=list&pageNum=${page.toString()}";
   }

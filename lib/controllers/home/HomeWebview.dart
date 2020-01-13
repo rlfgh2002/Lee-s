@@ -15,7 +15,7 @@ class HomeWebview extends StatefulWidget {
 
 class _HomeWebviewState extends State<HomeWebview> {
   // Instance of WebView plugin
-  final flutterWebviewPlugin = FlutterWebviewPlugin();
+  final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
   static String selectedUrl = "";
   String title = "";
@@ -44,11 +44,13 @@ class _HomeWebviewState extends State<HomeWebview> {
         ));
 
     selectedUrl = Strings.shared.controllers.jsonURL.center;
-    title = Strings.shared.controllers.home.cnter;
+    title = Strings.shared.controllers.home.center;
 
     //MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
+
     return WebviewScaffold(
       url: selectedUrl,
+      hidden: true,
       appBar: AppBar(
         title: Text(title,
             style: TextStyle(
@@ -63,20 +65,26 @@ class _HomeWebviewState extends State<HomeWebview> {
       ),
       withZoom: true,
       withLocalStorage: true,
-      hidden: true,
+
       withJavascript: true,
-      initialChild: Container(
-        //color: Colors.redAccent,
-        child: const Center(
-          child: Text('잠시만 기다려주세요..'),
-        ),
-      ),
+      clearCache: true,
+      clearCookies: true,
+
+      // initialChild: Container(
+      //   //color: Colors.redAccent,
+      //   child: const Center(
+      //     child: Text('잠시만 기다려주세요..'),
+      //   ),
+      // ),
     );
   }
 
   @override
   void initState() {
     super.initState();
+
+    flutterWebviewPlugin.close();
+    flutterWebviewPlugin.reload();
 
     _urlCtrl.addListener(() {
       selectedUrl = _urlCtrl.text;
@@ -85,6 +93,7 @@ class _HomeWebviewState extends State<HomeWebview> {
     // Add a listener to on destroy WebView, so you can make came actions.
     _onDestroy = flutterWebviewPlugin.onDestroy.listen((_) {
       if (mounted) {
+        print("Webview Destroyed");
         // Actions like show a info toast.
         _scaffoldKey.currentState.showSnackBar(
             const SnackBar(content: const Text('Webview Destroyed')));

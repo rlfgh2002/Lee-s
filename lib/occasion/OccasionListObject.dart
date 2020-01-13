@@ -5,11 +5,22 @@ class OccasionListObject {
 
   String subject = "";
   String contents = "";
-  String regDate = "";
-  String answer = "";
+  String serverFileName_1 = "";
+  String realFileName1 = "";
+  String fileUrl_1 = "";
+
+  String serverFileName_2 = "";
+  String realFileName2 = "";
+  String fileUrl_2 = "";
+
+  String serverFileName_3 = "";
+  String realFileName3 = "";
+  String fileUrl_3 = "";
+
+  String serverFileName_4 = "";
+  String realFileName4 = "";
+  String fileUrl_4 = "";
   String regdate = "";
-  String comment = "";
-  String commentdate = "";
 
   OccasionListObject(
       {int no = 0,
@@ -18,19 +29,36 @@ class OccasionListObject {
       String subject,
       String contents,
       String regDate,
-      String answer,
-      String regdate,
-      String comment,
-      String commentdate}) {
+      String serverFileName_1,
+      String realFileName1,
+      String fileUrl_1,
+      String serverFileName_2,
+      String realFileName2,
+      String fileUrl_2,
+      String serverFileName_3,
+      String realFileName3,
+      String fileUrl_3,
+      String serverFileName_4,
+      String realFileName4,
+      String fileUrl_4,
+      String regdate}) {
     this.no = no;
     this.pTotal = pTotal;
     this.pCurrent = pCurrent;
     this.subject = subject;
     this.contents = contents;
-    this.regDate = regDate;
-    this.answer = answer;
+    this.serverFileName_1 = serverFileName_1;
+    this.realFileName1 = realFileName1;
+    this.fileUrl_1 = fileUrl_1;
+    this.serverFileName_2 = serverFileName_2;
+    this.realFileName2 = realFileName2;
+    this.fileUrl_2 = fileUrl_2;
+    this.serverFileName_3 = serverFileName_3;
+    this.realFileName3 = realFileName3;
+    this.fileUrl_3 = fileUrl_3;
+    this.serverFileName_4 = serverFileName_4;
+    this.realFileName4 = realFileName4;
+    this.fileUrl_4 = fileUrl_4;
     this.regdate = regdate;
-    this.comment = comment;
-    this.commentdate = commentdate;
   }
 }

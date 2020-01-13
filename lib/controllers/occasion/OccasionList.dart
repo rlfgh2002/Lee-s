@@ -10,15 +10,19 @@ import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/occasion/OccasionListObject.dart';
+import 'package:haegisa2/views/null/nullPage.dart';
 import 'package:haegisa2/views/occasion/OccasionListWidget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'OccasionListSingle.dart';
+import 'OccasionWrite.dart';
 
 class OccasionList extends StatefulWidget {
   bool isFirstInit = true;
   OccasionList({Key key}) : super(key: key);
   List<Widget> myList = [];
-  List<Widget> inquiryList = [];
+  List<Widget> occasionList = [];
 
   @override
   OccasionListState createState() => OccasionListState();
@@ -63,7 +67,7 @@ class OccasionListState extends State<OccasionList> {
       child: FlatButton(
         child: Container(
           color: Statics.shared.colors.mainColor,
-          child: Text("문의하기",
+          child: Text("글쓰기",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: Statics.shared.fontSizes.supplementary,
@@ -73,7 +77,7 @@ class OccasionListState extends State<OccasionList> {
         onPressed: () {
           Navigator.of(context)
               .push(
-                new MaterialPageRoute(builder: (_) => new InquiryWrite()),
+                new MaterialPageRoute(builder: (_) => new OccasionWrite()),
               )
               .then((val) => val
                   ? _getRequests()
@@ -90,7 +94,7 @@ class OccasionListState extends State<OccasionList> {
     );
     widget.myList.add(writeButton);
 
-    widget.myList.addAll(this.widget.inquiryList); // fetch from server
+    widget.myList.addAll(this.widget.occasionList); // fetch from server
 
     if (pTotal > pCurrent) {
       Widget downloadMoreView = Container(
@@ -105,7 +109,7 @@ class OccasionListState extends State<OccasionList> {
           ),
           onPressed: () {
             // download 5 more magazines ...
-            this.download5MoreInquiry(page: pCurrent + 1);
+            this.download5MoreOccasion(page: pCurrent + 1);
           },
           padding: const EdgeInsets.all(0),
         ),
@@ -122,14 +126,14 @@ class OccasionListState extends State<OccasionList> {
     setState(() {});
   }
 
-  void download5MoreInquiry({int page = 1}) async {
+  void download5MoreOccasion({int page = 1}) async {
     http
-        .get(Statics.shared.urls
-            .inquiry(mode: "list", userId: userInformation.userID, page: page))
+        .get(Statics.shared.urls.occasion(
+            mode: "list", user_id: userInformation.userID, page: page))
         .then((val) {
       if (val.statusCode == 200) {
         print(
-            "::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
+            "::::::::::::::::::::: [ Getting OccasionList Start ] :::::::::::::::::::::");
         print("BODY: ${val.body.toString()}");
         var myJson = json.decode(utf8.decode(val.bodyBytes));
 
@@ -146,10 +150,19 @@ class OccasionListState extends State<OccasionList> {
               no: item["no"],
               subject: item["subject"].toString(),
               contents: item["contents"].toString(),
-              regDate: item["regdate"].toString(),
-              answer: item["answer"].toString(),
-              comment: item["comment"].toString(),
-              commentdate: item["commentdate"].toString(),
+              regdate: item["regdate"].toString(),
+              fileUrl_1: item["fileUrl_1"].toString(),
+              fileUrl_2: item["fileUrl_2"].toString(),
+              fileUrl_3: item["fileUrl_3"].toString(),
+              fileUrl_4: item["fileUrl_4"].toString(),
+              realFileName1: item["realFileName1"].toString(),
+              realFileName2: item["realFileName2"].toString(),
+              realFileName3: item["realFileName3"].toString(),
+              realFileName4: item["realFileName4"].toString(),
+              serverFileName_1: item["serverFileName_1"].toString(),
+              serverFileName_2: item["serverFileName_2"].toString(),
+              serverFileName_3: item["serverFileName_3"].toString(),
+              serverFileName_4: item["serverFileName_4"].toString(),
             );
 
             newList.add(OccasionListWidget(
@@ -159,25 +172,30 @@ class OccasionListState extends State<OccasionList> {
                       context,
                       new MaterialPageRoute(
                           builder: (context) =>
-                              new OccasionListWidget(obj: object)));
+                              new OccasionListSingle(obj: object)));
                 }));
           });
           if (page == 1) {
-            this.widget.inquiryList = newList;
+            this.widget.occasionList = newList;
           } else {
-            this.widget.inquiryList.addAll(newList);
+            this.widget.occasionList.addAll(newList);
           }
           this.refreshList(pCurrent, pTotal);
+        } else if (code == 100) {
+          List<Widget> newList = [];
+          newList.add(NullPage());
+          this.widget.occasionList = newList;
+          this.refreshList(0, 0);
         }
         print(
-            "::::::::::::::::::::: [ Getting NoticesList End ] :::::::::::::::::::::");
+            "::::::::::::::::::::: [ Getting OccasionList End ] :::::::::::::::::::::");
       } else {
         print(
-            ":::::::::::::::::: on Getting NoticesList error :: Server Error ::::::::::::::::::");
+            ":::::::::::::::::: on Getting OccasionList error :: Server Error ::::::::::::::::::");
       }
     }).catchError((error) {
       print(
-          ":::::::::::::::::: on Getting NoticesList error : ${error.toString()} ::::::::::::::::::");
+          ":::::::::::::::::: on Getting OccasionList error : ${error.toString()} ::::::::::::::::::");
     });
   }
 
@@ -189,7 +207,7 @@ class OccasionListState extends State<OccasionList> {
             Colors.black // Dark == white status bar -- for IOS.
         ));
     if (widget.isFirstInit) {
-      download5MoreInquiry(page: 1);
+      download5MoreOccasion(page: 1);
       widget.isFirstInit = false;
     }
 

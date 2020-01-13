@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:haegisa2/models/inquiry/InquiryListObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
+import 'package:haegisa2/occasion/OccasionListObject.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_html_view/flutter_html_view.dart';
@@ -12,9 +12,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'occasionList.dart';
 
 class OccasionListSingle extends StatefulWidget {
-  InquiryListObject object;
+  OccasionListObject object;
 
-  OccasionListSingle({InquiryListObject obj}) {
+  OccasionListSingle({OccasionListObject obj}) {
     this.object = obj;
   }
 
@@ -77,52 +77,141 @@ class _OccasionListSingleState extends State<OccasionListSingle> {
       margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
     );
 
-    bool isAnswer = false;
-    Widget answer = Container();
+    Widget files = Container();
+    bool isThereAnyFiles = false;
+    List<FlatButton> myFilesList = [];
 
-    List<Container> answerList = [];
-
-    if (this.widget.object.answer == "Y") {
-      isAnswer = true;
-      answerList.add(
-        Container(
-            width: screenWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    if (this.widget.object.fileUrl_1.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
               children: <Widget>[
-                Text(
-                  this.widget.object.comment,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
                 ),
-                SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  this.widget.object.commentdate,
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: Statics.shared.fontSizes.small,
-                      fontWeight: FontWeight.w200),
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
-                )
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(
+                      this.widget.object.realFileName1.toString(),
+                      maxLines: 1,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                    )),
               ],
-            )),
-      );
-    }
-
-    if (isAnswer) {
-      answer = Container(
-        color: Color.fromRGBO(244, 248, 255, 1),
-        padding:
-            const EdgeInsets.only(bottom: 16, top: 16, left: 20, right: 20),
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 32),
-        child: Column(
-          children: answerList,
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_1);
+          },
         ),
       );
     }
+
+    if (this.widget.object.fileUrl_2.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
+                ),
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(
+                      this.widget.object.realFileName2.toString(),
+                      maxLines: 1,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+              ],
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_2);
+          },
+        ),
+      );
+    }
+
+    if (this.widget.object.fileUrl_3.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
+                ),
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(
+                      this.widget.object.realFileName3.toString(),
+                      maxLines: 1,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+              ],
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_3);
+          },
+        ),
+      );
+    }
+
+    if (this.widget.object.fileUrl_4.isNotEmpty) {
+      isThereAnyFiles = true;
+      myFilesList.add(
+        FlatButton(
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Image.asset(
+                  "Resources/Icons/icon_file.png",
+                  height: 25,
+                ),
+                SizedBox(width: 10),
+                Container(
+                    width: screenWidth / 1.7,
+                    child: Text(
+                      this.widget.object.realFileName4.toString(),
+                      maxLines: 1,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                    )),
+              ],
+            ),
+          ),
+          onPressed: () {
+            _launchURL(this.widget.object.fileUrl_4);
+          },
+        ),
+      );
+    }
+
+    if (isThereAnyFiles) {
+      files = Container(
+        color: Color.fromRGBO(244, 248, 255, 1),
+        padding: const EdgeInsets.only(bottom: 16, top: 16, left: 8, right: 8),
+        margin: const EdgeInsets.only(left: 32, right: 32, top: 20, bottom: 32),
+        child: Column(
+          children: myFilesList,
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -175,7 +264,7 @@ class _OccasionListSingleState extends State<OccasionListSingle> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      this.widget.object.regDate,
+                      this.widget.object.regdate,
                       style: TextStyle(
                         fontSize: Statics.shared.fontSizes.medium,
                         color: Statics.shared.colors.captionColor,
@@ -186,12 +275,12 @@ class _OccasionListSingleState extends State<OccasionListSingle> {
                 ),
                 padding: const EdgeInsets.only(left: 32, right: 32)),
             greySplitter,
+            files,
             HtmlView(
               data: this.widget.object.contents,
               scrollable: false,
               padding: const EdgeInsets.only(left: 40, right: 40),
             ),
-            answer,
             greySplitter,
             listBtn
           ], // Children
