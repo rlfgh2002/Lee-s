@@ -961,7 +961,7 @@ class UserInfoState extends State<UserInfo> {
   infoModify(String url, {Map body}) async {
     return http.post(url, body: body).then((http.Response response) {
       final int statusCode = response.statusCode;
-      //final String responseBody = response.body; //한글 깨��
+      //final String responseBody = response.body; //한글 깨짐
       final String responseBody = utf8.decode(response.bodyBytes);
       var responseJSON = json.decode(responseBody);
       var code = responseJSON["code"];

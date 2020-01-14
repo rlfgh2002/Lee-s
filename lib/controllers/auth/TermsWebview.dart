@@ -53,7 +53,7 @@ class _TermsView extends State<TermsView> {
       title = Strings.shared.controllers.term.terms_policy_title;
     }
     //MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
-    return WebviewScaffold(
+    return new WebviewScaffold(
       url: selectedUrl,
       appBar: AppBar(
         title: Text(title,
@@ -69,14 +69,16 @@ class _TermsView extends State<TermsView> {
       ),
       withZoom: true,
       withLocalStorage: true,
-      hidden: true,
       withJavascript: true,
-      initialChild: Container(
-        //color: Colors.redAccent,
-        child: const Center(
-          child: Text('잠시만 기다려주세요..'),
-        ),
-      ),
+      clearCache: true,
+      clearCookies: true,
+      hidden: false,
+      // initialChild: Container(
+      //   //color: Colors.redAccent,
+      //   child: const Center(
+      //     child: Text('잠시만 기다려주세요..'),
+      //   ),
+      // ),
     );
   }
 

@@ -483,7 +483,7 @@ class _HomeState extends State<Home2> {
                                                         new SurveysTabs()));
                                           },
                                         ),
-                                        Text("설문조사",
+                                        Text("설문합사",
                                             style: TextStyle(
                                                 color: Statics.shared.colors
                                                     .titleTextColor,

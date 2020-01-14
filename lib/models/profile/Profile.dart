@@ -135,7 +135,7 @@ class RequestMember extends StatelessWidget {
                         textAlign: TextAlign.left,
                       ),
                       Text(
-                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습��다.",
+                        "※ 전환신청하시면 협회에서 빠른시간내에 연락드리겠습니다.",
                         style: TextStyle(
                           color: Statics.shared.colors.subTitleTextColor,
                           fontSize: Statics.shared.fontSizes.supplementary,

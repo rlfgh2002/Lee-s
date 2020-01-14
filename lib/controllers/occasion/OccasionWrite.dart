@@ -434,9 +434,6 @@ class _OccasionState extends State<OccasionWrite> {
                   postMap["holiday_date"] = date;
                   postMap["etc"] = etc;
 
-                  String title = "";
-                  String content = "";
-
                   Future<int> token() async {
                     await submit(
                         Strings.shared.controllers.jsonURL.occasionJson,
@@ -447,47 +444,40 @@ class _OccasionState extends State<OccasionWrite> {
 
                   token().then((value) {
                     print(value);
-                    if (value == 200) {
-                      title = "전송 완료";
-                      content = "전송이 완료되었습니다.";
-                    } else {
-                      title = "전송 실패";
-                      content = "전송이 실패했습니다. \n자에게 연락바랍니다.";
-                    }
-
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (_) => AlertDialog(
-                              title: new Text(title),
-                              content: new Text(content,
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              actions: <Widget>[
-                                // usually buttons at the bottom of the dialog
-                                new FlatButton(
-                                  child: new Text(
-                                    "확인",
-                                    style: TextStyle(
-                                        fontSize: Statics
-                                            .shared.fontSizes.supplementary,
-                                        color: Colors.black),
-                                  ),
-                                  onPressed: () {
-                                    if (title == "전송 완료") {
-                                      Navigator.of(context).pop(); //팝업닫고
-                                      Navigator.of(context).pop(); //이전페이지로
-                                    } else {
-                                      Navigator.of(context).pop(); //팝업만 닫기
-                                    }
-                                  },
-                                ),
-                              ],
-                            ));
                   });
                 }))
       ]),
     );
+  }
+
+  submitDialog(String title, String content) {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => AlertDialog(
+              title: new Text(title),
+              content: new Text(content,
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text(
+                    "확인",
+                    style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.supplementary,
+                        color: Colors.black),
+                  ),
+                  onPressed: () {
+                    if (title == "전송 완료") {
+                      Navigator.of(context).pop(); //업닫고
+                      Navigator.pop(context, true); //이전페이지로
+                    } else {
+                      Navigator.of(context).pop(); //팝업만 닫기
+                    }
+                  },
+                ),
+              ],
+            ));
   }
 
   _displaySnackBar(BuildContext context, String str) {
@@ -603,9 +593,9 @@ class _OccasionState extends State<OccasionWrite> {
     ];
 
     List<KeyValueModel> _wedding = [
-      KeyValueModel(key: "본인/자녀 대상자 선택", value: "0"),
+      KeyValueModel(key: "본인/녀 대상자 선택", value: "0"),
       KeyValueModel(key: "본인결혼", value: "1"),
-      KeyValueModel(key: "자녀���혼", value: "2")
+      KeyValueModel(key: "자녀결혼", value: "2")
     ];
 
     return Column(children: <Widget>[
@@ -841,7 +831,7 @@ class _OccasionState extends State<OccasionWrite> {
 
   Widget deathForm() {
     List<KeyValueModel> _money = [
-      KeyValueModel(key: "경조비 지급방식 선택", value: "0"),
+      KeyValueModel(key: "���조비 지급방식 선택", value: "0"),
       KeyValueModel(key: "화환", value: "1"),
       KeyValueModel(key: "축의금[계좌이체]", value: "2"),
     ];
@@ -1135,13 +1125,27 @@ class _OccasionState extends State<OccasionWrite> {
             final String responseBody = utf8.decode(response.bodyBytes);
             var responseJSON = json.decode(responseBody);
             var code = responseJSON["code"];
+            print(responseJSON["qry"]);
             if (response.statusCode == 200) {
               print("Uploaded! ");
               print('response.body ' + response.body);
-
               requestCode = code;
             } else {
+              print('response.body ' + response.body);
               requestCode = code;
+            }
+
+            if (requestCode != null) {
+              String title;
+              String content;
+              if (requestCode == 200) {
+                title = "전송 완료";
+                content = "전송이 완료되었습니다.";
+              } else {
+                title = "전송 실패";
+                content = "전송이 실패했습니다. \n관리자에게 연락바랍니다.";
+              }
+              submitDialog(title, content);
             }
           });
         })

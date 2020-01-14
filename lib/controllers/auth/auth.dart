@@ -74,14 +74,16 @@ class _AuthState extends State<Auth> {
       ),
       withZoom: true,
       withLocalStorage: true,
-      hidden: true,
       withJavascript: true,
-      initialChild: Container(
-        //color: Colors.redAccent,
-        child: const Center(
-          child: Text('잠시만 기다려주세요..'),
-        ),
-      ),
+      clearCache: true,
+      clearCookies: true,
+      hidden: false,
+      // initialChild: Container(
+      //   //color: Colors.redAccent,
+      //   child: const Center(
+      //     child: Text('잠시만 기다려주세요..'),
+      //   ),
+      // ),
       // bottomNavigationBar: BottomAppBar(
       //   child: Row(
       //     children: <Widget>[

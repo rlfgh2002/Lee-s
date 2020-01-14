@@ -47,10 +47,8 @@ class _HomeWebviewState extends State<HomeWebview> {
     title = Strings.shared.controllers.home.center;
 
     //MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
-
-    return WebviewScaffold(
+    return new WebviewScaffold(
       url: selectedUrl,
-      hidden: true,
       appBar: AppBar(
         title: Text(title,
             style: TextStyle(
@@ -65,11 +63,10 @@ class _HomeWebviewState extends State<HomeWebview> {
       ),
       withZoom: true,
       withLocalStorage: true,
-
       withJavascript: true,
       clearCache: true,
       clearCookies: true,
-
+      hidden: false,
       // initialChild: Container(
       //   //color: Colors.redAccent,
       //   child: const Center(
@@ -82,9 +79,6 @@ class _HomeWebviewState extends State<HomeWebview> {
   @override
   void initState() {
     super.initState();
-
-    flutterWebviewPlugin.close();
-    flutterWebviewPlugin.reload();
 
     _urlCtrl.addListener(() {
       selectedUrl = _urlCtrl.text;
