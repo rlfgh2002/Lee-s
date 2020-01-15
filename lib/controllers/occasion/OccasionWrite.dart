@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:convert';
+import 'package:camera/new/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:haegisa2/controllers/cameraScreen/CameraScreen.dart';
 import 'package:haegisa2/controllers/home/Home2.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -87,6 +88,7 @@ class _OccasionState extends State<OccasionWrite> {
     _birthController = new TextEditingController(text: birth);
     _companyController = new TextEditingController(text: company);
     _phoneController = new TextEditingController(text: phone);
+
     _fileController.addListener(() => _extension = _fileController.text);
   }
 
@@ -395,7 +397,7 @@ class _OccasionState extends State<OccasionWrite> {
                         _displaySnackBar(context, "결혼식장명 및 주소를 입력하세요.");
                         return;
                       } else if (holidayType == 2) {
-                        _displaySnackBar(context, "장례식장명 및 주소를 입력하세요.");
+                        _displaySnackBar(context, "장례식����명 및 주소를 입력하세요.");
                         return;
                       }
                     }
@@ -803,13 +805,47 @@ class _OccasionState extends State<OccasionWrite> {
                             scale: 2.0,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _pickingType = FileType.IMAGE;
-                              if (_pickingType != FileType.IMAGE) {
-                                _fileController.text = _extension = '';
-                              }
-                              _openFileExplorer();
-                            });
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SimpleDialog(
+                                  title: Text('첨부파일 방식을 선택하세요.'),
+                                  children: <Widget>[
+                                    SimpleDialogOption(
+                                      child: Text(
+                                        '카메라 촬영',
+                                        style: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        _getCameraPath(context);
+                                      },
+                                    ),
+                                    SimpleDialogOption(
+                                      child: Text(
+                                        '첨부파일 선택',
+                                        style: TextStyle(
+                                          fontSize: Statics
+                                              .shared.fontSizes.supplementary,
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _pickingType = FileType.IMAGE;
+                                          if (_pickingType != FileType.IMAGE) {
+                                            _fileController.text =
+                                                _extension = '';
+                                          }
+                                          _openFileExplorer();
+                                        });
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );
                           },
                         )
                       : FlatButton(
@@ -831,7 +867,7 @@ class _OccasionState extends State<OccasionWrite> {
 
   Widget deathForm() {
     List<KeyValueModel> _money = [
-      KeyValueModel(key: "���조비 지급방식 선택", value: "0"),
+      KeyValueModel(key: "경조비 지급방식 선택", value: "0"),
       KeyValueModel(key: "화환", value: "1"),
       KeyValueModel(key: "축의금[계좌이체]", value: "2"),
     ];
@@ -1151,6 +1187,30 @@ class _OccasionState extends State<OccasionWrite> {
         })
         .catchError((err) => throw Exception('error : ' + err.toString()))
         .whenComplete(() {});
+  }
+
+  _getCameraPath(BuildContext context) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final cameraPath = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CameraScreen()),
+    );
+
+    if (cameraPath != null && cameraPath != "") {
+      print("path=" + cameraPath);
+      String fileName;
+      fileName = cameraPath != null
+          ? cameraPath.split('/').last
+          : cameraPath != null ? cameraPath.keys.toString() : fileName;
+
+      print(fileName);
+      _fileController.text = fileName;
+      filePath = cameraPath;
+
+      //사진 선택 팝업 닫기
+      Navigator.pop(context);
+    }
   }
 }
 

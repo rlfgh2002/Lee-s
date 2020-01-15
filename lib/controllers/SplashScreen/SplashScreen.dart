@@ -102,6 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Directory appDocDirectory = await getApplicationDocumentsDirectory();
     userInformation.dirPath = appDocDirectory;
     var _localPath = appDocDirectory.path + "/Magazines";
+    var _localPath2 = appDocDirectory.path + "/Pictures";
     final myDir = new Directory(_localPath);
     myDir.exists().then((dirExist) {
       if (dirExist) {
@@ -110,6 +111,21 @@ class _SplashScreenState extends State<SplashScreen> {
         print('non-existent');
 
         new Directory(_localPath).create(recursive: true)
+            // The created directory is returned as a Future.
+            .then((Directory directory) {
+          print('Path of New Dir: ' + directory.path);
+        });
+      }
+    });
+
+    final myDir2 = new Directory(_localPath2);
+    myDir2.exists().then((dirExist) {
+      if (dirExist) {
+        print('exists');
+      } else {
+        print('non-existent');
+
+        new Directory(_localPath2).create(recursive: true)
             // The created directory is returned as a Future.
             .then((Directory directory) {
           print('Path of New Dir: ' + directory.path);
