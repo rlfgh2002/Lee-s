@@ -44,85 +44,45 @@ class GalleryListWidget extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      child: Row(
-        children: [
-          FlatButton(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: Image.network(
-                    "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
-                        thumb,
-                    scale: 2,
-                  ),
-                ),
-                Container(
-                  child: Text(this.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: Statics.shared.colors.titleTextColor,
-                          fontSize: Statics.shared.fontSizes.content)),
-                  width: ((screenWidth - (paddingSize * 1.0)) - buttonSize) / 2,
-                ),
-                Container(
-                  child: Text(this.obj.regDate,
-                      style: TextStyle(
-                          color: Statics.shared.colors.captionColor,
-                          fontSize: Statics.shared.fontSizes.small)),
-                  width: ((screenWidth - (paddingSize * 2)) - buttonSize) / 2,
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: FlatButton(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Image.network(
+                  "http://www.mariners.or.kr/uploads/photoNews/Thumb_" + thumb,
+                  width: ((screenWidth - (paddingSize * 1.0)) - buttonSize)),
             ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new GallerylistSingle(obj: obj)));
-            },
-          ),
-          Spacer(),
-          FlatButton(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: Image.network(
-                    "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
-                        thumb2,
-                    scale: 2,
-                  ),
+            Container(
+                child: Text(
+                  this.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Statics.shared.colors.titleTextColor,
+                      fontSize: Statics.shared.fontSizes.content),
+                  textAlign: TextAlign.start,
                 ),
-                Container(
-                  child: Text(this.title2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Statics.shared.colors.titleTextColor,
-                        fontSize: Statics.shared.fontSizes.content,
-                      )),
-                  width: ((screenWidth - (paddingSize * 1.0)) - buttonSize) / 2,
+                width: ((screenWidth - (paddingSize * 1.0)) - buttonSize)),
+            Container(
+                child: Text(
+                  this.obj.regDate,
+                  style: TextStyle(
+                      color: Statics.shared.colors.captionColor,
+                      fontSize: Statics.shared.fontSizes.small),
+                  textAlign: TextAlign.start,
                 ),
-                Container(
-                  child: Text(this.obj2.regDate,
-                      style: TextStyle(
-                          color: Statics.shared.colors.captionColor,
-                          fontSize: Statics.shared.fontSizes.small)),
-                  width: ((screenWidth - (paddingSize * 2)) - buttonSize) / 2,
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  new MaterialPageRoute(
-                      builder: (context) => new GallerylistSingle(obj: obj2)));
-            },
-          )
-        ],
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+                width: ((screenWidth - (paddingSize * 2)) - buttonSize)),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+        ),
+        onPressed: () {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new GallerylistSingle(obj: obj)));
+        },
       ),
+
       decoration: BoxDecoration(
         border:
             Border(bottom: BorderSide(color: Statics.shared.colors.lineColor)),

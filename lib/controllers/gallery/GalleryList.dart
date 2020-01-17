@@ -117,32 +117,12 @@ class _GalleryListState extends State<GalleryList> {
               serverFileName_3: item["serverFileName_3"].toString(),
               serverFileName_4: item["serverFileName_4"].toString(),
             );
-            GalleryListObject object2 = GalleryListObject(
-              subject: item["subject_2"].toString(),
-              no: item["no_2"],
-              content: item["content_2"].toString(),
-              regDate: item["regDate_2"].toString(),
-              writer: item["writer_2"].toString(),
-              fileUrl_1: item["fileUrl_1_2"].toString(),
-              fileUrl_2: item["fileUrl_2_2"].toString(),
-              fileUrl_3: item["fileUrl_3_2"].toString(),
-              fileUrl_4: item["fileUrl_4_2"].toString(),
-              realFileName1: item["realFileName1_2"].toString(),
-              realFileName2: item["realFileName2_2"].toString(),
-              realFileName3: item["realFileName3_2"].toString(),
-              realFileName4: item["realFileName4_2"].toString(),
-              serverFileName_1: item["serverFileName_1_2"].toString(),
-              serverFileName_2: item["serverFileName_2_2"].toString(),
-              serverFileName_3: item["serverFileName_3_2"].toString(),
-              serverFileName_4: item["serverFileName_4_2"].toString(),
-            );
             newList.add(GalleryListWidget(
               title: item["subject"].toString(),
               title2: item["subject_2"].toString(),
               thumb: item["serverFileName_1"].toString(),
               thumb2: item["serverFileName_1_2"].toString(),
               obj: object,
-              obj2: object2,
             ));
           });
           if (page == 1) {

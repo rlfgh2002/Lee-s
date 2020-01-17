@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:haegisa2/controllers/Inquiry/InquiryList.dart';
 import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dart';
 import 'package:haegisa2/controllers/LicenseTestQuestions/LicenseTestQuestions.dart';
@@ -10,6 +12,7 @@ import 'package:haegisa2/controllers/Magazines/Magazines.dart';
 import 'package:haegisa2/controllers/NoticesList/NoticesList.dart';
 import 'package:haegisa2/controllers/barcode/Barcode.dart';
 import 'package:haegisa2/controllers/gallery/GalleryList.dart';
+import 'package:haegisa2/controllers/home/test.dart';
 import 'package:haegisa2/controllers/intro/Intro.dart';
 import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/controllers/occasion/occasionList.dart';
@@ -20,6 +23,7 @@ import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
+import 'package:open_appstore/open_appstore.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/NoticesList/NoticesListObject.dart';
@@ -753,12 +757,18 @@ class _HomeState extends State<Home2> {
                                   scale: 2.5)
                             ],
                           )),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) =>
-                                    new LicenseTestQuestions()));
+                      onTap: () async {
+                        // OpenAppstore.launch(
+                        //     androidAppId: "com.facebook.katana&hl=ko",
+                        //     iOSAppId: "1470020259");
+
+                        AppAvailability.launchApp(
+                            "https://apps.apple.com/kr/app/%EB%A7%88%EB%A6%AC%EB%84%88%EC%8A%A4%EC%9E%A1-marinersjob/id1470020259");
+
+                        // Navigator.push(
+                        //     context,
+                        //     new MaterialPageRoute(
+                        //         builder: (context) => new Test()));
                       },
                     ),
                   ],
