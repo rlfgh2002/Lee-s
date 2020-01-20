@@ -1,6 +1,6 @@
-class NoticesListObject
-{
+class NoticesListObject {
   int no = 0;
+  String idx = "";
   String subject = "";
   String writer = "";
   String content = "";
@@ -24,6 +24,7 @@ class NoticesListObject
 
   NoticesListObject({
     int no = 0,
+    String idx,
     String subject,
     String writer,
     String content,
@@ -40,8 +41,9 @@ class NoticesListObject
     String serverFileName_4,
     String realFileName4,
     String fileUrl_4,
-  }){
+  }) {
     this.no = no;
+    this.idx = idx;
     this.subject = subject;
     this.writer = writer;
     this.content = content;

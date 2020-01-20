@@ -100,6 +100,7 @@ class _NoticesListState extends State<NoticesList> {
           rows.forEach((item) {
             NoticesListObject object = NoticesListObject(
               subject: item["subject"].toString(),
+              idx: item["idx"],
               no: item["no"],
               content: item["content"].toString(),
               regDate: item["regDate"].toString(),

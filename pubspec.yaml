@@ -52,11 +52,11 @@ dependencies:
   barcode_flutter: ^1.0.2 #generate barcode
   pdf_viewer_plugin: ^1.0.0+2
   flutter_html: ^0.9.6
-  file_picker: ^1.4.3
+  file_picker: ^1.4.3+1
   path: ^1.6.4
   permission_handler: ^4.0.0
   camera: ^0.5.7+3
-  flutter_appavailability: ^0.0.21 #설치된 파일 목록출력 및 실행
+  #flutter_appavailability: ^0.0.21 #설치된 파일 목록출력 및 실행
   open_appstore: ^1.0.2 #웹페이지가 아닌 앱스토어 오픈
   device_apps: ^1.0.9
   

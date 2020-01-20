@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_appavailability/flutter_appavailability.dart';
 import 'package:haegisa2/controllers/Inquiry/InquiryList.dart';
 import 'package:haegisa2/controllers/IntroduceOccupation/IntroduceOccupation.dart';
 import 'package:haegisa2/controllers/Magazines/Magazines.dart';
@@ -760,8 +759,8 @@ class _HomeState extends State<Home2> {
                             androidAppId: "com.mariners.heagisa2",
                             iOSAppId: "1463005343");
 
-                        AppAvailability.launchApp(
-                            "https://apps.apple.com/kr/app/%EB%A7%88%EB%A6%AC%EB%84%88%EC%8A%A4%EC%9E%A1-marinersjob/id1470020259");
+                        // AppAvailability.launchApp(
+                        //     "https://apps.apple.com/kr/app/%EB%A7%88%EB%A6%AC%EB%84%88%EC%8A%A4%EC%9E%A1-marinersjob/id1470020259");
 
                         // Navigator.push(
                         //     context,

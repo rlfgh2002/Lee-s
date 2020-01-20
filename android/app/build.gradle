@@ -40,7 +40,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.mariners.heagisa2" 
-        minSdkVersion 21
+        minSdkVersion 22
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -62,13 +62,13 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
 
             //##디버그용
-            signingConfig signingConfigs.debug
+            // signingConfig signingConfigs.debug
             //## 
 
             //##업로드용
-            // signingConfig signingConfigs.release
-            // minifyEnabled true
-            // useProguard true
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            useProguard true
             //##
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
