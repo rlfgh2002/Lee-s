@@ -100,6 +100,7 @@ class _GalleryListState extends State<GalleryList> {
           rows.forEach((item) {
             GalleryListObject object = GalleryListObject(
               subject: item["subject"].toString(),
+              idx: item["idx"],
               no: item["no"],
               content: item["content"].toString(),
               regDate: item["regDate"].toString(),

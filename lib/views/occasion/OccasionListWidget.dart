@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/models/occasion/OccasionListObject.dart';
 import 'package:haegisa2/models/statics/statics.dart';
-import 'package:haegisa2/occasion/OccasionListObject.dart';
 
 class OccasionListWidget extends StatelessWidget {
   VoidCallback onTap;

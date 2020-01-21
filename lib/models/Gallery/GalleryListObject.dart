@@ -1,5 +1,6 @@
 class GalleryListObject {
   int no = 0;
+  String idx = "";
   String subject = "";
   String writer = "";
   String content = "";
@@ -23,6 +24,7 @@ class GalleryListObject {
 
   GalleryListObject({
     int no = 0,
+    String idx,
     String subject,
     String writer,
     String content,
@@ -41,6 +43,7 @@ class GalleryListObject {
     String fileUrl_4,
   }) {
     this.no = no;
+    this.idx = idx;
     this.subject = subject;
     this.writer = writer;
     this.content = content;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/gallery/GalleryList.dart';
 import 'package:haegisa2/models/Gallery/GalleryListObject.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -9,13 +10,47 @@ import 'dart:convert';
 import 'package:flutter_html_view/flutter_html_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'Gallerylist.dart';
-
 class GallerylistSingle extends StatefulWidget {
   GalleryListObject object;
+  int no;
+  String idx;
+  String fileUrl_1;
+  String fileUrl_2;
+  String fileUrl_3;
+  String fileUrl_4;
+  String realFileName1;
+  String realFileName2;
+  String realFileName3;
+  String realFileName4;
+  String serverFileName_1;
+  String serverFileName_2;
+  String serverFileName_3;
+  String serverFileName_4;
+  String subject;
+  String writer;
+  String regDate;
+  String content;
 
   GallerylistSingle({GalleryListObject obj}) {
     this.object = obj;
+    this.no = obj.no;
+    this.idx = obj.idx;
+    this.fileUrl_1 = obj.fileUrl_1;
+    this.fileUrl_2 = obj.fileUrl_2;
+    this.fileUrl_3 = obj.fileUrl_3;
+    this.fileUrl_4 = obj.fileUrl_4;
+    this.realFileName1 = obj.realFileName1;
+    this.realFileName2 = obj.realFileName2;
+    this.realFileName3 = obj.realFileName3;
+    this.realFileName4 = obj.realFileName4;
+    this.serverFileName_1 = obj.serverFileName_1;
+    this.serverFileName_2 = obj.serverFileName_2;
+    this.serverFileName_3 = obj.serverFileName_3;
+    this.serverFileName_4 = obj.serverFileName_4;
+    this.subject = obj.subject;
+    this.writer = obj.writer;
+    this.regDate = obj.regDate;
+    this.content = obj.content;
   }
 
   @override
@@ -24,7 +59,7 @@ class GallerylistSingle extends StatefulWidget {
 
 class _GallerylistSingleState extends State<GallerylistSingle> {
   final _scaffold = GlobalKey<ScaffoldState>();
-
+  ScrollController _scrollController = new ScrollController();
   _launchURL(String url) async {
     var url2 = Uri.encodeFull(url).toString();
     if (await canLaunch(url2)) {
@@ -53,29 +88,79 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
         height: 1,
         margin:
             const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 10));
-    Widget listBtn = Container(
-      child: FlatButton(
-        child: Container(
-          child: Text(Strings.shared.controllers.noticesList.listKeyword,
-              style: TextStyle(
-                  color: Statics.shared.colors.mainColor,
-                  fontSize: Statics.shared.fontSizes.supplementary,
-                  fontWeight: FontWeight.w200)),
-          alignment: Alignment.center,
+    Widget listBtn =
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      Container(
+        child: FlatButton(
+          child: Container(
+            child: Text("< 이전글",
+                style: TextStyle(
+                    color: Statics.shared.colors.mainColor,
+                    fontSize: Statics.shared.fontSizes.supplementary,
+                    fontWeight: FontWeight.w200)),
+            alignment: Alignment.center,
+          ),
+          onPressed: () {
+            functionArrow(direction: "prev", idx: this.widget.idx);
+          },
+          padding: const EdgeInsets.all(0),
         ),
-        onPressed: () {
-          Navigator.pop(context,
-              new MaterialPageRoute(builder: (context) => new GalleryList()));
-        },
-        padding: const EdgeInsets.all(0),
+        decoration: BoxDecoration(
+            border:
+                Border.all(width: 1, color: Statics.shared.colors.mainColor)),
+        width: screenWidth / 5,
+        height: 60,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
       ),
-      decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Statics.shared.colors.mainColor)),
-      width: screenWidth,
-      height: 60,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
-    );
+      Container(
+        child: FlatButton(
+          child: Container(
+            child: Text(Strings.shared.controllers.noticesList.listKeyword,
+                style: TextStyle(
+                    color: Statics.shared.colors.mainColor,
+                    fontSize: Statics.shared.fontSizes.supplementary,
+                    fontWeight: FontWeight.w200)),
+            alignment: Alignment.center,
+          ),
+          onPressed: () {
+            Navigator.pop(context,
+                new MaterialPageRoute(builder: (context) => new GalleryList()));
+          },
+          padding: const EdgeInsets.all(0),
+        ),
+        decoration: BoxDecoration(
+            border:
+                Border.all(width: 1, color: Statics.shared.colors.mainColor)),
+        width: screenWidth / 5,
+        height: 60,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
+      ),
+      Container(
+        child: FlatButton(
+          child: Container(
+            child: Text("다음글 >",
+                style: TextStyle(
+                    color: Statics.shared.colors.mainColor,
+                    fontSize: Statics.shared.fontSizes.supplementary,
+                    fontWeight: FontWeight.w200)),
+            alignment: Alignment.center,
+          ),
+          onPressed: () {
+            functionArrow(direction: "next", idx: this.widget.idx);
+          },
+          padding: const EdgeInsets.all(0),
+        ),
+        decoration: BoxDecoration(
+            border:
+                Border.all(width: 1, color: Statics.shared.colors.mainColor)),
+        width: screenWidth / 5,
+        height: 60,
+        alignment: Alignment.center,
+        margin: const EdgeInsets.only(top: 20, right: 16, left: 16, bottom: 20),
+      )
+    ]);
 
     Widget files = Container();
     Widget thumb = Container();
@@ -83,7 +168,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
     List<FlatButton> myFilesList = [];
     List<Container> myThumbList = [];
 
-    if (this.widget.object.fileUrl_1.isNotEmpty) {
+    if (this.widget.fileUrl_1.isNotEmpty) {
       isThereAnyFiles = true;
       myFilesList.add(
         FlatButton(
@@ -98,7 +183,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
                 Container(
                     width: screenWidth / 1.7,
                     child: Text(
-                      this.widget.object.realFileName1.toString(),
+                      this.widget.realFileName1.toString(),
                       maxLines: 1,
                       textAlign: TextAlign.justify,
                       overflow: TextOverflow.ellipsis,
@@ -107,7 +192,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
             ),
           ),
           onPressed: () {
-            _launchURL(this.widget.object.fileUrl_1);
+            _launchURL(this.widget.fileUrl_1);
           },
         ),
       );
@@ -115,13 +200,13 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
         Container(
           child: Image.network(
             "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
-                this.widget.object.serverFileName_1.toString(),
+                this.widget.serverFileName_1.toString(),
             height: screenWidth / 1.7,
           ),
         ),
       );
     }
-    if (this.widget.object.fileUrl_2.isNotEmpty) {
+    if (this.widget.fileUrl_2.isNotEmpty) {
       isThereAnyFiles = true;
       myFilesList.add(
         FlatButton(
@@ -135,7 +220,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
                 SizedBox(width: 10),
                 Container(
                     width: screenWidth / 1.7,
-                    child: Text(this.widget.object.realFileName2.toString(),
+                    child: Text(this.widget.realFileName2.toString(),
                         maxLines: 1,
                         textAlign: TextAlign.justify,
                         overflow: TextOverflow.ellipsis)),
@@ -143,7 +228,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
             ),
           ),
           onPressed: () {
-            _launchURL(this.widget.object.fileUrl_2);
+            _launchURL(this.widget.fileUrl_2);
           },
         ),
       );
@@ -151,13 +236,13 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
         Container(
           child: Image.network(
             "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
-                this.widget.object.serverFileName_2.toString(),
+                this.widget.serverFileName_2.toString(),
             height: screenWidth / 1.7,
           ),
         ),
       );
     }
-    if (this.widget.object.fileUrl_3.isNotEmpty) {
+    if (this.widget.fileUrl_3.isNotEmpty) {
       isThereAnyFiles = true;
       myFilesList.add(
         FlatButton(
@@ -171,7 +256,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
                 SizedBox(width: 10),
                 Container(
                     width: screenWidth / 1.7,
-                    child: Text(this.widget.object.realFileName3.toString(),
+                    child: Text(this.widget.realFileName3.toString(),
                         maxLines: 1,
                         textAlign: TextAlign.justify,
                         overflow: TextOverflow.ellipsis)),
@@ -179,7 +264,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
             ),
           ),
           onPressed: () {
-            _launchURL(this.widget.object.fileUrl_3);
+            _launchURL(this.widget.fileUrl_3);
           },
         ),
       );
@@ -187,13 +272,13 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
         Container(
           child: Image.network(
             "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
-                this.widget.object.serverFileName_3.toString(),
+                this.widget.serverFileName_3.toString(),
             height: screenWidth / 1.7,
           ),
         ),
       );
     }
-    if (this.widget.object.fileUrl_4.isNotEmpty) {
+    if (this.widget.fileUrl_4.isNotEmpty) {
       isThereAnyFiles = true;
       myFilesList.add(
         FlatButton(
@@ -207,7 +292,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
                 SizedBox(width: 10),
                 Container(
                     width: screenWidth / 1.7,
-                    child: Text(this.widget.object.realFileName4.toString(),
+                    child: Text(this.widget.realFileName4.toString(),
                         maxLines: 1,
                         textAlign: TextAlign.justify,
                         overflow: TextOverflow.ellipsis)),
@@ -215,7 +300,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
             ),
           ),
           onPressed: () {
-            _launchURL(this.widget.object.fileUrl_4);
+            _launchURL(this.widget.fileUrl_4);
           },
         ),
       );
@@ -223,7 +308,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
         Container(
           child: Image.network(
             "http://www.mariners.or.kr/uploads/photoNews/Thumb_" +
-                this.widget.object.serverFileName_4.toString(),
+                this.widget.serverFileName_4.toString(),
             height: screenWidth / 1.7,
           ),
         ),
@@ -261,11 +346,12 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
       ),
       body: Container(
         child: ListView(
+          controller: _scrollController,
           children: [
             blueSplitter,
             Padding(
                 child: Text(
-                  this.widget.object.subject,
+                  this.widget.subject,
                   style: TextStyle(
                     fontSize: Statics.shared.fontSizes.subTitleInContent,
                     color: Statics.shared.colors.titleTextColor,
@@ -278,7 +364,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      this.widget.object.writer,
+                      this.widget.writer,
                       style: TextStyle(
                         fontSize: Statics.shared.fontSizes.medium,
                         color: Statics.shared.colors.captionColor,
@@ -296,7 +382,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      this.widget.object.regDate,
+                      this.widget.regDate,
                       style: TextStyle(
                         fontSize: Statics.shared.fontSizes.medium,
                         color: Statics.shared.colors.captionColor,
@@ -310,7 +396,7 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
             files,
             thumb,
             HtmlView(
-              data: this.widget.object.content,
+              data: this.widget.content,
               scrollable: false,
               padding: const EdgeInsets.only(left: 32, right: 32),
             ),
@@ -322,6 +408,95 @@ class _GallerylistSingleState extends State<GallerylistSingle> {
       ), // end Body
       key: _scaffold,
     );
+  }
+
+  void functionArrow({String direction, String idx, int page}) async {
+    http
+        .get(Statics.shared.urls.galleryList(page: 1) +
+            "&mode2=" +
+            direction +
+            "&idx=" +
+            idx)
+        .then((val) {
+      if (val.statusCode == 200) {
+        print(
+            "::::::::::::::::::::: [ Getting NoticesList Start ] :::::::::::::::::::::");
+        print("BODY: ${val.body.toString()}");
+        var myJson = json.decode(utf8.decode(val.bodyBytes));
+
+        int code = myJson["code"];
+        if (code == 200) {
+          List<GalleryListObject> myReturnList = [];
+          int pTotal = myJson["totalPageNum"];
+          int pCurrent = myJson["nowPageNum"];
+          List<dynamic> rows = myJson["rows"];
+
+          List<Widget> newList = [];
+          setState(() {
+            rows.forEach((item) {
+              this.widget.subject = item["subject"].toString();
+              this.widget.idx = item["idx"];
+              this.widget.no = item["no"];
+              this.widget.content = item["content"].toString();
+              this.widget.regDate = item["regDate"].toString();
+              this.widget.writer = item["writer"].toString();
+              this.widget.fileUrl_1 = item["fileUrl_1"].toString();
+              this.widget.fileUrl_2 = item["fileUrl_2"].toString();
+              this.widget.fileUrl_3 = item["fileUrl_3"].toString();
+              this.widget.fileUrl_4 = item["fileUrl_4"].toString();
+              this.widget.realFileName1 = item["realFileName1"].toString();
+              this.widget.realFileName2 = item["realFileName2"].toString();
+              this.widget.realFileName3 = item["realFileName3"].toString();
+              this.widget.realFileName4 = item["realFileName4"].toString();
+              this.widget.serverFileName_1 =
+                  item["serverFileName_1"].toString();
+              this.widget.serverFileName_2 =
+                  item["serverFileName_2"].toString();
+              this.widget.serverFileName_3 =
+                  item["serverFileName_3"].toString();
+              this.widget.serverFileName_4 =
+                  item["serverFileName_4"].toString();
+
+              //새로고침 후 스크롤 최상위로 이동
+              _scrollController.animateTo(
+                0.0,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 300),
+              );
+            });
+          });
+        } else if (code == 100) {
+          showDialog(
+              barrierDismissible: true,
+              context: context,
+              builder: (_) => AlertDialog(
+                      title: new Text("알림"),
+                      content: new Text("마지막 글입니다.",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      actions: <Widget>[
+                        // usually buttons at the bottom of the dialog
+                        new FlatButton(
+                          child: new Text("확인",
+                              style: TextStyle(
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  color: Colors.black)),
+                          onPressed: () {
+                            Navigator.of(context).pop(); //팝업닫고
+                          },
+                        ),
+                      ]));
+        }
+        print(
+            "::::::::::::::::::::: [ Getting NoticesList End ] :::::::::::::::::::::");
+      } else {
+        print(
+            ":::::::::::::::::: on Getting NoticesList error :: Server Error ::::::::::::::::::");
+      }
+    }).catchError((error) {
+      print(
+          ":::::::::::::::::: on Getting NoticesList error : ${error.toString()} ::::::::::::::::::");
+    });
   }
 
   void _moveBack(BuildContext context) => userInformation.userDeviceOS == "i"

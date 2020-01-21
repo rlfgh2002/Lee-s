@@ -13,6 +13,7 @@ import 'package:haegisa2/controllers/map/Map.dart';
 import 'package:haegisa2/controllers/occasion/occasionList.dart';
 import 'package:haegisa2/controllers/profile/Advisory.dart';
 import 'package:haegisa2/controllers/profile/HumanRights.dart';
+import 'package:haegisa2/controllers/profile/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/models/statics/UserInfo.dart';
@@ -480,7 +481,7 @@ class _HomeState extends State<Home2> {
                                                         new SurveysTabs()));
                                           },
                                         ),
-                                        Text("설문합사",
+                                        Text("설문조사",
                                             style: TextStyle(
                                                 color: Statics.shared.colors
                                                     .titleTextColor,
@@ -617,6 +618,33 @@ class _HomeState extends State<Home2> {
                                   height: deviceWidth / 5,
                                   width: deviceWidth / 4.5),
                               Container(
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Image.asset(
+                                              'Resources/Icons/icon_userinfo.png',
+                                              scale: 4.0),
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                new MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        new UserInfo()));
+                                          },
+                                        ),
+                                        Text("내정보수정",
+                                            style: TextStyle(
+                                                color: Statics.shared.colors
+                                                    .titleTextColor,
+                                                fontSize: 13),
+                                            textAlign: TextAlign.left),
+                                      ]),
                                   height: deviceWidth / 5,
                                   width: deviceWidth / 4.5),
                             ]),
@@ -643,8 +671,37 @@ class _HomeState extends State<Home2> {
                   child: FlatButton(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    child: Image.asset('Resources/Images/totalWork.png',
-                        width: deviceWidth / 1.2),
+                    child: Container(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "한국해기사협회의",
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize: 12),
+                            ),
+                            Text(
+                              "종합서비스센터 업무대행",
+                              style: TextStyle(
+                                  color: Statics.shared.colors.mainColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Image.asset('Resources/Images/totalWork.png',
+                            scale: 2.5)
+                      ],
+                    )),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -730,7 +787,7 @@ class _HomeState extends State<Home2> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "해기사시험",
+                                    "해기사시험험",
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,

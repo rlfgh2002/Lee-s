@@ -12,22 +12,20 @@ class GalleryListWidget extends StatelessWidget {
 
   VoidCallback onTap;
   GalleryListObject obj;
-  GalleryListObject obj2;
 
-  GalleryListWidget(
-      {String title,
-      String title2,
-      String thumb,
-      String thumb2,
-      VoidCallback onTap,
-      GalleryListObject obj,
-      GalleryListObject obj2}) {
+  GalleryListWidget({
+    String title,
+    String title2,
+    String thumb,
+    String thumb2,
+    VoidCallback onTap,
+    GalleryListObject obj,
+  }) {
     this.title = title;
     this.title2 = title2;
     this.thumb = thumb;
     this.thumb2 = thumb2;
     this.obj = obj;
-    this.obj2 = obj2;
     this.onTap = onTap;
   }
 

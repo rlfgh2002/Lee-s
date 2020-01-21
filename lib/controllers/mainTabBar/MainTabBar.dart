@@ -847,6 +847,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void filedownloaderInitialize() async {
+    WidgetsFlutterBinding.ensureInitialized();
     await FlutterDownloader.initialize();
   }
 

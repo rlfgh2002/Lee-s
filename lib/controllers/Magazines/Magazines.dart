@@ -58,11 +58,11 @@ class _MagazinesState extends State<Magazines> {
 
   @override
   void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
     super.dispose();
-    _init();
   }
 
-  Future<void> _init() async {
+  _init() {
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
@@ -71,18 +71,27 @@ class _MagazinesState extends State<Magazines> {
       DownloadTaskStatus status = data[1];
       int progress = data[2];
 
-      if (status == DownloadTaskStatus.complete) {
-        print("complete.");
-        print(fileDownloadStatus);
-        fileDownloadStatus = status;
-        refresh();
-      }
-
       print("status: $status");
       print("progress: $progress");
       print("id == downloadId: ${id == downloadId}");
+
+      if (status == DownloadTaskStatus.complete) {
+        print("다운로드 완료");
+        _displaySnackBar(context, "다운로드 완료");
+        setState(() {
+          widget.magazinesList[btnMagazineNum + 1] = buttonList(btnTitle,
+              btnFileURL, btnServerFileName, btnMagazineNum, false, btnObj);
+          widget.myList[btnMagazineNum + 1] = buttonList(btnTitle, btnFileURL,
+              btnServerFileName, btnMagazineNum, false, btnObj);
+          //FlutterDownloader.open(taskId: id);
+          OpenFile.open(_localPath + "/" + btnServerFileName);
+        });
+      } else if (status == DownloadTaskStatus.failed) {
+        print("다운실패");
+        _displaySnackBar(context, "다운로드 실패");
+        return;
+      }
     });
-    print("gdgd");
     FlutterDownloader.registerCallback(downloadCallback);
     // _localPath = (await _findLocalPath()) + '/Download';
     // final savedDir = Directory(_localPath);
@@ -393,8 +402,6 @@ class _MagazinesState extends State<Magazines> {
               changeURL = fileURL;
             }
 
-            //await FlutterDownloader.initialize();
-
             final taskId = await FlutterDownloader.enqueue(
               url: changeURL,
               savedDir: _localPath,
@@ -412,11 +419,13 @@ class _MagazinesState extends State<Magazines> {
             isDownload = false;
             btnObj = obj;
 
+            //FlutterDownloader.open(taskId: taskId);
+
             // FlutterDownloader.registerCallback((id, status, progress) {
             //   // code to update your UI
             //   if (status == DownloadTaskStatus.complete) {
             //     FlutterDownloader.open(taskId: taskId);
-            //     print("다운완료");
+            //     print("���운완료");
             //     setState(() {
             //       widget.magazinesList[magazineNum + 1] = buttonList(
             //           title, fileURL, serverFileName, magazineNum, false, obj);
@@ -434,8 +443,8 @@ class _MagazinesState extends State<Magazines> {
             //   }
             // });
 
-            var file = Directory(_localPath).listSync();
-            print(file);
+            //var file = Directory(_localPath).listSync();
+            //print(file);
           }
         } else {
           print("파일 오픈");
@@ -492,7 +501,7 @@ class _MagazinesState extends State<Magazines> {
   Future<void> refresh() async {
     if (fileDownloadStatus == DownloadTaskStatus.complete) {
       // FlutterDownloader.open(taskId: id);
-      print("다운완료");
+      print("다운완료2");
       if (mounted) {
         setState(() {
           widget.magazinesList[btnMagazineNum + 1] = buttonList(btnTitle,

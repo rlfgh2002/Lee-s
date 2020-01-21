@@ -53,6 +53,7 @@ class NoticesListSingle extends StatefulWidget {
 
 class _NoticesListSingleState extends State<NoticesListSingle> {
   final _scaffold = GlobalKey<ScaffoldState>();
+  ScrollController _scrollController = new ScrollController();
 
   _launchURL(String url) async {
     var url2 = Uri.encodeFull(url).toString();
@@ -299,6 +300,7 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
       ),
       body: Container(
         child: ListView(
+          controller: _scrollController,
           children: [
             blueSplitter,
             Padding(
@@ -399,6 +401,13 @@ class _NoticesListSingleState extends State<NoticesListSingle> {
               this.widget.realFileName2 = item["realFileName2"].toString();
               this.widget.realFileName3 = item["realFileName3"].toString();
               this.widget.realFileName4 = item["realFileName4"].toString();
+
+              //새로고침 후 스크롤 최상위로 이동
+              _scrollController.animateTo(
+                0.0,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 300),
+              );
             });
           });
         } else if (code == 100) {

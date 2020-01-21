@@ -30,5 +30,10 @@ private func registerPlugins(registry: FlutterPluginRegistry) {
     //   
     // FlutterDownloaderPlugin.register(with: registry.registrar(forPlugin: "vn.hunghd.flutter_downloader"))
     //
-    GeneratedPluginRegistrant.register(with: registry)
+    
+    //GeneratedPluginRegistrant.register(with: registry)
+    if( !registry.hasPlugin("vn.hunghd.flutter_downloader") ){
+      FlutterDownloaderPlugin.register(with: registry.registrar(forPlugin: "vn.hunghd.flutter_downloader"))
+    }
+
 }
