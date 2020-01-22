@@ -15,6 +15,7 @@ class _StaticDbInformation {
   static const String tblBlockUsers = 'tblBlockUsers';
   static const String tblSurveys = 'tblSurveys';
   static const String tblNotices = 'tblNotices';
+  static const String tblQna = 'tblQna';
 
   static const String tblNoticesId = 'noticeId';
   static const String tblNoticesSubject = 'subject';
@@ -22,6 +23,7 @@ class _StaticDbInformation {
   static const String tblNoticesFromName = 'fromName';
   static const String tblNoticesContent = 'content';
   static const String tblNoticesRegDate = 'regDate';
+  static const String tblNoticesSeen = 'seen';
 
   static const String tblConversationFieldId = 'convId';
   static const String tblConversationCreateDate = 'createDate';
@@ -90,6 +92,10 @@ class _StaticDbInformation {
   static const String tblSurveysContents = 'contents';
   static const String tblSurveysQcnt = 'q_cnt';
   static const String tblSurveysRegDate = 'regDate';
+
+  static const String tblQnaIdx = 'bd_idx';
+  static const String tblQnaSeen = 'seen';
+  static const String tblQnaRegDate = 'regDate';
 }
 
 class MyDataBase {
@@ -143,7 +149,7 @@ class MyDataBase {
 
       await db
           .execute(
-              'CREATE TABLE ${_StaticDbInformation.tblNotices} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblNoticesId} TEXT,${_StaticDbInformation.tblNoticesRegDate} TEXT,${_StaticDbInformation.tblNoticesFromId} TEXT,${_StaticDbInformation.tblNoticesFromName} TEXT,${_StaticDbInformation.tblNoticesSubject} TEXT,${_StaticDbInformation.tblNoticesContent} TEXT)')
+              'CREATE TABLE ${_StaticDbInformation.tblNotices} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblNoticesId} TEXT,${_StaticDbInformation.tblNoticesRegDate} TEXT,${_StaticDbInformation.tblNoticesFromId} TEXT,${_StaticDbInformation.tblNoticesFromName} TEXT,${_StaticDbInformation.tblNoticesSubject} TEXT,${_StaticDbInformation.tblNoticesContent} TEXT,${_StaticDbInformation.tblNoticesSeen} TEXT)')
           .then((val) {
         print(
             ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblNotices} STATUS => [TRUE] ::::::::::");
@@ -383,6 +389,7 @@ class MyDataBase {
       String fromId,
       String fromName,
       String content,
+      String seen = "0",
       onInserted(bool st)}) async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
@@ -391,7 +398,7 @@ class MyDataBase {
     await openDatabase(path).then((db) {
       db
           .rawInsert(
-              'INSERT INTO ${_StaticDbInformation.tblNotices} (${_StaticDbInformation.tblNoticesId},${_StaticDbInformation.tblNoticesRegDate},${_StaticDbInformation.tblNoticesFromId},${_StaticDbInformation.tblNoticesFromName},${_StaticDbInformation.tblNoticesSubject}, ${_StaticDbInformation.tblNoticesContent}) VALUES ("${noticeId.toString()}","${DateTime.now().toString()}","${fromId.toString()}","${fromName.toString()}","${subject.toString()}","${content.toString()}")')
+              'INSERT INTO ${_StaticDbInformation.tblNotices} (${_StaticDbInformation.tblNoticesId},${_StaticDbInformation.tblNoticesRegDate},${_StaticDbInformation.tblNoticesFromId},${_StaticDbInformation.tblNoticesFromName},${_StaticDbInformation.tblNoticesSubject}, ${_StaticDbInformation.tblNoticesContent}, ${_StaticDbInformation.tblNoticesSeen}) VALUES ("${noticeId.toString()}","${DateTime.now().toString()}","${fromId.toString()}","${fromName.toString()}","${subject.toString()}","${content.toString()}","${seen.toString()}")')
           .catchError((err) {
         print(
             ":::::::::: DB INSERT(Notices) ERROR => [${err.toString()}] ::::::::::");
@@ -403,6 +410,26 @@ class MyDataBase {
       }).whenComplete(() {
         //db.close();
         print(":::::::::: DB CLOSE ::::::::::");
+      });
+    });
+  }
+
+  void updateSeenNotice({String id}) async {
+    //why did you update chatDate2?? chatDate2 is last chat response date
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      db
+          .rawQuery(
+              "UPDATE ${_StaticDbInformation.tblNotices} SET seen = '1' WHERE id='${id.toString()}'")
+          //"UPDATE ${_StaticDbInformation.tblChats} SET seen = '1', chatDate2 = '${lastDate.toString()}' WHERE convId = '${convId}'"
+          .then((lists) {
+        print(":::::::::: DB UPDATE SEEN Notices(${lists.length}) ::::::::::");
+        //db.close();
+      }).catchError((error) {
+        print(
+            ":::::::::: DB UPDATE SEEN Notices ERROR => [${error.toString()}] ::::::::::");
       });
     });
   }

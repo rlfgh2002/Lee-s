@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:haegisa2/controllers/notices/Notices.dart';
+import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:flutter_html_view/flutter_html_view.dart';
 
 class NoticeSingle extends StatefulWidget {
   Map<String, dynamic> object;
+  final db = MyDataBase();
 
   NoticeSingle({Map<String, dynamic> obj}) {
     this.object = obj;
@@ -16,6 +19,17 @@ class NoticeSingle extends StatefulWidget {
 
 class _NoticeSingle extends State<NoticeSingle> {
   final _scaffold = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    widget.db.updateSeenNotice(
+      id: this.widget.object['subject'],
+    );
+    if (Notices.staticNoticesPage != null) {
+      Notices.staticNoticesPage.refresh();
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +62,7 @@ class _NoticeSingle extends State<NoticeSingle> {
         brightness: Brightness.light,
         title: Container(
             alignment: Alignment.centerLeft,
-            child: Text("",
+            child: Text("푸시알림",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontSize: Statics.shared.fontSizes.subTitle,

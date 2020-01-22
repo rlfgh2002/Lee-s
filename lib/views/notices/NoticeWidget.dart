@@ -23,11 +23,13 @@ class NoticeWidget extends StatelessWidget {
   String idx = "";
   bool isDone = false;
   DateTime date;
+  bool hasBadge = false;
 
   NoticeWidget(
       {int id,
       bool isDone = false,
       bool isOnSurveysTabs = false,
+      bool hasBadge = false,
       String title = "",
       String shortDescription = "",
       String time = "",
@@ -46,6 +48,7 @@ class NoticeWidget extends StatelessWidget {
     this.type = type;
     this.onTapped = onTapped;
     this.isOnSurveysTabs = isOnSurveysTabs;
+    this.hasBadge = hasBadge;
     this.date = date;
 
     switch (type) {
@@ -71,6 +74,18 @@ class NoticeWidget extends StatelessWidget {
     final db = MyDataBase();
     double screenSize = MediaQuery.of(context).size.width;
 
+    Widget badge = Container();
+
+    if (this.hasBadge) {
+      badge = Container(
+        width: 5,
+        height: 5,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            color: Colors.red),
+        margin: const EdgeInsets.only(top: 20),
+      );
+    }
     if (!this.isOnSurveysTabs) {
       //공지사항
       return Container(
@@ -83,58 +98,61 @@ class NoticeWidget extends StatelessWidget {
                 child: GestureDetector(
                   child: Container(
                     padding: const EdgeInsets.only(left: 8, right: 8),
-                    child: Row(children: [
-                      CircleAvatar(
-                        radius: this.avatarRadius,
-                        backgroundImage: new AssetImage(this.avatarLink),
-                        backgroundColor: Colors.white,
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        children: [
-                          Container(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      this.title,
-                                      style: TextStyle(
-                                          fontSize:
-                                              Statics.shared.fontSizes.content,
-                                          color: Statics
-                                              .shared.colors.titleTextColor),
-                                      overflow: TextOverflow.fade,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: this.avatarRadius,
+                          backgroundImage: new AssetImage(this.avatarLink),
+                          backgroundColor: Colors.white,
+                        ),
+                        SizedBox(width: 10),
+                        Column(
+                          children: [
+                            Container(
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        this.title,
+                                        style: TextStyle(
+                                            fontSize: Statics
+                                                .shared.fontSizes.content,
+                                            color: Statics
+                                                .shared.colors.titleTextColor),
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                      width: screenSize - 100,
                                     ),
-                                    width: screenSize - 100,
-                                  ),
 //                      Container(child: Text(this.time, style: TextStyle(color: Statics.shared.colors.subTitleTextColor, fontSize: Statics.shared.fontSizes.supplementary),overflow: TextOverflow.fade,),
 //                        width: 100,),
-                                ],
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                  ],
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                ),
+                                width: screenSize - 100),
+                            SizedBox(height: 5),
+                            Container(
+                              child: Text(
+                                this.time,
+                                style: TextStyle(
+                                    fontSize: Statics.shared.fontSizes.content,
+                                    color:
+                                        Statics.shared.colors.subTitleTextColor,
+                                    fontWeight: FontWeight.normal),
+                                overflow: TextOverflow.fade,
                               ),
-                              width: screenSize - 100),
-                          SizedBox(height: 5),
-                          Container(
-                            child: Text(
-                              this.time,
-                              style: TextStyle(
-                                  fontSize: Statics.shared.fontSizes.content,
-                                  color:
-                                      Statics.shared.colors.subTitleTextColor,
-                                  fontWeight: FontWeight.normal),
-                              overflow: TextOverflow.fade,
+                              width: screenSize - 100,
                             ),
-                            width: screenSize - 100,
-                          )
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        textDirection: TextDirection.ltr,
-                      ),
-                      SizedBox(width: 10),
-                    ]),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          textDirection: TextDirection.ltr,
+                        ),
+                        badge
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
                   ),
                   onTap: () {
                     this.onTapped();

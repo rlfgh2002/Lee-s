@@ -35,6 +35,7 @@ class MainTabBar extends StatefulWidget {
   static MainTabBar mainTabBar;
   static MainTabBarState myChild;
   MiddleWare mdw = MiddleWare.shared;
+
   @override
   MainTabBarState createState() {
     MainTabBar.mainTabBar = this;
@@ -47,6 +48,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   static String btnChat = "Resources/Icons/btn_chat.png";
   static String btnChatAc = "Resources/Icons/btn_chat_ac.png";
   static String btnNotice = "Resources/Icons/btn_notice.png";
+  static String btnNoticeAc = "Resources/Icons/btn_notice_ac.png";
 
   MainTabBarState() {}
   DateTime backButtonPressTime;
@@ -80,7 +82,13 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           btnChatAc = "Resources/Icons/btn_chat_ac.png";
         }
       } else if (type == "notice") {
-        btnNotice = "Resources/Icons/btn_notice_new.png";
+        if (newMessage == true) {
+          btnNotice = "Resources/Icons/btn_notice_new.png";
+          btnNoticeAc = "Resources/Icons/btn_notice_ac_new.png";
+        } else {
+          btnNotice = "Resources/Icons/btn_notice.png";
+          btnNoticeAc = "Resources/Icons/btn_notice_ac.png";
+        }
       }
     });
   }
@@ -308,6 +316,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             } else if (message['notificationType'].toString().toLowerCase() ==
                 "notice") {
               btnNotice = "Resources/Icons/btn_notice_new.png";
+              btnNoticeAc = "Resources/Icons/btn_notice_ac_new.png";
             }
           });
         } else {
@@ -641,7 +650,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               Notices.staticNoticesPage.myChild.refreshNotices();
               print(":::::: notices should be refreshed ::::::");
             });
-            return;
+            if (Platform.isAndroid) {
+              return;
+            } //아이폰은 return 넣으면 다음으로 넘어가지 않아서 데이터 저장이 안됨. 안드로이드는 return 없으면 노티 누르면 해당 데이터가 저장되서 중복으로 저장이 됨
           }
 
           VoteObject voteItem = VoteObject.fromJson(message);
@@ -692,7 +703,41 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               Notices.staticNoticesPage.myChild.refreshNotices();
               print(":::::: notices should be refreshed ::::::");
             });
-            return;
+            if (Platform.isAndroid) {
+              return;
+            } //아이폰은 return 넣으면 다음으로 넘어가지 않아서 데이터 저장이 안됨. 안드로이드는 return 없으면 노티 누르면 해당 데이터가 저장되서 중복으로 저장이 됨
+          }
+
+          VoteObject noticeItem = VoteObject.fromJson(message);
+          if (noticeItem.subject != null) {
+            String noticeId = randomChatId();
+            widget.db.insertNotice(
+                fromId: noticeItem.fromId,
+                fromName: noticeItem.fromName,
+                subject: noticeItem.subject,
+                noticeId: noticeId,
+                content: noticeItem.content,
+                onInserted: (status) {
+                  if (status) {
+                  } // on inserted
+                  else {} // on no inserted
+                });
+          }
+        } // Notice Notification
+        else if (message['data']['notificationType'].toString().toLowerCase() ==
+            "qna") {
+          if (isOnResume) {
+            //this.widget.mdw.shouldMoveToThisVoteId = message['data']['idx'].toString();
+            setState(() {
+              MiddleWare.shared.currentIndex = 3;
+              MiddleWare.shared.tabc
+                  .animateTo(3, duration: Duration(seconds: 0));
+              Notices.staticNoticesPage.myChild.refreshNotices();
+              print(":::::: notices should be refreshed ::::::");
+            });
+            if (Platform.isAndroid) {
+              return;
+            } //아이폰은 return 넣으면 다음으로 넘어가지 않아서 데이터 저장이 안됨. 안드로이드는 return 없으면 노티 누르면 해당 데이터가 저장되서 중복으로 저장이 됨
           }
 
           VoteObject noticeItem = VoteObject.fromJson(message);
@@ -836,6 +881,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       }
     });
 
+    //checkNewAlarm();
     this.updateUserLocation();
     super.initState();
   }
@@ -965,6 +1011,17 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
   }
 
+  void checkNewAlarm() async {
+    await SharedPreferences.getInstance().then((val) {
+      bool status = val.getBool("app_new_alarm");
+      if (status == false || status == null) {
+        btnNotice = "Resources/Icons/btn_notice.png";
+      } else {
+        btnNotice = "Resources/Icons/btn_notice_new.png";
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -992,8 +1049,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             title: Text("")),
         BottomNavigationBarItem(
             icon: new Image.asset(btnNotice, width: 50),
-            activeIcon:
-                new Image.asset("Resources/Icons/btn_notice_ac.png", width: 50),
+            activeIcon: new Image.asset(btnNoticeAc, width: 50),
             title: Text("")),
         BottomNavigationBarItem(
             icon: new Image.asset("Resources/Icons/btn_mymenu.png", width: 50),

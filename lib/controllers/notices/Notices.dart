@@ -21,6 +21,13 @@ class Notices extends StatefulWidget {
   List<NoticeWidget> notices = [];
   NoticesState myChild;
 
+  void refresh() {
+    Future.delayed(Duration(seconds: 1)).whenComplete(() {
+      print("REFRESH :::::)))))");
+      myChild.refreshNotices();
+    });
+  }
+
   @override
   NoticesState createState() {
     return NoticesState();
@@ -28,6 +35,7 @@ class Notices extends StatefulWidget {
 }
 
 class NoticesState extends State<Notices> {
+  bool badgeState = false;
   final _scaffold = GlobalKey<ScaffoldState>();
   Container noNoticesFoundYet() {
     return Container(
@@ -260,18 +268,23 @@ class NoticesState extends State<Notices> {
             DateFormat("yyyy-MM-dd HH:mm:ss")
                 .parse(res[i]['regDate'].toString()));
 
+        if (res[i]['seen'] == "0") {
+          badgeState = true;
+        }
+
         NoticeWidget item = NoticeWidget(
           id: res[i]['id'],
           title: res[i]['subject'].toString(),
           date: DateTime.parse(res[i]['regDate'].toString()),
           shortDescription: res[i]['content'].toString(),
+          hasBadge: res[i]['seen'] == "0" ? true : false,
           time: date,
           type: NoticeType.Notice,
           onTapped: () {
             Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) => new NoticeSingle(obj: res.first)));
+                    builder: (context) => new NoticeSingle(obj: res[i])));
           },
         );
         myNoticesList.add(item);
@@ -405,6 +418,8 @@ class NoticesState extends State<Notices> {
     myList.sort((item1, item2) => item2.date.compareTo(item1.date));
     setState(() {
       widget.notices = myList;
+      MainTabBarState.setBadge(context, "notice", badgeState);
+      badgeState = false; //초기화
     });
   }
 
