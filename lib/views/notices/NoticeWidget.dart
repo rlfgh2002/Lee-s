@@ -61,6 +61,9 @@ class NoticeWidget extends StatelessWidget {
       case NoticeType.Vote:
         this.avatarLink = "Resources/Icons/img_vote.png";
         break;
+      case NoticeType.Qna:
+        this.avatarLink = "Resources/Icons/btn_inquiry.png";
+        break;
     }
   }
 
@@ -92,7 +95,7 @@ class NoticeWidget extends StatelessWidget {
         color: Colors.white,
         margin: const EdgeInsets.only(top: 5),
         padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: this.type == NoticeType.Notice
+        child: this.type == NoticeType.Notice || this.type == NoticeType.Qna
             ? Dismissible(
                 key: Key(this.id.toString()),
                 child: GestureDetector(
@@ -400,4 +403,4 @@ class NoticeWidget extends StatelessWidget {
   }
 }
 
-enum NoticeType { Notice, Vote, Survey }
+enum NoticeType { Notice, Vote, Survey, Qna }

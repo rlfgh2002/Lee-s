@@ -19,10 +19,10 @@ class InquiryListSingle extends StatefulWidget {
   }
 
   @override
-  _InquiryListOSingleState createState() => _InquiryListOSingleState();
+  _InquiryListSingleState createState() => _InquiryListSingleState();
 }
 
-class _InquiryListOSingleState extends State<InquiryListSingle> {
+class _InquiryListSingleState extends State<InquiryListSingle> {
   final _scaffold = GlobalKey<ScaffoldState>();
 
   _launchURL(String url) async {

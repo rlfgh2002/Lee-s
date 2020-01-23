@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:haegisa2/controllers/NoticeWidgetSingle/NoticeSingle.dart';
+import 'package:haegisa2/controllers/inquiry/InquirySingle.dart';
 import 'package:haegisa2/controllers/mainTabBar/MainTabBar.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
@@ -411,6 +412,40 @@ class NoticesState extends State<Notices> {
         total.sort((item1, item2) => item1.date.compareTo(item2.date));
         refreshAllNotices(total);
       }
+    });
+
+    widget.db.selectQna(onResult: (res) {
+      for (int i = 0; i < res.length; i++) {
+        String date = DateFormat("yyyy-MM-dd HH:mm").format(
+            DateFormat("yyyy-MM-dd HH:mm:ss")
+                .parse(res[i]['regDate'].toString()));
+
+        if (res[i]['seen'] == "0") {
+          badgeState = true;
+        }
+
+        NoticeWidget item = NoticeWidget(
+          idx: res[i]['idx'],
+          id: res[i]['id'],
+          title: res[i]['subject'].toString(),
+          date: DateTime.parse(res[i]['regDate'].toString()),
+          shortDescription: res[i]['content'].toString(),
+          hasBadge: res[i]['seen'] == "0" ? true : false,
+          time: date,
+          type: NoticeType.Qna,
+          onTapped: () {
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new InquirySingle(obj: res[i])));
+          },
+        );
+        myNoticesList.add(item);
+      }
+
+      total = mySurveysList + myNoticesList;
+      total.sort((item1, item2) => item1.date.compareTo(item2.date));
+      refreshAllNotices(total);
     });
   }
 

@@ -93,7 +93,8 @@ class _StaticDbInformation {
   static const String tblSurveysQcnt = 'q_cnt';
   static const String tblSurveysRegDate = 'regDate';
 
-  static const String tblQnaIdx = 'bd_idx';
+  static const String tblQnaIdx = 'idx';
+  static const String tblQnaSubject = 'subject';
   static const String tblQnaSeen = 'seen';
   static const String tblQnaRegDate = 'regDate';
 }
@@ -208,6 +209,17 @@ class MyDataBase {
           .then((val) {
         print(
             ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblSurveysAnswers} STATUS => [TRUE] ::::::::::");
+      }).catchError((error) {
+        print(
+            ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
+      });
+
+      await db
+          .execute(
+              'CREATE TABLE ${_StaticDbInformation.tblQna} (${_StaticDbInformation.tblQnaIdx} TEXT PRIMARY KEY, ${_StaticDbInformation.tblQnaSubject} TEXT,${_StaticDbInformation.tblQnaSeen} TEXT,${_StaticDbInformation.tblQnaRegDate} TEXT)')
+          .then((val) {
+        print(
+            ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblQna} STATUS => [TRUE] ::::::::::");
       }).catchError((error) {
         print(
             ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
@@ -1201,6 +1213,79 @@ class MyDataBase {
             ":::::::::: DB DELETE ROW ERROR => [${err.toString()}] ::::::::::");
         onDeleted(false);
         //db.close();
+      });
+    });
+  }
+
+  void insertQna(
+      {String idx = "",
+      String regDate = "",
+      String subject = "",
+      String seen = "0",
+      onInserted(bool st)}) async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    print(":::::::::: NEW QNA GENERATING ... ::::::::::");
+    await openDatabase(path).then((db) {
+      db
+          .rawInsert(
+              'REPLACE INTO ${_StaticDbInformation.tblQna}(${_StaticDbInformation.tblQnaIdx}, ${_StaticDbInformation.tblQnaRegDate}, ${_StaticDbInformation.tblQnaSubject}, ${_StaticDbInformation.tblQnaSeen}) VALUES ("${idx.toString()}", "${regDate.toString()}", "${subject.toString()}", "${seen.toString()}")')
+          .catchError((err) {
+        print(
+            ":::::::::: DB INSERT(QNA) ERROR => [${err.toString()}] ::::::::::");
+        onInserted(false);
+      }).then((val) {
+        print(
+            ":::::::::: DB INSERT(QNA) QUERY => [${val.toString()}] ::::::::::");
+        onInserted(true);
+      }).whenComplete(() {
+        //db.close();
+        print(":::::::::: DB CLOSE ::::::::::");
+      });
+    });
+  }
+
+  void selectQna({onResult(List<Map<String, dynamic>> results)}) async {
+    print(":::::::::: DB SELECTING Qna ::::::::::");
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      List<Map<String, dynamic>> myList = [];
+      db
+          .rawQuery(
+              "SELECT * FROM ${_StaticDbInformation.tblQna}  ORDER BY idx DESC")
+          .then((lists) {
+        for (int i = 0; i < lists.length; i++) {
+          myList.add(lists[i]);
+          print(
+              ":::::::::: DB SELECT ROW (${i}) => [${lists[i].toString()}] ::::::::::");
+        } // for loop
+        //db.close();
+        onResult(myList);
+      }).catchError((err) {
+        print(":::::::::: DB ERROR SELECT Qna : ${err.toString()} ::::::::::");
+      });
+    });
+  }
+
+  void updateSeenQna({String idx}) async {
+    //why did you update chatDate2?? chatDate2 is last chat response date
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      db
+          .rawQuery(
+              "UPDATE ${_StaticDbInformation.tblQna} SET seen = '1' WHERE idx='${idx.toString()}'")
+          //"UPDATE ${_StaticDbInformation.tblChats} SET seen = '1', chatDate2 = '${lastDate.toString()}' WHERE convId = '${convId}'"
+          .then((lists) {
+        print(":::::::::: DB UPDATE SEEN Notices(${lists.length}) ::::::::::");
+        //db.close();
+      }).catchError((error) {
+        print(
+            ":::::::::: DB UPDATE SEEN Notices ERROR => [${error.toString()}] ::::::::::");
       });
     });
   }

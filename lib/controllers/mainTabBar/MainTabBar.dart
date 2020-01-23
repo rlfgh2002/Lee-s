@@ -314,7 +314,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
               btnChat = "Resources/Icons/btn_chat_new.png";
               btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
             } else if (message['notificationType'].toString().toLowerCase() ==
-                "notice") {
+                    "notice" &&
+                message['notificationType'].toString().toLowerCase() == "qna") {
               btnNotice = "Resources/Icons/btn_notice_new.png";
               btnNoticeAc = "Resources/Icons/btn_notice_ac_new.png";
             }
@@ -330,9 +331,11 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                 "chat") {
               setBadge(context, "chat", true);
             } else if (message['data']['notificationType']
-                    .toString()
-                    .toLowerCase() ==
-                "notice") {
+                        .toString()
+                        .toLowerCase() ==
+                    "notice" &&
+                message['data']['notificationType'].toString().toLowerCase() ==
+                    "qna") {
               setBadge(context, "notice", true);
             }
           }
@@ -740,15 +743,11 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
             } //아이폰은 return 넣으면 다음으로 넘어가지 않아서 데이터 저장이 안됨. 안드로이드는 return 없으면 노티 누르면 해당 데이터가 저장되서 중복으로 저장이 됨
           }
 
-          VoteObject noticeItem = VoteObject.fromJson(message);
-          if (noticeItem.subject != null) {
-            String noticeId = randomChatId();
-            widget.db.insertNotice(
-                fromId: noticeItem.fromId,
-                fromName: noticeItem.fromName,
-                subject: noticeItem.subject,
-                noticeId: noticeId,
-                content: noticeItem.content,
+          if (message['data']['subject'] != null) {
+            widget.db.insertQna(
+                idx: message['data']['idx'],
+                subject: message['data']['subject'],
+                regDate: message['data']['regDate'],
                 onInserted: (status) {
                   if (status) {
                   } // on inserted

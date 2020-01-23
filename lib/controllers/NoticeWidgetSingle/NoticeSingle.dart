@@ -23,7 +23,7 @@ class _NoticeSingle extends State<NoticeSingle> {
   @override
   void initState() {
     widget.db.updateSeenNotice(
-      id: this.widget.object['subject'],
+      id: this.widget.object['id'].toString(),
     );
     if (Notices.staticNoticesPage != null) {
       Notices.staticNoticesPage.refresh();
