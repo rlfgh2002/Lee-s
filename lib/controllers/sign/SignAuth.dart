@@ -46,54 +46,65 @@ class _SignInState extends State<SignAuth> {
         key: _scaffoldKey,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Container(
-                child: Text(
-                  Strings.shared.controllers.signSelect.title4,
-                  style: TextStyle(
-                    fontSize: Statics.shared.fontSizes.title,
-                    fontWeight: FontWeight.bold,
-                    color: Statics.shared.colors.titleTextColor,
-                  ),
-                ),
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(top: 70)),
-            Container(
-                child: Text(
-                  Strings.shared.controllers.signSelect.title5,
-                  style: TextStyle(
-                    fontSize: Statics.shared.fontSizes.subTitle,
-                    color: Statics.shared.colors.subTitleTextColor,
-                  ),
-                ),
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(right: 64, top: 20)),
-            SizedBox(height: 40),
-            Container(
-                child: FlatButton(
-                  child: Image.asset(
-                    "Resources/Icons/btn_certi.png",
-                    scale: 2.0,
-                  ),
-                  onPressed: () async {
-                    userInformation.mode = "join";
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => new Auth()));
-                  },
-                ),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 20)),
-            SizedBox(height: 40),
-          ], //Children
-        ), // Column
-        padding: const EdgeInsets.only(left: 32, right: 32),
+      body: ListView(
+        children: <Widget>[
+          Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                Container(
+                    child: Text(
+                      Strings.shared.controllers.signSelect.title4,
+                      style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.title,
+                        fontWeight: FontWeight.bold,
+                        color: Statics.shared.colors.titleTextColor,
+                      ),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(top: 10)),
+                Container(
+                    child: Text(
+                      Strings.shared.controllers.signSelect.title5,
+                      style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.subTitle,
+                        color: Statics.shared.colors.subTitleTextColor,
+                      ),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(right: 64, top: 20)),
+                SizedBox(height: 20),
+                Container(
+                    child: FlatButton(
+                      child: Image.asset(
+                        "Resources/Icons/btn_certi.png",
+                        scale: 2.5,
+                      ),
+                      onPressed: () async {
+                        userInformation.mode = "join";
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => new Auth()));
+                      },
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(top: 10)),
+                SizedBox(height: 20),
+                Container(
+                    child: Image.asset(
+                      "Resources/Images/auth_banner.png",
+                      scale: 1.0,
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(top: 10)),
+              ], //Children
+            ), // Column
+            padding: const EdgeInsets.only(left: 32, right: 32),
 
-        width: MiddleWare.shared.screenSize,
+            width: MiddleWare.shared.screenSize,
+          )
+        ],
       ), // Container
     );
   } // user is logged in

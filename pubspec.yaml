@@ -161,6 +161,7 @@ flutter:
     - Resources/Images/ill_vote.png
     - Resources/Images/no_member.png
     - Resources/Images/splash.png
+    - Resources/Images/auth_banner.png
 
     # Single Chat Page
     - Resources/Images/leftEdge.png
@@ -170,11 +171,11 @@ flutter:
     - Resources/Images/userAlertTop.png
 
     # SurveysTabs
-    - proceedingBackground.png
-    - proceedingBackgroundDark.png
+    - Resources/Icons/proceedingBackground.png
+    - Resources/Icons/proceedingBackgroundDark.png
 
     # Conversations
-    - userChatAvatar.png
+    - Resources/Icons/userChatAvatar.png
 
     # home
     - Resources/Images/bgHome.png

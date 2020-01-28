@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:camera/new/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:async/async.dart';
@@ -15,6 +16,7 @@ import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:permission_handler/permission_handler.dart';
 
 class OccasionWrite extends StatefulWidget {
   @override
@@ -397,7 +399,7 @@ class _OccasionState extends State<OccasionWrite> {
                         _displaySnackBar(context, "결혼식장명 및 주소를 입력하세요.");
                         return;
                       } else if (holidayType == 2) {
-                        _displaySnackBar(context, "장례식����명 및 주소를 입력하세요.");
+                        _displaySnackBar(context, "장례식�����명 및 주소를 입력하세요.");
                         return;
                       }
                     }
@@ -820,6 +822,12 @@ class _OccasionState extends State<OccasionWrite> {
                                         ),
                                       ),
                                       onPressed: () async {
+                                        Map<PermissionGroup, PermissionStatus>
+                                            permissions =
+                                            await PermissionHandler()
+                                                .requestPermissions(
+                                                    [PermissionGroup.camera]);
+                                        print('per1 : $permissions');
                                         _getCameraPath(context);
                                       },
                                     ),
@@ -1190,26 +1198,59 @@ class _OccasionState extends State<OccasionWrite> {
   }
 
   _getCameraPath(BuildContext context) async {
-    // Navigator.push returns a Future that completes after calling
-    // Navigator.pop on the Selection Screen.
-    final cameraPath = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CameraScreen()),
-    );
+    PermissionStatus permission =
+        await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+    print('per2 : $permission');
 
-    if (cameraPath != null && cameraPath != "") {
-      print("path=" + cameraPath);
-      String fileName;
-      fileName = cameraPath != null
-          ? cameraPath.split('/').last
-          : cameraPath != null ? cameraPath.keys.toString() : fileName;
+    //카메라 권한 체크 (아이폰은 한번 거절할 경우 재요청 할수 없음. 설정에서 수동으로 설정해야함.)
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.unknown) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('접근 거부'),
+              content: Text("카메라 접근 권한이 거부되었습니다.\n휴대폰 설정에서 권한을 허용해 주십시오."),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text('확인'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    } else {
+      final cameras = await availableCameras();
 
-      print(fileName);
-      _fileController.text = fileName;
-      filePath = cameraPath;
+      // 이용가능한 카메라 목록에서 특정 카메라를 얻습니다.
+      final firstCamera = cameras.first;
 
-      //사진 선택 팝업 닫기
-      Navigator.pop(context);
+      // Navigator.push returns a Future that completes after calling
+      // Navigator.pop on the Selection Screen.
+      final cameraPath = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CameraScreen(
+                  camera: firstCamera,
+                )),
+      );
+
+      if (cameraPath != null && cameraPath != "") {
+        print("path=" + cameraPath);
+        String fileName;
+        fileName = cameraPath != null
+            ? cameraPath.split('/').last
+            : cameraPath != null ? cameraPath.keys.toString() : fileName;
+
+        print(fileName);
+        _fileController.text = fileName;
+        filePath = cameraPath;
+
+        //사진 선택 팝업 닫기
+        Navigator.pop(context);
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
-class IOObject
-{
+class IOObject {
+  String idx = "";
   String name = "";
   String company = "";
   String shortContent = "";
@@ -9,6 +9,7 @@ class IOObject
   String viewImgUrl_2 = "";
 
   IOObject({
+    String idx,
     String name,
     String company,
     String shortContent,
@@ -16,7 +17,8 @@ class IOObject
     String listImgUrl,
     String viewImgUrl_1,
     String viewImgUrl_2,
-  }){
+  }) {
+    this.idx = idx;
     this.name = name;
     this.company = company;
     this.shortContent = shortContent;

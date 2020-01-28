@@ -140,6 +140,7 @@ class _IntroduceOccupationState extends State<IntroduceOccupation> {
           List<Widget> newList = [];
           rows.forEach((item) {
             IOObject object = IOObject(
+              idx: item["idx"].toString(),
               name: item["name"].toString(),
               content: item["content"].toString(),
               company: item["company"].toString(),

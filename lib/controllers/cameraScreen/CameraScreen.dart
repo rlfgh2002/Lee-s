@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 
-List<CameraDescription> _cameras;
-
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key key}) : super(key: key);
+  final CameraDescription camera;
 
+  const CameraScreen({
+    Key key,
+    @required this.camera,
+  }) : super(key: key);
   @override
   CameraScreenState createState() => CameraScreenState();
 }
@@ -23,12 +25,12 @@ class CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-    setCameras();
+    //setCameras();
     // To display the current output from the Camera,
     // create a CameraController.
     _controller = CameraController(
       // Get a specific camera from the list of available cameras.
-      _cameras[0],
+      widget.camera,
       // Define the resolution to use.
       ResolutionPreset.medium,
     );
@@ -118,8 +120,4 @@ class DisplayPictureScreen extends StatelessWidget {
       body: Image.file(File(imagePath)),
     );
   }
-}
-
-void setCameras() async {
-  _cameras = await availableCameras();
 }
