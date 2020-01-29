@@ -631,6 +631,8 @@ class _HomeState extends State<Home2> {
                                               'Resources/Icons/icon_userinfo.png',
                                               scale: 4.0),
                                           onPressed: () {
+                                            UserInfo.shared.g_address1 = "";
+                                            UserInfo.shared.g_postNo = "";
                                             Navigator.push(
                                                 context,
                                                 new MaterialPageRoute(
@@ -755,7 +757,7 @@ class _HomeState extends State<Home2> {
                           )),
                       onTap: () async {
                         OpenAppstore.launch(
-                            androidAppId: "com.mariners.heagisa2",
+                            androidAppId: "kr.co.job.mariner",
                             iOSAppId: "1470020259");
 
                         // var url = "";
@@ -813,7 +815,7 @@ class _HomeState extends State<Home2> {
                           )),
                       onTap: () async {
                         OpenAppstore.launch(
-                            androidAppId: "com.mariners.heagisa2",
+                            androidAppId: "kr.co.marinesoft.haegisa",
                             iOSAppId: "1463005343");
 
                         // AppAvailability.launchApp(

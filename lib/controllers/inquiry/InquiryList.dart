@@ -60,7 +60,7 @@ class InquiryListState extends State<InquiryList> {
           left: 16,
           right: 16,
         ));
-    widget.myList.add(topView);
+    //widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
     Widget writeButton = Container(

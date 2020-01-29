@@ -41,17 +41,11 @@ class OccasionListState extends State<OccasionList> {
     widget.myList = [];
     double screenWidth = MediaQuery.of(context).size.width;
     Widget topView = Container(
-      child: Stack(
-        children: [
-          Image.asset(
-            "Resources/Images/occasion.png",
-            width: screenWidth,
-            height: 100,
-          ),
-        ],
+      child: Image.asset(
+        "Resources/Images/occasion.png",
+        scale: 1.0,
       ),
       alignment: Alignment.center,
-      height: 100,
     );
     Widget blueSplitter = Container(
         color: Statics.shared.colors.blueLineColor,

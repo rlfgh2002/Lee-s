@@ -72,10 +72,10 @@ dev_dependencies:
 
 flutter_icons:
   image_path_ios: "Resources/appIcons/ios/iTunesArtwork@2x.png"
-  image_path_android: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
+  image_path_android: "Resources/appIcons/ios/iTunesArtwork@2x.png"
   adaptive_icon_background: "#FFFFFF"
   #adaptive_icon_background: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
-  adaptive_icon_foreground: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
+  #adaptive_icon_foreground: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
   android: true
   ios: true
 
