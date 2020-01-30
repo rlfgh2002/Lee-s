@@ -41,6 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         onComplete(true);
         getUserinfoJson();
+
         createDir();
       }
     });

@@ -161,7 +161,8 @@ class NoticeWidget extends StatelessWidget {
                     this.onTapped();
                   },
                   onLongPress: () {
-                    if (this.type == NoticeType.Notice) {
+                    if (this.type == NoticeType.Notice ||
+                        this.type == NoticeType.Qna) {
                       showDialog(
                           barrierDismissible: false,
                           context: context,
@@ -191,9 +192,15 @@ class NoticeWidget extends StatelessWidget {
                                           color: Colors.red),
                                     ),
                                     onPressed: () {
-                                      db.deleteNotices(id: this.id);
-                                      Navigator.of(context).pop();
-                                      NoticesState.setStateStatic(context);
+                                      if (this.type == NoticeType.Notice) {
+                                        db.deleteNotices(id: this.id);
+                                        Navigator.of(context).pop();
+                                        NoticesState.setStateStatic(context);
+                                      } else {
+                                        db.deleteQna(idx: this.idx);
+                                        Navigator.of(context).pop();
+                                        NoticesState.setStateStatic(context);
+                                      }
                                     },
                                   ),
                                 ],
@@ -203,7 +210,8 @@ class NoticeWidget extends StatelessWidget {
                 ),
                 onDismissed: (direction) {},
                 confirmDismiss: (bl) {
-                  if (this.type == NoticeType.Notice) {
+                  if (this.type == NoticeType.Notice ||
+                      this.type == NoticeType.Qna) {
                     showDialog(
                         barrierDismissible: false,
                         context: context,
@@ -233,9 +241,15 @@ class NoticeWidget extends StatelessWidget {
                                         color: Colors.red),
                                   ),
                                   onPressed: () {
-                                    db.deleteNotices(id: this.id);
-                                    Navigator.of(context).pop();
-                                    NoticesState.setStateStatic(context);
+                                    if (this.type == NoticeType.Notice) {
+                                      db.deleteNotices(id: this.id);
+                                      Navigator.of(context).pop();
+                                      NoticesState.setStateStatic(context);
+                                    } else {
+                                      db.deleteQna(idx: this.idx);
+                                      Navigator.of(context).pop();
+                                      NoticesState.setStateStatic(context);
+                                    }
                                   },
                                 ),
                               ],

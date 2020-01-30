@@ -1270,6 +1270,96 @@ class MyDataBase {
     });
   }
 
+  void deleteQna({String idx, onDeleted(bool st)}) async {
+    print(":::::::::: DB DELETE Notices ::::::::::");
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+
+    await openDatabase(path).then((db) {
+      db
+          .rawDelete(
+              "DELETE FROM ${_StaticDbInformation.tblQna} WHERE idx ='${idx}'")
+          .then((val) {
+        print(":::::::::: DB DELETE ROW => [${val}] ::::::::::");
+        onDeleted(true);
+        //db.close();
+      }).catchError((err) {
+        print(
+            ":::::::::: DB DELETE ROW ERROR => [${err.toString()}] ::::::::::");
+        onDeleted(false);
+        //db.close();
+      });
+    });
+  }
+
+  void chatBadge({onResult(String results)}) async {
+    print(":::::::::: DB SELECTING Qna ::::::::::");
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      String count;
+      db
+          .rawQuery(
+              "SELECT COUNT(id) as CNT FROM ${_StaticDbInformation.tblChats} WHERE seen = '0' ")
+          .then((lists) {
+        count = lists[0]["CNT"].toString();
+        print(
+            ":::::::::: DB SELECT ROW (${0}) => [${lists[0]["CNT"].toString()}] ::::::::::");
+        //db.close();
+        onResult(count);
+      }).catchError((err) {
+        print(":::::::::: DB ERROR SELECT Qna : ${err.toString()} ::::::::::");
+      });
+    });
+  }
+
+  void noticeBadge({onResult(String results)}) async {
+    print(":::::::::: DB SELECTING Notice ::::::::::");
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      String count;
+      db
+          .rawQuery(
+              "SELECT COUNT(id) as CNT FROM ${_StaticDbInformation.tblNotices} WHERE seen = '0' ")
+          .then((lists) {
+        count = lists[0]["CNT"].toString();
+        print(
+            ":::::::::: DB SELECT ROW (${0}) => [${lists[0]["CNT"].toString()}] ::::::::::");
+        //db.close();
+        onResult(count);
+      }).catchError((err) {
+        print(
+            ":::::::::: DB ERROR SELECT Notice : ${err.toString()} ::::::::::");
+      });
+    });
+  }
+
+  void qnaBadge({onResult(String results)}) async {
+    print(":::::::::: DB SELECTING Qna ::::::::::");
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path).then((db) {
+      String count;
+      db
+          .rawQuery(
+              "SELECT COUNT(idx) as CNT FROM ${_StaticDbInformation.tblQna} WHERE seen = '0' ")
+          .then((lists) {
+        count = lists[0]["CNT"].toString();
+        print(
+            ":::::::::: DB SELECT ROW (${0}) => [${lists[0]["CNT"].toString()}] ::::::::::");
+        //db.close();
+        onResult(count);
+      }).catchError((err) {
+        print(":::::::::: DB ERROR SELECT Qna : ${err.toString()} ::::::::::");
+      });
+    });
+  }
+
   void updateSeenQna({String idx}) async {
     //why did you update chatDate2?? chatDate2 is last chat response date
     var databasesPath = await getDatabasesPath();

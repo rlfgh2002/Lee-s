@@ -230,7 +230,7 @@ class _HomeState extends State<Home2> {
                       margin: const EdgeInsets.only(right: 20, top: 10),
                       decoration: BoxDecoration(
                         color: Statics.shared.colors.mainColor,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
                         image: DecorationImage(
                             image: AssetImage('Resources/Images/bgCount.png'),
                             fit: BoxFit.cover),

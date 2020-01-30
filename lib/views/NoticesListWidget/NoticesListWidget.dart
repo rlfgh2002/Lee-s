@@ -49,13 +49,17 @@ class NoticesListWidget extends StatelessWidget {
                           fontSize: Statics.shared.fontSizes.content)),
                   width: (screenWidth - (paddingSize * 2)) - buttonSize,
                 ),
-                Container(
-                    child: Text(this.obj.regDate,
-                        style: TextStyle(
-                            color: Statics.shared.colors.captionColor,
-                            fontSize: Statics.shared.fontSizes.small)),
-                    width: (screenWidth - (paddingSize * 2)) - buttonSize,
-                    margin: const EdgeInsets.only(top: 10)),
+                Row(
+                  children: <Widget>[
+                    Container(
+                        child: Text(this.obj.regDate,
+                            style: TextStyle(
+                                color: Statics.shared.colors.captionColor,
+                                fontSize: Statics.shared.fontSizes.small)),
+                        width: (screenWidth - (paddingSize * 2)) - buttonSize,
+                        margin: const EdgeInsets.only(top: 10)),
+                  ],
+                )
               ],
               mainAxisAlignment: MainAxisAlignment.center,
             ),

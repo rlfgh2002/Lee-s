@@ -59,6 +59,7 @@ dependencies:
   #flutter_appavailability: ^0.0.21 #설치된 파일 목록출력 및 실행
   open_appstore: ^1.0.2 #웹페이지가 아닌 앱스토어 오픈
   device_apps: ^1.0.9
+  progress_dialog: ^1.2.0
   
   flutter_localizations:
     sdk: flutter
@@ -71,11 +72,11 @@ dev_dependencies:
 
 
 flutter_icons:
+  image_path: "Resources/appIcons/ios/iTunesArtwork@2x.png"
   image_path_ios: "Resources/appIcons/ios/iTunesArtwork@2x.png"
   image_path_android: "Resources/appIcons/ios/iTunesArtwork@2x.png"
-  adaptive_icon_background: "#FFFFFF"
-  #adaptive_icon_background: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
-  #adaptive_icon_foreground: "Resources/appIcons/android/mipmap-xxxhdpi/ic_launcher.png"
+  adaptive_icon_background: "Resources/appIcons/ios/iTunesArtwork@2x.png"
+  adaptive_icon_foreground: "Resources/appIcons/ios/iTunesArtwork@2x.png"
   android: true
   ios: true
 
@@ -162,6 +163,7 @@ flutter:
     - Resources/Images/no_member.png
     - Resources/Images/splash.png
     - Resources/Images/auth_banner.png
+    - Resources/Images/inquiry_banner.png
 
     # Single Chat Page
     - Resources/Images/leftEdge.png

@@ -11,6 +11,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/models/Chat/chatObject.dart';
+import 'package:haegisa2/models/DataBase/MyDataBase.dart';
 import 'package:haegisa2/models/myFuncs.dart';
 import 'package:haegisa2/views/MainTabBar/NoInternetPopUp.dart';
 import 'controllers/mainTabBar/MainTabBar.dart';
@@ -46,7 +47,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
+    MyDataBase();
     if (Platform.isIOS) iOS_Permission();
 
     subscription = Connectivity()

@@ -19,6 +19,7 @@ import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 bool isDownload = true; //다운로드 할수 있는지 이미 다운된것은 false
 DownloadTaskStatus fileDownloadStatus = DownloadTaskStatus.undefined;
@@ -49,6 +50,7 @@ class _MagazinesState extends State<Magazines> {
   int magazineNum = 0;
   ReceivePort _port = ReceivePort();
   String downloadId;
+  ProgressDialog progressDialog;
 
   @override
   void initState() {
@@ -71,11 +73,16 @@ class _MagazinesState extends State<Magazines> {
       DownloadTaskStatus status = data[1];
       int progress = data[2];
 
+      progressDialog.update(progress: progress.toDouble());
+
       print("status: $status");
       print("progress: $progress");
       print("id == downloadId: ${id == downloadId}");
 
       if (status == DownloadTaskStatus.complete) {
+        progressDialog.hide().then((isHidden) {
+          print(isHidden);
+        });
         print("다운로드 완료");
         _displaySnackBar(context, "다운로드 완료");
         setState(() {
@@ -87,6 +94,9 @@ class _MagazinesState extends State<Magazines> {
           OpenFile.open(_localPath + "/" + btnServerFileName);
         });
       } else if (status == DownloadTaskStatus.failed) {
+        progressDialog.hide().then((isHidden) {
+          print(isHidden);
+        });
         print("다운실패");
         _displaySnackBar(context, "다운로드 실패");
         return;
@@ -215,7 +225,9 @@ class _MagazinesState extends State<Magazines> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-
+    progressDialog = new ProgressDialog(context,
+        type: ProgressDialogType.Download, isDismissible: true, showLogs: true);
+    progressDialog.style(message: "다운로드중...");
     if (widget.isFirstInit) {
       download5MoreMagazines(page: 1);
       widget.isFirstInit = false;
@@ -401,6 +413,8 @@ class _MagazinesState extends State<Magazines> {
             } else {
               changeURL = fileURL;
             }
+
+            progressDialog.show();
 
             final taskId = await FlutterDownloader.enqueue(
               url: changeURL,

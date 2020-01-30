@@ -44,14 +44,12 @@ class InquiryListState extends State<InquiryList> {
       child: Stack(
         children: [
           Image.asset(
-            "Resources/Images/noticeListHeader.png",
+            "Resources/Images/inquiry_banner.png",
             width: screenWidth,
-            height: 100,
           ),
         ],
       ),
       alignment: Alignment.center,
-      height: 100,
     );
     Widget blueSplitter = Container(
         color: Statics.shared.colors.blueLineColor,
@@ -60,7 +58,7 @@ class InquiryListState extends State<InquiryList> {
           left: 16,
           right: 16,
         ));
-    //widget.myList.add(topView);
+    widget.myList.add(topView);
     widget.myList.add(blueSplitter);
 
     Widget writeButton = Container(

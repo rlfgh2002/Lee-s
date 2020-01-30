@@ -68,9 +68,12 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     return currentLocation;
   }
 
-  static void setBadge(BuildContext context, String type, bool newMessage) {
+  static Future<void> setBadge(
+      BuildContext context, String type, bool newMessage) {
     MainTabBarState state =
         context.findAncestorStateOfType<State<MainTabBar>>();
+
+    //비동기로 변경하면서 state의 상태를 먼저 체크 후 뱃지 변경
 
     state.setState(() {
       if (type == "chat") {
@@ -294,6 +297,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
   }
 
   void firebaseCloudMessaging_Listeners() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     print(
         "::::::::::::::::::::::::: [ Firebase Listening ] :::::::::::::::::::::::::");
 
@@ -308,18 +312,17 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           Map<String, dynamic> body = {'data': []};
           body['data'] = message;
           analiseMessage(body, true, false);
-          setState(() {
-            if (message['notificationType'].toString().toLowerCase() ==
-                "chat") {
+          if (message['data']['notificationType'].toString().toLowerCase() ==
+              "chat") {
+            setState(() {
               btnChat = "Resources/Icons/btn_chat_new.png";
               btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
-            } else if (message['notificationType'].toString().toLowerCase() ==
-                    "notice" &&
-                message['notificationType'].toString().toLowerCase() == "qna") {
+            });
+          } else
+            setState(() {
               btnNotice = "Resources/Icons/btn_notice_new.png";
               btnNoticeAc = "Resources/Icons/btn_notice_ac_new.png";
-            }
-          });
+            });
         } else {
           if (message['notification']['title'] == null &&
               message['notification']['body'] == null &&
@@ -329,15 +332,15 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
             if (message['data']['notificationType'].toString().toLowerCase() ==
                 "chat") {
-              setBadge(context, "chat", true);
-            } else if (message['data']['notificationType']
-                        .toString()
-                        .toLowerCase() ==
-                    "notice" &&
-                message['data']['notificationType'].toString().toLowerCase() ==
-                    "qna") {
-              setBadge(context, "notice", true);
-            }
+              setState(() {
+                btnChat = "Resources/Icons/btn_chat_new.png";
+                btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
+              });
+            } else
+              setState(() {
+                btnNotice = "Resources/Icons/btn_notice_new.png";
+                btnNoticeAc = "Resources/Icons/btn_notice_ac_new.png";
+              });
           }
         }
       },
@@ -368,6 +371,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
 
   static Future<dynamic> fcmBackgroundMessageHandler(
       Map<String, dynamic> message) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     print('MSGX=> on Background $message');
 
     final MyDataBase myDb = MyDataBase();
@@ -430,6 +435,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   onNoInerted: () {});
             });
         // chat notification
+        sharedPreferences.setBool("app_new_badge_chat", true);
+
+        sharedPreferences.commit();
+        return;
       } else {
         if (message['data']['notificationType'].toString() == "vote") {
           // vote notification
@@ -482,6 +491,23 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                 else {} // on no inserted
               });
         } // Notice Notification
+        else if (message['data']['notificationType'].toString().toLowerCase() ==
+            "qna") {
+          if (message['data']['subject'] != null) {
+            myDb.insertQna(
+                idx: message['data']['idx'],
+                subject: message['data']['subject'],
+                regDate: message['data']['regDate'],
+                onInserted: (status) {
+                  if (status) {
+                  } // on inserted
+                  else {} // on no inserted
+                });
+          }
+        }
+
+        sharedPreferences.setBool("app_new_badge_notice", true);
+        sharedPreferences.commit();
       }
     } // notificationType is NOT null
 
@@ -726,6 +752,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   else {} // on no inserted
                 });
           }
+          if (Notices.staticNoticesPage != null) {
+            Notices.staticNoticesPage.myChild.refreshNotices();
+          }
         } // Notice Notification
         else if (message['data']['notificationType'].toString().toLowerCase() ==
             "qna") {
@@ -753,6 +782,9 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                   } // on inserted
                   else {} // on no inserted
                 });
+          }
+          if (Notices.staticNoticesPage != null) {
+            Notices.staticNoticesPage.myChild.refreshNotices();
           }
         } // Notice Notification
       }
@@ -859,7 +891,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     MainTabBar.myChild = this;
     MiddleWare.shared.tabc = TabController(
         length: MiddleWare.shared.myTabBarList.length, vsync: this);
-
     getUserId(onGetUserId: (uid) {
       getAllSurveys(uid: uid);
     });
@@ -879,8 +910,8 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
         showNoInternet(context);
       }
     });
+    checkNewBadge();
 
-    //checkNewAlarm();
     this.updateUserLocation();
     super.initState();
   }
@@ -1006,17 +1037,6 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
                     });
                   }).dialog();
             });
-      }
-    });
-  }
-
-  void checkNewAlarm() async {
-    await SharedPreferences.getInstance().then((val) {
-      bool status = val.getBool("app_new_alarm");
-      if (status == false || status == null) {
-        btnNotice = "Resources/Icons/btn_notice.png";
-      } else {
-        btnNotice = "Resources/Icons/btn_notice_new.png";
       }
     });
   }
@@ -1168,5 +1188,32 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
       ),
     );
     return loginBtn;
+  }
+
+  void checkNewBadge() {
+    widget.db.chatBadge(onResult: (res) {
+      if (res != "0") {
+        setState(() {
+          btnChat = "Resources/Icons/btn_chat_new.png";
+          btnChatAc = "Resources/Icons/btn_chat_ac_new.png";
+        });
+      }
+    });
+    widget.db.noticeBadge(onResult: (res) {
+      if (res != "0") {
+        setState(() {
+          btnNotice = "Resources/Icons/btn_notice_new.png";
+          btnNoticeAc = "Resources/Icons/btn_notice_ac_new.png";
+        });
+      }
+    });
+    widget.db.qnaBadge(onResult: (res) {
+      if (res != "0") {
+        setState(() {
+          btnNotice = "Resources/Icons/btn_notice_new.png";
+          btnNoticeAc = "Resources/Icons/btn_notice_ac_new.png";
+        });
+      }
+    });
   }
 }
