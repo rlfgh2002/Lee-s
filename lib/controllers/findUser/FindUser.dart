@@ -62,7 +62,7 @@ class _FindUserState extends State<FindUser> {
                       padding: EdgeInsets.only(
                           left: paddingRightLeft,
                           right: paddingRightLeft,
-                          top: 60),
+                          top: 30),
                       margin: const EdgeInsets.only(bottom: 15)),
                   // Container(
                   //     child: Text(Strings.shared.controllers.findUser.caption1,

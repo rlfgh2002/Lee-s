@@ -60,15 +60,32 @@ class GalleryListWidget extends StatelessWidget {
                   textAlign: TextAlign.start,
                 ),
                 width: ((screenWidth - (paddingSize * 1.0)) - buttonSize)),
-            Container(
-                child: Text(
-                  this.obj.regDate,
-                  style: TextStyle(
-                      color: Statics.shared.colors.captionColor,
-                      fontSize: Statics.shared.fontSizes.small),
-                  textAlign: TextAlign.start,
+            Row(
+              children: <Widget>[
+                Container(
+                  child: Text(this.obj.regDate,
+                      style: TextStyle(
+                          color: Statics.shared.colors.captionColor,
+                          fontSize: Statics.shared.fontSizes.small)),
+                  padding: const EdgeInsets.only(top: 2),
                 ),
-                width: ((screenWidth - (paddingSize * 2)) - buttonSize)),
+                DateTime.now()
+                            .difference(DateTime.parse(this.obj.regDate))
+                            .inDays <=
+                        7
+                    ? Container(
+                        child: Text(
+                          " N",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontSize: Statics.shared.fontSizes.verySmall,
+                              fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.justify,
+                        ),
+                      )
+                    : Container(),
+              ],
+            )
           ],
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -312,7 +312,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
           Map<String, dynamic> body = {'data': []};
           body['data'] = message;
           analiseMessage(body, true, false);
-          if (message['data']['notificationType'].toString().toLowerCase() ==
+          if (body['data']['notificationType'].toString().toLowerCase() ==
               "chat") {
             setState(() {
               btnChat = "Resources/Icons/btn_chat_new.png";
@@ -543,7 +543,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     else {
       if (message['data']['notificationType'].toString() == "chat") {
         // 주석 해제 할 시 해당 채팅방으로 이동
-        // 주석 처리할 시그냥 단순히 채팅 탭으로 이동
+        // 주석 처리할 시 그냥 단순히 채팅 탭으로 이동
         if (isOnResume) {
           // this.widget.mdw.shouldMoveToThisConvId =
           //     message['data']['conversationId'].toString();

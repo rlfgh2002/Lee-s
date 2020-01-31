@@ -52,16 +52,31 @@ class NoticesListWidget extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Container(
-                        child: Text(this.obj.regDate,
-                            style: TextStyle(
-                                color: Statics.shared.colors.captionColor,
-                                fontSize: Statics.shared.fontSizes.small)),
-                        width: (screenWidth - (paddingSize * 2)) - buttonSize,
-                        margin: const EdgeInsets.only(top: 10)),
+                      child: Text(this.obj.regDate,
+                          style: TextStyle(
+                              color: Statics.shared.colors.captionColor,
+                              fontSize: Statics.shared.fontSizes.small)),
+                      padding: const EdgeInsets.only(top: 2),
+                    ),
+                    DateTime.now()
+                                .difference(DateTime.parse(this.obj.regDate))
+                                .inDays <=
+                            7
+                        ? Container(
+                            child: Text(
+                              " N",
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: Statics.shared.fontSizes.verySmall,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.justify,
+                            ),
+                          )
+                        : Container(),
                   ],
                 )
               ],
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
             ),
           ],
           mainAxisSize: MainAxisSize.max,

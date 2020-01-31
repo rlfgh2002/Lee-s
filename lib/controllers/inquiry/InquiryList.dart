@@ -13,6 +13,7 @@ import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:haegisa2/models/statics/strings.dart';
 import 'package:haegisa2/models/statics/statics.dart';
 import 'package:haegisa2/views/inquiry/InquiryListWidget.dart';
+import 'package:haegisa2/views/null/nullPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -171,6 +172,10 @@ class InquiryListState extends State<InquiryList> {
           }
           this.refreshList(pCurrent, pTotal);
         }
+        List<Widget> newList = [];
+        newList.add(NullPage());
+        this.widget.inquiryList = newList;
+        this.refreshList(0, 0);
         print(
             "::::::::::::::::::::: [ Getting NoticesList End ] :::::::::::::::::::::");
       } else {
