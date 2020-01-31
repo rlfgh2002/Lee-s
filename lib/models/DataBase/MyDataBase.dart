@@ -113,8 +113,11 @@ class MyDataBase {
       bool dbStatus = prefs.getBool('my_database_iscreated');
       print(":::::::::: DB STATUS => [${dbStatus}] ::::::::::");
       if (dbStatus != true) {
-        print("CREATION:::::");
+        print("::::: DB CREATION :::::");
         _createDataBase();
+      } else {
+        print("::::: DB UPDATE:::::");
+        _upgradeDataBase();
       }
     });
   }
@@ -123,7 +126,7 @@ class MyDataBase {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, _StaticDbInformation.dbName);
     // open the database
-    await openDatabase(path, version: 1,
+    await openDatabase(path, version: 2,
             onCreate: (Database db, int version) async {
       // When creating the db, create the table
       await db
@@ -227,7 +230,7 @@ class MyDataBase {
 
       //await db.execute('');
     } // Create DataBase
-            )
+            , onUpgrade: _onUpgrade)
         .catchError(
             (er) => print("Error While Createing Table ${er.toString()}"))
         .then((val) {
@@ -235,6 +238,80 @@ class MyDataBase {
       print(":::::::::: DB INITIALIZING STATUS => [TRUE] ::::::::::");
       //val.close();
     });
+  }
+
+  void _upgradeDataBase() async {
+    var databasesPath = await getDatabasesPath();
+    String path = join(databasesPath, _StaticDbInformation.dbName);
+    // open the database
+    await openDatabase(path,
+            version: 2,
+            //await db.execute('');
+            // Create DataBase
+            onUpgrade: _onUpgrade)
+        .catchError(
+            (er) => print("Error While Createing Table ${er.toString()}"))
+        .then((val) {
+      prefs.setBool('my_database_iscreated', true);
+      print(":::::::::: DB INITIALIZING STATUS => [TRUE] ::::::::::");
+      //val.close();
+    });
+  }
+
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      //version 2 :tblQna 추가 ,tblSurveys,tblVotesAnswers 컬럼 추가(테이블 삭제하고 재생성 어짜피 설문조사 테이블은 계속 지워지고 생성됨)
+      db
+          .execute(
+              'CREATE TABLE ${_StaticDbInformation.tblQna} (${_StaticDbInformation.tblQnaIdx} TEXT PRIMARY KEY, ${_StaticDbInformation.tblQnaSubject} TEXT,${_StaticDbInformation.tblQnaSeen} TEXT,${_StaticDbInformation.tblQnaRegDate} TEXT)')
+          .then((val) {
+        print(
+            ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblQna} STATUS => [TRUE] ::::::::::");
+      }).catchError((error) {
+        print(
+            ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
+      });
+
+      db.execute("DROP TABLE ${_StaticDbInformation.tblSurveys}").then((val) {
+        print(
+            ":::::::::: DB DROP TABLE ${_StaticDbInformation.tblSurveys} STATUS => [TRUE] ::::::::::");
+      }).catchError((error) {
+        print(
+            ":::::::::: DB DROP TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
+      });
+
+      db
+          .execute(
+              'CREATE TABLE ${_StaticDbInformation.tblSurveys} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblSurveysNo} TEXT, ${_StaticDbInformation.tblSurveysRegDate} TEXT, ${_StaticDbInformation.tblSurveysDone} TEXT,${_StaticDbInformation.tblSurveysBdIdx} TEXT,${_StaticDbInformation.tblSurveysStartDate} TEXT,${_StaticDbInformation.tblSurveysEndDate} TEXT, ${_StaticDbInformation.tblSurveysSubject} TEXT, ${_StaticDbInformation.tblSurveysContents} TEXT, ${_StaticDbInformation.tblSurveysQcnt} TEXT)')
+          .then((val) {
+        print(
+            ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblSurveys} STATUS => [TRUE] ::::::::::");
+      }).catchError((error) {
+        print(
+            ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
+      });
+
+      db
+          .execute("DROP TABLE ${_StaticDbInformation.tblVotesAnswers}")
+          .then((val) {
+        print(
+            ":::::::::: DB DROP TABLE ${_StaticDbInformation.tblVotesAnswers} STATUS => [TRUE] ::::::::::");
+      }).catchError((error) {
+        print(
+            ":::::::::: DB DROP TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
+      });
+
+      db
+          .execute(
+              'CREATE TABLE ${_StaticDbInformation.tblVotesAnswers} (id INTEGER PRIMARY KEY AUTOINCREMENT, ${_StaticDbInformation.tblAnswersVoteIdx} TEXT, ${_StaticDbInformation.tblAnswersVoteDone} TEXT,${_StaticDbInformation.tblAnswersStatus} TEXT,${_StaticDbInformation.tblAnswersAnswer1} TEXT,${_StaticDbInformation.tblAnswersAnswer2} TEXT, ${_StaticDbInformation.tblAnswersAnswer3} TEXT, ${_StaticDbInformation.tblAnswersAnswer4} TEXT, ${_StaticDbInformation.tblAnswersAnswer5} TEXT, ${_StaticDbInformation.tblAnswersAnswer6} TEXT)')
+          .then((val) {
+        print(
+            ":::::::::: DB CREATE TABLE ${_StaticDbInformation.tblVotesAnswers} STATUS => [TRUE] ::::::::::");
+      }).catchError((error) {
+        print(
+            ":::::::::: DB CREATE TABLE ${error.toString()} STATUS => [FALSE] ::::::::::");
+      });
+    }
   }
 
   void _deleteDataBase() async {

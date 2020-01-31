@@ -64,12 +64,23 @@ class _FindUserState extends State<FindUser> {
                           right: paddingRightLeft,
                           top: 60),
                       margin: const EdgeInsets.only(bottom: 15)),
+                  // Container(
+                  //     child: Text(Strings.shared.controllers.findUser.caption1,
+                  //         style: TextStyle(
+                  //             fontSize: Statics.shared.fontSizes.content,
+                  //             color: Statics.shared.colors.captionColor),
+                  //         textAlign: TextAlign.center),
+                  //     padding: EdgeInsets.only(
+                  //         left: paddingRightLeft,
+                  //         right: paddingRightLeft,
+                  //         top: 0),
+                  //     margin: const EdgeInsets.only(bottom: 30)),
                   Container(
-                      child: Text(Strings.shared.controllers.findUser.caption1,
+                      child: Text(Strings.shared.controllers.findUser.caption2,
                           style: TextStyle(
-                              fontSize: Statics.shared.fontSizes.content,
+                              fontSize: Statics.shared.fontSizes.medium,
                               color: Statics.shared.colors.captionColor),
-                          textAlign: TextAlign.center),
+                          textAlign: TextAlign.left),
                       padding: EdgeInsets.only(
                           left: paddingRightLeft,
                           right: paddingRightLeft,

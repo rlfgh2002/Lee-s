@@ -72,7 +72,9 @@ class _StringsControllerFindUser {
   String pageTitle = "회원검색";
   String title1 = "협회 회원중에\n찾고 싶은 분이 계신가요?";
   String caption1 = "검색창에서 회원을 검색해보세요!";
-  String searchPlaceHolder = "이름, 휴대전화번호 검색";
+  String caption2 =
+      "- 찾는사람이 앱을 설치해야 검색이 가능합니다. \n- 협회 어플이 런칭 초기단계라 검색 결과가 없을시, '1:1문의'에 문의해주시면 연결 할 수 있도록 노력하겠습니다.";
+  String searchPlaceHolder = "이름 또는 전화번호로 검색";
   String notFound = "검색 결과가 없습니다";
 }
 // FIND USER Controller //

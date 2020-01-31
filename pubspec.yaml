@@ -72,11 +72,11 @@ dev_dependencies:
 
 
 flutter_icons:
-  image_path: "Resources/appIcons/ios/iTunesArtwork@2x.png"
+  image_path: "Resources/appIcons/playstore-icon.png"
   image_path_ios: "Resources/appIcons/ios/iTunesArtwork@2x.png"
-  image_path_android: "Resources/appIcons/ios/iTunesArtwork@2x.png"
-  adaptive_icon_background: "Resources/appIcons/ios/iTunesArtwork@2x.png"
-  adaptive_icon_foreground: "Resources/appIcons/ios/iTunesArtwork@2x.png"
+  image_path_android: "Resources/appIcons/playstore-icon.png"
+  adaptive_icon_background: "Resources/appIcons/playstore-icon.png"
+  adaptive_icon_foreground: "Resources/appIcons/playstore-icon.png"
   android: true
   ios: true
 
