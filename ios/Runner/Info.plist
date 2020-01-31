@@ -31,16 +31,12 @@
 	<string>All files have been downloaded</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Can I use the camera please?</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Can I use the mic please?</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>com.mariners.haegisa2</string>
 	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -64,12 +60,16 @@
 	<string>Needed to media file</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Needed to calender</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Can I use the camera please?</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Needed to member information</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Needed to access location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Needed to access location</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Can I use the mic please?</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Needed to motion usage</string>
 	<key>NSPhotoLibraryUsageDescription</key>
