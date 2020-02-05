@@ -28,7 +28,38 @@ class UserInfo extends StatefulWidget {
 class UserInfoState extends State<UserInfo> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var schoolTable = new List();
-  List<School> _schoolList = new List();
+  List<School> _schoolList = [
+    School(chcode: "14000", ccname: "선택하세요"),
+    School(chcode: "14000", ccname: "선택하세요"),
+    School(chcode: "14000", ccname: "선택하세요"),
+    School(chcode: "14001", ccname: "한국해양대학교"),
+    School(chcode: "14002", ccname: "목포해양대학교"),
+    School(chcode: "14003", ccname: "해대부설해전"),
+    School(chcode: "14004", ccname: "해대부설전수과"),
+    School(chcode: "14005", ccname: "부경대학교"),
+    School(chcode: "14006", ccname: "전남대학교"),
+    School(chcode: "14007", ccname: "군산대학교"),
+    School(chcode: "14008", ccname: "부산해양고등학교"),
+    School(chcode: "14009", ccname: "부산해사고등학교"),
+    School(chcode: "14010", ccname: "원양어업기술훈"),
+    School(chcode: "14011", ccname: "인천해사고"),
+    School(chcode: "14012", ccname: "포항대학교"),
+    School(chcode: "14013", ccname: "경상대학교"),
+    School(chcode: "14014", ccname: "대졸"),
+    School(chcode: "14015", ccname: "전문졸"),
+    School(chcode: "14016", ccname: "고졸"),
+    School(chcode: "14017", ccname: "중졸"),
+    School(chcode: "14018", ccname: "국졸"),
+    School(chcode: "14019", ccname: "기타"),
+    School(chcode: "14020", ccname: "해군사관학교"),
+    School(chcode: "14021", ccname: "제주대학교"),
+    School(chcode: "14022", ccname: "경남해양과학고"),
+    School(chcode: "14023", ccname: "성산고등학교"),
+    School(chcode: "14024", ccname: "강원도립대"),
+    School(chcode: "14025", ccname: "포항해양과학고등학교"),
+    School(chcode: "14026", ccname: "오션폴리텍"),
+    School(chcode: "14027", ccname: "완도수산고등학교"),
+  ];
 
   TextEditingController _emailController;
   TextEditingController _addressController;
@@ -587,46 +618,51 @@ class UserInfoState extends State<UserInfo> {
                           ),
                           Container(
                               width: deviceWidth / 2.0,
-                              child: FutureBuilder(
-                                future: getSchool(), // a Future<String> or null
-                                builder: (BuildContext context,
-                                    AsyncSnapshot snapshot) {
-                                  //print('project snapshot data is: ${snapshot.data}');
-                                  switch (snapshot.connectionState) {
-                                    case ConnectionState.none:
-                                      return new Text('Press button to start');
-                                    case ConnectionState.waiting:
-                                      return new Container(
-                                        child: FlatButton(
-                                          splashColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          child: Text("",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: Statics.shared.colors
-                                                      .titleTextColor,
-                                                  fontSize: Statics.shared
-                                                      .fontSizes.subTitle)),
-                                          onPressed: () {},
-                                        ),
-                                        height: deviceWidth / 6,
-                                      );
-                                    default:
-                                      if (snapshot.hasError)
-                                        return new Text(
-                                            'Error: ${snapshot.error}');
-                                      else {
-                                        if (btnModify3 == false) {
-                                          return getschoolName(
-                                              context, snapshot, school);
-                                        } else {
-                                          return schoolDropbox(
-                                              context, snapshot);
-                                        }
-                                      }
-                                  }
-                                },
-                              )),
+                              child: btnModify3 == false
+                                  ? getschoolName2(school)
+                                  : schoolDropbox2()),
+                          // Container(
+                          //     width: deviceWidth / 2.0,
+                          //     child: FutureBuilder(
+                          //       future: getSchool(), // a Future<String> or null
+                          //       builder: (BuildContext context,
+                          //           AsyncSnapshot snapshot) {
+                          //         //print('project snapshot data is: ${snapshot.data}');
+                          //         switch (snapshot.connectionState) {
+                          //           case ConnectionState.none:
+                          //             return new Text('Press button to start');
+                          //           case ConnectionState.waiting:
+                          //             return new Container(
+                          //               child: FlatButton(
+                          //                 splashColor: Colors.transparent,
+                          //                 highlightColor: Colors.transparent,
+                          //                 child: Text("",
+                          //                     overflow: TextOverflow.ellipsis,
+                          //                     style: TextStyle(
+                          //                         color: Statics.shared.colors
+                          //                             .titleTextColor,
+                          //                         fontSize: Statics.shared
+                          //                             .fontSizes.subTitle)),
+                          //                 onPressed: () {},
+                          //               ),
+                          //               height: deviceWidth / 6,
+                          //             );
+                          //           default:
+                          //             if (snapshot.hasError)
+                          //               return new Text(
+                          //                   'Error: ${snapshot.error}');
+                          //             else {
+                          //               if (btnModify3 == false) {
+                          //                 return getschoolName(
+                          //                     context, snapshot, school);
+                          //               } else {
+                          //                 return schoolDropbox(
+                          //                     context, snapshot);
+                          //               }
+                          //             }
+                          //         }
+                          //       },
+                          //     )),
                           Spacer(),
                           Container(
                               width: deviceWidth / 6.2,
@@ -891,6 +927,15 @@ class UserInfoState extends State<UserInfo> {
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
+  Widget schoolDropbox2() {
+    if (_schoolList.length == 0) {
+      // here we are creating the drop down menu items, you can customize the item right here
+      // but I'll just use a simple text for this
+
+    }
+    return _createDropDownMenu();
+  }
+
   Widget schoolDropbox(BuildContext context, AsyncSnapshot snapshot) {
     var values = snapshot.data;
     print("SCHOOL LENGTH : ${_schoolList.length}");
@@ -929,6 +974,21 @@ class UserInfoState extends State<UserInfo> {
         );
       }).toList(),
     );
+  }
+
+  getschoolName2(String chcode) {
+    for (var res in _schoolList) {
+      if (res.chcode == chcode) {
+        return Text(
+          res.ccname,
+          style: TextStyle(
+            color: Statics.shared.colors.titleTextColor,
+            fontSize: Statics.shared.fontSizes.supplementary,
+          ),
+          textAlign: TextAlign.left,
+        );
+      }
+    }
   }
 
   Future<List> getSchool() async {

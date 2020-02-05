@@ -789,7 +789,7 @@ class _HomeState extends State<Home2> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "해기사시험험",
+                                    "해기사시험",
                                     style: TextStyle(
                                         color: Statics
                                             .shared.colors.titleTextColor,
