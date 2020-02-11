@@ -30,8 +30,6 @@ class UserInfoState extends State<UserInfo> {
   var schoolTable = new List();
   List<School> _schoolList = [
     School(chcode: "14000", ccname: "선택하세요"),
-    School(chcode: "14000", ccname: "선택하세요"),
-    School(chcode: "14000", ccname: "선택하세요"),
     School(chcode: "14001", ccname: "한국해양대학교"),
     School(chcode: "14002", ccname: "목포해양대학교"),
     School(chcode: "14003", ccname: "해대부설해전"),

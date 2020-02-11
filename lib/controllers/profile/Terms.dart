@@ -62,7 +62,7 @@ class _TermsState extends State<Terms> {
                       Spacer(),
                       SizedBox(
                         width: 50,
-                        child: Image.asset('Resources/Icons/Vector 3.2.png',
+                        child: Image.asset('Resources/Icons/Vector_3.2.png',
                             width: 10, scale: 4.0),
                       )
                     ])),
@@ -92,7 +92,7 @@ class _TermsState extends State<Terms> {
                       Spacer(),
                       SizedBox(
                         width: 50,
-                        child: Image.asset('Resources/Icons/Vector 3.2.png',
+                        child: Image.asset('Resources/Icons/Vector_3.2.png',
                             width: 10, scale: 4.0),
                       )
                     ])),

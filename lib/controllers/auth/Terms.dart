@@ -250,7 +250,7 @@ class TermsState extends State<TermsPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('Resources/Icons/Vector 3.2.png')),
+                          image: AssetImage('Resources/Icons/Vector_3.2.png')),
                     )),
               ),
             ),

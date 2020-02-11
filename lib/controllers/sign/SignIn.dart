@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/auth.dart';
+import 'package:haegisa2/controllers/member/JoinAlready.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
@@ -63,236 +64,245 @@ class _SignInState extends State<SignIn> {
       userInformation.userToken = token; // Print the Token in Console
     });
 
-    return Scaffold(
-      key: _scaffoldKey,
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-                child: Text(
-                  Strings.shared.controllers.signIn.title1,
-                  style: TextStyle(
-                    fontSize: Statics.shared.fontSizes.title,
-                    color: Statics.shared.colors.titleTextColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                alignment: Alignment.centerLeft),
-            Container(
-                child: Text(
-                  Strings.shared.controllers.signIn.title2,
-                  style: TextStyle(
-                      fontSize: Statics.shared.fontSizes.title,
-                      color: Statics.shared.colors.mainColor,
-                      fontWeight: FontWeight.bold),
-                ),
-                alignment: Alignment.centerLeft),
-            Container(
-                child: Text(
-                  Strings.shared.controllers.signIn.subTitle,
-                  style: TextStyle(
-                    fontSize: Statics.shared.fontSizes.subTitle,
-                    color: Color(0xFF333364B),
-                  ),
-                ),
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(top: 20)),
-            SizedBox(height: 25),
-
-            //아이디 입력
-            Container(
-                child: TextField(
-                  decoration: InputDecoration(
-                      hintStyle: TextStyle(
-                        fontSize: Statics.shared.fontSizes.subTitle,
-                        color: Statics.shared.colors.subTitleTextColor,
+    return new WillPopScope(
+        onWillPop: () async => _onBackPressed(),
+        child: new Scaffold(
+          key: _scaffoldKey,
+          body: Container(
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    child: Text(
+                      Strings.shared.controllers.signIn.title1,
+                      style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.title,
+                        color: Statics.shared.colors.titleTextColor,
+                        fontWeight: FontWeight.bold,
                       ),
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.perm_identity),
-                      hintText: Strings
-                          .shared.controllers.signIn.txtHintUser), // decoration
-                  onChanged: (String str) {
-                    idValue = str;
-                    if (str.length > 0) {
-                      _idChecked = true;
-                    } else {
-                      _idChecked = false;
-                    }
-                  },
-                ),
-                alignment: Alignment.centerLeft),
-            SizedBox(height: 10),
-
-            //패스워드 입력
-            Container(
-                child: TextField(
-                  decoration: InputDecoration(
-                      hintStyle: TextStyle(
+                    ),
+                    alignment: Alignment.centerLeft),
+                Container(
+                    child: Text(
+                      Strings.shared.controllers.signIn.title2,
+                      style: TextStyle(
+                          fontSize: Statics.shared.fontSizes.title,
+                          color: Statics.shared.colors.mainColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    alignment: Alignment.centerLeft),
+                Container(
+                    child: Text(
+                      Strings.shared.controllers.signIn.subTitle,
+                      style: TextStyle(
                         fontSize: Statics.shared.fontSizes.subTitle,
-                        color: Statics.shared.colors.subTitleTextColor,
+                        color: Color(0xFF333364B),
                       ),
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.lock_outline),
-                      hintText: Strings.shared.controllers.signIn.txtHintPass),
-                  obscureText: true, // decoration
-                  onChanged: (String str) {
-                    passValue = str;
-                    if (str.length > 0) {
-                      _pwdChecked = true;
-                    } else {
-                      _pwdChecked = false;
-                    }
-                  },
-                ),
-                alignment: Alignment.centerLeft),
-            SizedBox(height: 5),
-            Container(
-                child: Row(
-                  children: [
-                    FlatButton(
-                      child: Text(Strings.shared.controllers.signIn.findIDTitle,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics
-                                  .shared.fontSizes.supplementary)), // Text
-                      onPressed: () {
-                        userInformation.mode = "find_id";
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new Auth()));
-                      },
-                      padding: const EdgeInsets.all(0),
-                    ), // Flat Button -> FindID
-                    Text("  |  ",
-                        style: TextStyle(
-                            color: Statics.shared.colors.subTitleTextColor)),
-                    FlatButton(
-                      child: Text(
-                          Strings.shared.controllers.signIn.forgetPasswordTitle,
-                          style: TextStyle(
-                              color: Statics.shared.colors.titleTextColor,
-                              fontSize: Statics
-                                  .shared.fontSizes.supplementary)), // Text
-                      onPressed: () {
-                        userInformation.mode = "find_pw";
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (context) => new Auth()));
-                      },
-                      padding: const EdgeInsets.all(0),
-                    ), // Flat Button -> ForgetPassword
-                  ], // Row Children
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                ), // Row
-                alignment: Alignment.centerRight),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(top: 20)),
+                SizedBox(height: 25),
 
-            Container(
-                height: 60,
-                alignment: FractionalOffset.bottomCenter,
-                child: new SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: FlatButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    padding: EdgeInsets.all(20),
-                    color: _idChecked && _pwdChecked
-                        ? Statics.shared.colors.mainColor
-                        : Statics.shared.colors.subTitleTextColor,
-                    child: Text(Strings.shared.controllers.signIn.loginBtnTitle,
-                        style: TextStyle(
+                //아이디 입력
+                Container(
+                    child: TextField(
+                      decoration: InputDecoration(
+                          hintStyle: TextStyle(
                             fontSize: Statics.shared.fontSizes.subTitle,
-                            color: Colors.white)),
-                    onPressed: () async {
-                      if (_idChecked == true && _pwdChecked) {
-                        if (trim(idValue) == "") {
-                          _displaySnackBar(context,
-                              Strings.shared.controllers.signIn.enterID);
-                        } else if (trim(passValue) == "") {
-                          _displaySnackBar(context,
-                              Strings.shared.controllers.signIn.enterPass);
+                            color: Statics.shared.colors.subTitleTextColor,
+                          ),
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.perm_identity),
+                          hintText: Strings.shared.controllers.signIn
+                              .txtHintUser), // decoration
+                      onChanged: (String str) {
+                        idValue = str;
+                        if (str.length > 0) {
+                          _idChecked = true;
+                        } else {
+                          _idChecked = false;
                         }
+                      },
+                    ),
+                    alignment: Alignment.centerLeft),
+                SizedBox(height: 10),
 
-                        var map = new Map<String, dynamic>();
-                        map["id"] = idValue;
-                        map["pwd"] = passValue;
-                        Result resultPost = await createPost(
-                            Strings.shared.controllers.jsonURL.loginJson,
-                            body: map);
-                        if (jsonMsg == "ID is Wrong") {
-                          _displaySnackBar(context,
-                              Strings.shared.controllers.signIn.wrongID);
-                        } else if (jsonMsg == "PASSWORD is Wrong") {
-                          _displaySnackBar(context,
-                              Strings.shared.controllers.signIn.wrongPass);
-                        } else if (jsonMsg == "success") {
-                          await deviceinfo();
-
-                          userInformation.mode = "login";
-                          userInformation.fullName = resultPost.memberName;
-                          userInformation.hp = resultPost.hp;
-                          userInformation.loginCheck = 1;
-                          userInformation.userID = idValue;
-                          userInformation.memberType = resultPost.memberType;
-                          userInformation.userIdx = resultPost.memberIdx;
-                          userInformation.haegisa = resultPost.haegisa;
-
-                          _firebaseMessaging.getToken().then((token) {
-                            print(token);
-                            userInformation.userToken = token;
-                          });
-
-                          this.refreshUserInfo(() {
-                            Navigator.pushReplacement(
+                //패스워드 입력
+                Container(
+                    child: TextField(
+                      decoration: InputDecoration(
+                          hintStyle: TextStyle(
+                            fontSize: Statics.shared.fontSizes.subTitle,
+                            color: Statics.shared.colors.subTitleTextColor,
+                          ),
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.lock_outline),
+                          hintText:
+                              Strings.shared.controllers.signIn.txtHintPass),
+                      obscureText: true, // decoration
+                      onChanged: (String str) {
+                        passValue = str;
+                        if (str.length > 0) {
+                          _pwdChecked = true;
+                        } else {
+                          _pwdChecked = false;
+                        }
+                      },
+                    ),
+                    alignment: Alignment.centerLeft),
+                SizedBox(height: 5),
+                Container(
+                    child: Row(
+                      children: [
+                        FlatButton(
+                          child: Text(
+                              Strings.shared.controllers.signIn.findIDTitle,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize: Statics
+                                      .shared.fontSizes.supplementary)), // Text
+                          onPressed: () {
+                            userInformation.mode = "find_id";
+                            Navigator.push(
                                 context,
                                 new MaterialPageRoute(
-                                    builder: (context) => new SplashScreen()));
-                          });
-                        }
-                      }
-                    },
-                  ),
-                )),
-            Row(children: <Widget>[
-              Expanded(child: Divider(height: 30)),
-            ]),
-            Container(
-                height: 60,
-                alignment: FractionalOffset.bottomCenter,
-                child: new SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: Statics.shared.colors.mainColor, width: 1),
-                    ),
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    padding: EdgeInsets.all(20),
-                    color: Colors.white,
-                    child: Text(Strings.shared.controllers.signIn.joinTitle,
-                        style: TextStyle(
-                            fontSize: Statics.shared.fontSizes.subTitle,
-                            color: Statics.shared.colors.mainColor)),
-                    onPressed: () async {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => new SignAuth()));
-                    },
-                  ),
-                )),
-          ], //Children
-        ), // Column
-        padding: const EdgeInsets.only(left: 32, right: 32),
-        width: MiddleWare.shared.screenSize,
-      ), // Container
-    );
+                                    builder: (context) => new Auth()));
+                          },
+                          padding: const EdgeInsets.all(0),
+                        ), // Flat Button -> FindID
+                        Text("  |  ",
+                            style: TextStyle(
+                                color:
+                                    Statics.shared.colors.subTitleTextColor)),
+                        FlatButton(
+                          child: Text(
+                              Strings.shared.controllers.signIn
+                                  .forgetPasswordTitle,
+                              style: TextStyle(
+                                  color: Statics.shared.colors.titleTextColor,
+                                  fontSize: Statics
+                                      .shared.fontSizes.supplementary)), // Text
+                          onPressed: () {
+                            userInformation.mode = "find_pw";
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new JoinAlready()));
+                          },
+                          padding: const EdgeInsets.all(0),
+                        ), // Flat Button -> ForgetPassword
+                      ], // Row Children
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                    ), // Row
+                    alignment: Alignment.centerRight),
+
+                Container(
+                    height: 60,
+                    alignment: FractionalOffset.bottomCenter,
+                    child: new SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: FlatButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        padding: EdgeInsets.all(20),
+                        color: _idChecked && _pwdChecked
+                            ? Statics.shared.colors.mainColor
+                            : Statics.shared.colors.subTitleTextColor,
+                        child: Text(
+                            Strings.shared.controllers.signIn.loginBtnTitle,
+                            style: TextStyle(
+                                fontSize: Statics.shared.fontSizes.subTitle,
+                                color: Colors.white)),
+                        onPressed: () async {
+                          if (_idChecked == true && _pwdChecked) {
+                            if (trim(idValue) == "") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.enterID);
+                            } else if (trim(passValue) == "") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.enterPass);
+                            }
+
+                            var map = new Map<String, dynamic>();
+                            map["id"] = idValue;
+                            map["pwd"] = passValue;
+                            Result resultPost = await createPost(
+                                Strings.shared.controllers.jsonURL.loginJson,
+                                body: map);
+                            if (jsonMsg == "ID is Wrong") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.wrongID);
+                            } else if (jsonMsg == "PASSWORD is Wrong") {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.wrongPass);
+                            } else if (jsonMsg == "success") {
+                              await deviceinfo();
+
+                              userInformation.mode = "login";
+                              userInformation.fullName = resultPost.memberName;
+                              userInformation.hp = resultPost.hp;
+                              userInformation.loginCheck = 1;
+                              userInformation.userID = idValue;
+                              userInformation.memberType =
+                                  resultPost.memberType;
+                              userInformation.userIdx = resultPost.memberIdx;
+                              userInformation.haegisa = resultPost.haegisa;
+
+                              _firebaseMessaging.getToken().then((token) {
+                                print(token);
+                                userInformation.userToken = token;
+                              });
+
+                              this.refreshUserInfo(() {
+                                Navigator.pushReplacement(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) =>
+                                            new SplashScreen()));
+                              });
+                            }
+                          }
+                        },
+                      ),
+                    )),
+                Row(children: <Widget>[
+                  Expanded(child: Divider(height: 30)),
+                ]),
+                Container(
+                    height: 60,
+                    alignment: FractionalOffset.bottomCenter,
+                    child: new SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: Statics.shared.colors.mainColor, width: 1),
+                        ),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        padding: EdgeInsets.all(20),
+                        color: Colors.white,
+                        child: Text(Strings.shared.controllers.signIn.joinTitle,
+                            style: TextStyle(
+                                fontSize: Statics.shared.fontSizes.subTitle,
+                                color: Statics.shared.colors.mainColor)),
+                        onPressed: () async {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) => new SignAuth()));
+                        },
+                      ),
+                    )),
+              ], //Children
+            ), // Column
+            padding: const EdgeInsets.only(left: 32, right: 32),
+            width: MiddleWare.shared.screenSize,
+          ), // Container
+        ));
   } // user is logged in
 
   _displaySnackBar(BuildContext context, String str) {
@@ -409,6 +419,42 @@ class _SignInState extends State<SignIn> {
         ),
       ),
     );
+  }
+
+  Future<bool> _onBackPressed() {
+    showDialog(
+        barrierDismissible: true,
+        context: context,
+        builder: (_) => AlertDialog(
+              title: new Text("앱 종료"),
+              content: new Text("앱을 종료하시겠습니까?",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Statics.shared.fontSizes.supplementary)),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text("취소",
+                      style: TextStyle(
+                          fontSize: Statics.shared.fontSizes.supplementary,
+                          color: Colors.black)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new FlatButton(
+                  child: new Text(
+                    "종료",
+                    style: TextStyle(
+                        fontSize: Statics.shared.fontSizes.supplementary,
+                        color: Colors.red),
+                  ),
+                  onPressed: () {
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  },
+                ),
+              ],
+            ));
   }
 }
 

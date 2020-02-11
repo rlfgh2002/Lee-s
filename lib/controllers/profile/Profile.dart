@@ -298,7 +298,7 @@ class _ProfileState extends State<Profile> {
                               SizedBox(
                                 width: 50,
                                 child: Image.asset(
-                                    'Resources/Icons/Vector 3.2.png',
+                                    'Resources/Icons/Vector_3.2.png',
                                     width: 10,
                                     scale: 4),
                               )
@@ -344,7 +344,7 @@ class _ProfileState extends State<Profile> {
                     //           SizedBox(
                     //             width: 50,
                     //             child: Image.asset(
-                    //                 'Resources/Icons/Vector 3.2.png',
+                    //                 'Resources/Icons/Vector_3.2.png',
                     //                 width: 10,
                     //                 scale: 4),
                     //           )
@@ -390,7 +390,7 @@ class _ProfileState extends State<Profile> {
                               SizedBox(
                                 width: 50,
                                 child: Image.asset(
-                                    'Resources/Icons/Vector 3.2.png',
+                                    'Resources/Icons/Vector_3.2.png',
                                     width: 10,
                                     scale: 4),
                               )
@@ -427,7 +427,7 @@ class _ProfileState extends State<Profile> {
                               SizedBox(
                                 width: 50,
                                 child: Image.asset(
-                                    'Resources/Icons/Vector 3.2.png',
+                                    'Resources/Icons/Vector_3.2.png',
                                     width: 10,
                                     scale: 4),
                               )

@@ -171,10 +171,10 @@ class _AuthState extends State<Auth> {
               if (userInformation.userDeviceOS == "i") {
                 userInformation.mode =
                     Strings.shared.controllers.signIn.already;
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (_) => alertDialog(userInformation.mode));
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) => new SplashScreen()));
               } else {
                 Navigator.push(
                     context,
