@@ -1,6 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/sign/SignIn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -25,8 +27,25 @@ class JoinAlready extends StatefulWidget {
 
 class _JoinInState extends State<JoinAlready> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   TextEditingController _idController =
       new TextEditingController(text: userInformation.userID);
+
+  void refreshUserInfo(onComplete()) async {
+    await SharedPreferences.getInstance().then((val) {
+      val
+          .setString("app_user_login_info_userid", userInformation.userID)
+          .then((val2) {
+        if (val2) {
+          val.setBool("app_user_login_info_islogin", true).then((val3) {
+            if (val3) {
+              onComplete();
+            }
+          });
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,40 +209,53 @@ class _JoinInState extends State<JoinAlready> {
                                     body: map);
 
                                 if (resultPost.code == "200") {
-                                  showDialog(
-                                      barrierDismissible: false,
-                                      context: context,
-                                      builder: (_) => AlertDialog(
-                                            title: new Text("알림"),
-                                            content: new Text(
-                                                "비밀번호가 변경되었습니다. \n로그인 화면으로 이동합니다.",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            actions: <Widget>[
-                                              // usually buttons at the bottom of the dialog
+                                  var map = new Map<String, dynamic>();
+                                  map["id"] = userInformation.userID;
+                                  map["pwd"] = this.widget.passValue;
+                                  Result resultPost = await createPost(
+                                      Strings
+                                          .shared.controllers.jsonURL.loginJson,
+                                      body: map);
+                                  if (jsonMsg == "ID is Wrong") {
+                                    _displaySnackBar(
+                                        context,
+                                        Strings
+                                            .shared.controllers.signIn.wrongID);
+                                  } else if (jsonMsg == "PASSWORD is Wrong") {
+                                    _displaySnackBar(
+                                        context,
+                                        Strings.shared.controllers.signIn
+                                            .wrongPass);
+                                  } else if (jsonMsg == "success") {
+                                    await deviceinfo();
 
-                                              new FlatButton(
-                                                child: new Text(
-                                                  "확인",
-                                                  style: TextStyle(
-                                                      fontSize: Statics
-                                                          .shared
-                                                          .fontSizes
-                                                          .supplementary,
-                                                      color: Statics.shared
-                                                          .colors.mainColor),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      new MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              new SignIn()));
-                                                },
-                                              ),
-                                            ],
-                                          ));
+                                    userInformation.mode = "login";
+                                    userInformation.fullName =
+                                        resultPost.memberName;
+                                    userInformation.hp = resultPost.hp;
+                                    userInformation.loginCheck = 1;
+                                    userInformation.userID =
+                                        userInformation.userID;
+                                    userInformation.memberType =
+                                        resultPost.memberType;
+                                    userInformation.userIdx =
+                                        resultPost.memberIdx;
+                                    userInformation.haegisa =
+                                        resultPost.haegisa;
+
+                                    _firebaseMessaging.getToken().then((token) {
+                                      print(token);
+                                      userInformation.userToken = token;
+                                    });
+
+                                    this.refreshUserInfo(() {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  new SplashScreen()));
+                                    });
+                                  }
                                 } else {
                                   _displaySnackBar(context,
                                       Strings.shared.controllers.signIn.error);
@@ -269,7 +301,18 @@ Future<Result> createPost(String url, {Map body}) async {
 
     if (statusCode == 200) {
       // If the call to the server was successful, parse the JSON
-      return Result.fromJson(json.decode(response.body));
+      var table = responseJSON["table"];
+      if (code == "200") {
+        if (url == Strings.shared.controllers.jsonURL.loginJson) {
+          for (var result in table) {
+            return Result.fromJson(
+                result, Strings.shared.controllers.jsonURL.loginJson);
+          }
+        } else if (url == Strings.shared.controllers.jsonURL.findPW) {
+          return Result.fromJson(
+              responseJSON, Strings.shared.controllers.jsonURL.loginJson);
+        }
+      }
     } else {
       // If that call was not successful, throw an error.
       throw Exception('Failed to load post');
@@ -280,23 +323,38 @@ Future<Result> createPost(String url, {Map body}) async {
 //JSON 데이터
 class Result {
   final String code;
+  final String idx;
+  final String memberIdx;
+  final String id;
+  final String memberName;
+  final String hp;
+  final String memberType;
+  final String haegisa;
 
-  Result({this.code});
+  Result(
+      {this.code,
+      this.idx,
+      this.memberIdx,
+      this.id,
+      this.memberName,
+      this.hp,
+      this.memberType,
+      this.haegisa});
 
-  factory Result.fromJson(Map<String, dynamic> json) {
-    return Result(
-      code: json['code'],
-    );
+  factory Result.fromJson(Map<String, dynamic> json, String url) {
+    if (url == Strings.shared.controllers.jsonURL.loginJson) {
+      return Result(
+        code: json['code'],
+        idx: json['idx'],
+        memberIdx: json['member_idx'],
+        id: json['id'],
+        memberName: json['member_name'],
+        hp: json['hp'],
+        memberType: json['member_type'],
+        haegisa: json['haegisa'],
+      );
+    } else if (url == Strings.shared.controllers.jsonURL.findPW) {
+      return Result(code: json['code']);
+    }
   }
-}
-
-//JSON 데이터
-class School {
-  School({
-    this.chcode,
-    this.ccname,
-  });
-
-  final String chcode;
-  final String ccname;
 }
