@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/MaintabBar/MiddleWare.dart';
+import 'package:haegisa2/controllers/profile/ChangePassword.dart';
 import 'package:haegisa2/controllers/profile/Profile.dart';
 import 'package:haegisa2/models/profile/SearchAddress.dart';
 import 'package:haegisa2/models/statics/strings.dart';
@@ -194,6 +195,60 @@ class UserInfoState extends State<UserInfo> {
                             textAlign: TextAlign.left,
                           ),
                           Spacer(),
+                        ],
+                      ), // Row Children
+                    ),
+                    Row(children: <Widget>[
+                      Expanded(child: Divider(height: 0)),
+                    ]),
+                    Container(
+                      height: deviceWidth / 6,
+                      padding: const EdgeInsets.only(left: 20),
+                      child: new Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(children: <Widget>[
+                              Text(
+                                "비밀번호",
+                                style: TextStyle(
+                                    color: Statics.shared.colors.titleTextColor,
+                                    fontSize:
+                                        Statics.shared.fontSizes.supplementary,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.left,
+                              ),
+                            ]),
+                            width: deviceWidth / 5,
+                            padding: const EdgeInsets.only(right: 10),
+                          ),
+                          Container(
+                              width: deviceWidth / 2.0,
+                              child: Text(
+                                "*****",
+                                style: TextStyle(
+                                  fontSize:
+                                      Statics.shared.fontSizes.supplementary,
+                                  color: Statics.shared.colors.titleTextColor,
+                                ),
+                              )),
+                          Spacer(),
+                          Container(
+                              width: deviceWidth / 6.2,
+                              child: FlatButton(
+                                child: Text("변경",
+                                    style: TextStyle(
+                                        fontSize: Statics
+                                            .shared.fontSizes.supplementary,
+                                        color: Statics.shared.colors.mainColor,
+                                        fontWeight: FontWeight.bold)),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new ChangePassword()));
+                                },
+                              ))
                         ],
                       ), // Row Children
                     ),

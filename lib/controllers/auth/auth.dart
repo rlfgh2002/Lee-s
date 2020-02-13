@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/controllers/member/JoinAlready.dart';
 import 'dart:async';
 import 'package:haegisa2/controllers/member/find_id.dart';
 import 'package:haegisa2/controllers/member/find_pw.dart';
@@ -24,7 +25,7 @@ class _AuthState extends State<Auth> {
   // Instance of WebView plugin
   final flutterWebviewPlugin = FlutterWebviewPlugin();
 
-  static String selectedUrl = Strings.shared.controllers.jsonURL.authJson +
+  String selectedUrl = Strings.shared.controllers.jsonURL.authJson +
       '?mode=' +
       userInformation.mode;
 
@@ -63,11 +64,27 @@ class _AuthState extends State<Auth> {
 
     print(_urlCtrl);
 
+    String appbarTitle = "";
+    if (userInformation.mode == "find_id") {
+      appbarTitle = "아이디 찾기 인증";
+    } else if (userInformation.mode == "find_pw") {
+      appbarTitle = "비밀번호 찾기 인증";
+    } else if (userInformation.mode == "join") {
+      appbarTitle = "회원가입 인증";
+    }
+
     return WebviewScaffold(
       url: selectedUrl,
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
+        title: Container(
+            child: Text(appbarTitle,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
+            margin: const EdgeInsets.only(left: 8)),
         centerTitle: false,
         elevation: 0,
         iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
@@ -168,18 +185,20 @@ class _AuthState extends State<Auth> {
               flutterWebviewPlugin.hide();
               flutterWebviewPlugin.close();
 
+              userInformation.userID = valueMap['id'];
+
               if (userInformation.userDeviceOS == "i") {
                 userInformation.mode =
                     Strings.shared.controllers.signIn.already;
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new SplashScreen()));
+                        builder: (context) => new JoinAlready()));
               } else {
                 Navigator.push(
                     context,
                     new MaterialPageRoute(
-                        builder: (context) => new SplashScreen()));
+                        builder: (context) => new JoinAlready()));
               }
             } else if (valueMap['status'] == 3) {
               flutterWebviewPlugin.hide();

@@ -18,12 +18,12 @@ String passValue = "";
 String passValue2 = "";
 String jsonMsg = "";
 
-class FindPW extends StatefulWidget {
+class ChangePassword extends StatefulWidget {
   @override
   _FindInState createState() => _FindInState();
 }
 
-class _FindInState extends State<FindPW> {
+class _FindInState extends State<ChangePassword> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,6 @@ class _FindInState extends State<FindPW> {
         systemNavigationBarColor:
             Colors.black // Dark == white status bar -- for IOS.
         ));
-
-    MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -135,8 +133,7 @@ class _FindInState extends State<FindPW> {
                                   context: context,
                                   builder: (_) => AlertDialog(
                                         title: new Text("알림"),
-                                        content: new Text(
-                                            "비밀번호가 변경되었습니다. \n로그인 화면으로 이동합니다.",
+                                        content: new Text("비밀번호가 변경되었습니다.",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold)),
                                         actions: <Widget>[
@@ -152,11 +149,10 @@ class _FindInState extends State<FindPW> {
                                                       .shared.colors.mainColor),
                                             ),
                                             onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  new MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          new SignIn()));
+                                              Navigator.of(context)
+                                                  .pop(); //팝업닫고
+                                              Navigator.pop(
+                                                  context, true); //이전페이지로
                                             },
                                           ),
                                         ],
@@ -179,7 +175,7 @@ class _FindInState extends State<FindPW> {
         ), // Column
         padding: const EdgeInsets.only(left: 32, right: 32),
 
-        width: MiddleWare.shared.screenSize,
+        width: MediaQuery.of(context).size.width,
       ), // Container
     );
   } // user is logged in

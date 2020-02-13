@@ -28,6 +28,20 @@ class FindID extends StatelessWidget {
 
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
     return new Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        title: Container(
+            child: Text(Strings.shared.controllers.signIn.findIDTitle,
+                style: TextStyle(
+                    color: Statics.shared.colors.titleTextColor,
+                    fontSize: Statics.shared.fontSizes.subTitle,
+                    fontWeight: FontWeight.bold)),
+            margin: const EdgeInsets.only(left: 8)),
+        centerTitle: false,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 1)),
+      ),
       body: Container(
         color: Colors.white,
         child: Column(

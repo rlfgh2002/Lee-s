@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
+import 'package:haegisa2/controllers/sign/SignIn.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -24,6 +25,8 @@ class JoinAlready extends StatefulWidget {
 
 class _JoinInState extends State<JoinAlready> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController _idController =
+      new TextEditingController(text: userInformation.userID);
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class _JoinInState extends State<JoinAlready> {
                   ),
                   SizedBox(height: 20),
                   Container(
-                    child: Text("기존 아이디",
+                    child: Text("기존 를",
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -77,6 +80,7 @@ class _JoinInState extends State<JoinAlready> {
                       //아이디 입력
                       height: deviceHeight / 10,
                       child: TextField(
+                        controller: _idController,
                         decoration: InputDecoration(
                             hintStyle: TextStyle(
                               fontSize: Statics.shared.fontSizes.subTitle,
@@ -89,6 +93,7 @@ class _JoinInState extends State<JoinAlready> {
                         onChanged: (String str) {
                           this.widget.idValue = str;
                         },
+                        readOnly: true,
                       ),
                       alignment: Alignment.centerLeft),
                   SizedBox(height: 30),
@@ -153,16 +158,6 @@ class _JoinInState extends State<JoinAlready> {
                           text: "로그인",
                           iconURL: "Resources/Icons/Vector_3.2.png",
                           onPressed: () async {
-                            if (this.widget.idValue == "") {
-                              _displaySnackBar(context,
-                                  Strings.shared.controllers.signIn.enterID);
-                              return;
-                            }
-                            if (this.widget.idValue.length < 6) {
-                              _displaySnackBar(context,
-                                  Strings.shared.controllers.signIn.findID3);
-                              return;
-                            }
                             if (this.widget.passValue == "" ||
                                 this.widget.passValue2 == "") {
                               _displaySnackBar(context,
@@ -187,68 +182,51 @@ class _JoinInState extends State<JoinAlready> {
                                         .shared.controllers.signIn.findPass2);
                               } else {
                                 var map = new Map<String, dynamic>();
+                                map["user_id"] = userInformation.userID;
+                                map["user_new_pw"] = this.widget.passValue;
 
-                                map = new Map<String, dynamic>();
-                                map["mode"] = "insert";
-                                map["member_idx"] = userInformation.userIdx;
-                                map["user_id"] = this.widget.idValue;
-                                map["password"] = this.widget.passValue;
-                                map["email"] = this.widget.email;
-                                map["member_name"] = userInformation.fullName;
-                                map["USER_PHONE"] = userInformation.hp;
-                                map["USER_JUMIN"] = userInformation.birth;
-
-                                Result memberJoin = await createPost(
-                                    Strings.shared.controllers.jsonURL.joinJson,
+                                Result resultPost = await createPost(
+                                    Strings.shared.controllers.jsonURL.findPW,
                                     body: map);
 
-                                if (memberJoin.code != "200") {
-                                  _displaySnackBar(context,
-                                      Strings.shared.controllers.signIn.error2);
-                                } else {
-                                  await deviceinfo();
-
-                                  userInformation.mode = "login";
-                                  userInformation.loginCheck = 1;
-                                  userInformation.userID = this.widget.idValue;
-
-                                  var map = new Map<String, dynamic>();
-                                  map["user_id"] = this.widget.idValue;
-                                  map["user_phone"] = userInformation.hp;
-                                  map["reg_key"] = userInformation.userToken;
-                                  map["os_type"] = userInformation.userDeviceOS;
-                                  map["os_version"] = "";
-                                  map["app_version"] =
-                                      userInformation.appVersion;
-                                  map["device_id"] =
-                                      userInformation.userDeviceID;
-                                  map["push_status"] = "y";
-                                  await createPost(
-                                      Strings.shared.controllers.jsonURL
-                                          .logininfoJson,
-                                      body: map);
-
+                                if (resultPost.code == "200") {
                                   showDialog(
+                                      barrierDismissible: false,
                                       context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text('가입완료'),
-                                          content: Text(
-                                              "회원가입이 완료되었습니다.\n가입된 아이디로 로그인 해주십시오."),
-                                          actions: <Widget>[
-                                            new FlatButton(
-                                              child: new Text('확인'),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    new MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            new SplashScreen()));
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      });
+                                      builder: (_) => AlertDialog(
+                                            title: new Text("알림"),
+                                            content: new Text(
+                                                "비밀번호가 변경되었습니다. \n로그인 화면으로 이동합니다.",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            actions: <Widget>[
+                                              // usually buttons at the bottom of the dialog
+
+                                              new FlatButton(
+                                                child: new Text(
+                                                  "확인",
+                                                  style: TextStyle(
+                                                      fontSize: Statics
+                                                          .shared
+                                                          .fontSizes
+                                                          .supplementary,
+                                                      color: Statics.shared
+                                                          .colors.mainColor),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      new MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              new SignIn()));
+                                                },
+                                              ),
+                                            ],
+                                          ));
+                                } else {
+                                  _displaySnackBar(context,
+                                      Strings.shared.controllers.signIn.error);
                                 }
                               }
                             }

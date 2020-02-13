@@ -156,6 +156,7 @@ flutter:
     - Resources/Icons/arrow_down.png
     - Resources/Icons/Vector.png
     - Resources/Icons/btn_delete.png
+    - Resources/Icons/join_ok.png
 
     # Images
     - Resources/Images/ill_survey.png
@@ -212,6 +213,12 @@ flutter:
     - Resources/Icons/icon_mariners.png
     - Resources/Icons/icon_exam.png
     - Resources/Icons/icon_userinfo.png
+    - Resources/Icons/logo_marinersjob.png
+    - Resources/Icons/marinersjob1.png
+    - Resources/Icons/marinersjob2.png
+    - Resources/Icons/icon_playstore.png
+    - Resources/Icons/icon_appstore.png
+    - Resources/Icons/icon_explorer.png
 
     # barcode
     - Resources/Images/barcodeType1.png

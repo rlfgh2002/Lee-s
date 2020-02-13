@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
@@ -47,6 +48,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    filedownloaderInitialize();
     MyDataBase();
     if (Platform.isIOS) iOS_Permission();
 
@@ -66,6 +68,11 @@ class _MyAppState extends State<MyApp> {
               context,
               MaterialPageRoute(builder: (context) => SplashScreen()),
             ));
+  }
+
+  void filedownloaderInitialize() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await FlutterDownloader.initialize();
   }
 
   void checkInternet(BuildContext ctx) async {

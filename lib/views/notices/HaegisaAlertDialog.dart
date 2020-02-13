@@ -307,7 +307,6 @@ class _HaegisaAlertDialogState extends State<HaegisaAlertDialog> {
                               }
                             }
                             if (trueInt == null) {
-                              print("Tlqkf");
                               showDialog(
                                   barrierDismissible: true,
                                   context: context,

@@ -20,6 +20,7 @@ import 'package:haegisa2/models/statics/UserInfo.dart';
 import 'package:http/http.dart' as http;
 import 'package:haegisa2/controllers/surveysTab/SurveysTabs.dart';
 import 'package:open_appstore/open_appstore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/NoticesList/NoticesListObject.dart';
 import '../../models/iO/IOObject.dart';
 import '../IntroduceOccupation/IOSingle.dart';
@@ -752,13 +753,174 @@ class _HomeState extends State<Home2> {
                                 width: 20,
                               ),
                               Image.asset('Resources/Icons/icon_mariners.png',
-                                  scale: 2.5)
+                                  scale: 2.5),
                             ],
                           )),
                       onTap: () async {
-                        OpenAppstore.launch(
-                            androidAppId: "kr.co.job.mariner",
-                            iOSAppId: "1470020259");
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                contentPadding: EdgeInsets.all(0.0),
+                                content: Container(
+                                  color: Color(0xFF00AFEF),
+                                  height: userInformation.userDeviceOS == "i"
+                                      ? MediaQuery.of(context).size.height / 1.3
+                                      : MediaQuery.of(context).size.height /
+                                          1.45,
+                                  width:
+                                      MediaQuery.of(context).size.width / 1.1,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: deviceHeight / 18.0,
+                                      ),
+                                      Image.asset(
+                                        "Resources/Icons/logo_marinersjob.png",
+                                        scale: 3.0,
+                                      ),
+                                      SizedBox(width: deviceWidth, height: 20),
+                                      Image.asset(
+                                        "Resources/Icons/marinersjob1.png",
+                                        scale: 3.0,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Image.asset(
+                                        "Resources/Icons/Line2.png",
+                                        scale: 1.5,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Image.asset(
+                                        "Resources/Icons/marinersjob2.png",
+                                        scale: 3.0,
+                                      ),
+                                      SizedBox(height: 20),
+                                      Container(
+                                        height: deviceHeight / 12.0,
+                                        width: deviceWidth / 1.6,
+                                        child: FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          color: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(30.0),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Image.asset(
+                                                "Resources/Icons/icon_playstore.png",
+                                                scale: 3.0,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Image.asset(
+                                                "Resources/Icons/icon_appstore.png",
+                                                scale: 3.0,
+                                              ),
+                                              Text(
+                                                " 앱으로 열기",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: Statics.shared
+                                                        .fontSizes.content),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () {
+                                            OpenAppstore.launch(
+                                                androidAppId:
+                                                    "kr.co.job.mariner",
+                                                iOSAppId: "1470020259");
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        height: deviceHeight / 12.0,
+                                        width: deviceWidth / 1.6,
+                                        child: FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          color: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(30.0),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Image.asset(
+                                                "Resources/Icons/icon_explorer.png",
+                                                scale: 3.0,
+                                              ),
+                                              Text(
+                                                " 모바일웹으로 열기",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: Statics.shared
+                                                        .fontSizes.content),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                          onPressed: () async {
+                                            var url = "";
+                                            url = "http://marinersjob.co.kr";
+                                            var url2 =
+                                                Uri.encodeFull(url).toString();
+                                            if (await canLaunch(url2)) {
+                                              await launch(url2);
+                                            } else {
+                                              throw 'Could not launch $url';
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        padding: const EdgeInsets.only(
+                                            top: 10, bottom: 10),
+                                        alignment: Alignment.center,
+                                        color: Colors.white,
+                                        child: FlatButton(
+                                          splashColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          child: Text(
+                                            "닫기",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: Statics
+                                                    .shared.fontSizes.subTitle,
+                                                fontWeight: FontWeight.bold),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+
+                        // OpenAppstore.launch(
+                        //     androidAppId: "kr.co.job.mariner",
+                        //     iOSAppId: "1470020259");
 
                         // var url = "";
                         // url = "http://marinersjob.co.kr";

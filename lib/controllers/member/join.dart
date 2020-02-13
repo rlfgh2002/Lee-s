@@ -126,6 +126,13 @@ class _JoinInState extends State<Join> {
                         },
                       ),
                       alignment: Alignment.centerLeft),
+                  Container(
+                    child: Text("※ 아이디는 6자리 이상 16자리 이하로 입력",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Statics.shared.fontSizes.small)), // Text
+                    alignment: Alignment.centerLeft,
+                  ),
                   SizedBox(height: 10),
                   Container(
                       //비밀번호 입력
@@ -146,6 +153,13 @@ class _JoinInState extends State<Join> {
                         },
                       ),
                       alignment: Alignment.centerLeft),
+                  Container(
+                    child: Text("※ 영문+숫자+특수문자 조합 6~16자리 입력",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: Statics.shared.fontSizes.small)), // Text
+                    alignment: Alignment.centerLeft,
+                  ),
                   SizedBox(height: 10),
                   Container(
                       //비밀번호 확인
@@ -261,6 +275,11 @@ class _JoinInState extends State<Join> {
                                   Strings.shared.controllers.signIn.findID3);
                               return;
                             }
+                            if (this.widget.idValue.length > 16) {
+                              _displaySnackBar(context,
+                                  Strings.shared.controllers.signIn.findID3);
+                              return;
+                            }
                             if (this.widget.passValue == "" ||
                                 this.widget.passValue2 == "") {
                               _displaySnackBar(context,
@@ -345,21 +364,125 @@ class _JoinInState extends State<Join> {
                                       context: context,
                                       builder: (context) {
                                         return AlertDialog(
-                                          title: Text('가입완료'),
-                                          content: Text(
-                                              "회원가입이 완료되었습니다.\n가입된 아이디로 로그인 해주십시오."),
-                                          actions: <Widget>[
-                                            new FlatButton(
-                                              child: new Text('확인'),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    new MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            new SplashScreen()));
-                                              },
-                                            )
-                                          ],
+                                          contentPadding: EdgeInsets.all(0.0),
+                                          content: Container(
+                                            color:
+                                                Statics.shared.colors.lineColor,
+                                            height:
+                                                userInformation.userDeviceOS ==
+                                                        "i"
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        1.75
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        2.0,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width /
+                                                1.1,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            2.55,
+                                                    child: Container(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: <Widget>[
+                                                          Image.asset(
+                                                            "Resources/Icons/join_ok.png",
+                                                            scale: 2.0,
+                                                          ),
+                                                          SizedBox(
+                                                              width:
+                                                                  deviceWidth,
+                                                              height: 20),
+                                                          Text(
+                                                            "앱 회원가입을",
+                                                            style: TextStyle(
+                                                                color: Statics
+                                                                    .shared
+                                                                    .colors
+                                                                    .titleTextColor,
+                                                                fontSize: Statics
+                                                                    .shared
+                                                                    .fontSizes
+                                                                    .title,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          SizedBox(height: 5),
+                                                          Text(
+                                                            "환영합니다!",
+                                                            style: TextStyle(
+                                                                color: Statics
+                                                                    .shared
+                                                                    .colors
+                                                                    .subColor,
+                                                                fontSize: Statics
+                                                                    .shared
+                                                                    .fontSizes
+                                                                    .title,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )),
+                                                Spacer(),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 10, bottom: 10),
+                                                  alignment: Alignment.center,
+                                                  color: Colors.white,
+                                                  child: FlatButton(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
+                                                    child: Text(
+                                                      "로그인하기",
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: Statics
+                                                              .shared
+                                                              .fontSizes
+                                                              .subTitle,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      Navigator.push(
+                                                          context,
+                                                          new MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  new SignIn()));
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
                                         );
                                       });
                                 }
@@ -485,7 +608,7 @@ Future<Result> createPost(String url, {Map body}) async {
   jsonMsg = "";
   return http.post(url, body: body).then((http.Response response) {
     final int statusCode = response.statusCode;
-    //final String responseBody = response.body; //한글 깨짐
+    //final String responseBody = response.body; //한글 ��짐
     final String responseBody = utf8.decode(response.bodyBytes);
     var responseJSON = json.decode(responseBody);
     var code = responseJSON["code"];

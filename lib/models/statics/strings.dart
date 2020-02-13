@@ -200,7 +200,7 @@ class _StringsSignInController {
   String wrongPass = "비밀번호가 불일치합니다. 다시 입력해주세요.";
   String findID1 = "회원님의 아이디는";
   String findID2 = "입니다.";
-  String findID3 = "아이디는 6자리 이상 입력해주세요.";
+  String findID3 = "아이디는 6자리 이상 16자리 이하로 입력해주세요.";
   String findPass = "비밀번호가 다릅니다.";
   String findPass2 = "비밀번호는 영문,숫자,특수문자 조합 6~16자리 입니다.";
   String error = "사용할수 없는 계정입니다. 관리자에게 연락해주세요.";

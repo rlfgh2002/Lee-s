@@ -189,7 +189,7 @@ class _SignInState extends State<SignIn> {
                             Navigator.push(
                                 context,
                                 new MaterialPageRoute(
-                                    builder: (context) => new JoinAlready()));
+                                    builder: (context) => new Auth()));
                           },
                           padding: const EdgeInsets.all(0),
                         ), // Flat Button -> ForgetPassword

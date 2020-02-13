@@ -899,7 +899,7 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     });
 
     getVersion();
-    filedownloaderInitialize();
+    //filedownloaderInitialize();
     print("Main TabBar New...");
 
     widget.subscription = Connectivity()
@@ -922,10 +922,10 @@ class MainTabBarState extends State<MainTabBar> with TickerProviderStateMixin {
     widget.subscription.cancel();
   }
 
-  void filedownloaderInitialize() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await FlutterDownloader.initialize();
-  }
+  // void filedownloaderInitialize() async {
+  //   WidgetsFlutterBinding.ensureInitialized();
+  //   await FlutterDownloader.initialize();
+  // }
 
   void updateUserLocation() async {
     print("...::: Checking Location Start :::...");
