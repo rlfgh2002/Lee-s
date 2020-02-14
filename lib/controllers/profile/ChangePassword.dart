@@ -39,7 +39,7 @@ class _FindInState extends State<ChangePassword> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         title: Container(
-            child: Text(Strings.shared.controllers.signIn.forgetPasswordTitle,
+            child: Text("비밀번호 변경",
                 style: TextStyle(
                     color: Statics.shared.colors.titleTextColor,
                     fontSize: Statics.shared.fontSizes.subTitle,
