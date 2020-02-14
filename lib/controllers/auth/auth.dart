@@ -179,6 +179,10 @@ class _AuthState extends State<Auth> {
               userInformation.userIdx = valueMap['member_idx'];
               userInformation.gender = valueMap['gender'];
               userInformation.birth = valueMap['bitrh'];
+              userInformation.email = valueMap['email'];
+              userInformation.school = valueMap['school'];
+              userInformation.gisu = valueMap['gisu'];
+
               Navigator.push(context,
                   new MaterialPageRoute(builder: (context) => new Join()));
             } else if (valueMap['status'] == 2) {

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:haegisa2/controllers/SplashScreen/SplashScreen.dart';
 import 'package:haegisa2/controllers/auth/auth.dart';
 import 'package:haegisa2/controllers/member/JoinAlready.dart';
+import 'package:haegisa2/controllers/member/join.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'MiddleWare.dart';
 import 'dart:async';
@@ -189,7 +190,7 @@ class _SignInState extends State<SignIn> {
                             Navigator.push(
                                 context,
                                 new MaterialPageRoute(
-                                    builder: (context) => new Auth()));
+                                    builder: (context) => new Join()));
                           },
                           padding: const EdgeInsets.all(0),
                         ), // Flat Button -> ForgetPassword

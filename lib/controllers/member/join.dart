@@ -18,9 +18,10 @@ class Join extends StatefulWidget {
   String idValue = "";
   String passValue = "";
   String passValue2 = "";
-  String email = "";
-  String school = "14000";
-  String gisu = "";
+  String email = userInformation.email;
+  String school =
+      userInformation.school == "" ? "14000" : userInformation.school;
+  String gisu = userInformation.gisu;
 
   @override
   _JoinInState createState() => _JoinInState();
@@ -60,7 +61,6 @@ class _JoinInState extends State<Join> {
     School(chcode: "14026", ccname: "오션폴리텍"),
     School(chcode: "14027", ccname: "완도수산고등학교"),
   ];
-  String _selectedValue;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -69,13 +69,19 @@ class _JoinInState extends State<Join> {
             Colors.black // Dark == white status bar -- for IOS.
         ));
 
+    TextEditingController _emailController =
+        new TextEditingController(text: this.widget.email);
+
+    TextEditingController _gisuController =
+        new TextEditingController(text: this.widget.gisu);
+
     MiddleWare.shared.screenSize = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(Strings.shared.controllers.signIn.forgetPasswordTitle),
+          title: Text(""),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           centerTitle: false,
@@ -185,6 +191,7 @@ class _JoinInState extends State<Join> {
                       //이메일
                       height: deviceHeight / 10,
                       child: TextField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                             hintStyle: TextStyle(
                               fontSize: Statics.shared.fontSizes.subTitle,
@@ -242,6 +249,7 @@ class _JoinInState extends State<Join> {
                       //기수
                       height: deviceHeight / 10,
                       child: TextField(
+                        controller: _gisuController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             hintStyle: TextStyle(
@@ -265,6 +273,10 @@ class _JoinInState extends State<Join> {
                           text: Strings.shared.controllers.signIn.submit,
                           iconURL: "Resources/Icons/Vector_3.2.png",
                           onPressed: () async {
+                            print("이메일 : " + this.widget.email);
+                            print("기수 : " + this.widget.gisu);
+                            print("학교 : " + this.widget.school);
+
                             if (this.widget.idValue == "") {
                               _displaySnackBar(context,
                                   Strings.shared.controllers.signIn.enterID);
@@ -411,7 +423,7 @@ class _JoinInState extends State<Join> {
                                                                   deviceWidth,
                                                               height: 20),
                                                           Text(
-                                                            "앱 회원가입을",
+                                                            "앱 회원이입을",
                                                             style: TextStyle(
                                                                 color: Statics
                                                                     .shared
@@ -580,7 +592,7 @@ class _JoinInState extends State<Join> {
             ),
             DropdownButton<String>(
               hint: Text('선택하세요'), // Not necessary for Option 1
-              value: _selectedValue,
+              value: this.widget.school,
 
               style: TextStyle(
                 color: Colors.black,
@@ -588,7 +600,6 @@ class _JoinInState extends State<Join> {
               ),
               onChanged: (String newValue) {
                 setState(() {
-                  _selectedValue = newValue;
                   this.widget.school = newValue;
                 });
               },

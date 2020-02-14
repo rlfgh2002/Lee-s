@@ -61,7 +61,7 @@ class _JoinInState extends State<JoinAlready> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(Strings.shared.controllers.signIn.forgetPasswordTitle),
+          title: Text(""),
           backgroundColor: Colors.white,
           brightness: Brightness.light,
           centerTitle: false,
