@@ -423,7 +423,7 @@ class _JoinInState extends State<Join> {
                                                                   deviceWidth,
                                                               height: 20),
                                                           Text(
-                                                            "앱 회원이입을",
+                                                            "앱 회원가입을",
                                                             style: TextStyle(
                                                                 color: Statics
                                                                     .shared

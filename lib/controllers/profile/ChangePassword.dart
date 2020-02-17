@@ -70,7 +70,14 @@ class _FindInState extends State<ChangePassword> {
                   },
                 ),
                 alignment: Alignment.centerLeft),
-            SizedBox(height: 5),
+            Container(
+              child: Text("※ 영문+숫자+특수문자 조합 6~16자리 입력",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Statics.shared.fontSizes.small)), // Text
+              alignment: Alignment.centerLeft,
+            ),
+            SizedBox(height: 10),
             Container(
                 child: TextField(
                   decoration: InputDecoration(
